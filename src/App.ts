@@ -29,9 +29,10 @@ export default defineComponent({
     // 登录数据
     const login: any = {uname:'',passwd:'',subText:'登 录',dis:false};
     // 左侧菜单
-    const sea: any = {show: true, key:'', list:[]};
+    const sea: any = {show: true, key:'', isData: true, list:[]};
     const menusPos: any = [0,0,0];
     const menusChildren: any = [];
+    const menusLately: any = [];
     // 语言
     const language: any = {
       num: 0,
@@ -43,7 +44,7 @@ export default defineComponent({
         {name:'go',val:'GoLang( Gin )'},
       ]
     };
-    return {state,router,transitionName,info,login,menusChildren,sea,menusPos,language}
+    return {state,router,transitionName,info,login,menusChildren,sea,menusPos,menusLately,language}
   },
   watch:{
     $route(to,from){
@@ -176,45 +177,58 @@ export default defineComponent({
         this.logout();
       });
     },
-    /* 显示菜单 */
-    menusDisplay(index?: number){
-      for(let i in this.state.menus) this.state.menus[i].checked = false;
-      if(index!=undefined) this.state.menus[index].checked = true;
-    },
     /* 点击菜单 */
     menusClick(pos: number[], url: string='/'){
-      // 隐藏菜单
-      this.menusDisplay();
       // 位置
       this.menusPos = pos
       Storage.setItem('menusPos',JSON.stringify(pos));
       // 子菜单
       this.menusChildren = this.state.menus[pos[0]].children || [];
+      this.state.menuTitle[0] = this.state.menus[pos[0]].label;
       if(pos[0]==0){
-        this.state.menuTitle = '首页';
         return NavigateTo(url);
       }
       if(!this.menusChildren[pos[1]] || !this.menusChildren[pos[1]].children) return;
       let menu = this.menusChildren[pos[1]].children[pos[2]];
       this.state.menuAction = menu.value.action;
-      this.state.menuTitle = menu.label;
+      this.state.menuTitle[1] = this.menusChildren[pos[1]].label;
+      this.state.menuTitle[2] = menu.label;
+      // 最近浏览
+      this.menusSetLately({label:menu.label, pos:pos});
       // 跳转
       NavigateTo(menu.value.url);
     },
-    /* 菜单动画 */
-    menusStyle(v: any){
-      v.checked = v.checked?false:true;
+    /* 最近浏览 */
+    menusSetLately(data: any){
+      let menus: any = Storage.getItem('menusLately');
+      menus = menus?JSON.parse(menus):[];
+      if(data){
+        for(let i in menus){
+          if(JSON.stringify(menus[i])==JSON.stringify(data) || parseInt(i)>=9){
+            menus.splice(i, 1);
+          }
+        }
+        menus.unshift(data);
+        Storage.setItem('menusLately', JSON.stringify(menus));
+      }
+      this.menusLately = menus;
     },
 
     /* 搜索 */
     seaInput(){
       const reg =new RegExp(this.sea.key.toLowerCase());
       let label: string, en: string;
+      let isData: boolean = false;
+      let res: boolean = false;
       for(let i in this.sea.list){
         label = this.sea.list[i].label.toLowerCase();
         en = this.sea.list[i].en.toLowerCase();
-        this.sea.list[i].show = reg.test(label)||reg.test(en);
+        res = reg.test(label)||reg.test(en);
+        this.sea.list[i].show = res;
+        if(res) isData = res;
       }
+      // 是否存在
+      this.sea.isData = isData;
     },
 
   }

@@ -1,7 +1,12 @@
 <template>
   <div
     class="wm-main"
-    :style="{width:'calc(100% - '+padding*2+'px)', height:'calc(100% - '+padding*2+'px)', padding:padding+'px'}"
+    :style="{
+      width:'calc(100% - '+padding*2+'px)',
+      height:'calc(100% - '+padding*2+'px)',
+      padding:padding+'px',
+      backgroundColor:bgColor,
+    }"
   >
     <slot></slot>
   </div>
@@ -20,7 +25,8 @@ import { defineComponent } from 'vue';
 export default defineComponent({
   name: 'Main',
   props: {
-    padding: {type: Number, default: 10}, //边距
+    padding: {type: Number, default: 10},             //边距
+    bgColor: {type: String, default: 'transparent'},  //背景颜色
   },
 });
 </script>

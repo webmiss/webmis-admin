@@ -25,7 +25,7 @@
             <wm-input :value="login.passwd" @update:value="login.passwd=$event" type="password" placeholder="密码" />
           </div>
           <div class="login_input">
-            <wm-button @click="loginSub()" :disabled="login.dis">{{login.subText}}</wm-button>
+            <wm-button type="primary" width="100%" height="40px" margin="0" @click="loginSub()" :disabled="login.dis">{{login.subText}}</wm-button>
           </div>
         </div>
         <div class="login_copy nowrap">{{info.copy}}&nbsp;&nbsp;版本：{{info.version}}</div>
@@ -34,90 +34,86 @@
     <!-- Login End -->
 
     <!-- Main -->
-    <div class="app_body flex" v-show="state.isLogin===true">
-      <!-- Left -->
-      <div class="app_left scrollbar">
-        <div class="app_logo bgImg" :style="{backgroundImage:'url('+require('./assets/logo.svg')+')'}" @click="menusClick([0,0,0])"></div>
-        <div class="app_title nowrap">{{info.title}}</div>
-        <ul class="app_menus">
-          <li v-for="(m1,k1) in state.menus" :key="k1" class="m1" :class="menusPos[0]==k1?'active':''">
-            <div class="m1_click" @click="menusDisplay(k1)">
-              <div class="arrow arrow_left" :style="{display:m1.checked?'block':'none'}"></div>
-              <div class="m1_div"><i class="m1_i" :class="m1.icon"></i></div>
-              <p class="m1_p">{{m1.label}}</p>
-            </div>
-            <!-- Search -->
-            <ul class="app_menus_list" v-if="k1==0" :style="{display:m1.checked?'block':'none'}">
-              <li class="app_search">
-                <i class="ui ui_search"></i>
-                <input type="text" placeholder="菜单名称" v-model="sea.key" @input="seaInput()" />
-              </li>
-              <li class="title flex" @click="sea.show=!sea.show">
-                <h2>全部</h2>
-                <span :style="{transform: sea.show?'rotate(-0deg)':'rotate(-180deg)'}">
-                  <i class="ui ui_arrow_down center"></i>
-                </span>
-              </li>
-              <template v-for="(m,k) in sea.list" :key="k">
-                <li class="label" v-if="sea.show&&m.show" :class="menusPos==m.value?'active':''" @click="menusClick(m.value)">{{ m.label }}</li>
-              </template>
-            </ul>
-            <!-- Menus -->
-            <ul class="app_menus_list" v-else-if="m1.children" :style="{display:m1.checked?'block':'none'}">
-              <template v-for="(m2,k2) in m1.children" :key="k2">
-                <li class="title flex" @click="m2.checked=!m2.checked">
-                  <h2>{{ m2.label }}</h2>
-                  <span :style="{transform: m2.checked?'rotate(-0deg)':'rotate(-180deg)'}">
-                    <i class="ui ui_arrow_down center"></i>
-                  </span>
-                </li>
-                <template v-if="!m2.checked">
-                  <li class="label" v-for="(m3,k3) in m2.children" :key="k3" :class="menusPos[0]==k1 && menusPos[1]==k2 && menusPos[2]==k3?'active':''" @click="menusClick([k1,k2,k3])">{{ m3.label }}</li>
-                </template>
-              </template>
-            </ul>
-            <!-- Menus End -->
-          </li>
-        </ul>
-        <div class="app_copy">&copy; {{ info.version }}</div>
-      </div>
-      <!-- Left End -->
-      <!-- Right -->
-      <div class="app_right" @click="menusDisplay()">
-        <!-- Top -->
-        <div class="app_right_top flex">
-          <!-- 标题 -->
-          <div class="app_top_title flex_left">
-            <span>{{info.title}}</span>
-            <i class="arrow ui ui_arrow_right"></i>
-            <span class="a" @click="$router.replace({path:'/refresh'})" title="重新加载">{{ state.menuTitle }}</span>
+    <div class="app_body" v-show="state.isLogin===true">
+      <!-- Top -->
+      <div class="app_top flex">
+        <!-- Logo -->
+        <div class="flex">
+          <div class="app_top_logo flex" @click="menusClick([0,0,0])">
+            <span class="logo bgImg" :style="{backgroundImage:'url('+require('./assets/logo.svg')+')'}"></span>
+            <span class="title">{{info.title}}</span>
           </div>
-          <!-- User -->
-          <div class="app_user">
-            <div class="flex_left">
-              <span class="tu bgImg" :style="{backgroundImage:'url('+state.uInfo.img+')'}">
-                <i class="ui ui_image" v-if="state.uInfo.img==''"></i>
-              </span>
-              <span class="name">{{state.uInfo.nickname || '会员昵称'}}</span>
-              <span class="ico"><i class="arrow ui ui_arrow_down"></i></span>
-            </div>
-            <div class="box">
-              <div class="user_info flex_left">
-                <div class="ico bgImg" :style="{backgroundImage:'url('+state.uInfo.img+')'}">
-                  <i class="ui ui_image" v-if="state.uInfo.img==''"></i>
-                </div>
-                <div class="info"><h2>{{state.uInfo.uname}}</h2><p>ID:{{state.uInfo.uid}}</p></div>
-              </div>
-              <ul class="user_list">
-                <li @click="menusClick([0],'/UserInfo')">基本信息</li>
-                <li @click="menusClick([0],'/UserPasswd')">修改密码</li>
+          <!-- Search -->
+          <div class="app_top_sea flex">
+            <i class="ui ui_search ico"></i>
+            <input type="text" placeholder="搜索菜单名称" v-model="sea.key" @input="seaInput()" />
+            <div class="box scrollbar">
+              <ul class="list">
+                <template v-for="(m,k) in sea.list" :key="k">
+                  <li v-if="m.show" @click="menusClick(m.value)">{{ m.label }}</li>
+                </template>
+                <li v-if="!sea.isData" class="null"></li>
               </ul>
-              <div class="user_logout" @click="logout()">退出登录</div>
             </div>
           </div>
         </div>
-        <!-- Top End -->
-        <div class="app_ct">
+        <div class="flex">
+          <!-- Tools -->
+          <ul class="app_top_tools flex">
+            <li><i class="ui ui_data"></i></li>
+            <li><i class="ui ui_message"></i></li>
+          </ul>
+          <!-- User -->
+          <div class="app_top_user">
+            <span class="img">
+              <i class="ui ui_user"></i>
+            </span>
+            <div class="box">
+              <div class="info">
+                <h2 class="nowrap">{{state.uInfo.nickname || '会员昵称'}}</h2>
+                <p>账号: {{state.uInfo.uname}} ID:{{state.uInfo.uid}}</p>
+              </div>
+              <ul class="list">
+                <li @click="menusClick([0],'/UserInfo')">基本信息</li>
+                <li @click="menusClick([0],'/UserPasswd')">修改密码</li>
+              </ul>
+              <div class="logout" @click="logout()">退出登录</div>
+            </div>
+          </div>
+          <!-- User End -->
+        </div>
+      </div>
+      <!-- Top End -->
+      <!-- Body -->
+      <div class="app_ct flex">
+        <div class="app_left">
+          <!-- Menus -->
+          <div class="app_menus_body scrollbar">
+            <ul class="app_menus">
+              <li class="m1" v-for="(m1,k1) in state.menus" :key="k1" :class="menusPos[0]==k1?'active':''">
+                <div class="flex_left">
+                  <span class="ico"><i :class="m1.icon"></i></span>
+                  <span class="title">{{m1.label}}</span>
+                </div>
+                <div class="app_menus_list scrollbar">
+                  <ul v-if="k1==0">
+                    <li class="class">最近浏览</li>
+                    <li v-for="v,k in menusLately" :key="k" @click="menusClick(v.pos)">{{ v.label }}</li>
+                  </ul>
+                  <ul v-else-if="m1.children">
+                    <template v-for="(m2,k2) in m1.children" :key="k2">
+                      <li class="class">{{ m2.label }}</li>
+                      <li v-for="(m3,k3) in m2.children" :key="k3" :class="menusPos[0]==k1 && menusPos[1]==k2 && menusPos[2]==k3?'active':''" @click="menusClick([k1,k2,k3])">{{ m3.label }}</li>
+                    </template>
+                  </ul>
+                </div>
+              </li>
+            </ul>
+          </div>
+          <!-- Copy -->
+          <div class="app_copy">&copy; {{ info.version }}</div>
+        </div>
+        <div class="app_right">
           <router-view v-slot="{ Component }">
             <transition :name="transitionName">
               <keep-alive :include="state.keepAlive">
@@ -127,7 +123,7 @@
           </router-view>
         </div>
       </div>
-      <!-- Right End -->
+      <!-- Body End -->
     </div>
     <!-- Main End -->
     

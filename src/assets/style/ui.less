@@ -21,7 +21,7 @@ h3{font-size: 16px; font-weight: 500;}
 /* 公共 */
 .html{height: 100%;}
 .link{cursor: pointer; color: @Primary; text-decoration: none;}
-.link:hover{color: #FF6600;}
+.link:hover{opacity: 0.8;}
 .back{display: inline-block; width: 32px; text-align: center;}
 .back.icons{color: rgba(88,88,88,1);}
 .hide{display: none;}
@@ -30,6 +30,7 @@ h3{font-size: 16px; font-weight: 500;}
 .center{position: absolute; z-index: 10; left: 50%; top: 50%; transform: translate(-50%,-50%);}
 .divCenter{position: absolute; left: 0; right: 0; top: 0; bottom: 0; margin: auto;}
 .ctCenter{position: absolute; margin: 0 auto; left: 0; right: 0;}
+.mtop10{margin-top: 10px;}
 /* 内容 */
 .null{text-align: center; color: #999; line-height: 100px;}
 .null::before{content: '暂无数据！';}
@@ -69,7 +70,7 @@ h3{font-size: 16px; font-weight: 500;}
 .nowrap_three{overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;}
 
 /* 切换动画 */
-.view{position: absolute; z-index: 0; width:calc(100% - 70px); height: calc(100% - 48px); background-color: #FFF; box-shadow: 0 0 2px rgba(0,0,0,.1); animation-duration: 400ms; animation-timing-function: cubic-bezier(0.165,0.84,0.44,1);}
+.view{position: absolute; z-index: 0; width:calc(100% - 70px); height: calc(100% - 48px); box-shadow: 0 0 2px rgba(0,0,0,.1); animation-duration: 400ms; animation-timing-function: cubic-bezier(0.165,0.84,0.44,1);}
 @keyframes left-fold-in { 0% {z-index: 1; opacity: 0;} 100% {z-index: 1; opacity: 1;} }
 @keyframes left-fold-out { 0% {z-index: 0; opacity: 1;} 100% {z-index: 0; opacity: 0;} }
 @keyframes right-fold-in { 0% {z-index: 0; opacity: 0;} 100% {z-index: 0; opacity: 1;} }

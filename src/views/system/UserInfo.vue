@@ -1,5 +1,5 @@
 <template>
-  <wm-main>
+  <wm-main bgColor="#FFF">
     <wm-form class="max_width">
       <wm-form-item label="头像" height="auto">
         <wm-img-upload :url="upload.url" :param="upload.param" @upload="upImg">

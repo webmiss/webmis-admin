@@ -1,5 +1,5 @@
 <template>
-  <wm-main>
+  <wm-main bgColor="#FFF">
     <wm-form class="max_width">
       <wm-form-item label="当前密码">
         <wm-input type="password" :value="form.passwd" @update:value="form.passwd=$event" maxlength="16" placeholder="登录密码" />

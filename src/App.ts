@@ -117,6 +117,7 @@ export default defineComponent({
           // 获取菜单
           Storage.removeItem('menusPos');
           this.getMenus();
+          this.menusSetLately();
           // 刷新路由
           this.$router.replace({path:'/refresh'});
         }else{
@@ -199,7 +200,7 @@ export default defineComponent({
       NavigateTo(menu.value.url);
     },
     /* 最近浏览 */
-    menusSetLately(data: any){
+    menusSetLately(data: any=null){
       let menus: any = Storage.getItem('menusLately');
       menus = menus?JSON.parse(menus):[];
       if(data){

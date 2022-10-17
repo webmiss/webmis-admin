@@ -7,8 +7,9 @@
         <span><i class="ui ui_arrow_right" /></span>
         <span class="link" @click="$router.replace({path:'/refresh'})">{{ state.menuTitle[2] }}</span>
       </div>
-      <div class="more flex">
-        <span title="刷新"><i class="ui ui_refresh" @click="$router.replace({path:'/refresh'})" /></span>
+      <div class="app_addr_more flex">
+        <span class="info">行业动态: <b>0</b> 条&nbsp;&nbsp;企业资讯: <b>0</b> 条</span>
+        <span class="reload" title="刷新" @click="$router.replace({path:'/refresh'})"><i class="ui ui_refresh" /></span>
       </div>
     </div>
     <!-- 内容 -->
@@ -17,13 +18,17 @@
       <div class="app_action_body flex">
         <ul class="app_action_list flex_left">
           <li><wm-button type="primary" icon="ui ui_search" radius="50%"></wm-button></li>
-          <li v-if="getters.actionShow('add')" @click="add.show=true"><wm-button type="primary" effect="plain">添加</wm-button></li>
+          <li v-if="getters.actionShow('add')" @click="add.show=true"><wm-button effect="plain">添加</wm-button></li>
           <li v-if="getters.actionShow('edit')" @click="editData()"><wm-button type="primary" effect="plain">编辑</wm-button></li>
           <li v-if="getters.actionShow('del')" @click="delData()"><wm-button type="danger" effect="plain">删除</wm-button></li>
           <li class="line">|</li>
           <li><wm-button type="primary">确认</wm-button></li>
         </ul>
-        <div class="app_action_info">行业动态: <b>0</b> 条&nbsp;&nbsp;企业资讯: <b>0</b> 条</div>
+        <ul class="app_action_list flex_left">
+          <li><wm-button type="primary" effect="text" padding="0 4px">导出</wm-button></li>
+          <li class="line">|</li>
+          <li><wm-button type="primary" effect="text" padding="0 4px">打印</wm-button></li>
+        </ul>
       </div>
       <!-- 动作菜单 End -->
     </div>

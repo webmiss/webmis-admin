@@ -99,6 +99,9 @@
                   <ul v-if="k1==0">
                     <li class="class">最近浏览</li>
                     <li v-for="v,k in menusLately" :key="k" @click="menusClick(v.pos)">{{ v.label }}</li>
+                    <li class="class">个人信息</li>
+                    <li @click="menusClick([0],'/UserInfo')">基本信息</li>
+                    <li @click="menusClick([0],'/UserPasswd')">修改密码</li>
                   </ul>
                   <ul v-else-if="m1.children">
                     <template v-for="(m2,k2) in m1.children" :key="k2">

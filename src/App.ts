@@ -72,7 +72,10 @@ export default defineComponent({
     // Enter事件
     this._enter();
     // 获取菜单
-    if(Storage.getItem('token')) this.getMenus();
+    if(Storage.getItem('token')){
+      this.getMenus();
+      this.menusSetLately();
+    }
     // 默认语言
     this.setLanguage();
   },

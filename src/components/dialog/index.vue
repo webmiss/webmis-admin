@@ -26,14 +26,14 @@
 .wm-dialog_close::after,.wm-dialog_close::before{content: ''; position: absolute; width: 14px; height: 1.6px; background-color: #999; left: 50%; top: 50%; transform-origin: center;}
 .wm-dialog_close::after{transform: rotate(45deg); margin-left: -16%;}
 .wm-dialog_close::before{transform: rotate(-45deg); margin-left: -16%;}
-.wm-dialog_footer{height: 40px; padding: 8px 0 16px;}
+.wm-dialog_footer{height: 32px; padding: 8px 0 16px;}
 /* 滚动条 */
 .wm-dialog_body{overflow: auto; width: 100%; height: calc(100% - 40px - 60px);}
 .wm-dialog_body::-webkit-scrollbar{width: 8px;}
 .wm-dialog_body::-webkit-scrollbar-thumb{border-radius: 4px; background: rgba(136,136,136,0.4);}
 .wm-dialog_body:hover::-webkit-scrollbar-track{background: rgba(136,136,136,0.1);}
 /* 内容 */
-.wm-dialog_content{padding: 0px 16px 16px;}
+.wm-dialog_content{padding: 0px 16px 8px;}
 </style>
 
 <script lang="ts">
@@ -87,7 +87,7 @@ export default defineComponent({
         let content: any = this.$refs.DialogContent;
         let val: string = getComputedStyle(content).getPropertyValue('height');
         let bh: number = this.state.height;
-        let h: number = parseInt(val.replace(/(px)/g, ''))+40+60+this.hMargin*2;
+        let h: number = parseInt(val.replace(/(px)/g, ''))+32+60+this.hMargin*2;
         if(h>bh) body.style.height = bh-48-60-this.hMargin*2+'px';
         else body.style.height = '';
       }, 300);

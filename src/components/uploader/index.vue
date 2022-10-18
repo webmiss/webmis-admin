@@ -5,7 +5,7 @@
 </template>
 
 <style>
-.wm-uploader{display: inline-block;}
+.wm-uploader{overflow: hidden;}
 </style>
 
 <script lang="ts">

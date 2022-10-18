@@ -19,10 +19,10 @@
         <div class="login_ct">
           <h2 class="login_title">{{info.title}}</h2>
           <div class="login_input">
-            <wm-input :value="login.uname" @update:value="login.uname=$event" placeholder="请输入手机号码" />
+            <wm-input :value="login.uname" height="40px" @update:value="login.uname=$event" placeholder="请输入手机号码" />
           </div>
           <div class="login_input">
-            <wm-input :value="login.passwd" @update:value="login.passwd=$event" type="password" placeholder="密码" />
+            <wm-input :value="login.passwd" height="40px" @update:value="login.passwd=$event" type="password" placeholder="密码" />
           </div>
           <div class="login_input">
             <wm-button type="primary" width="100%" height="40px" margin="0" @click="loginSub()" :disabled="login.dis">{{login.subText}}</wm-button>
@@ -99,7 +99,8 @@
                   <ul v-if="k1==0">
                     <li class="class">最近浏览</li>
                     <li v-for="v,k in menusLately" :key="k" @click="menusClick(v.pos)">{{ v.label }}</li>
-                    <li class="class">个人信息</li>
+                    <li class="class">公共菜单</li>
+                    <li @click="menusClick([0,0,0])">工作台</li>
                     <li @click="menusClick([0],'/UserInfo')">基本信息</li>
                     <li @click="menusClick([0],'/UserPasswd')">修改密码</li>
                   </ul>

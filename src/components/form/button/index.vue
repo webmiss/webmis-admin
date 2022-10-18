@@ -1,8 +1,8 @@
 <template>
   <button class="wm-button" :class="effect+'_'+type" :style="{
     width: icon?height:width,
-    height: 'calc('+height+' - 2px)',
-    lineHeight: 'calc('+height+' - 2px)',
+    height: height,
+    lineHeight: height,
     padding: icon?'0':padding,
     margin: margin,
     borderRadius: radius,
@@ -15,7 +15,7 @@
 <style lang="less" scoped>
 .wm-button:focus,button:active:focus,button.active:focus,button.focus,button:active.focus,button.active.focus{outline: none; border-color: transparent; box-shadow:none;}
 .wm-button{user-select: none; margin: 0 4px; border: transparent 1px solid; background: none; cursor: pointer; font-size: 14px; text-align: center; box-sizing: border-box;}
-.wm-button:hover{opacity: 0.9; box-shadow: 0 0 6px rgba(0,0,0,.2); text-shadow: 0 0 4px rgba(0,0,0,.08);}
+.wm-button:hover{box-shadow: 0 0 6px rgba(0,0,0,.2); text-shadow: 0 0 4px rgba(0,0,0,.08);}
 .wm-button:disabled{opacity: 0.7; cursor: not-allowed;}
 /* default */
 .wm-button.dark_default,.plain_default{background-color: #FFF; color: #626468; border-color: #D2D4D8;}
@@ -55,7 +55,6 @@
 </style>
 
 <script lang="ts">
-import Env from '../../../env'
 import { defineComponent } from 'vue';
 export default defineComponent({
   name: 'Botton',
@@ -64,7 +63,7 @@ export default defineComponent({
     type: {type: String, default: 'default'},         //类型: primary, success, warning, danger, info
     width: {type: String, default: 'auto'},           //宽度
     height: {type: String, default: '32px'},          //高度
-    padding: {type: String, default: '0 16px'},       //内部间距
+    padding: {type: String, default: '0 20px'},       //内部间距
     margin: {type: String, default: '0 4px'},         //外部间距
     radius: {type: String, default: '2px'},           //圆角
     icon: {type: String, default: ''},                //图标

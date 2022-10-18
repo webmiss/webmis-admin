@@ -9,28 +9,98 @@
       </div>
       <div class="app_addr_more flex">
         <span class="info">行业动态: <b>0</b> 条&nbsp;&nbsp;企业资讯: <b>0</b> 条</span>
-        <span class="reload" title="刷新" @click="$router.replace({path:'/refresh'})"><i class="ui ui_refresh" /></span>
+        <span class="reload" title="刷新" @click="loadData()"><i class="ui ui_refresh" /></span>
       </div>
     </div>
     <!-- 内容 -->
-    <div class="app_content mtop10">
-      <!-- 动作菜单 -->
-      <div class="app_action_body flex">
-        <ul class="app_action_list flex_left">
-          <li><wm-button type="primary" icon="ui ui_search" radius="50%"></wm-button></li>
-          <li v-if="getters.actionShow('add')" @click="add.show=true"><wm-button effect="plain">添加</wm-button></li>
-          <li v-if="getters.actionShow('edit')" @click="editData()"><wm-button type="primary" effect="plain">编辑</wm-button></li>
-          <li v-if="getters.actionShow('del')" @click="delData()"><wm-button type="danger" effect="plain">删除</wm-button></li>
-          <li class="line">|</li>
-          <li><wm-button type="primary">确认</wm-button></li>
-        </ul>
-        <ul class="app_action_list flex_left">
-          <li><wm-button type="primary" effect="text" padding="0 4px">导出</wm-button></li>
-          <li class="line">|</li>
-          <li><wm-button type="primary" effect="text" padding="0 4px">打印</wm-button></li>
-        </ul>
+    <div class="app_content mtop10 flex">
+      <div class="app_ct_left" v-show="sea.show">
+        <!-- 搜索 -->
+        <wm-search v-model:show="sea.show" @update:submit="subSea()">
+          <li>
+            <wm-select v-model:value="sea.form.cid" placeholder="选择分类" :data="menus.data" clearable />
+          </li>
+          <li>
+            <wm-input v-model:value="sea.form.title" placeholder="新闻标题" clearable />
+          </li>
+          <li>
+            <wm-input v-model:value="sea.form.source" placeholder="来源" clearable />
+          </li>
+          <li>
+            <wm-input v-model:value="sea.form.author" placeholder="作者" clearable />
+          </li>
+        </wm-search>
+        <!-- 搜索 End -->
       </div>
-      <!-- 动作菜单 End -->
+      <div class="app_ct_right" :style="{width: sea.show?'calc(100% - 260px)':''}">
+        <!-- 动作菜单 -->
+        <div class="app_action_body flex">
+          <ul class="app_action_list flex_left">
+            <li v-show="!sea.show" @click="sea.show=true"><wm-button type="primary" icon="ui ui_search" radius="50%"></wm-button></li>
+            <li v-if="getters.actionShow('add')" @click="add.show=true"><wm-button effect="plain">添加</wm-button></li>
+            <li v-if="getters.actionShow('edit')" @click="editData()"><wm-button type="primary" effect="plain">编辑</wm-button></li>
+            <li v-if="getters.actionShow('del')" @click="delData()"><wm-button type="danger" effect="plain">删除</wm-button></li>
+            <li class="line">|</li>
+            <li><wm-button type="primary">确认</wm-button></li>
+          </ul>
+          <ul class="app_action_list flex_left">
+            <li><wm-button type="primary" effect="text" padding="0 4px">导出</wm-button></li>
+            <li class="line">|</li>
+            <li><wm-button type="primary" effect="text" padding="0 4px">打印</wm-button></li>
+          </ul>
+        </div>
+        <!-- 动作菜单 End -->
+        <!-- List -->
+        <div class="app_table scrollbar">
+          <wm-table ref="Table" :data="page.list" style="min-width: 1200px;">
+            <template #title>
+              <td width="40">ID<wm-table-order :value="oby.list.id" @update:value="OrderBy('id', $event)" /></td>
+              <td width="28">封面</td>
+              <td>标题<wm-table-order :value="oby.list.title" @update:value="OrderBy('title', $event)" /></td>
+              <td width="80">所属</td>
+              <td width="120">时间<wm-table-order :value="oby.list.utime" @update:value="OrderBy('utime', $event)" /></td>
+              <td width="60" class="tCenter">状态</td>
+              <td width="60" class="tCenter">内容</td>
+              <td>来源<wm-table-order :value="oby.list.source" @update:value="OrderBy('source', $event)" /></td>
+              <td>作者<wm-table-order :value="oby.list.author" @update:value="OrderBy('author', $event)" /></td>
+            </template>
+            <tr v-for="(val,key) in page.list" :key="key">
+              <td width="30" class="checkbox wm-table_checkbox">
+                <wm-checkbox :value="val.id"></wm-checkbox>
+              </td>
+              <td>{{ val.id }}</td>
+              <td>
+                <wm-img width="28px" height="28px" radius="2px" icoSize="24px" :url="val.img" :title="val.title" @click="openShow(val)"></wm-img>
+              </td>
+              <td><div class="news_title" @click="openShow(val)">{{ val.title }}</div></td>
+              <td>{{ menusName[val.cid] }}</td>
+              <td>
+                <wm-popover type="bottom" effect="dark" width="180px">
+                  <template #body>
+                    <p>创建: {{ val.ctime || '无' }}</p>
+                    <p>更新: {{ val.utime || '无' }}</p>
+                  </template>
+                  <template #reference>
+                    <wm-tag size="medium">{{ val.utime.substr(0,10) }}</wm-tag>
+                  </template>
+                </wm-popover>
+              </td>
+              <td class="tCenter">
+                <wm-switch v-if="getters.actionShow('state')" :value="val.state" @update:value="setState($event,val.id)"></wm-switch>
+                <span v-else>-</span>
+              </td>
+              <td class="tCenter">
+                <wm-button type="text" v-if="getters.actionShow('edit')" @click="setContent(val.id)">编辑</wm-button>
+                <span v-else>-</span>
+              </td>
+              <td>{{ val.source }}</td>
+              <td>{{ val.author }}</td>
+            </tr>
+          </wm-table>
+        </div>
+        <wm-page :page="page.page" :limit="page.limit" :total="page.total" @update:page="subPage"></wm-page>
+        <!-- List End -->
+      </div>
     </div>
     <!-- 内容 End -->
 
@@ -75,7 +145,7 @@
         </tr>
       </wm-table-form>
       <template #footer>
-        <wm-button @click="subAdd()">添 加</wm-button>
+        <wm-button type="primary" @click="subAdd()">确 认</wm-button>
       </template>
     </wm-dialog>
     <!-- Add End -->
@@ -121,7 +191,7 @@
         </tr>
       </wm-table-form>
       <template #footer>
-        <wm-button @click="subEdit()">保 存</wm-button>
+        <wm-button type="primary" @click="subEdit()">确 认</wm-button>
       </template>
     </wm-dialog>
     <!-- Edit End -->
@@ -130,7 +200,7 @@
     <wm-dialog title="删除" width="360px" v-model:show="del.show">
       <wm-row>是否删除已选择数据？</wm-row>
       <template #footer>
-        <wm-button @click="subDel()">彻底删除</wm-button>
+        <wm-button type="danger" @click="subDel()">彻底删除</wm-button>
       </template>
     </wm-dialog>
     <!-- Del End -->
@@ -149,7 +219,7 @@
     <wm-dialog title="新闻内容" width="760px" v-model:show="content.edit">
       <wm-tinymce class="form" v-model:value="content.form.content" :menubar="true" :height="500" :upload="content.upload" placeholder="新闻内容"></wm-tinymce>
       <template #footer>
-        <wm-button @click="subContent()">保 存</wm-button>
+        <wm-button type="primary" @click="subContent()">确 认</wm-button>
       </template>
     </wm-dialog>
     <!-- Content End -->

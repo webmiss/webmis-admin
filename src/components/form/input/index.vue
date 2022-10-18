@@ -62,7 +62,7 @@ export default defineComponent({
     placeholder: {type: String, default: '请输入'},   //提示: 无
     width: {type: String, default: '100%'},           //宽度: '100%'
     maxWidth: {type: String, default: 'auto'},        //宽度: '100%'
-    height: {type: String, default: '32px'},          //高度: '40px'
+    height: {type: String, default: '32px'},          //高度: '32px'
     lineHeight: {type: String, default: '20px'},      //行高: '20px'
     padding: {type: String, default: '10px 10px'},    //间距: '10px 10px'
     align: {type: String, default: ''},               //文本对齐方式: 'left'

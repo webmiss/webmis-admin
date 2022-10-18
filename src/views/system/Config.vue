@@ -1,5 +1,5 @@
 <template>
-  <wm-main>
+  <wm-main bgColor="#FFF">
     <wm-form>
       <wm-form-item label="Upload" height="auto">
         <wm-img-upload :width="200" :height="200" :url="upload.url" :param="upload.param" @upload="upImg($event,'logo')">

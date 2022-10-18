@@ -45,7 +45,7 @@ export default defineComponent({
     limit: {type: Number, default: 10},         //每页条数: 10
     total: {type: Number, default: 0},          //总条目数: 0
     maxPage: {type: Number, default: 11},       //显示页数: 11
-    padding: {type: String, default: '16px 0'}, //边距: '32px 0'
+    padding: {type: String, default: '10px 0'}, //边距: '32px 0'
   },
   data(){
     const max: number = 0;

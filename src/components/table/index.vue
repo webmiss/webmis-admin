@@ -13,7 +13,7 @@
 </template>
 
 <style lang="less">
-.wm-table{width: 100%; margin: 4px 0; border-collapse: collapse; box-sizing: border-box; border-radius: 4px;}
+.wm-table{width: 100%; border-collapse: collapse; box-sizing: border-box; border-radius: 4px;}
 .wm-table .checkbox{position: relative;}
 .wm-table .wm-checkbox{position: absolute; top: 50%; transform: translateY(-50%);}
 .wm-table td{position: relative; padding: 4px 8px; line-height: 28px; border: #FFF 1px solid;}

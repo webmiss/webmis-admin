@@ -1,6 +1,5 @@
 import { defineComponent } from 'vue';
 import { useStore } from 'vuex';
-import Env from '../../env'
 /* JS组件 */
 import Loading from '@/library/ui/loading'
 import Toast from '@/library/ui/toast'
@@ -27,7 +26,6 @@ export default defineComponent({
     const state: any = store.state;
     const getters: any = store.getters;
     // 信息
-    const theme: any = {primary: Env.themes.primary.plain[0], minor: Env.themes.primary.plain[2]}
     const info: any = {url:'', path:'/', loaded:'0%'};
     // 列表、新建、重命名、上传、下载、打包、删除
     const lists: any = {url:'', folder:[], files:[], dirNum:0, fileNum:0, size:'0KB'};
@@ -39,7 +37,7 @@ export default defineComponent({
     const del: any = {show:false, data:[]};
     // 图片预览
     const imgView: any = {show: false, imgs:[], index: 0};
-    return {state, getters, theme, info, lists, folder, rename, upload, down, zip, del, imgView};
+    return {state, getters, info, lists, folder, rename, upload, down, zip, del, imgView};
   },
   mounted(){
     // 加载数据

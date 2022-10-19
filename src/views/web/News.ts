@@ -16,7 +16,6 @@ import wmTableForm from '@/components/table/form.vue'
 import wmTableOrder from '@/components/table/order.vue'
 import wmCheckbox from '@/components/form/checkbox/index.vue'
 import wmTag from '@/components/tag/index.vue'
-import wmPopover from '@/components/popover/index.vue'
 import wmDialog from '@/components/dialog/index.vue'
 import wmInput from '@/components/form/input/index.vue'
 import wmButton from '@/components/form/button/index.vue'
@@ -29,7 +28,7 @@ import wmTinymce from '@/components/tinymce/index.vue'
 
 export default defineComponent({
   components: {
-    wmSearch,wmMain,wmRow,wmTable,wmTableForm,wmTableOrder,wmCheckbox,wmTag,wmPopover,wmDialog,wmInput,wmButton,wmPage,
+    wmSearch,wmMain,wmRow,wmTable,wmTableForm,wmTableOrder,wmCheckbox,wmTag,wmDialog,wmInput,wmButton,wmPage,
     wmSwitch,wmImg,wmImgUpload,wmSelect,wmTinymce,
   },
   data(){

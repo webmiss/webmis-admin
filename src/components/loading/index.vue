@@ -2,14 +2,14 @@
 <div class="wm-load">
   <!-- Flow -->
   <div v-if="theme=='flow'" class="wm-load_flow">
-    <div class="bounce1" :style="{backgroundColor: color}"></div>
-    <div class="bounce2" :style="{backgroundColor: color}"></div>
-    <div class="bounce3" :style="{backgroundColor: color}"></div>
+    <div class="bounce1" :style="{backgroundColor: color?color:''}"></div>
+    <div class="bounce2" :style="{backgroundColor: color?color:''}"></div>
+    <div class="bounce3" :style="{backgroundColor: color?color:''}"></div>
   </div>
   <!-- Swing -->
   <div v-else-if="theme=='swing'" class="wm-load_swing">
-    <div class="dot1" :style="{backgroundColor: color}"></div>
-    <div class="dot2" :style="{backgroundColor: color}"></div>
+    <div class="dot1" :style="{backgroundColor: color?color:''}"></div>
+    <div class="dot2" :style="{backgroundColor: color?color:''}"></div>
   </div>
   <!-- Circle -->
   <div v-else-if="theme=='circle'" class="wm-load_circle">
@@ -28,11 +28,11 @@
   </div>
   <!-- Wave -->
   <div v-else-if="theme=='wave'" class="wm-load_wave">
-    <div class="rect1" :style="{backgroundColor: color}"></div>
-    <div class="rect2" :style="{backgroundColor: color}"></div>
-    <div class="rect3" :style="{backgroundColor: color}"></div>
-    <div class="rect4" :style="{backgroundColor: color}"></div>
-    <div class="rect5" :style="{backgroundColor: color}"></div>
+    <div class="rect1" :style="{backgroundColor: color?color:''}"></div>
+    <div class="rect2" :style="{backgroundColor: color?color:''}"></div>
+    <div class="rect3" :style="{backgroundColor: color?color:''}"></div>
+    <div class="rect4" :style="{backgroundColor: color?color:''}"></div>
+    <div class="rect5" :style="{backgroundColor: color?color:''}"></div>
   </div>
 </div>
 </template>
@@ -47,7 +47,7 @@
   -webkit-animation: sk-bouncedelay 1.4s infinite ease-in-out both;
   animation: sk-bouncedelay 1.4s infinite ease-in-out both;
 }
-.wm-load_flow .bounce1,.wm-load_flow .bounce2,.wm-load_flow .bounce3{ margin: 0 1px; }
+.wm-load_flow .bounce1,.wm-load_flow .bounce2,.wm-load_flow .bounce3{ margin: 0 1px; background-color: @Primary;}
 .wm-load_flow .bounce1 { -webkit-animation-delay: -0.32s; animation-delay: -0.32s; }
 .wm-load_flow .bounce2 {
   -webkit-animation-delay: -0.16s; animation-delay: -0.16s;
@@ -71,6 +71,7 @@
   width: 60%; height: 60%; display: inline-block; position: absolute; top: 0; border-radius: 100%;
   -webkit-animation: sk-bounce 2.0s infinite ease-in-out;
   animation: sk-bounce 2.0s infinite ease-in-out;
+  background-color: @Primary;
 }
 .dot2 { top: auto; bottom: 0; -webkit-animation-delay: -1.0s; animation-delay: -1.0s; }
 @-webkit-keyframes sk-rotate { 100% { -webkit-transform: rotate(360deg) }}
@@ -129,6 +130,7 @@
   width: 4px; height: 80%; display: inline-block; margin: 0 1px;
   -webkit-animation: sk-stretchdelay 1.2s infinite ease-in-out;
   animation: sk-stretchdelay 1.2s infinite ease-in-out;
+  background-color: @Primary;
 }
 .wm-load_wave .rect2 { -webkit-animation-delay: -1.1s; animation-delay: -1.1s; }
 .wm-load_wave .rect3 { -webkit-animation-delay: -1.0s; animation-delay: -1.0s; }
@@ -146,12 +148,11 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import Env from '../../env'
 export default defineComponent({
   name: 'Loading',
   props: {
-    theme: {type: String, default: 'flow'},             //样式: flow、swing、circle、wave
-    color: {type: String, default: Env.themes.primary.plain[0]}, //颜色
+    theme: {type: String, default: 'flow'},   //样式: flow、swing、circle、wave
+    color: {type: String, default: ''},       //颜色: 默认主题色
   },
 });
 </script>

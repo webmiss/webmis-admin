@@ -60,37 +60,6 @@ export default {
   tinymceKey: 'dm9pn8sfmiyaalv1r49hvf8ww9x8denshvuhp1tf7z51k6jj',
   /* Token */
   token: '',
-  /* 主题 */
-  themes: {
-    primary:{
-      plain:['#595','#C2E7B0','#F0F9EB'],
-      dark:['#FFF','#595','#595'],
-    },
-    info:{
-      plain:['#909399','#E9E9EB','#F4F5F5'],
-      dark:['#FFF','#909399','#909399'],
-    },
-    success:{
-      plain:['#67C23A','#E1F3D8','#F0F9EB'],
-      dark:['#FFF','#67C23A','#67C23A'],
-    },
-    warning:{
-      plain:['#E6A23C','#FAECD8','#FDF6EC'],
-      dark:['#FFF','#E6A23C','#E6A23C'],
-    },
-    danger:{
-      plain:['#F56C6C','#FDE2E2','#FEF0F0'],
-      dark:['#FFF','#F56C6C','#F56C6C'],
-    },
-    border: {
-      plain:['#DCDFE6','#C0C4CC','#EBEEF5','#F2F6FC'],
-      dark:['#FFF','#CCC','#999','#666'],
-    },
-    text: {
-      plain:['#282828','#606266','#909399','#C0C4CC'],
-      dark:['#FFF','#CCC','#999','#666'],
-    }
-  },
   /* 请求 */
   request: {
     headers: {

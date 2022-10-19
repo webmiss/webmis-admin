@@ -30,10 +30,10 @@
             <li>{{ info.path }}</li>
           </ul>
           <ul class="app_action_list flex_left">
-            <li v-if="getters.actionShow('upload')" @click="uploadData()"><wm-button type="primary">上传</wm-button></li>
-            <li v-if="getters.actionShow('mkdir')" @click="folder.show=true"><wm-button effect="plain">新建文件夹</wm-button></li>
-            <li v-if="getters.actionShow('rename')" @click="renameData()"><wm-button effect="plain">重命名</wm-button></li>
-            <li v-if="getters.actionShow('remove')" @click="delData()"><wm-button type="danger" effect="plain">删除</wm-button></li>
+            <li v-if="getters.actionShow('upload')" @click="uploadData()"><wm-button type="primary" height="28px">上传</wm-button></li>
+            <li v-if="getters.actionShow('mkdir')" @click="folder.show=true"><wm-button effect="plain" height="28px">新建文件夹</wm-button></li>
+            <li v-if="getters.actionShow('rename')" @click="renameData()"><wm-button effect="plain" height="28px">重命名</wm-button></li>
+            <li v-if="getters.actionShow('remove')" @click="delData()"><wm-button type="danger" effect="plain" height="28px">删除</wm-button></li>
           </ul>
           
         </div>
@@ -43,27 +43,31 @@
           <span class="text" :style="{width:info.loaded}">{{info.loaded!='0%'&&info.loaded!='100%'?info.loaded:''}}</span>
         </div>
         <!-- 列表 -->
-        <div class="file_body">
-          <ul v-if="lists.folder.length!=0 || lists.files.length!=0">
+        <div class="file_body scrollbar">
+          <ul class="flex_left" v-if="lists.folder.length!=0 || lists.files.length!=0">
             <!-- 文件夹 -->
             <li v-for="(val,key) in lists.folder" :key="'dir'+key" :class="val.check?'file_active':'file_state'">
-              <div class="file_click" @click="val.check=!val.check"><i class="check"></i></div>
-              <div class="file" @click="openFolder(val.name)">
-                <div class="file_ct">
-                  <i class="ui ui_folder"></i>
+              <div class="file_center">
+                <div class="file_click" @click="val.check=!val.check"><i class="check"></i></div>
+                <div class="file" @click="openFolder(val.name)">
+                  <div class="file_ct">
+                    <i class="ui ui_folder"></i>
+                  </div>
+                  <div class="name nowrap" :title="val.name">{{ val.name }}</div>
                 </div>
-                <div class="name nowrap" :title="val.name">{{ val.name }}</div>
               </div>
             </li>
             <!-- 文件 -->
             <li v-for="(val,key) in lists.files" :key="'file'+key" :class="val.check?'file_active':'file_state'">
-              <div class="file_click" @click="val.check=!val.check"><i class="check"></i></div>
-              <div class="file" @click="openFile(val.name)">
-                <div class="file_ct">
-                  <div class="file_img bgImg" v-if="isImg(val.ext)" :style="{backgroundImage:'url('+info.url+lists.path+val.name+')'}"></div>
-                  <i class="ui ui_file" v-else></i>
+              <div class="file_center">
+                <div class="file_click" @click="val.check=!val.check"><i class="check"></i></div>
+                <div class="file" @click="openFile(val.name)">
+                  <div class="file_ct">
+                    <div class="file_img bgImg" v-if="isImg(val.ext)" :style="{backgroundImage:'url('+info.url+lists.path+val.name+')'}"></div>
+                    <i class="ui ui_file" v-else></i>
+                  </div>
+                  <div class="name nowrap" :title="val.name">{{ val.name }}</div>
                 </div>
-                <div class="name nowrap" :title="val.name">{{ val.name }}</div>
               </div>
             </li>
           </ul>
@@ -129,14 +133,15 @@
 
 <style lang="less" scoped>
 /* 进度条 */
-.file_load{width: 100%; height: 2px; line-height: 2px; font-size: 12px; background-color: #F2F2F2;}
+.file_load{width: 100%; height: 3px; line-height: 3px; font-size: 12px; background-color: #F2F2F2;}
 .file_load span{display: inline-block;}
 .file_load .text{position: absolute; padding-top: 10px; text-align: right;}
 
 /* 列表 */
-.file_body{height: calc(100% - 128px); padding: 10px 16px;}
-.file_body ul{overflow: hidden;}
-.file_body li{position: relative; float: left; margin: 5px;}
+.file_body{overflow-y: auto; height: calc(100% - 80px); padding: 10px 16px;}
+.file_body ul{overflow: hidden; width: 100%;}
+.file_body li{width: 10%; box-sizing: border-box; padding: 5px 0;}
+.file_center{position: relative; width: 128px; margin: 0 auto;}
 .file{width: 128px; height: 128px; border: #FFF 1px solid; border-radius: 5px;}
 .file:hover{background-color: #F2F4F6;}
 .file .name{line-height: 24px; text-align: center; padding: 8px 5px;}
@@ -162,6 +167,33 @@
 /* 图片 */
 .file_img{width: 100%; height: 100%; background-color: #F2F4F6;}
 .file_img.bgImg{background-size: contain;}
+
+
+/* 响应式布局 */
+@media screen and ( max-width: 1600px ){
+  .file_body li{width: 12.5%;}
+}
+@media screen and ( max-width: 1400px ){
+  .file_body li{width: 14.2%;}
+}
+@media screen and ( max-width: 1280px ){
+  .file_body li{width: 16.6%;}
+}
+@media screen and ( max-width: 1024px ){
+  .file_body li{width: 20%;}
+}
+@media screen and ( max-width: 980px ){
+  .file_body li{width: 25%;}
+}
+@media screen and ( max-width: 768px ){
+  .file_body li{width: 33%;}
+}
+@media screen and ( max-width: 540px ){
+  .file_body li{width: 50%;}
+}
+@media screen and ( max-width: 420px ){
+  .file_body li{width: 100%;}
+}
 </style>
 
 <script lang="ts" src="./FileManage.ts"></script>

@@ -27,14 +27,17 @@
         <!-- 动作菜单 -->
         <div class="app_action_body flex">
           <ul class="app_action_list flex_left">
-            <li><wm-button type="primary" effect="text" padding="0 2px" class="flex" @click="sea.show=!sea.show"><i class="ui ui_search"></i>&nbsp;搜索</wm-button></li>
+            <li><wm-button type="primary" effect="text" padding="0 4px" class="flex" @click="sea.show=!sea.show"><i class="ui ui_search"></i>&nbsp;搜索</wm-button></li>
             <li class="line">|</li>
-            <li><wm-button type="primary" effect="text" padding="0 2px">导出</wm-button></li>
+            <li v-if="getters.actionShow('add')" @click="add.show=true"><wm-button effect="text" padding="0 4px">添加</wm-button></li>
+            <li v-if="getters.actionShow('edit')" @click="editData()"><wm-button type="primary" effect="text" padding="0 4px">编辑</wm-button></li>
+            <li v-if="getters.actionShow('del')" @click="delData()"><wm-button type="danger" effect="text" padding="0 4px">删除</wm-button></li>
+            <li class="line">|</li>
           </ul>
           <ul class="app_action_list flex_left">
-            <li v-if="getters.actionShow('add')" @click="add.show=true"><wm-button effect="plain" height="30px">添加</wm-button></li>
-            <li v-if="getters.actionShow('edit')" @click="editData()"><wm-button type="primary" effect="plain" height="30px">编辑</wm-button></li>
-            <li v-if="getters.actionShow('del')" @click="delData()"><wm-button type="danger" effect="plain" height="30px">删除</wm-button></li>
+            <li><wm-button type="primary" effect="text" padding="0 4px">导出</wm-button></li>
+            <li class="line">|</li>
+            <li><wm-button type="primary" effect="text" padding="0 4px">打印</wm-button></li>
           </ul>
         </div>
         <!-- 动作菜单 End -->

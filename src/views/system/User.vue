@@ -78,20 +78,19 @@
               <td><b>{{ val.tel || val.email || val.uname }}</b></td>
               <td>{{ val.nickname || '-' }}</td>
               <td class="tCenter">
-                <wm-button type="info" effect="text" padding="0 4px" v-if="getters.actionShow('perm') && val.sys_perm" @click="permData('admin', val.uid, val.sys_role, val.sys_perm)">私有</wm-button>
+                <wm-button type="danger" effect="text" padding="0 4px" v-if="getters.actionShow('perm') && val.sys_perm" @click="permData('admin', val.uid, val.sys_role, val.sys_perm)">私有</wm-button>
                 <wm-button type="primary" effect="text" padding="0 4px" v-else-if="getters.actionShow('perm') && val.sys_role" @click="permData('admin', val.uid, val.sys_role, val.sys_perm)">角色</wm-button>
-                <wm-button type="danger" effect="text" padding="0 4px" v-else-if="getters.actionShow('perm')" @click="permData('admin', val.uid, val.sys_role, val.sys_perm)">分配</wm-button>
+                <wm-button type="info" effect="text" padding="0 4px" v-else-if="getters.actionShow('perm')" @click="permData('admin', val.uid, val.sys_role, val.sys_perm)">分配</wm-button>
                 <span v-else>-</span>
               </td>
               <td>
-                <wm-button type="info" effect="text" padding="0 4px" v-if="getters.actionShow('perm') && val.api_perm" @click="permData('api', val.uid, val.api_role, val.api_perm)">私有</wm-button>
+                <wm-button type="danger" effect="text" padding="0 4px" v-if="getters.actionShow('perm') && val.api_perm" @click="permData('api', val.uid, val.api_role, val.api_perm)">私有</wm-button>
                 <wm-button type="primary" effect="text" padding="0 4px" v-else-if="getters.actionShow('perm') && val.api_role" @click="permData('api', val.uid, val.api_role, val.api_perm)">角色</wm-button>
-                <wm-button type="danger" effect="text" padding="0 4px" v-else-if="getters.actionShow('perm')" @click="permData('api', val.uid, val.api_role, val.api_perm)">分配</wm-button>
+                <wm-button type="info" effect="text" padding="0 4px" v-else-if="getters.actionShow('perm')" @click="permData('api', val.uid, val.api_role, val.api_perm)">分配</wm-button>
                 <span v-else>-</span>
               </td>
               <td>
-                <wm-button type="info" effect="text" padding="0 4px" v-if="getters.actionShow('info') && val.nickname" @click="infoData(val)">修改</wm-button>
-                <wm-button type="danger" effect="text" padding="0 4px" v-else-if="getters.actionShow('info')" @click="infoData(val)">添加</wm-button>
+                <wm-button type="info" effect="text" padding="0 4px" v-if="getters.actionShow('info')" @click="infoData(val)">修改</wm-button>
                 <span v-else>-</span>
               </td>
               <td class="tCenter">

@@ -33,16 +33,11 @@
         <!-- 动作菜单 -->
         <div class="app_action_body flex">
           <ul class="app_action_list flex_left">
+            <li><wm-button type="primary" effect="text" padding="0 2px" class="flex" @click="sea.show=!sea.show"><i class="ui ui_search"></i>&nbsp;搜索</wm-button></li>
             <li class="line">|</li>
-            <li><wm-button type="primary" effect="text" padding="0 4px">全选</wm-button></li>
-            <li class="line">|</li>
-            <li><wm-button type="primary" effect="text" padding="0 4px">复制</wm-button></li>
-            <li class="line">|</li>
-            <li><wm-button type="primary" effect="text" padding="0 4px">导出</wm-button></li>
-            <li class="line">|</li>
+            <li><wm-button type="primary" effect="text" padding="0 2px">导出</wm-button></li>
           </ul>
           <ul class="app_action_list flex_left">
-            <li v-show="!sea.show" @click="sea.show=true"><wm-button type="primary" icon="ui ui_search" radius="50%"></wm-button></li>
             <li v-if="getters.actionShow('add')" @click="add.show=true"><wm-button effect="plain">添加</wm-button></li>
             <li v-if="getters.actionShow('edit')" @click="editData()"><wm-button type="primary" effect="plain">编辑</wm-button></li>
             <li v-if="getters.actionShow('del')" @click="delData()"><wm-button type="danger" effect="plain">删除</wm-button></li>
@@ -79,8 +74,8 @@
               <td>{{ val.utime }}</td>
               <td class="tCenter">{{ val.sort }}</td>
               <td class="tCenter">
-                <wm-button type="text" textColor="danger" v-if="getters.actionShow('perm') && val.controller && !val.action" @click="permData(val.id, val.title, val.controller, val.action)">设置</wm-button>
-                <wm-button type="text" v-else-if="getters.actionShow('perm') && val.controller && val.action" @click="permData(val.id, val.title, val.controller, val.action)">编辑</wm-button>
+                <wm-button type="danger" effect="text" padding="0 4px" v-if="getters.actionShow('perm') && val.controller && !val.action" @click="permData(val.id, val.title, val.controller, val.action)">设置</wm-button>
+                <wm-button type="primary" effect="text" padding="0 4px" v-else-if="getters.actionShow('perm') && val.controller && val.action" @click="permData(val.id, val.title, val.controller, val.action)">编辑</wm-button>
                 <span v-else>-</span>
               </td>
               <td>{{ val.url }}</td>

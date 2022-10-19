@@ -25,7 +25,7 @@
 .wm-checkbox .enabled:hover .checked{border-color: @Primary;}
 .wm-checkbox .enabled:hover .label{color: @Primary;}
 .wm-checkbox .active{position: relative; border-color: @Primary; background-color: @Primary;}
-.wm-checkbox .active::after{content: ""; position: absolute; width: 4px; height: 8px; border: 2px solid #fff; border-left: 0; border-top: 0; left: 5px; top: 2px; transform: rotate(45deg);}
+.wm-checkbox .active::after{content: ""; position: absolute; width: 4px; height: 8px; border: 2px solid #fff; border-left: 0; border-top: 0; left: 5px; top: 1px; transform: rotate(45deg);}
 .wm-checkbox .disabled{cursor: not-allowed;}
 .wm-checkbox .disabled .checked{background-color: #F2F2F2;}
 .wm-checkbox .disabled .label{color: @Disabled;}

@@ -117,7 +117,7 @@ export default defineComponent({
     value: {type:Array, default:[]},                //默认值
     data: {type:Array, default:[]},                 //数据: [{label:'A', value:'1', children: [{label:'1', value:'3'},{label:'2', value:'4'}]},{label:'b', value:'2', disabled: true}];
     width: {type:String, default:'100%'},           //宽度
-    height: {type:String, default:'40px'},          //高度
+    height: {type:String, default:'32px'},          //高度
     placeholder: {type:String, default:'请选择'},   //提示信息
     maxWidth: {type:String, default:'180px'},       //最大宽度
     maxHeight: {type:String, default:'180px'},      //最大高度

@@ -15,7 +15,6 @@ import wmTableOrder from '@/components/table/order.vue'
 import wmCheckbox from '@/components/form/checkbox/index.vue'
 import wmImg from '@/components/img/index.vue'
 import wmTag from '@/components/tag/index.vue'
-import wmPopover from '@/components/popover/index.vue'
 import wmSwitch from '@/components/switch/index.vue'
 import wmDialog from '@/components/dialog/index.vue'
 import wmInput from '@/components/form/input/index.vue'
@@ -29,7 +28,7 @@ import wmTabs from '@/components/tabs/index.vue'
 /* 用户管理 */
 export default defineComponent({
   components: {
-    wmSearch,wmMain,wmRow,wmTable,wmTableForm,wmTableOrder,wmCheckbox,wmImg,wmTag,wmPopover,
+    wmSearch,wmMain,wmRow,wmTable,wmTableForm,wmTableOrder,wmCheckbox,wmImg,wmTag,
     wmSwitch,wmDialog,wmInput,wmRadio,wmDate,wmButton,wmPage,wmTree,
     wmTabs,
   },

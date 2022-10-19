@@ -18,10 +18,11 @@ import wmInput from '@/components/form/input/index.vue'
 import wmButton from '@/components/form/button/index.vue'
 import wmPage from '@/components/page/index.vue'
 import wmTree from '@/components/tree/index.vue'
+import wmTag from '@/components/tag/index.vue'
 
 /* API角色 */
 export default defineComponent({
-  components: {wmSearch,wmMain,wmRow,wmTable,wmTableForm,wmTableOrder,wmCheckbox,wmDialog,wmInput,wmButton,wmPage,wmTree},
+  components: {wmSearch,wmMain,wmRow,wmTable,wmTableForm,wmTableOrder,wmCheckbox,wmDialog,wmInput,wmButton,wmPage,wmTree,wmTag},
   data(){
     // 状态
     const store: any = useStore();
@@ -31,7 +32,7 @@ export default defineComponent({
     const page: any = {list:[], page:1, limit:20, total:0};
     // 搜索、排序、添加、编辑、删除
     const sea: any = {show:false, form:{}};
-    const oby: any = {name:'', list:{id:'', name:'', ctime:'', utime:''}};
+    const oby: any = {name:'', list:{id:'', name:'', utime:''}};
     const add: any = {show:false, form:{}};
     const edit: any = {show:false, id:'', form:{}};
     const del: any = {show:false, ids:''};

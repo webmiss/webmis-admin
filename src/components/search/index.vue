@@ -17,11 +17,11 @@
 
 <style lang="less">
 .wm-search{position: relative; height: 100%; font-size: 14px;}
-.wm-search_title{line-height: 32px; padding: 4px 4px; background-color: #F4F4F4; box-sizing: border-box;}
+.wm-search_title{line-height: 32px; padding: 8px 4px; background-color: #F4F4F4; box-sizing: border-box;}
 .wm-search_title h2{font-size: 14px; padding-left: 10px; font-weight: 600;}
 .wm-search_title span{cursor: pointer; width: 32px; height: 32px; line-height: 32px; text-align: center; border-radius: 50%;}
-.wm-search_title span i{font-size: 14px; color: @Primary;}
-.wm-search_title span:hover{background-color: @Minor;}
+.wm-search_title span i{font-size: 14px; color: @Info;}
+.wm-search_title span:hover i{color: @Primary;}
 .wm-search_body{overflow-y: auto; height: calc(100% - 42px);}
 .wm-search_form{padding: 10px 15px;}
 .wm-search_form li{padding: 5px 0;}

@@ -18,7 +18,7 @@
         <!-- 搜索 -->
         <wm-search v-model:show="sea.show" @update:submit="subSea()">
           <li>
-            <wm-input v-model:value="sea.form.name" maxlength="16" placeholder="角色名称" clearable />
+            <wm-input v-model:value="sea.form.name" maxlength="16" placeholder="角色名称" clearable @keyup.enter="subSea()" />
           </li>
         </wm-search>
         <!-- 搜索 End -->

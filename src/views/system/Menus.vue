@@ -18,16 +18,16 @@
         <!-- 搜索 -->
         <wm-search v-model:show="sea.show" @update:submit="subSea()">
           <li>
-            <wm-input v-model:value="sea.form.fid" placeholder="FID" clearable />
+            <wm-input v-model:value="sea.form.fid" placeholder="FID" clearable @keyup.enter="subSea()" />
           </li>
           <li>
-            <wm-input v-model:value="sea.form.title" placeholder="菜单名称" clearable />
+            <wm-input v-model:value="sea.form.title" placeholder="菜单名称" clearable @keyup.enter="subSea()" />
           </li>
           <li>
-            <wm-input v-model:value="sea.form.en" placeholder="英文名称" clearable />
+            <wm-input v-model:value="sea.form.en" placeholder="英文名称" clearable @keyup.enter="subSea()" />
           </li>
           <li>
-            <wm-input v-model:value="sea.form.url" placeholder="API关键字" clearable />
+            <wm-input v-model:value="sea.form.url" placeholder="API关键字" clearable @keyup.enter="subSea()" />
           </li>
         </wm-search>
         <!-- 搜索 End -->

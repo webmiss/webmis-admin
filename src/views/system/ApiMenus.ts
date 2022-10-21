@@ -29,7 +29,7 @@ export default defineComponent({
     const state: any = store.state;
     const getters: any = store.getters;
     // 分页
-    const page: any = {list:[], page:1, limit:20, total:0};
+    const page: any = {list:[], page:1, limit:100, total:0};
     // 搜索、排序、添加、编辑、删除
     const sea: any = {show:false, form:{}};
     const oby: any = {name:'', list:{id:'', fid:'', title:'', en:'', ctime:'', utime:'', url:'', controller:''}};

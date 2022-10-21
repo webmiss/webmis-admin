@@ -26,10 +26,10 @@ export default defineComponent({
     const transitionName: string = '';
     // 信息
     const info: any = {title: Env.title, version: Env.version, copy: Env.copy};
-    // 登录数据
+    // 登录
     const login: any = {uname:'',passwd:'',subText:'登 录',dis:false};
-    // 左侧菜单
-    const sea: any = {show: true, key:'', isData: true, list:[]};
+    // 菜单
+    const sea: any = {show: false, key:'', isData: true, list:[]};
     const menusPos: any = [0,0,0];
     const menusChildren: any = [];
     const menusLately: any = [];
@@ -197,6 +197,7 @@ export default defineComponent({
       this.state.menuAction = menu.value.action;
       this.state.menuTitle[1] = this.menusChildren[pos[1]].label;
       this.state.menuTitle[2] = menu.label;
+      this.sea.show = false;
       // 最近浏览
       this.menusSetLately({label:menu.label, pos:pos});
       // 跳转

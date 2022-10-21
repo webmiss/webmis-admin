@@ -57,7 +57,7 @@
 /* Menus */
 .app_menus_body{overflow-y: auto; height: calc(100% - 32px);}
 .app_menus{color: #3D3D3D;}
-.app_menus li{line-height: 24px; box-shadow: 0 1px 0px rgba(0,0,0,.08);}
+.app_menus li{user-select: none; line-height: 24px; border-bottom: #E8E8E8 1px solid;}
 .app_menus li:hover{color: @Primary;}
 .app_menus .m1 div{cursor: pointer; padding: 8px 8px;}
 .app_menus .ico{width: 24px; height: 24px; text-align: center; border-radius: 50%;}
@@ -66,7 +66,7 @@
 .app_menus .active{color: @Primary; background-color: @Minor;}
 .app_menus_list{visibility: hidden; opacity: 0; overflow-y: auto; position: fixed; z-index: 98; left: 110px; top: 48px; padding: 10px 16px; width: 240px; height: calc(100% - 68px); background-color: #FFF; box-shadow: 4px 0 4px rgba(0,0,0,.08); transition: @Transition;}
 .app_menus_list .class{line-height: 32px; font-size: 14px; font-weight: 700; color: #333; border-bottom: #E2E4E8 1px solid;}
-.app_menus_list li{cursor: pointer; box-shadow: none; line-height: 32px; padding: 0 8px; margin: 2px 0; font-size: 14px; color: #666; border-radius: 4px;}
+.app_menus_list li{cursor: pointer; border: none; line-height: 32px; padding: 0 8px; margin: 2px 0; font-size: 14px; color: #666; border-radius: 4px;}
 .app_menus_list li:hover{color: @Primary; background-color: @Minor;}
 .app_menus_list li:hover.class{cursor: default; color: #333; background-color: #FFF;}
 .app_menus .m1:hover .app_menus_list{visibility: visible; opacity: 1; left: 120px;}
@@ -74,17 +74,16 @@
 .app_copy{height: 32px; line-height: 32px; text-align: center; font-size: 12px; color: @Info; box-shadow: 0 0 2px rgba(0,0,0,.1);}
 
 /* 地址栏 */
-.app_addr{height: 40px; line-height: 40px; background-color: #FFF; box-shadow: 0 0 4px rgba(0,0,0,.1);}
-.app_addr .addr{padding: 0 10px;}
+.app_addr{overflow: hidden; height: 40px; line-height: 40px; background-color: #FFF; box-shadow: 0 0 4px rgba(0,0,0,.1);}
+.app_addr .addr{padding: 0 14px;}
 .app_addr .addr span{padding: 0 2px;}
 .app_addr .addr i{font-size: 12px; color: #999;}
 .app_addr_more{font-size: 13px; color: #8294A8;}
 .app_addr_more span{text-align: center;}
 .app_addr_more .info{padding: 0 8px;}
-.app_addr_more .info b{color: @Success; font-size: 14px;}
-.app_addr_more .reload{cursor: pointer; width: 40px; border-left: #E2E4E8 1px solid;}
+.app_addr_more .info b{color: #3D3D3D; font-size: 14px;}
+.app_addr_more .reload{cursor: pointer; width: 40px; border-left: #E2E4E8 1px solid; color: @Primary;}
 .app_addr_more .reload:hover{background-color: @Minor;}
-.app_addr_more .reload:hover i{color: @Primary;}
 
 /* 内容 */
 .app_content{height: calc(100% - 50px); background-color: #FFF; box-shadow: 0 0 4px rgba(0,0,0,.2);}
@@ -97,6 +96,32 @@
 .app_action_list .line{color: #C2C4C8; padding: 0 5px;}
 /* 表格 */
 .app_table{overflow: auto; margin-top: 8px; max-height: calc(100% - 110px); border-bottom: #F2F2F2 1px solid;}
+
+/* 图表 */
+.app_chart{overflow-y: auto; height: calc(100% - 50px);}
+.chart_body{width: 100%;}
+.chart_left{width: calc(100% - 250px);}
+.chart_right{width: 240px;}
+.chart{background-color: #FFF; border-radius: 4px; padding: 0 16px;}
+.chart_title{line-height: 32px; padding: 8px 0; border-bottom: #E2E2E2 1px solid;}
+.chart_title h2{font-size: 14px; font-weight: 600;}
+.chart_ct{padding: 10px;}
+/* 图表-工具 */
+.chart_tools{overflow: hidden; border-radius: 8px;}
+.chart_tools li{cursor: pointer; position: relative; padding: 0 10px; line-height: 32px; color: @IconColor;}
+.chart_tools li:hover{color: @Primary;}
+.chart_tools li.active{color: @Primary; font-weight: 600;}
+.chart_tools li::before{content: ''; position: absolute; width: 1px; height: 12px; background-color: #D2D2D2; right: 0; top: 50%; transform: translateY(-50%);}
+.chart_tools li:last-child::before{display: none;}
+/* 图表-表格 */
+.chart_table{width: 100%; border-collapse: collapse; font-size: 14px; text-align: center;}
+.chart_table td{position: relative; padding: 8px 8px; line-height: 20px; border: #E2E2E2 1px solid;}
+.chart_table .title{font-weight: bold; color: @Info; font-size: 10px; background-color: @BorderColor;}
+.chart_table .day{width: 80px;}
+/* 图表-列表 */
+.chart_list{overflow: hidden;}
+.chart_list li{line-height: 40px; border-bottom: #F2F2F2 1px solid;}
+.chart_list li:last-child{border: none;}
 
 /* 响应式布局 */
 @media screen and ( max-width: 1400px ){

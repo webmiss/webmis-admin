@@ -49,8 +49,11 @@
             <input type="text" placeholder="搜索菜单名称" v-model="sea.key" @input="seaInput()" />
             <div class="box scrollbar">
               <ul class="list">
-                <template v-for="(m,k) in sea.list" :key="k">
-                  <li v-if="m.show" @click="menusClick(m.value)">{{ m.label }}</li>
+                <template  v-if="!sea.key && menusLately.length>0">
+                  <li v-for="(v,k) in menusLately" :key="k" @click="menusClick(v.pos)">{{ v.label }}</li>
+                </template>
+                <template v-else>
+                  <li v-for="(m,k) in sea.list" :key="k" v-show="m.show" @click="menusClick(m.value)">{{ m.label }}</li>
                 </template>
                 <li v-if="!sea.isData" class="null"></li>
               </ul>
@@ -91,11 +94,11 @@
           <div class="app_menus_body scrollbar">
             <ul class="app_menus">
               <li class="m1" v-for="(m1,k1) in state.menus" :key="k1" :class="menusPos[0]==k1?'active':''">
-                <div class="flex_left">
+                <div class="flex_left" @click="sea.show=!sea.show">
                   <span class="ico"><i :class="m1.icon"></i></span>
                   <span class="title">{{m1.label}}</span>
                 </div>
-                <div class="app_menus_list scrollbar">
+                <div class="app_menus_list scrollbar" v-show="sea.show">
                   <ul v-if="k1==0">
                     <li class="class">最近浏览</li>
                     <li v-for="v,k in menusLately" :key="k" @click="menusClick(v.pos)">{{ v.label }}</li>

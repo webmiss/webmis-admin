@@ -38,15 +38,14 @@
           <ul class="app_action_list flex_left">
             <li><wm-button type="primary" effect="text" padding="0 4px" class="flex" @click="sea.show=!sea.show"><i class="ui ui_search"></i>&nbsp;搜索</wm-button></li>
             <li class="line">|</li>
-            <li v-if="getters.actionShow('add')" @click="add.show=true"><wm-button effect="text" padding="0 4px">添加</wm-button></li>
-            <li v-if="getters.actionShow('edit')" @click="editData()"><wm-button type="primary" effect="text" padding="0 4px">编辑</wm-button></li>
-            <li v-if="getters.actionShow('del')" @click="delData()"><wm-button type="danger" effect="text" padding="0 4px">删除</wm-button></li>
-            <li class="line">|</li>
+            <li v-if="getters.actionShow('add')"><wm-button effect="text" padding="0 4px" @click="add.show=true">添加</wm-button></li>
+            <li v-if="getters.actionShow('edit')"><wm-button type="primary" effect="text" padding="0 4px" @click="editData()">编辑</wm-button></li>
+            <li v-if="getters.actionShow('del')"><wm-button type="danger" effect="text" padding="0 4px" @click="delData()">删除</wm-button></li>
           </ul>
           <ul class="app_action_list flex_left">
-            <li><wm-button type="primary" effect="text" padding="0 4px">导出</wm-button></li>
+            <li><wm-button type="primary" effect="text" padding="0 2px">导出</wm-button></li>
             <li class="line">|</li>
-            <li><wm-button type="primary" effect="text" padding="0 4px">打印</wm-button></li>
+            <li><wm-button type="primary" effect="text" padding="0 2px">打印</wm-button></li>
           </ul>
         </div>
         <!-- 动作菜单 End -->
@@ -76,7 +75,7 @@
                 <span v-else>-</span>
               </td>
               <td><b>{{ val.title }}</b></td>
-              <td>{{ val.en }}</td>
+              <td>{{ val.en || '-' }}</td>
               <td>
                 <wm-tag size="medium" :title="'创建: '+val.ctime+'\n更新: '+val.utime">{{ val.utime.substr(0,10) }}</wm-tag>
               </td>
@@ -86,8 +85,8 @@
                 <wm-button type="primary" effect="text" padding="0 4px" v-else-if="getters.actionShow('perm') && val.controller && val.action" @click="permData(val.id, val.title, val.controller, val.action)">编辑</wm-button>
                 <span v-else>-</span>
               </td>
-              <td>{{ val.url }}</td>
-              <td>{{ val.controller }}</td>
+              <td>{{ val.url || '-' }}</td>
+              <td>{{ val.controller || '-' }}</td>
             </tr>
           </wm-table>
         </div>

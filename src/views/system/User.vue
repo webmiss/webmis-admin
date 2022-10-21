@@ -41,15 +41,14 @@
           <ul class="app_action_list flex_left">
             <li><wm-button type="primary" effect="text" padding="0 4px" class="flex" @click="sea.show=!sea.show"><i class="ui ui_search"></i>&nbsp;搜索</wm-button></li>
             <li class="line">|</li>
-            <li v-if="getters.actionShow('add')" @click="add.show=true"><wm-button effect="text" padding="0 4px">添加</wm-button></li>
-            <li v-if="getters.actionShow('edit')" @click="editData()"><wm-button type="primary" effect="text" padding="0 4px">编辑</wm-button></li>
-            <li v-if="getters.actionShow('del')" @click="delData()"><wm-button type="danger" effect="text" padding="0 4px">删除</wm-button></li>
-            <li class="line">|</li>
+            <li v-if="getters.actionShow('add')"><wm-button effect="text" padding="0 4px" @click="add.show=true">添加</wm-button></li>
+            <li v-if="getters.actionShow('edit')"><wm-button type="primary" effect="text" padding="0 4px" @click="editData()">编辑</wm-button></li>
+            <li v-if="getters.actionShow('del')"><wm-button type="danger" effect="text" padding="0 4px" @click="delData()">删除</wm-button></li>
           </ul>
           <ul class="app_action_list flex_left">
-            <li><wm-button type="primary" effect="text" padding="0 4px">导出</wm-button></li>
+            <li><wm-button type="primary" effect="text" padding="0 2px">导出</wm-button></li>
             <li class="line">|</li>
-            <li><wm-button type="primary" effect="text" padding="0 4px">打印</wm-button></li>
+            <li><wm-button type="primary" effect="text" padding="0 2px">打印</wm-button></li>
           </ul>
         </div>
         <!-- 动作菜单 End -->
@@ -211,15 +210,13 @@
     <!-- Info End -->
 
     <!-- Perm -->
-    <wm-dialog title="权限" width="540px" v-model:show="perm.show">
-      <wm-tabs v-model:active="perm.active" :data="[{label:'角色', name:'role'},{label:'私有', name:'perm'}]">
-        <template #role>
-          <wm-radio class="content" :data="perm.roleList" :value="perm.role+''" @update:value="perm.role=$event"></wm-radio>
-        </template>
-        <template #perm>
-          <wm-tree class="content" ref="perm" :data="perm.permList"></wm-tree>
-        </template>
-      </wm-tabs>
+    <wm-dialog v-model:show="perm.show" title="权限" width="540px" tabsActive="role" :tabs="[{label:'角色', name:'role'},{label:'私有', name:'perm'}]">
+      <template #role>
+        <wm-radio :data="perm.roleList" v-model:value="perm.role"></wm-radio>
+      </template>
+      <template #perm>
+        <wm-tree ref="perm" :data="perm.permList"></wm-tree>
+      </template>
       <template #footer>
         <wm-button type="primary" @click="subPerm()">确 认</wm-button>
       </template>
@@ -230,7 +227,6 @@
 </template>
 
 <style scoped>
-.content{padding: 16px 8px;}
 </style>
 
 <script lang="ts" src="./User.ts"></script>

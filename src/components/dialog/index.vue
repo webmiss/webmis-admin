@@ -1,16 +1,34 @@
 <template>
-  <wm-popup ref="Popup" :show="show" @update:show="$emit('update:show',$event)" :bgClose="bgClose">
+  <wm-popup class="wm-dialog_body" ref="Popup" :show="show" @update:show="$emit('update:show',$event)" :bgClose="bgClose">
     <div class="wm-dialog" :style="{width:width, height:height, backgroundColor:bgColor}">
+      <!-- Title -->
       <div class="wm-dialog_title">
         <div class="wm-dialog_close" @click="$emit('update:show', false)"></div>
         <div class="title" :style="{textAlign:titleAlign}">{{title}}</div>
       </div>
-      <div ref="DialogBody"  class="wm-dialog_body">
+      <!-- Header -->
+      <div v-if="header>0" class="flex_center" :style="{height: header+'px'}">
+        <slot name="header"></slot>
+      </div>
+      <!-- Tabs -->
+      <ul class="wm-tabs_list wm-dialog_tabs" v-if="tabs.length>0">
+        <li v-for="(v,k) in tabs" :key="k" :class="v.name==active?'active':''" @click="active=v.name">{{v.label}}</li>
+      </ul>
+      <div v-if="tabs.length>0" ref="DialogBody" class="wm-dialog_body scrollbar">
+        <div ref="DialogContent" class="wm-dialog_content">
+          <div class="wm-tabs_body" v-for="(v,k) in tabs" :key="k" v-show="v.name==active">
+            <slot :name="v.name"></slot>
+          </div>
+        </div>
+      </div>
+      <!-- Content -->
+      <div v-else ref="DialogBody"  class="wm-dialog_body scrollbar">
         <div ref="DialogContent" class="wm-dialog_content">
           <slot></slot>
         </div>
       </div>
-      <div v-if="isFooter" class="wm-dialog_footer" :style="{textAlign:footerAlign}">
+      <!-- Footer -->
+      <div v-if="footer>0" class="wm-dialog_footer" :style="{height:footer+'px', textAlign:footerAlign}">
         <slot name="footer"></slot>
       </div>
     </div>
@@ -18,7 +36,7 @@
 </template>
 
 <style lang="less" scoped>
-.wm-dialog{border-radius: 4px; padding-bottom: 4px;}
+.wm-dialog{border-radius: 2px; padding-bottom: 8px; border: #FFF 1px solid; box-sizing: border-box; box-shadow: 0 0 24px rgba(0,0,0,.4);}
 .wm-dialog_title{position: relative; height: 40px; font-size: 16px; padding: 0 8px; text-align: center;}
 .wm-dialog_title .title{line-height: 40px; user-select: none;}
 .wm-dialog_close{cursor: pointer; position: absolute; right: 8px; top: 4px; width: 32px; height: 32px; border-radius: 50%;}
@@ -26,41 +44,44 @@
 .wm-dialog_close::after,.wm-dialog_close::before{content: ''; position: absolute; width: 14px; height: 1.6px; background-color: #999; left: 50%; top: 50%; transform-origin: center;}
 .wm-dialog_close::after{transform: rotate(45deg); margin-left: -16%;}
 .wm-dialog_close::before{transform: rotate(-45deg); margin-left: -16%;}
-.wm-dialog_footer{height: 32px; padding: 8px 0 16px;}
+.wm-dialog_tabs{margin: 0 16px;}
+.wm-dialog_footer{padding: 10px 0; border-top: #F2F2F2 1px solid;}
 /* 滚动条 */
 .wm-dialog_body{overflow: auto; width: 100%; height: calc(100% - 40px - 60px);}
-.wm-dialog_body::-webkit-scrollbar{width: 8px;}
-.wm-dialog_body::-webkit-scrollbar-thumb{border-radius: 4px; background: rgba(136,136,136,0.4);}
-.wm-dialog_body:hover::-webkit-scrollbar-track{background: rgba(136,136,136,0.1);}
 /* 内容 */
-.wm-dialog_content{padding: 0px 16px 8px;}
+.wm-dialog_content{padding: 10px 16px;}
 </style>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { useStore } from 'vuex';
 import wmPopup from '../popup/index.vue'
+import wmTabs from '../tabs/index.vue'
 import HtmlObserve from '../../library/html/observe'
 export default defineComponent({
   name: 'Dialog',
-  components: {wmPopup},
+  components: {wmPopup,wmTabs},
   props: {
     show: {type: Boolean, default: false},          //是否显示
     title: {type: String, default: ''},             //标题
     width: {type: String, default: '420px'},        //宽
     height: {type: String, default: 'auto'},        //高
-    hMargin: {type: Number, default: 16},           //高度边距
+    header: {type: Number, default: 0},             //头部高度
+    footer: {type: Number, default: 32},            //底部高度
+    margin: {type: Number, default: 16},            //上下边距
     titleAlign: {type: String, default: 'center'},  //标题对齐方式
     footerAlign: {type: String, default: 'center'}, //底部对齐方式
     bgColor: {type: String, default: '#FFF'},       //内容背景颜色
     bgClose: {type: Boolean, default: false},       //点击背景关闭
-    isFooter: {type: Boolean, default: true},       //是否底部
+    tabsActive: {type: String, default: ''},        //Tabs-默认选择
+    tabs: {type:Array, default:[]},                 //Tabs-数据: [{label:'Tab1', name:'tab1'},{label:'Tab2', name:'tab2'}]
   },
   data(){
     // 状态
     const store: any = useStore();
     const state: any = store.state;
-    return {state};
+    let active: string = '';
+    return {state, active};
   },
   watch:{
     show(val){
@@ -69,9 +90,10 @@ export default defineComponent({
       }else{
         this.autoHeight();
       }
-    }
+    },
   },
   mounted(){
+    this.active = this.tabsActive;
   },
   methods:{
 
@@ -87,8 +109,12 @@ export default defineComponent({
         let content: any = this.$refs.DialogContent;
         let val: string = getComputedStyle(content).getPropertyValue('height');
         let bh: number = this.state.height;
-        let h: number = parseInt(val.replace(/(px)/g, ''))+32+60+this.hMargin*2;
-        if(h>bh) body.style.height = bh-48-60-this.hMargin*2+'px';
+        let th: number = 40+8+this.margin*2;
+        if(this.header>0) th += this.header;
+        if(this.tabs.length>0) th += 40;
+        if(this.footer>0) th += this.footer+20;
+        let h: number = parseInt(val.replace(/(px)/g, ''))+th;
+        if(h>(bh-20)) body.style.height = bh-th+'px';
         else body.style.height = '';
       }, 300);
     },

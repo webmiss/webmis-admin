@@ -21,7 +21,7 @@
 .wm-checkbox span{float: left;}
 .wm-checkbox .checkbox{display: none;}
 .wm-checkbox .checked{position: relative; display: inline-block; width: 15px; height: 15px; border: @BorderColor 1px solid; border-radius: 2px; background-color: #FFF; transition: @Transition;}
-.wm-checkbox .label{display: inline-block; height: 15px; line-height: 15px; padding-left: 6px;}
+.wm-checkbox .label{display: inline-block; height: 15px; line-height: 15px; padding-left: 6px; padding-top: 1px;}
 .wm-checkbox .enabled:hover .checked{border-color: @Primary;}
 .wm-checkbox .enabled:hover .label{color: @Primary;}
 .wm-checkbox .active{position: relative; border-color: @Primary; background-color: @Primary;}

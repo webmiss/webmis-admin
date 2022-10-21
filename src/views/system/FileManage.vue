@@ -30,10 +30,11 @@
             <li>{{ info.path }}</li>
           </ul>
           <ul class="app_action_list flex_left">
-            <li v-if="getters.actionShow('upload')" @click="uploadData()"><wm-button type="primary" height="28px">上传</wm-button></li>
-            <li v-if="getters.actionShow('mkdir')" @click="folder.show=true"><wm-button effect="plain" height="28px">新建文件夹</wm-button></li>
-            <li v-if="getters.actionShow('rename')" @click="renameData()"><wm-button effect="plain" height="28px">重命名</wm-button></li>
-            <li v-if="getters.actionShow('remove')" @click="delData()"><wm-button type="danger" effect="plain" height="28px">删除</wm-button></li>
+            <li v-if="getters.actionShow('mkdir')"><wm-button effect="plain" height="28px" @click="folder.show=true">新建文件夹</wm-button></li>
+            <li v-if="getters.actionShow('rename')"><wm-button effect="plain" height="28px" @click="renameData()">重命名</wm-button></li>
+            <li v-if="getters.actionShow('remove')"><wm-button type="danger" effect="plain" height="28px" @click="delData()">删除</wm-button></li>
+            <li class="line">|</li>
+            <li v-if="getters.actionShow('upload')"><wm-button type="primary" height="28px" @click="uploadData()">上传</wm-button></li>
           </ul>
           
         </div>

@@ -32,21 +32,21 @@
 <style lang="less" scoped>
 .wm-input_body{position: relative; width: 100%;}
 
-.wm-input_clear_body{display: none; position: absolute; z-index: 1; width: 30px; height: 80%; top: 10%; right: 1px; text-align: center; background-color: #FFF;}
+.wm-input_clear_body{display: none; position: absolute; z-index: 1; width: 30px; height: 80%; top: 10%; right: 1px; text-align: center;}
 .wm-input_clear{position: absolute; cursor: pointer; top: 50%; right: 6px; transform: translateY(-50%); width: 16px; height: 16px; background-color: @Danger; border-radius: 50%; opacity: .5;}
 .wm-input_clear:hover{opacity: 1;}
-.wm-input_clear::after,.wm-input_clear::before{content: ''; position: absolute; width: 50%; height: 0.1rem; background-color: #FFF; left: 50%; top: 50%; transform-origin: center;}
+.wm-input_clear::after,.wm-input_clear::before{content: ''; position: absolute; width: 50%; height: 0.1rem; background-color: @Minor; left: 50%; top: 50%; transform-origin: center;}
 .wm-input_clear::after{transform: translate(-50%, -50%) rotate(45deg);}
 .wm-input_clear::before{transform: translate(-50%, -50%) rotate(-45deg);}
 .wm-input_body:hover .wm-input_clear_body{display: block;}
 
-.wm-input_botton{user-select: none; cursor: pointer; padding: 0 10px; position: absolute; z-index: 1; top: 50%; right: 1px; transform: translateY(-50%); color: @Info; background-color: #FFF;}
+.wm-input_botton{user-select: none; cursor: pointer; padding: 0 10px; position: absolute; z-index: 1; top: 50%; right: 1px; transform: translateY(-50%); color: @Info;}
 .wm-input_botton:hover{color: @Primary;}
 
 .wm-input{border: none; background: none; -webkit-appearance: none; outline: none; font: 400 14px Arial; caret-color: @Primary;}
 .wm-input{width: 100%; box-sizing: border-box; border-radius: 4px; border: @BorderColor 1px solid; background-color: #FFF;}
 .wm-input:hover{box-shadow: 0 0 4px rgba(0,0,0,.1); border-color: @BorderHover;}
-.wm-input:focus{outline: none; border-color: @Primary;}
+.wm-input:focus{outline: none; border-color: @Primary; background-color: @Minor;}
 .wm-input:disabled{border-color: #DCDFE6; background-color: #F4F4F4;}
 </style>
 
@@ -67,7 +67,7 @@ export default defineComponent({
     padding: {type: String, default: '10px 10px'},    //间距: '10px 10px'
     align: {type: String, default: ''},               //文本对齐方式: 'left'
     borderRadius: {type: String, default: '4px'},     //边框圆角: '4px'
-    bgColor: {type: String, default: '#FFF'},         //背景颜色: '#FFF'
+    bgColor: {type: String, default: ''},             //背景颜色: ''
     disabled: {type: Boolean, default: false},        //是否禁用
     clearable: {type: Boolean, default: false},       //一键清空
     bottonText: {type: String, default: ''},          //右侧按钮

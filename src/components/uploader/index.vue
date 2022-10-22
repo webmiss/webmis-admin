@@ -43,6 +43,9 @@ export default defineComponent({
           },()=>{
             Toast('网络加载错误!');
           },{
+            headers: {
+              "Content-Type": "multipart/form-data;charset=utf-8"  // 表单方式
+            },
             onUploadProgress:(event: any)=>{
               this.$emit('progress',event);
             }

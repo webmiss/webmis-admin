@@ -4,8 +4,8 @@ import axios, { AxiosRequestConfig } from 'axios'
 /* Put请求 */
 export default (url: string, data: any={}, success?: any, fail?: any, config?: any)=>{
   // URL
-  if(url.substr(0,4)=='http') url=url;
-  else if(url.substr(0,1)=='/') url=Env.baseUrl+url.substr(1);
+  if(url.substring(0,4)=='http') url=url;
+  else if(url.substring(0,1)=='/') url=Env.baseUrl+url.substring(1);
   else url=Env.apiUrl+url;
   // 表单
   let param = new FormData();

@@ -43,7 +43,7 @@ export default defineComponent({
         this.chart = new G2.Chart(config);
         // 显示
         this.chart.legend({position: this.position});
-        this.chart.coord('theta', {radius: 0.75, innerRadius: 0.45});
+        this.chart.coordinate('theta', {radius: 0.75, innerRadius: 0.45});
         this.chart.tooltip({showTitle: false, showMarkers: false});
         this.chart.interaction('element-single-selected');
         this.chart.legend(false);

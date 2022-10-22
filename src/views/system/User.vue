@@ -59,11 +59,11 @@
               <td width="60">UID<wm-table-order :value="oby.list['a.id']" @update:value="OrderBy('a.id', $event)" /></td>
               <td width="120">账号<wm-table-order :value="oby.list['a.tel']" @update:value="OrderBy('a.tel', $event)" /></td>
               <td>昵称<wm-table-order :value="oby.list['b.nickname']" @update:value="OrderBy('b.nickname', $event)" /></td>
+              <td width="100">登录时间<wm-table-order :value="oby.list['a.ltime']" @update:value="OrderBy('a.ltime', $event)" /></td>
+              <td width="60" class="tCenter">状态</td>
               <td width="60" class="tCenter">系统权限</td>
               <td width="60" class="tCenter">API权限</td>
               <td width="60" class="tCenter">个人信息</td>
-              <td width="60" class="tCenter">状态</td>
-              <td width="100">登录时间<wm-table-order :value="oby.list['a.ltime']" @update:value="OrderBy('a.ltime', $event)" /></td>
               <td>姓名<wm-table-order :value="oby.list['b.name']" @update:value="OrderBy('b.name', $event)" /></td>
               <td width="40">性别<wm-table-order :value="oby.list['b.gender']" @update:value="OrderBy('b.gender', $event)" /></td>
               <td width="100">生日<wm-table-order :value="oby.list['b.birthday']" @update:value="OrderBy('b.birthday', $event)" /></td>
@@ -79,6 +79,13 @@
               </td>
               <td><b>{{ val.tel || val.email || val.uname }}</b></td>
               <td>{{ val.nickname || '-' }}</td>
+              <td>
+                <wm-tag size="medium" :title="'注册: '+val.rtime+'\n登录: '+val.ltime">{{ val.ltime.substr(0,10) }}</wm-tag>
+              </td>
+              <td class="tCenter">
+                <wm-switch v-if="getters.actionShow('state')" :value="val.state" @update:value="setState($event,val.uid)"></wm-switch>
+                <span v-else>-</span>
+              </td>
               <td class="tCenter">
                 <wm-button type="danger" effect="text" padding="0 4px" v-if="getters.actionShow('perm') && val.sys_perm" @click="permData('admin', val.uid, val.sys_role, val.sys_perm)">私有</wm-button>
                 <wm-button type="primary" effect="text" padding="0 4px" v-else-if="getters.actionShow('perm') && val.sys_role" @click="permData('admin', val.uid, val.sys_role, val.sys_perm)">角色</wm-button>
@@ -94,13 +101,6 @@
               <td>
                 <wm-button type="info" effect="text" padding="0 4px" v-if="getters.actionShow('info')" @click="infoData(val)">修改</wm-button>
                 <span v-else>-</span>
-              </td>
-              <td class="tCenter">
-                <wm-switch v-if="getters.actionShow('state')" :value="val.state" @update:value="setState($event,val.uid)"></wm-switch>
-                <span v-else>-</span>
-              </td>
-              <td>
-                <wm-tag size="medium" :title="'注册: '+val.rtime+'\n登录: '+val.ltime">{{ val.ltime.substr(0,10) }}</wm-tag>
               </td>
               <td>{{ val.name || '-' }}</td>
               <td class="tCenter">{{ val.gender || '-' }}</td>

@@ -69,9 +69,5 @@ export default defineComponent({
     icon: {type: String, default: ''},                //图标
     disabled: {type: Boolean, default: false},        //是否禁用
   },
-  mounted(){
-  },
-  methods:{
-  },
 });
 </script>

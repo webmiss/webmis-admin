@@ -20,17 +20,20 @@
 .wm-page{overflow: hidden; white-space: nowrap; text-align: center;}
 .wm-page_info{display: inline-block; vertical-align: middle; white-space: nowrap; line-height: 28px; padding: 0 16px; font-size: 12px; color: #999;}
 .wm-page_list{display: inline-block; vertical-align: middle; user-select: none; white-space: nowrap;}
-.wm-page_list li{position: relative; float: left; cursor: pointer; height: 28px; line-height: 28px; min-width: 28px; padding: 0 4px; margin: 0 auto; margin: 0 4px; font-size: 13px; font-weight: bold; color: #24292E; background-color: #F4F6F8; border-radius: 4px; box-sizing: border-box;}
-.wm-page_list li:hover{color: @Primary;}
+.wm-page_list li{position: relative; float: left; cursor: pointer; height: 28px; line-height: 28px; min-width: 28px; padding: 0 4px; margin: 0 auto; margin: 0 4px; font-size: 13px; font-weight: bold; color: #24292E; background-color: #FFF; border-radius: 4px; box-sizing: border-box;}
+.wm-page_list li:hover{background-color: @Minor; color: @Primary;}
 .wm-page_list .arrow{width: 28px; padding: 0;}
+.wm-page_list .arrow:hover i::after{border-color: @Primary;}
 .wm-page_list .arrow i{position: absolute;}
 .wm-page_list .arrow i::after{content: ''; position: absolute; top: 9px; width: 6px; height: 6px; border: #666 2px solid; border-left: 0; border-top: 0; transform-origin: center;}
 .wm-page_arrow_left::after{transform: rotate(135deg) scaleY(1); left: -4px;}
 .wm-page_arrow_right::after{transform: rotate(-45deg) scaleY(1); left: -6px;}
 .wm-page_list .arrow_dis{cursor: not-allowed;}
 .wm-page_list .arrow_dis i::after{border-color: #999;}
-.wm-page_list .active{background-color: @Primary; color: #FFF;}
-.wm-page_list .active:hover{background-color: @Primary; color: #FFF;}
+.wm-page_list .arrow_dis:hover{background-color: transparent;}
+.wm-page_list .arrow_dis:hover i::after{border-color: #999;}
+.wm-page_list .active{background-color: #FFF; color: @Primary;}
+.wm-page_list .active:hover{background-color: @Minor;}
 </style>
 
 <script lang="ts">

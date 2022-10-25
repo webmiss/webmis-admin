@@ -10,6 +10,7 @@
       <li class="arrow arrow_dis" v-if="page>=max"><i class="wm-page_arrow_right"></i></li>
       <li class="arrow" v-else @click="toPage(page+1)"><i class="wm-page_arrow_right"></i></li>
     </ul>
+    <div class="wm-page_info">跳转到</div>
     <div class="wm-page_info flex">
       <wm-input :value="input" @update:value="subInput" placeholder="页码" width="60px" height="28px" align="center" padding="4px 2px" />
     </div>

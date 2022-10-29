@@ -108,6 +108,9 @@
               <td>{{ val.department || '-' }}</td>
               <td>{{ val.position || '-' }}</td>
             </tr>
+            <tr v-if="page.list.length==0">
+              <td height="160" class="null" colspan="13"></td>
+            </tr>
           </wm-table>
         </div>
         <wm-page :page="page.page" :limit="page.limit" :total="page.total" @update:page="subPage"></wm-page>

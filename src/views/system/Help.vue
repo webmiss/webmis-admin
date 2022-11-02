@@ -1,5 +1,5 @@
 <template>
-  <wm-main bgColor="#FFF">
+  <wm-main bgColor="#FFF" :padding="32">
     <div class="help_html">
       <h1>开发说明</h1>
       <p>WebMIS全栈开发基础框架.前后端分离，前端采用 Vue3 + TypeScript 在Node环境下开发并封装基础UI组件和JS组件，后端采用PHP、Python、Java、Go封装数据库多连接池、Redis连接池的高性能轻量级基础框架，技术包括 PHP / Python / SpringBoot / Gin / Phalcon / Flutter / NodeJS / Vue / Socket / Redis / ResultFul API 等技术。 </p>
@@ -19,17 +19,17 @@
       <p>modules > admin, 创建控制器，验证权限如下:</p>
 <pre>
   // PHP
-  $msg = AdminToken::Verify($token, '');                              // 验证Token
-  $msg = AdminToken::Verify($token, $_SERVER['REQUEST_URI']);         // Token和Action
+  $msg = AdminToken::Verify($token, '');
+  $msg = AdminToken::Verify($token, $_SERVER['REQUEST_URI']);
   // Python
-  msg = AdminToken.Verify(token, '')                                  // 验证Token
-  msg = AdminToken.Verify(token, request.path)                        // Token和Action
+  msg = AdminToken.Verify(token, '')
+  msg = AdminToken.Verify(token, request.path)
   // Java
-  String msg = AdminToken.Verify(token, "");                          // 验证Token
-  String msg = AdminToken.Verify(token, request.getRequestURI());     // Token和Action
+  String msg = AdminToken.Verify(token, "");
+  String msg = AdminToken.Verify(token, request.getRequestURI());
   // Go
-  msg := (&service.AdminToken{}).Verify(token, "")                    // 验证Token
-  msg := (&service.AdminToken{}).Verify(token, c.Request.RequestURI)  // Token和Action
+  msg := (&service.AdminToken{}).Verify(token, "")
+  msg := (&service.AdminToken{}).Verify(token, c.Request.RequestURI)
 </pre>
       <h2>四、前端功能</h2>
       <p>views > Demo.vue, 复制基础模板，是否显示菜单下的动作权限</p>

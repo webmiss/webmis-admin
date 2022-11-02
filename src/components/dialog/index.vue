@@ -1,6 +1,6 @@
 <template>
   <wm-popup class="wm-dialog_body" ref="Popup" :show="show" @update:show="$emit('update:show',$event)" :bgClose="bgClose">
-    <div class="wm-dialog" :style="{width:width, height:height, backgroundColor:bgColor}">
+    <div class="wm-dialog" :style="{width:width, height:height, backgroundColor:bgColor, borderRadius:radius}">
       <!-- Title -->
       <div class="wm-dialog_title">
         <div class="wm-dialog_close" @click="$emit('update:show', false)"></div>
@@ -36,7 +36,7 @@
 </template>
 
 <style lang="less" scoped>
-.wm-dialog{border-radius: 2px; padding-bottom: 8px; border: #FFF 1px solid; box-sizing: border-box; box-shadow: 0 0 24px rgba(0,0,0,.4);}
+.wm-dialog{padding-bottom: 8px; box-sizing: border-box; box-shadow: 0 0 4px rgba(0,0,0,.4);}
 .wm-dialog_title{position: relative; height: 40px; font-size: 16px; padding: 0 8px; text-align: center;}
 .wm-dialog_title .title{line-height: 40px; user-select: none;}
 .wm-dialog_close{cursor: pointer; position: absolute; right: 8px; top: 4px; width: 32px; height: 32px; border-radius: 50%;}
@@ -66,6 +66,7 @@ export default defineComponent({
     title: {type: String, default: ''},             //标题
     width: {type: String, default: '420px'},        //宽
     height: {type: String, default: 'auto'},        //高
+    radius: {type: String, default: '4px'},         //圆角
     header: {type: Number, default: 0},             //头部高度
     footer: {type: Number, default: 32},            //底部高度
     margin: {type: Number, default: 16},            //上下边距

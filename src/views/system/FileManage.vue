@@ -1,5 +1,5 @@
 <template>
-  <wm-main :padding="0">
+  <div>
     <!-- 地址栏 -->
     <div class="app_addr flex">
       <div class="addr flex">
@@ -129,7 +129,7 @@
     <!-- 图片预览 -->
     <wm-img-view ref="imgShow" v-model:show="imgView.show"></wm-img-view>
 
-  </wm-main>
+  </div>
 </template>
 
 <style lang="less" scoped>

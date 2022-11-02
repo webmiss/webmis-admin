@@ -1,5 +1,5 @@
 <template>
-  <wm-main :padding="0">
+  <div>
     <!-- 地址栏 -->
     <div class="app_addr flex">
       <div class="addr flex">
@@ -218,7 +218,7 @@
     </wm-dialog>
     <!-- Content End -->
 
-  </wm-main>
+  </div>
 </template>
 
 <style lang="less" scoped>

@@ -36,12 +36,12 @@
 </template>
 
 <style lang="less" scoped>
-.wm-dialog{padding-bottom: 8px; box-sizing: border-box; box-shadow: 0 0 4px rgba(0,0,0,.4);}
-.wm-dialog_title{position: relative; height: 40px; font-size: 16px; padding: 0 8px; text-align: center;}
+.wm-dialog{padding-bottom: 8px; box-sizing: border-box; box-shadow: 0 0 8px rgba(0,0,0,.4);}
+.wm-dialog_title{position: relative; height: 40px; font-size: 14px; font-weight: 700; padding: 0 8px; text-align: center;}
 .wm-dialog_title .title{line-height: 40px; user-select: none;}
 .wm-dialog_close{cursor: pointer; position: absolute; right: 8px; top: 4px; width: 32px; height: 32px; border-radius: 50%;}
 .wm-dialog_close:hover::after,.wm-dialog_close:hover::before{background-color: @Primary;}
-.wm-dialog_close::after,.wm-dialog_close::before{content: ''; position: absolute; width: 14px; height: 1.6px; background-color: #999; left: 50%; top: 50%; transform-origin: center;}
+.wm-dialog_close::after,.wm-dialog_close::before{content: ''; position: absolute; width: 12px; height: 1.6px; background-color: #666; left: 50%; top: 50%; transform-origin: center;}
 .wm-dialog_close::after{transform: rotate(45deg); margin-left: -16%;}
 .wm-dialog_close::before{transform: rotate(-45deg); margin-left: -16%;}
 .wm-dialog_tabs{margin: 0 16px;}

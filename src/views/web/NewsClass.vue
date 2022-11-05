@@ -52,19 +52,19 @@
               <td width="60" class="tCenter">状态</td>
               <td>排序</td>
             </template>
-            <tr v-for="(val,key) in page.list" :key="key">
+            <tr v-for="(v,k) in page.list" :key="k">
               <td width="30" class="checkbox wm-table_checkbox">
-                <wm-checkbox :value="val.id"></wm-checkbox>
+                <wm-checkbox :value="v.id"></wm-checkbox>
               </td>
-              <td>{{ val.id }}</td>
-              <td>{{ val.name }}</td>
-              <td>{{ val.ctime }}</td>
-              <td>{{ val.utime }}</td>
+              <td>{{ v.id }}</td>
+              <td>{{ v.name }}</td>
+              <td>{{ v.ctime }}</td>
+              <td>{{ v.utime }}</td>
               <td class="tCenter">
-                <wm-switch v-if="getters.actionShow('state')" :value="val.state" @update:value="setState($event,val.id)"></wm-switch>
+                <wm-switch v-if="getters.actionShow('state')" :value="v.state" @update:value="setState($event,v.id)"></wm-switch>
                 <span v-else>-</span>
               </td>
-              <td>{{ val.sort }}</td>
+              <td>{{ v.sort }}</td>
             </tr>
             <tr v-if="page.list.length==0">
               <td height="160" class="null" colspan="7"></td>

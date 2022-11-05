@@ -61,27 +61,27 @@
               <td>URL<wm-table-order :value="oby.list.url" @update:value="OrderBy('url', $event)" /></td>
               <td>API<wm-table-order :value="oby.list.controller" @update:value="OrderBy('controller', $event)" /></td>
             </template>
-            <tr v-for="(val,key) in page.list" :key="key">
+            <tr v-for="(v,k) in page.list" :key="k">
               <td width="30" class="checkbox wm-table_checkbox">
-                <wm-checkbox :value="val.id"></wm-checkbox>
+                <wm-checkbox :value="v.id"></wm-checkbox>
               </td>
-              <td>{{ val.id }}</td>
-              <td>{{ val.fid }}</td>
-              <td><b>{{ val.title }}</b></td>
+              <td>{{ v.id }}</td>
+              <td>{{ v.fid }}</td>
+              <td><b>{{ v.title }}</b></td>
               <td class="tCenter">
-                <span class="menus_icon" v-if="val.ico"><i :class="val.ico"></i></span>
+                <span class="menus_icon" v-if="v.ico"><i :class="v.ico"></i></span>
                 <span v-else>-</span>
               </td>
-              <td>{{ val.ctime }}</td>
-              <td>{{ val.utime }}</td>
-              <td class="tCenter">{{ val.sort }}</td>
+              <td>{{ v.ctime }}</td>
+              <td>{{ v.utime }}</td>
+              <td class="tCenter">{{ v.sort }}</td>
               <td class="tCenter">
-                <wm-button type="danger" effect="text" padding="0 4px" v-if="getters.actionShow('perm') && val.controller && !val.action" @click="permData(val.id, val.title, val.controller, val.action)">设置</wm-button>
-                <wm-button type="primary" effect="text" padding="0 4px" v-else-if="getters.actionShow('perm') && val.controller && val.action" @click="permData(val.id, val.title, val.controller, val.action)">编辑</wm-button>
+                <wm-button type="danger" effect="text" padding="0 4px" v-if="getters.actionShow('perm') && v.controller && !v.action" @click="permData(v.id, v.title, v.controller, v.action)">设置</wm-button>
+                <wm-button type="primary" effect="text" padding="0 4px" v-else-if="getters.actionShow('perm') && v.controller && v.action" @click="permData(v.id, v.title, v.controller, v.action)">编辑</wm-button>
                 <span v-else>-</span>
               </td>
-              <td>{{ val.url }}</td>
-              <td>{{ val.controller }}</td>
+              <td>{{ v.url }}</td>
+              <td>{{ v.controller }}</td>
             </tr>
             <tr v-if="page.list.length==0">
               <td height="160" class="null" colspan="11"></td>
@@ -206,10 +206,10 @@
             <div class="perm_an"><wm-add @click="permAdd()" /></div>
           </td>
         </template>
-        <tr v-for="(val,key) in perm.list" :key="key">
-          <td><wm-input :value="val.name" @update:value="val.name=$event" /></td>
-          <td><wm-input :value="val.action" @update:value="val.action=$event" /></td>
-          <td><wm-input :value="val.perm" @update:value="val.perm=$event" /></td>
+        <tr v-for="(v,k) in perm.list" :key="k">
+          <td><wm-input :value="v.name" @update:value="v.name=$event" /></td>
+          <td><wm-input :value="v.action" @update:value="v.action=$event" /></td>
+          <td><wm-input :value="v.perm" @update:value="v.perm=$event" /></td>
           <td>
             <div class="perm_an"><wm-close @click="permRemove(key)" /></div>
           </td>

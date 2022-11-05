@@ -47,27 +47,27 @@
         <div class="file_body scrollbar">
           <ul class="flex_left" v-if="lists.folder.length!=0 || lists.files.length!=0">
             <!-- 文件夹 -->
-            <li v-for="(val,key) in lists.folder" :key="'dir'+key" :class="val.check?'file_active':'file_state'">
+            <li v-for="(v,k) in lists.folder" :key="'dir'+k" :class="v.check?'file_active':'file_state'">
               <div class="file_center">
-                <div class="file_click" @click="val.check=!val.check"><i class="check"></i></div>
-                <div class="file" @click="openFolder(val.name)">
+                <div class="file_click" @click="v.check=!v.check"><i class="check"></i></div>
+                <div class="file" @click="openFolder(v.name)">
                   <div class="file_ct">
                     <i class="ui ui_folder"></i>
                   </div>
-                  <div class="name nowrap" :title="val.name">{{ val.name }}</div>
+                  <div class="name nowrap" :title="v.name">{{ v.name }}</div>
                 </div>
               </div>
             </li>
             <!-- 文件 -->
-            <li v-for="(val,key) in lists.files" :key="'file'+key" :class="val.check?'file_active':'file_state'">
+            <li v-for="(v,k) in lists.files" :key="'file'+k" :class="v.check?'file_active':'file_state'">
               <div class="file_center">
-                <div class="file_click" @click="val.check=!val.check"><i class="check"></i></div>
-                <div class="file" @click="openFile(val.name)">
+                <div class="file_click" @click="v.check=!v.check"><i class="check"></i></div>
+                <div class="file" @click="openFile(v.name)">
                   <div class="file_ct">
-                    <div class="file_img bgImg" v-if="isImg(val.ext)" :style="{backgroundImage:'url('+info.url+lists.path+val.name+')'}"></div>
+                    <div class="file_img bgImg" v-if="isImg(v.ext)" :style="{backgroundImage:'url('+info.url+lists.path+v.name+')'}"></div>
                     <i class="ui ui_file" v-else></i>
                   </div>
-                  <div class="name nowrap" :title="val.name">{{ val.name }}</div>
+                  <div class="name nowrap" :title="v.name">{{ v.name }}</div>
                 </div>
               </div>
             </li>

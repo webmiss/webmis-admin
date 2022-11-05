@@ -20,7 +20,7 @@
 .wm-search_title{line-height: 32px; padding: 4px; background-image: linear-gradient(172deg, @Minor, #FFF); box-sizing: border-box;}
 .wm-search_title h2{font-size: 14px; padding-left: 10px; font-weight: 600;}
 .wm-search_title span{cursor: pointer; width: 32px; height: 32px; line-height: 32px; text-align: center; border-radius: 50%;}
-.wm-search_title span i{font-size: 14px; color: @Info;}
+.wm-search_title span i{font-size: 12px; color: @Info;}
 .wm-search_title span:hover i{color: @Primary;}
 .wm-search_body{overflow-y: auto; height: calc(100% - 48px);}
 .wm-search_form{padding: 8px 16px;}

@@ -10,7 +10,7 @@
         <i class="ui ui_arrow_down"></i>
       </div>
       <!-- Value -->
-      <input type="text" readonly :placeholder="placeholder" :value="text" :style="{borderColor: checked?'#6FB737':'', boxShadow: checked?'0 0 4px rgba(0,0,0,.1)':''}">
+      <input type="text" readonly :placeholder="placeholder" :value="text" :style="{borderColor: checked?'#595':'', boxShadow: checked?'0 0 10px rgba(0,0,0,.16)':''}">
     </div>
     <div class="wm-select_body" v-if="checked">
       <span class="wm-select_arrow"></span>
@@ -48,7 +48,7 @@
 .wm-select_clear::before{transform: translate(-50%, -50%) rotate(-45deg);}
 .wm-select_input:hover .wm-select_clear_body{display: block;}
 
-.wm-select_body{position: absolute; z-index: 9999; width: 100%; margin-top: 10px; padding: 8px 0; box-sizing: border-box; border: @BorderColor 1px solid; border-radius: 4px; background-color: #FFF; box-shadow: 0 0 10px rgba(0,0,0,.16);}
+.wm-select_body{position: absolute; z-index: 9999; width: 100%; margin-top: 8px; padding: 8px 0; box-sizing: border-box; border: @BorderColor 1px solid; border-radius: 4px; background-color: #FFF; box-shadow: 0 0 10px rgba(0,0,0,.16);}
 .wm-select_arrow{position: absolute; width: 10px; height: 10px; top: -5px; left: 50%; transform: translateX(-50%);}
 .wm-select_arrow::before{content: ''; position: absolute; width: 10px; height: 10px; border: @BorderColor 1px solid; border-right-color: transparent; border-bottom-color: transparent; background-color: #FFF; transform: rotate(45deg); box-sizing: border-box;}
 .wm-select_sea{padding: 4px 8px;}

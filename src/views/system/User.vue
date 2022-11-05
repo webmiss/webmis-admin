@@ -70,43 +70,43 @@
               <td>部门<wm-table-order :value="oby.list['b.department']" @update:value="OrderBy('b.department', $event)" /></td>
               <td>职务<wm-table-order :value="oby.list['b.position']" @update:value="OrderBy('b.position', $event)" /></td>
             </template>
-            <tr v-for="(val,key) in page.list" :key="key">
+            <tr v-for="(v,k) in page.list" :key="k">
               <td width="30" class="checkbox wm-table_checkbox">
-                <wm-checkbox :value="val.uid"></wm-checkbox>
+                <wm-checkbox :value="v.uid"></wm-checkbox>
               </td>
               <td>
-                <wm-img width="28px" height="28px" radius="50%" icoSize="16px" :url="val.img" :title="val.uid+''"></wm-img>
+                <wm-img width="28px" height="28px" radius="50%" icoSize="16px" :url="v.img" :title="v.uid+''"></wm-img>
               </td>
-              <td><b>{{ val.tel || val.email || val.uname }}</b></td>
-              <td>{{ val.nickname || '-' }}</td>
+              <td><b>{{ v.tel || v.email || v.uname }}</b></td>
+              <td>{{ v.nickname || '-' }}</td>
               <td>
-                <wm-tag size="medium" :title="'注册: '+val.rtime+'\n登录: '+val.ltime">{{ val.ltime.substr(0,10) }}</wm-tag>
+                <wm-tag size="medium" :title="'注册: '+v.rtime+'\n登录: '+v.ltime">{{ v.ltime.substr(0,10) }}</wm-tag>
               </td>
               <td class="tCenter">
-                <wm-switch v-if="getters.actionShow('state')" :value="val.state" @update:value="setState($event,val.uid)"></wm-switch>
+                <wm-switch v-if="getters.actionShow('state')" :value="v.state" @update:value="setState($event,v.uid)"></wm-switch>
                 <span v-else>-</span>
               </td>
               <td class="tCenter">
-                <wm-button type="danger" effect="text" padding="0 4px" v-if="getters.actionShow('perm') && val.sys_perm" @click="permData('admin', val.uid, val.sys_role, val.sys_perm)">私有</wm-button>
-                <wm-button type="primary" effect="text" padding="0 4px" v-else-if="getters.actionShow('perm') && val.sys_role" @click="permData('admin', val.uid, val.sys_role, val.sys_perm)">角色</wm-button>
-                <wm-button type="info" effect="text" padding="0 4px" v-else-if="getters.actionShow('perm')" @click="permData('admin', val.uid, val.sys_role, val.sys_perm)">分配</wm-button>
+                <wm-button type="danger" effect="text" padding="0 4px" v-if="getters.actionShow('perm') && v.sys_perm" @click="permData('admin', v.uid, v.sys_role, v.sys_perm)">私有</wm-button>
+                <wm-button type="primary" effect="text" padding="0 4px" v-else-if="getters.actionShow('perm') && v.sys_role" @click="permData('admin', v.uid, v.sys_role, v.sys_perm)">角色</wm-button>
+                <wm-button type="info" effect="text" padding="0 4px" v-else-if="getters.actionShow('perm')" @click="permData('admin', v.uid, v.sys_role, v.sys_perm)">分配</wm-button>
                 <span v-else>-</span>
               </td>
               <td>
-                <wm-button type="danger" effect="text" padding="0 4px" v-if="getters.actionShow('perm') && val.api_perm" @click="permData('api', val.uid, val.api_role, val.api_perm)">私有</wm-button>
-                <wm-button type="primary" effect="text" padding="0 4px" v-else-if="getters.actionShow('perm') && val.api_role" @click="permData('api', val.uid, val.api_role, val.api_perm)">角色</wm-button>
-                <wm-button type="info" effect="text" padding="0 4px" v-else-if="getters.actionShow('perm')" @click="permData('api', val.uid, val.api_role, val.api_perm)">分配</wm-button>
+                <wm-button type="danger" effect="text" padding="0 4px" v-if="getters.actionShow('perm') && v.api_perm" @click="permData('api', v.uid, v.api_role, v.api_perm)">私有</wm-button>
+                <wm-button type="primary" effect="text" padding="0 4px" v-else-if="getters.actionShow('perm') && v.api_role" @click="permData('api', v.uid, v.api_role, v.api_perm)">角色</wm-button>
+                <wm-button type="info" effect="text" padding="0 4px" v-else-if="getters.actionShow('perm')" @click="permData('api', v.uid, v.api_role, v.api_perm)">分配</wm-button>
                 <span v-else>-</span>
               </td>
               <td>
-                <wm-button type="info" effect="text" padding="0 4px" v-if="getters.actionShow('info')" @click="infoData(val)">修改</wm-button>
+                <wm-button type="info" effect="text" padding="0 4px" v-if="getters.actionShow('info')" @click="infoData(v)">修改</wm-button>
                 <span v-else>-</span>
               </td>
-              <td>{{ val.name || '-' }}</td>
-              <td class="tCenter">{{ val.gender || '-' }}</td>
-              <td>{{ val.birthday || '-' }}</td>
-              <td>{{ val.department || '-' }}</td>
-              <td>{{ val.position || '-' }}</td>
+              <td>{{ v.name || '-' }}</td>
+              <td class="tCenter">{{ v.gender || '-' }}</td>
+              <td>{{ v.birthday || '-' }}</td>
+              <td>{{ v.department || '-' }}</td>
+              <td>{{ v.position || '-' }}</td>
             </tr>
             <tr v-if="page.list.length==0">
               <td height="160" class="null" colspan="13"></td>

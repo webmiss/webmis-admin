@@ -59,34 +59,34 @@
               <td>名称<wm-table-order :value="oby.list.title" @update:value="OrderBy('title', $event)" /></td>
               <td>英文<wm-table-order :value="oby.list.en" @update:value="OrderBy('en', $event)" /></td>
               <td width="100">更新时间<wm-table-order :value="oby.list.utime" @update:value="OrderBy('utime', $event)" /></td>
-              <td width="60" class="tCenter">排序</td>
               <td width="60" class="tCenter">权限</td>
+              <td width="60" class="tCenter">排序</td>
               <td>URL<wm-table-order :value="oby.list.url" @update:value="OrderBy('url', $event)" /></td>
               <td>API<wm-table-order :value="oby.list.controller" @update:value="OrderBy('controller', $event)" /></td>
             </template>
-            <tr v-for="(val,key) in page.list" :key="key">
+            <tr v-for="(v,k) in page.list" :key="k">
               <td width="30" class="checkbox wm-table_checkbox">
-                <wm-checkbox :value="val.id"></wm-checkbox>
+                <wm-checkbox :value="v.id"></wm-checkbox>
               </td>
-              <td>{{ val.id }}</td>
-              <td>{{ val.fid }}</td>
+              <td>{{ v.id }}</td>
+              <td>{{ v.fid }}</td>
               <td class="tCenter">
-                <span class="menus_icon" v-if="val.ico"><i :class="val.ico"></i></span>
+                <span class="menus_icon" v-if="v.ico"><i :class="v.ico"></i></span>
                 <span v-else>-</span>
               </td>
-              <td><b>{{ val.title }}</b></td>
-              <td>{{ val.en || '-' }}</td>
+              <td><b>{{ v.title }}</b></td>
+              <td>{{ v.en || '-' }}</td>
               <td>
-                <wm-tag size="medium" :title="'创建: '+val.ctime+'\n更新: '+val.utime">{{ val.utime.substr(0,10) }}</wm-tag>
+                <wm-tag size="medium" :title="'创建: '+v.ctime+'\n更新: '+v.utime">{{ v.utime.substr(0,10) }}</wm-tag>
               </td>
-              <td class="tCenter">{{ val.sort }}</td>
               <td class="tCenter">
-                <wm-button type="danger" effect="text" padding="0 4px" v-if="getters.actionShow('perm') && val.controller && !val.action" @click="permData(val.id, val.title, val.controller, val.action)">设置</wm-button>
-                <wm-button type="primary" effect="text" padding="0 4px" v-else-if="getters.actionShow('perm') && val.controller && val.action" @click="permData(val.id, val.title, val.controller, val.action)">编辑</wm-button>
+                <wm-button type="danger" effect="text" padding="0 4px" v-if="getters.actionShow('perm') && v.controller && !v.action" @click="permData(v.id, v.title, v.controller, v.action)">设置</wm-button>
+                <wm-button type="primary" effect="text" padding="0 4px" v-else-if="getters.actionShow('perm') && v.controller && v.action" @click="permData(v.id, v.title, v.controller, v.action)">编辑</wm-button>
                 <span v-else>-</span>
               </td>
-              <td>{{ val.url || '-' }}</td>
-              <td>{{ val.controller || '-' }}</td>
+              <td class="tCenter">{{ v.sort }}</td>
+              <td>{{ v.url || '-' }}</td>
+              <td>{{ v.controller || '-' }}</td>
             </tr>
             <tr v-if="page.list.length==0">
               <td height="160" class="null" colspan="11"></td>
@@ -111,31 +111,31 @@
         <tr>
           <td class="lable">名称</td>
           <td>
-            <wm-input v-model:value="add.form.title" maxlength="16" maxWidth="80%" placeholder="菜单名称" clearable />
+            <wm-input v-model:value="add.form.title" maxlength="16" maxWidth="90%" placeholder="菜单名称" clearable />
           </td>
         </tr>
         <tr>
           <td class="lable">英文</td>
           <td>
-            <wm-input v-model:value="add.form.en" maxlength="16" maxWidth="80%" placeholder="英文名称" clearable />
+            <wm-input v-model:value="add.form.en" maxlength="16" maxWidth="90%" placeholder="英文名称" clearable />
           </td>
         </tr>
         <tr>
           <td class="lable">URL</td>
           <td>
-            <wm-input v-model:value="add.form.url" maxlength="24" maxWidth="80%" placeholder="URL" clearable />
+            <wm-input v-model:value="add.form.url" maxlength="24" maxWidth="90%" placeholder="URL" clearable />
           </td>
         </tr>
         <tr>
           <td class="lable">API</td>
           <td>
-            <wm-input v-model:value="add.form.controller" maxlength="64" maxWidth="80%" placeholder="例如: /admin/sys_menus" clearable />
+            <wm-input v-model:value="add.form.controller" maxlength="64" maxWidth="90%" placeholder="例如: /admin/sys_menus" clearable />
           </td>
         </tr>
         <tr>
           <td class="lable">图标样式</td>
           <td>
-            <wm-input v-model:value="add.form.ico" maxlength="32" maxWidth="80%" placeholder="图标样式" clearable />
+            <wm-input v-model:value="add.form.ico" maxlength="32" maxWidth="90%" placeholder="图标样式" clearable />
           </td>
         </tr>
         <tr>
@@ -163,31 +163,31 @@
         <tr>
           <td class="lable">名称</td>
           <td>
-            <wm-input v-model:value="edit.form.title" maxlength="16" maxWidth="80%" placeholder="菜单名称" clearable />
+            <wm-input v-model:value="edit.form.title" maxlength="16" maxWidth="90%" placeholder="菜单名称" clearable />
           </td>
         </tr>
         <tr>
           <td class="lable">英文</td>
           <td>
-            <wm-input v-model:value="edit.form.en" maxlength="16" maxWidth="80%" placeholder="英文名称" clearable />
+            <wm-input v-model:value="edit.form.en" maxlength="16" maxWidth="90%" placeholder="英文名称" clearable />
           </td>
         </tr>
         <tr>
           <td class="lable">URL</td>
           <td>
-            <wm-input v-model:value="edit.form.url" maxlength="24" maxWidth="80%" placeholder="URL" clearable />
+            <wm-input v-model:value="edit.form.url" maxlength="24" maxWidth="90%" placeholder="URL" clearable />
           </td>
         </tr>
         <tr>
           <td class="lable">API</td>
           <td>
-            <wm-input v-model:value="edit.form.controller" maxlength="64" maxWidth="80%" placeholder="例如: /admin/sys_menus" clearable />
+            <wm-input v-model:value="edit.form.controller" maxlength="64" maxWidth="90%" placeholder="例如: /admin/sys_menus" clearable />
           </td>
         </tr>
         <tr>
           <td class="lable">图标样式</td>
           <td>
-            <wm-input v-model:value="edit.form.ico" maxlength="32" maxWidth="80%" placeholder="图标样式" clearable />
+            <wm-input v-model:value="edit.form.ico" maxlength="32" maxWidth="90%" placeholder="图标样式" clearable />
           </td>
         </tr>
         <tr>
@@ -223,13 +223,16 @@
             <span class="center perm_an"><wm-add @click="permAdd()" /></span>
           </td>
         </template>
-        <tr v-for="(val,key) in perm.list" :key="key">
-          <td><wm-input :value="val.name" @update:value="val.name=$event" /></td>
-          <td><wm-input :value="val.action" @update:value="val.action=$event" /></td>
-          <td><wm-input :value="val.perm" @update:value="val.perm=$event" /></td>
+        <tr v-for="(v,k) in perm.list" :key="k">
+          <td><wm-input :value="v.name" @update:value="v.name=$event" /></td>
+          <td><wm-input :value="v.action" @update:value="v.action=$event" /></td>
+          <td><wm-input :value="v.perm" @update:value="v.perm=$event" /></td>
           <td>
             <div class="center perm_an" ><wm-close @click="permRemove(key)" /></div>
           </td>
+        </tr>
+        <tr v-if="perm.list.length==0">
+          <td height="160" class="null" colspan="4"></td>
         </tr>
       </wm-table>
       <template #footer>

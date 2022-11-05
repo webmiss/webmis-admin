@@ -63,29 +63,29 @@
               <td>来源<wm-table-order :value="oby.list.source" @update:value="OrderBy('source', $event)" /></td>
               <td>作者<wm-table-order :value="oby.list.author" @update:value="OrderBy('author', $event)" /></td>
             </template>
-            <tr v-for="(val,key) in page.list" :key="key">
+            <tr v-for="(v,k) in page.list" :key="k">
               <td width="30" class="checkbox wm-table_checkbox">
-                <wm-checkbox :value="val.id"></wm-checkbox>
+                <wm-checkbox :value="v.id"></wm-checkbox>
               </td>
-              <td>{{ val.id }}</td>
+              <td>{{ v.id }}</td>
               <td>
-                <wm-img width="28px" height="28px" radius="2px" icoSize="24px" :url="val.img" :title="val.title" @click="openShow(val)"></wm-img>
+                <wm-img width="28px" height="28px" radius="2px" icoSize="24px" :url="v.img" :title="v.title" @click="openShow(val)"></wm-img>
               </td>
-              <td><div class="news_title" @click="openShow(val)">{{ val.title }}</div></td>
-              <td>{{ menusName[val.cid] }}</td>
+              <td><div class="news_title" @click="openShow(v)">{{ v.title }}</div></td>
+              <td>{{ menusName[v.cid] }}</td>
               <td>
-                <wm-tag size="medium" :title="'创建: '+val.ctime+'\n更新: '+val.utime">{{ val.utime.substr(0,10) }}</wm-tag>
+                <wm-tag size="medium" :title="'创建: '+v.ctime+'\n更新: '+v.utime">{{ v.utime.substr(0,10) }}</wm-tag>
               </td>
               <td class="tCenter">
-                <wm-switch v-if="getters.actionShow('state')" :value="val.state" @update:value="setState($event,val.id)"></wm-switch>
+                <wm-switch v-if="getters.actionShow('state')" :value="v.state" @update:value="setState($event,v.id)"></wm-switch>
                 <span v-else>-</span>
               </td>
               <td class="tCenter">
-                <wm-button type="text" v-if="getters.actionShow('edit')" @click="setContent(val.id)">编辑</wm-button>
+                <wm-button type="text" v-if="getters.actionShow('edit')" @click="setContent(v.id)">编辑</wm-button>
                 <span v-else>-</span>
               </td>
-              <td>{{ val.source }}</td>
-              <td>{{ val.author }}</td>
+              <td>{{ v.source }}</td>
+              <td>{{ v.author }}</td>
             </tr>
             <tr v-if="page.list.length==0">
               <td height="160" class="null" colspan="10"></td>

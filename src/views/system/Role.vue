@@ -50,21 +50,21 @@
               <td width="60" class="tCenter">权限</td>
               <td>权限值</td>
             </template>
-            <tr v-for="(val,key) in page.list" :key="key">
+            <tr v-for="(v,k) in page.list" :key="k">
               <td width="30" class="checkbox wm-table_checkbox">
-                <wm-checkbox :value="val.id"></wm-checkbox>
+                <wm-checkbox :value="v.id"></wm-checkbox>
               </td>
-              <td>{{ val.id }}</td>
-              <td><b>{{ val.name }}</b></td>
+              <td>{{ v.id }}</td>
+              <td><b>{{ v.name }}</b></td>
               <td>
-                <wm-tag size="medium" :title="'创建: '+val.ctime+'\n更新: '+val.utime">{{ val.utime.substr(0,10) }}</wm-tag>
+                <wm-tag size="medium" :title="'创建: '+v.ctime+'\n更新: '+v.utime">{{ v.utime.substr(0,10) }}</wm-tag>
               </td>
               <td class="tCenter">
-                <wm-button type="danger" effect="text" padding="0 4px"  v-if="getters.actionShow('perm') && !val.perm" @click="permData(val.id,val.perm)">设置</wm-button>
-                <wm-button type="primary" effect="text" padding="0 4px" v-else-if="getters.actionShow('perm')" @click="permData(val.id,val.perm)">编辑</wm-button>
+                <wm-button type="danger" effect="text" padding="0 4px"  v-if="getters.actionShow('perm') && !v.perm" @click="permData(v.id,v.perm)">设置</wm-button>
+                <wm-button type="primary" effect="text" padding="0 4px" v-else-if="getters.actionShow('perm')" @click="permData(v.id,v.perm)">编辑</wm-button>
                 <span v-else>-</span>
               </td>
-              <td>{{ val.perm }}</td>
+              <td>{{ v.perm }}</td>
             </tr>
             <tr v-if="page.list.length==0">
               <td height="160" class="null" colspan="6"></td>

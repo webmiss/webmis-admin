@@ -8,10 +8,10 @@
   </table>
 </template>
 
-<style>
+<style lang="less">
 .wm-table_form{width: 100%; border-collapse: collapse; border-radius: 4px;}
-.wm-table_form .title{font-size: 14px; font-weight: bold; text-indent: 4px;}
-.wm-table_form .lable{color: #627488; text-align: right;}
+.wm-table_form .title{font-size: 14px; font-weight: bold; text-indent: 4px; background-color: #F4F4F4;}
+.wm-table_form .lable{color: #999; text-align: right;}
 .wm-table_form td{position: relative; padding: 4px 8px; line-height: 28px; border: #FFF 1px solid;}
 </style>
 

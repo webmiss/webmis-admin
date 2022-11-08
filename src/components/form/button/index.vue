@@ -15,7 +15,7 @@
 <style lang="less" scoped>
 .wm-button:focus,button:active:focus,button.active:focus,button.focus,button:active.focus,button.active.focus{outline: none; border-color: transparent; box-shadow:none;}
 .wm-button{user-select: none; margin: 0 4px; border: transparent 1px solid; background: none; cursor: pointer; font-size: 14px; text-align: center; box-sizing: border-box;}
-.wm-button:hover{box-shadow: 0 0 6px rgba(0,0,0,.2); text-shadow: 0 0 4px rgba(0,0,0,.08);}
+.wm-button:hover{box-shadow: 0 2px 4px rgba(0,0,0,.3); text-shadow: 0 0 4px rgba(0,0,0,.1);}
 .wm-button:disabled{opacity: 0.7; cursor: not-allowed;}
 /* default */
 .wm-button.dark_default,.plain_default{background-color: #FFF; color: #626468; border-color: #D2D4D8;}

@@ -34,7 +34,7 @@
 <style lang="less" scoped>
 .wm-select{position: relative; font-size: 14px;}
 .wm-select_input{position: relative; width: 100%;}
-.wm-select_input input{cursor: pointer; width: 100%; height: 100%; padding: 0 30px 0 16px; display: flex; box-sizing: border-box; border-radius: 4px; border: @BorderColor 1px solid; background-color: #FFF;}
+.wm-select_input input{cursor: pointer; width: 100%; height: 100%; padding: 0 30px 0 10px; display: flex; box-sizing: border-box; border-radius: 4px; border: @BorderColor 1px solid; background-color: #FFF;}
 .wm-select_input input:focus{outline: none;}
 .wm-select_input input:hover{border-color: @BorderHover;}
 .wm-select_input_ico{cursor: pointer; position: absolute; width: 30px; height: 100%; right: 0; text-align: center; transition-duration: .3s;}

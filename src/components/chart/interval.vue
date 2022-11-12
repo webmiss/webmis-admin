@@ -32,7 +32,7 @@ export default defineComponent({
     /* 初始化 */
     init(){
       // 对象
-      const config: any = {container: this.$refs.chart, autoFit: true, height: this.height};
+      const config: any = {container: this.$refs.chart, autoFit: true, forceFit: true, height: this.height};
       if(!this.chart) this.chart = new G2.Chart(config);
       // 数据
       this.chart.clear();
@@ -47,6 +47,10 @@ export default defineComponent({
       });
       // 加载
       this.chart.render();
+      // 重新计算宽度
+      const e: Event = document.createEvent('Event');
+      e.initEvent('resize', true, true);
+      window.dispatchEvent(e);
     },
 
   }

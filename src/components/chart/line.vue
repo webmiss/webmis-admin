@@ -25,7 +25,7 @@ export default defineComponent({
   },
   watch:{
     data(val){
-      if(val) setTimeout(()=>{ this.init(); }, 300);
+      if(val) this.init();
     }
   },
   mounted(){
@@ -60,6 +60,10 @@ export default defineComponent({
         },
       });
       this.chart.render();
+      // 重新计算宽度
+      const e: Event = document.createEvent('Event');
+      e.initEvent('resize', true, true);
+      window.dispatchEvent(e);
     },
 
   }

@@ -68,6 +68,10 @@ export default defineComponent({
       this.chart.render();
       // 显示Html
       setTimeout(()=>{ this.isHtml=true; },1000);
+      // 重新计算宽度
+      const e: Event = document.createEvent('Event');
+      e.initEvent('resize', true, true);
+      window.dispatchEvent(e);
     },
 
   }

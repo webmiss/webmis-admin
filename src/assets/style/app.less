@@ -105,7 +105,8 @@
 .chart{background-color: #FFF; border-radius: 4px; padding: 0 16px;}
 .chart_title{line-height: 32px; padding: 8px 0; border-bottom: #E2E2E2 1px solid;}
 .chart_title h2{font-size: 14px; font-weight: 600;}
-.chart_ct{padding: 10px;}
+.chart_title .info{font-size: 12px; color: @Info; padding: 0 4px;}
+.chart_ct{padding: 10px 0;}
 /* 图表-工具 */
 .chart_tools{overflow: hidden; border-radius: 8px;}
 .chart_tools li{cursor: pointer; position: relative; padding: 0 10px; line-height: 32px; color: @IconColor;}
@@ -113,6 +114,17 @@
 .chart_tools li.active{color: @Primary; font-weight: 600;}
 .chart_tools li::before{content: ''; position: absolute; width: 1px; height: 12px; background-color: #D2D2D2; right: 0; top: 50%; transform: translateY(-50%);}
 .chart_tools li:last-child::before{display: none;}
+/* 图表-统计 */
+.chart_total{overflow: hidden; padding: 10px 0;}
+.chart_total li{line-height: 20px; border: transparent 1px solid; padding: 4px 8px; border-radius: 4px;}
+.chart_total li:hover{box-shadow: @Shadow;}
+.chart_total .title{font-size: 12px; color: @Text;}
+.chart_total .num{font-size: 20px; font-weight: 500; line-height: 32px; text-align: center;}
+.chart_total .bg_primary{background-color: @Minor; color: @Primary; border-color: @Border;}
+.chart_total .bg_info{background-color: @InfoBg; color: @Info; border-color: @InfoBorder;}
+.chart_total .bg_warning{background-color: @WarningBg; color: @Warning; border-color: @WarningBorder;}
+.chart_total .bg_success{background-color: @SuccessBg; color: @Success; border-color: @SuccessBorder;}
+.chart_total .bg_danger{background-color: @DangerBg; color: @Danger; border-color: @DangerBorder;}
 /* 图表-表格 */
 .chart_table{width: 100%; border-collapse: collapse; font-size: 14px; text-align: center;}
 .chart_table td{position: relative; padding: 8px 8px; line-height: 20px; border: #E2E2E2 1px solid;}

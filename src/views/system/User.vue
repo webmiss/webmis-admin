@@ -13,7 +13,7 @@
       </div>
     </div>
     <!-- 内容 -->
-    <div class="app_content mtop10 flex">
+    <div class="app_content flex">
       <div class="app_ct_left" v-show="sea.show">
         <!-- 搜索 -->
         <wm-search v-model:show="sea.show" @update:submit="subSea()">

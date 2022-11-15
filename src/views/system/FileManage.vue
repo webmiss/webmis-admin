@@ -13,7 +13,7 @@
       </div>
     </div>
     <!-- 内容 -->
-    <div class="app_content mtop10 flex">
+    <div class="app_content flex">
       <div class="app_ct_right">
         <!-- 动作菜单 -->
         <div class="app_action_body flex">

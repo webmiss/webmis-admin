@@ -12,7 +12,7 @@
       </div>
       <!-- Tabs -->
       <ul class="wm-tabs_list wm-dialog_tabs" v-if="tabs.length>0">
-        <li v-for="(v,k) in tabs" :key="k" :class="v.name==active?'active':''" @click="active=v.name">{{v.label}}</li>
+        <li v-for="(v,k) in tabs" :key="k" :class="v.name==active?'active':''" @click="tabsClick(v.name)">{{v.label}}</li>
       </ul>
       <div v-if="tabs.length>0" ref="DialogBody" class="wm-dialog_body scrollbar">
         <div ref="DialogContent" class="wm-dialog_content">
@@ -118,6 +118,12 @@ export default defineComponent({
         if(h>(bh-20)) body.style.height = bh-th+'px';
         else body.style.height = '';
       }, 300);
+    },
+
+    /* Tabs */
+    tabsClick(name: string){
+      this.active = name;
+      this.$emit('update:tabsActive', name);
     },
 
   },

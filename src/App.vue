@@ -148,6 +148,8 @@
 @import url('./assets/style/app.less');
 </style>
 <style lang="less" scoped>
+#app{overflow: hidden;}
+/* Language */
 .language{position: absolute; padding: 10px 0; top: 16px; right: 16px;}
 .language_text{cursor: pointer; width: 200px; line-height: 40px; text-align: center; border-radius: 20px; color: #CCC; border-radius: 20px; background-color: rgba(0,0,0,.7);}
 .language_text:hover{color: @Primary;}

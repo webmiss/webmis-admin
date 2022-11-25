@@ -1,7 +1,7 @@
 <template>
   <div ref="Tag" class="wm-tag" :class="effect+'_'+type" :style="{
     height: height,
-    lineHeight: height,
+    lineHeight: 'calc('+height+' - 2px)',
     padding: padding,
     fontSize: fontSize,
   }">

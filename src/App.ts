@@ -13,11 +13,10 @@ import NavigateTo from '@/library/ui/navigate-to'
 import wmInput from '@/components/form/input/index.vue'
 import wmButton from '@/components/form/button/index.vue'
 import wmPopover from '@/components/popover/index.vue'
-import wmSearch from '@/components/search/index.vue'
 
 export default defineComponent({
   name: 'APP',
-  components: {wmInput,wmButton,wmPopover,wmSearch},
+  components: {wmInput,wmButton,wmPopover},
   data(){
     const store: any = useStore();
     const state: any = store.state;

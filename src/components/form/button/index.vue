@@ -2,7 +2,7 @@
   <button class="wm-button" :class="effect+'_'+type" :style="{
     width: icon?height:width,
     height: height,
-    lineHeight: height,
+    lineHeight: 'calc('+height+' - 2px)',
     padding: icon?'0':padding,
     margin: margin,
     borderRadius: radius,

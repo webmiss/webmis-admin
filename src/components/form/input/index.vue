@@ -17,13 +17,14 @@
       :placeholder="placeholder"
       :style="{
         height: height,
-        lineHeight: lineHeight,
+        lineHeight: 'calc('+lineHeight+' - 2px)',
         padding: padding,
         textAlign: align,
         borderRadius: borderRadius,
         backgroundColor: bgColor,
       }"
       :disabled="disabled"
+      :readonly="readonly"
       @input="$emit('update:value', $event.target.value)"
     />
   </div>
@@ -69,6 +70,7 @@ export default defineComponent({
     borderRadius: {type: String, default: '4px'},     //边框圆角: '4px'
     bgColor: {type: String, default: ''},             //背景颜色: ''
     disabled: {type: Boolean, default: false},        //是否禁用
+    readonly: {type: Boolean, default: false},        //是否读写
     clearable: {type: Boolean, default: false},       //一键清空
     bottonText: {type: String, default: ''},          //右侧按钮
   },

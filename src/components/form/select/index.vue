@@ -1,6 +1,6 @@
 <template>
   <div class="wm-select" :style="{width: width}">
-    <div class="wm-select_input" :style="{height: height, lineHeight: height}" @click="checked=!checked;seaKey('')">
+    <div class="wm-select_input" :style="{height: height, lineHeight: 'calc('+height+' - 2px)'}" @click="checked=!checked;seaKey('')">
       <!-- Clear -->
       <div class="wm-select_clear_body" v-if="value&&clearable">
         <span class="wm-select_clear" @click.stop="$emit('update:value', '')"></span>
@@ -10,7 +10,7 @@
         <i class="ui ui_arrow_down"></i>
       </div>
       <!-- Value -->
-      <input type="text" readonly :placeholder="placeholder" :value="text" :style="{borderColor: checked?'#595':'', boxShadow: checked?'0 0 10px rgba(0,0,0,.16)':''}">
+      <wm-input :value="text" @update:value="seaKey($event)" :placeholder="placeholder" :readonly="true" />
     </div>
     <div class="wm-select_body" v-if="checked">
       <span class="wm-select_arrow"></span>
@@ -37,11 +37,11 @@
 .wm-select_input input{cursor: pointer; width: 100%; height: 100%; padding: 0 30px 0 10px; display: flex; box-sizing: border-box; border-radius: 4px; border: @BorderColor 1px solid; background-color: #FFF;}
 .wm-select_input input:focus{outline: none;}
 .wm-select_input input:hover{border-color: @BorderHover;}
-.wm-select_input_ico{cursor: pointer; position: absolute; width: 30px; height: 100%; right: 0; text-align: center; transition-duration: .3s;}
+.wm-select_input_ico{cursor: pointer; position: absolute; z-index: 1; width: 30px; height: 100%; line-height: 32px; right: 0; text-align: center; transition-duration: .3s;}
 .wm-select_input_ico i{font-size: 12px; color: @IconColor;}
 
-.wm-select_clear_body{display: none; position: absolute; z-index: 1; width: 30px; height: 80%; top: 10%; right: 1px; text-align: center; background-color: #FFF;}
-.wm-select_clear{position: absolute; cursor: pointer; top: 50%; right: 6px; transform: translateY(-50%); width: 16px; height: 16px; background-color: @Danger; border-radius: 50%; opacity: .5;}
+.wm-select_clear_body{display: none; position: absolute; z-index: 2; width: 30px; height: 80%; top: 10%; right: 1px; text-align: center;}
+.wm-select_clear{position: absolute; cursor: pointer; top: 50%; right: 6px; transform: translateY(-50%); width: 16px; height: 16px; background-color: @Danger; border-radius: 50%; opacity: .8;}
 .wm-select_clear:hover{opacity: 1;}
 .wm-select_clear::after,.wm-select_clear::before{content: ''; position: absolute; width: 50%; height: 0.1rem; background-color: #FFF; left: 50%; top: 50%; transform-origin: center;}
 .wm-select_clear::after{transform: translate(-50%, -50%) rotate(45deg);}

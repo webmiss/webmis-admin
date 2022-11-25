@@ -18,7 +18,7 @@
         <!-- 搜索 -->
         <wm-search v-model:show="sea.show" @update:submit="subSea()">
           <li>
-            <wm-input v-model:value="sea.form.uname" placeholder="用户名/手机号码/邮箱" clearable @keyup.enter="subSea()" />
+            <wm-input v-model:value="sea.form.uname" placeholder="账号" clearable @keyup.enter="subSea()" />
           </li>
           <li>
             <wm-input v-model:value="sea.form.nickname" placeholder="昵称" clearable @keyup.enter="subSea()" />

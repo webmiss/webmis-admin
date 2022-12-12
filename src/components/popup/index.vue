@@ -1,7 +1,7 @@
 <template>
 <div v-show="show">
   <div ref="PopupBG" class="wm-popup_bg" :style="{backgroundColor:'rgba(0,0,0,'+opacity+')'}" @click="_clickBG()"></div>
-  <div ref="PopupBody" class="wm-popup_body" :style="{backgroundColor:bgColor}">
+  <div ref="PopupBody" class="wm-popup_body" :style="{width:width, height:height, backgroundColor:bgColor}">
     <slot></slot>
   </div>
 </div>
@@ -20,6 +20,8 @@ export default defineComponent({
   props: {
     show: {type: Boolean, default: false},        //是否显示
     position: {type: String, default: 'center'},  //位置: left、right、top、bottom
+    width: {type: String, default: ''},           //内容宽度
+    height: {type: String, default: ''},          //内容高度
     opacity: {type: Number, default: 0.4},        //背景透明度
     bgColor: {type: String, default: ''},         //内容背景颜色
     bgClose: {type: Boolean, default: true},      //点击背景关闭

@@ -16,7 +16,7 @@
 </template>
 
 <style lang="less" scoped>
-.wm-checkbox{display: inline-block; height: 26px; line-height: 26px;}
+.wm-checkbox{user-select: none; display: inline-block; height: 26px; line-height: 26px;}
 .wm-checkbox li{float: left; cursor: pointer; padding: 5px; margin: 0 4px;}
 .wm-checkbox span{float: left;}
 .wm-checkbox .checkbox{display: none;}

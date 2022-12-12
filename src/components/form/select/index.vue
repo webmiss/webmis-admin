@@ -21,8 +21,14 @@
       <!-- List -->
       <ul v-if="dataList.length>0" class="wm-select_list scrollbar" :style="{maxHeight: maxHeight}">
         <template v-for="(v,k) in dataList" :key="k">
-          <li v-if="v.disabled" class="nowrap wm-select_disabled" style="cursor: not-allowed;">{{v.label}}</li>
-          <li v-else class="nowrap" :class="v.value==value?'wm-select_active':''" @click="selectClick(v.value)">{{v.label}}</li>
+          <li v-if="v.disabled" class="flex nowrap wm-select_disabled" style="cursor: not-allowed;">
+            <span class="label">{{v.label}}</span>
+            <span class="info">{{v.info || ''}}</span>
+          </li>
+          <li v-else class="flex nowrap" :class="v.value==value?'wm-select_active':''" @click="selectClick(v.value)">
+            <span class="label">{{v.label}}</span>
+            <span class="info">{{v.info || ''}}</span>
+          </li>
         </template>
       </ul>
       <div v-else class="null"></div>
@@ -53,9 +59,10 @@
 .wm-select_arrow::before{content: ''; position: absolute; width: 10px; height: 10px; border: @BorderColor 1px solid; border-right-color: transparent; border-bottom-color: transparent; background-color: #FFF; transform: rotate(45deg); box-sizing: border-box;}
 .wm-select_sea{padding: 4px 8px;}
 .wm-select_list{overflow-y: auto;}
-.wm-select_list li{cursor: pointer; line-height: 32px; padding: 0 16px;}
+.wm-select_list li{cursor: pointer; line-height: 32px; padding: 0 8px 0 16px;}
 .wm-select_list li:hover{background-color: @Minor;}
-.wm-select_active{color: @Primary; font-weight: bold;}
+.wm-select_list li .info{color: @Info; font-size: 12px;}
+.wm-select_active .label{color: @Primary; font-weight: bold;}
 .wm-select_disabled{color: @Disabled;}
 </style>
 

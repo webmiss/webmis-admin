@@ -6,9 +6,27 @@
     </div>
     <!-- botton -->
     <div class="wm-input_botton" v-if="bottonText" @click.stop="$emit('update:bottom', true)">{{ bottonText }}</div>
+    <!-- textarea -->
+    <textarea v-if="type=='textarea'"
+      class="wm-input"
+      :value="value"
+      :maxlength="maxlength"
+      :minlength="minlength"
+      :placeholder="placeholder"
+      :style="{
+        height: height,
+        lineHeight: 'calc('+lineHeight+' - 2px)',
+        padding: padding,
+        textAlign: align,
+        borderRadius: borderRadius,
+        backgroundColor: bgColor,
+      }"
+      :disabled="disabled"
+      :readonly="readonly"
+      @input="$emit('update:value', $event.target.value)"
+    ></textarea>
     <!-- Input -->
-    <input
-      ref="input"
+    <input v-else
       class="wm-input"
       :value="value"
       :type="type"
@@ -57,7 +75,7 @@ export default defineComponent({
   name: 'Input',
   props: {
     value: {default: ''},                             //值
-    type: {type: String, default: 'text'},            //类型: input属性
+    type: {type: String, default: 'text'},            //类型: textarea、text
     maxlength: {type: String, default: ''},           //最大长度: 默认
     minlength: {type: String, default: ''},           //最小长度: 默认
     placeholder: {type: String, default: '请输入'},   //提示: 无

@@ -19,12 +19,17 @@ export const DateTime: Function = (format: string='Y-m-d H:i:s', timestamp: numb
   return res;
 }
 
+/* Time */
+export const Time: Function = ()=>{
+  let now: number = new Date().getTime();
+  now = Math.round(now/1000);
+  return now;
+}
+
 /* 时间戳 */
 export const StrToTime: Function = (datetime: string='')=>{
   const arr = datetime.split(' ');
-  const num = parseInt(arr[0]);
-  let now = new Date().getTime();
-  now = Math.round(now/1000);
+  const num: number = parseInt(arr[0]);
   let n = 0;
   switch (arr[1]) {
     case 'second': n=num*1; break;
@@ -35,5 +40,7 @@ export const StrToTime: Function = (datetime: string='')=>{
     case 'month': n=num*60*60*24*7*30; break;
     case 'year': n=num*60*60*24*365; break;
   }
-  return now+n;
+  let now: number = n!=0?new Date().getTime():new Date(datetime).getTime();
+  now = Math.round(now/1000)+n;
+  return now>0?now:0;
 }

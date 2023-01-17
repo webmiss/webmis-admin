@@ -19,7 +19,7 @@ export default defineComponent({
     left: {type: String, default: '100%'},        //左
     top: {type: String, default: '-50%'},         //顶
     zoom: {type: String, default: '0.8'},         //缩放
-    padding: {type: String, default: '0 8px'},    //内部间距
+    padding: {type: String, default: '0 6px'},    //内部间距
     color: {type: String, default: '#FFF'},       //文本颜色
     bgColor: {type: String, default: '#606266'},  //背景颜色
     fontSize: {type: String, default: '12px'},    //字体大小

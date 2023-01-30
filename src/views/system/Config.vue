@@ -10,7 +10,7 @@
         <wm-input v-model:value="form.input" width="240px" clearable />
       </wm-form-item>
       <wm-form-item label="Select">
-        <wm-select v-model:value="form.select" width="240px" clearable :data="select" />
+        <wm-select v-model:value="form.select" width="240px" multiple clearable :data="select" />
       </wm-form-item>
       <wm-form-item label="Cascader">
         <wm-cascader :value="form.cascader" width="240px" @update:value="form.cascader=$event" :data="cascader" clearable />

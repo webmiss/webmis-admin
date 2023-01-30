@@ -2,8 +2,8 @@
   <div class="wm-select" :style="{width: width}">
     <div class="wm-select_input" :style="{height: height, lineHeight: 'calc('+height+' - 2px)'}" @click="checked=!checked;seaKey('')">
       <!-- Clear -->
-      <div class="wm-select_clear_body" v-if="value&&clearable">
-        <span class="wm-select_clear" @click.stop="$emit('update:value', '')"></span>
+      <div class="wm-select_clear_body" v-if="text&&clearable">
+        <span class="wm-select_clear" @click.stop="selectClear()"></span>
       </div>
       <!-- Arrow -->
       <div class="wm-select_input_ico" :style="{transform: checked?'rotate(-180deg)':'rotate(0deg)'}">
@@ -22,11 +22,11 @@
       <ul v-if="dataList.length>0" class="wm-select_list scrollbar" :style="{maxHeight: maxHeight}">
         <template v-for="(v,k) in dataList" :key="k">
           <li v-if="v.disabled" class="flex nowrap wm-select_disabled" style="cursor: not-allowed;">
-            <span class="label">{{v.label}}</span>
+            <span class="label"><span v-if="v.checked" class="active"></span>{{v.label}}</span>
             <span class="info">{{v.info || ''}}</span>
           </li>
-          <li v-else class="flex nowrap" :class="v.value==value?'wm-select_active':''" @click="selectClick(v.value)">
-            <span class="label">{{v.label}}</span>
+          <li v-else class="flex nowrap" :class="v.checked?'wm-select_active':''" @click="selectClick(v.value)">
+            <span class="label"><span v-if="v.checked" class="active"></span>{{v.label}}</span>
             <span class="info">{{v.info || ''}}</span>
           </li>
         </template>
@@ -59,11 +59,14 @@
 .wm-select_arrow::before{content: ''; position: absolute; width: 10px; height: 10px; border: @BorderColor 1px solid; border-right-color: transparent; border-bottom-color: transparent; background-color: #FFF; transform: rotate(45deg); box-sizing: border-box;}
 .wm-select_sea{padding: 4px 8px;}
 .wm-select_list{overflow-y: auto;}
-.wm-select_list li{cursor: pointer; line-height: 32px; padding: 0 8px 0 16px;}
+.wm-select_list li{cursor: pointer; line-height: 32px; padding: 0 10px 0 20px;}
 .wm-select_list li:hover{background-color: @Minor;}
-.wm-select_list li .info{color: @Info; font-size: 12px;}
+.wm-select_list .info{color: @Info; font-size: 12px;}
+.wm-select_list .active{position: relative;}
+.wm-select_list .active::after{content: ""; position: absolute; left: -12px; top: 4px; width: 4px; height: 8px; border: 2px solid @Primary; border-left: 0; border-top: 0; transform: rotate(45deg);}
 .wm-select_active .label{color: @Primary; font-weight: bold;}
 .wm-select_disabled{color: @Disabled;}
+.wm-select_disabled .active::after{border-color: @Disabled;}
 </style>
 
 <script lang="ts">
@@ -81,27 +84,27 @@ export default defineComponent({
     maxHeight: {type:String, default:'160px'},      //最大高度
     clearable: {type: Boolean, default: false},     //一键清空
     search: {type: Boolean, default: false},        //搜索
+    multiple: {type: Boolean, default: false},      //多选
   },
   data(){
     const checked: boolean = false;
     const text: string = '';
-    const dataList: any = null;
     const seaVal: any = '';
-    return {checked, text, dataList, seaVal}
+    const dataList: any = [];
+    return {checked, text, seaVal, dataList}
   },
   watch:{
-    value(val: any){
-      this.selectDisplay(val);
-    },
+    // value(val: any){
+    //   this.selectDisplay();
+    // },
     data(val: any){
-      this.dataList = val;
-      this.selectDisplay(this.value);
+      this.selectInit();
     }
   },
   mounted(){
     // 默认值
     this.dataList = this.data;
-    this.selectDisplay(this.value);
+    setTimeout(()=>{ this.selectInit(); }, 400);
     // 阻止穿透
     const obj: any = document.getElementsByClassName('wm-select');
     for(let i=0; i<obj.length; i++){
@@ -113,33 +116,58 @@ export default defineComponent({
     document.addEventListener('click',()=>{ this.checked = false; });
   },
   methods:{
+    
+    /* 默认值 */
+    selectInit(){
+      for(let v of this.data as any){
+        // 多选
+        if(this.multiple) v.checked = this.value.indexOf(v.value)!=-1;
+        // 单选
+        else v.checked = v.value==this.value;
+      }
+      this.selectDisplay();
+    },
 
     /* 选择 */
     selectClick(val: string){
-      this.checked = false;
-      this.selectDisplay(val);
-      this.$emit('update:value', val);
+      if(!this.multiple) this.checked = false;
+      for(let v of this.data as any){
+        if(v.value==val) v.checked=!v.checked;
+        else if(!this.multiple) v.checked=false;
+      }
+      this.selectDisplay();
+    },
+
+    /* 清除 */
+    selectClear(){
+      for(let v of this.data as any) v.checked=false;
+      this.text = '';
+      this.selectDisplay();
     },
 
     /* 显示值 */
-    selectDisplay(val: string){
-      const data: any = this.data;
-      if(val=='') return this.text='';
-      for(let i in data){
-        if(data[i]['value']==val) return this.text=data[i]['label'];
+    selectDisplay(){
+      let label: Array<string> = [];
+      let value: Array<string> = [];
+      for(let v of this.data as any){
+        if(v.checked){
+          label.push(v.label);
+          value.push(v.value);
+        }
       }
+      this.text = label.join(',');
+      this.$emit('update:value', this.multiple?value:value.join(','));
     },
 
     /* 搜索 */
     seaKey(v: any){
-      if(!v) return this.dataList=this.data;
+      if(!v) return this.dataList = this.data;
       const reg =new RegExp(v.toLowerCase());
-      const data: any = this.data;
       const list: any = [];
       let label: string;
-      for(let i in data){
-        label = data[i].label.toLowerCase();
-        if(reg.test(label)) list.push(data[i]);
+      for(let v of this.data as any){
+        label = v.label.toLowerCase();
+        if(reg.test(label)) list.push(v);
       }
       this.dataList = list;
     },

@@ -33,8 +33,8 @@ export default defineComponent({
       param: {name:'logo', token:Storage.getItem('token')},
     };
     // 表单
-    const form: any = {logo:'', input:'', select:'option1', cascader:[], radio:'无', checkbox:[], switch:true, tinymce:'<b>测试</b>'};
-    const select: any = [{label:'Option1', value:'option1', disabled: true},{label:'Option2', value:'option2'}];
+    const form: any = {logo:'', input:'', select:['option1', 'option3'], cascader:[], radio:'无', checkbox:[], switch:true, tinymce:'<b>测试</b>'};
+    const select: any = [{label:'Option1', info:'opt1', value:'option1', checked:true},{label:'Option2', info:'opt2', value:'option2', disabled: true},{label:'Option3', info:'opt3', value:'option3'}];
     const cascader: any = [{label:'菜单A', value:'1', children: [{label:'子菜单1', value:'3'},{label:'子菜单2', value:'4'}]},{label:'菜单B', value:'2', disabled: true}];
     const radio: any = [{label:'男',value:'男'},{label:'女',value:'女'},{label:'无',value:'无',disabled: true}];
     const checkbox: any = [{label:'游戏', value: 1},{label:'购物', value: 2},{label:'其他', value: 3, checked: true, disabled: true}];

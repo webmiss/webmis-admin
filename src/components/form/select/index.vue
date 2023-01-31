@@ -94,9 +94,9 @@ export default defineComponent({
     return {checked, text, seaVal, dataList}
   },
   watch:{
-    // value(val: any){
-    //   this.selectDisplay();
-    // },
+    value(val: any){
+      this.selectInit();
+    },
     data(val: any){
       this.selectInit();
     }
@@ -104,7 +104,7 @@ export default defineComponent({
   mounted(){
     // 默认值
     this.dataList = this.data;
-    setTimeout(()=>{ this.selectInit(); }, 400);
+    this.selectInit();
     // 阻止穿透
     const obj: any = document.getElementsByClassName('wm-select');
     for(let i=0; i<obj.length; i++){
@@ -119,13 +119,15 @@ export default defineComponent({
     
     /* 默认值 */
     selectInit(){
-      for(let v of this.data as any){
-        // 多选
-        if(this.multiple) v.checked = this.value.indexOf(v.value)!=-1;
-        // 单选
-        else v.checked = v.value==this.value;
-      }
-      this.selectDisplay();
+      setTimeout(()=>{
+        for(let v of this.data as any){
+          // 多选
+          if(this.multiple) v.checked = this.value.indexOf(v.value)!=-1;
+          // 单选
+          else v.checked = v.value==this.value;
+        }
+        this.selectDisplay();
+      }, 400);
     },
 
     /* 选择 */

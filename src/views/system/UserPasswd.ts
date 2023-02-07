@@ -5,7 +5,7 @@ import Loading from '@/library/ui/loading'
 import Toast from '@/library/ui/toast'
 import Post from '@/library/request/post'
 import Storage from '@/library/Storage'
-import RegRight from '@/library/reg/right'
+import RegRight from '@/library/util/reg_right'
 /* UI组件 */
 import wmMain from '@/components/main/index.vue'
 import wmForm from '@/components/form/index.vue'

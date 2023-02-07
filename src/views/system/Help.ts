@@ -1,7 +1,7 @@
 import { defineComponent } from 'vue';
 import { useStore } from 'vuex';
 /* JS组件 */
-import NavigateTo from '@/library/ui/navigate-to'
+import NavigateTo from '@/library/ui/navigate_to'
 /* UI组件 */
 import wmMain from '@/components/main/index.vue'
 

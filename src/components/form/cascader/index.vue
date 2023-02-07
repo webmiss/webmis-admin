@@ -109,8 +109,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { Explode } from '@/library/util/index'
-import { RTrim } from '@/library/util/trim'
+import { Explode, RTrim } from '@/library/util/index'
 export default defineComponent({
   name:'Cascader',
   props: {

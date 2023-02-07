@@ -7,8 +7,7 @@ import Post from '@/library/request/post'
 import Storage from '@/library/Storage'
 import TimeDate from '@/library/time/date'
 import TimeFormatHour from '@/library/time/format_hour'
-import PriceFormat from '@/library/price/format'
-import PricePercentage from '@/library/price/percentage'
+import { PriceEncode, PricePercentage } from '@/library/format/index'
 /* UI组件 */
 import wmMain from '@/components/main/index.vue'
 import wmChartLine from '@/components/chart/line.vue'
@@ -86,7 +85,7 @@ export default defineComponent({
 
     /* 格式化-数字 */
     FormatNum(num: string) {
-      return PriceFormat.encode(num, 0);
+      return PriceEncode(num, 0);
     },
     /* 格式化-百分比 */
     FormatPercentage(n1: number, n2: number) {

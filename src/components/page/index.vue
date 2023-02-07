@@ -40,7 +40,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import wmInput from '../form/input/index.vue'
-import PriceToFixed from '@/library/price/to-fixed'
+import { PriceFixed } from '@/library/format/index'
 export default defineComponent({
   name: 'Page',
   components: {wmInput},
@@ -81,7 +81,7 @@ export default defineComponent({
       else if(n>this.max) page = this.max;
       // 中间
       let list = [];
-      const nx = PriceToFixed(this.maxPage/2, 0);
+      const nx = PriceFixed(this.maxPage/2, 0);
       const start = n-nx>=1?n-nx:1;
       if(this.max>this.maxPage){
         for(let i=0; i<this.maxPage; i++){

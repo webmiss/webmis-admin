@@ -68,9 +68,8 @@
           </ul>
           <!-- User -->
           <div class="app_top_user">
-            <span class="img">
-              <i class="ui ui_user"></i>
-            </span>
+            <span class="img" v-if="state.uInfo.img" :style="{backgroundImage: 'url('+state.uInfo.img+')'}"></span>
+            <span v-else class="img"><i class="ui ui_user"></i></span>
             <div class="box">
               <div class="info">
                 <h2 class="nowrap">{{state.uInfo.nickname || '会员昵称'}}</h2>

@@ -74,20 +74,6 @@ export default {
     color: '#333',  //字体颜色
     bgColor:'#FFF'  //背景颜色
   },
-  /* 更新 */
-  update: {
-    start: true,  //开启更新
-    bg: '#24292E',  //背景颜色
-    logoBg: '#FFFFFF', //Logo背景
-    loading: '#6FB737',  //加载中
-    loaded: '#000000', //未加载
-    copy: '#666666', //版权颜色
-    msgColor: '#999999', //提示颜色
-    butColor: '#FFFFFF', //按钮颜色
-    butBg: '#6FB737',  //按钮背景
-    butText: '下载并安装' //按钮文字
-  },
-  upIosUrl: 'itms-apps://itunes.apple.com/cn/app/tao-bao-sui-shi-sui-xiang/id387682726?mt=8', //IOS下载链接
   /* Login */
   login: {
     start: true,  //Token验证

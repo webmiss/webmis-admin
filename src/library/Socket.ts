@@ -32,7 +32,7 @@ export default {
 
   /* WebSocket */
   socketOpen(token: string){
-    this.state.socket = new WebSocket(Env.socket.server+'?type='+Env.socket.type+'&token='+token);
+    this.state.socket = new WebSocket(Env.socket.server+'?channel='+Env.socket.channel+'&token='+token);
     // 链接
     this.state.socket.onopen = ()=>{
       console.log('Socket开启');

@@ -2,6 +2,7 @@ import App from '@/main';
 import Env from '@/env'
 import Toast from '@/library/ui/toast'
 import Storage from '@/library/Storage'
+import Post from '@/library/request/post'
 import Msg from './Msg'
 
 /* Socket */
@@ -36,6 +37,7 @@ export default {
     // 链接
     this.state.socket.onopen = ()=>{
       console.log('Socket开启');
+      // 心跳包
       clearInterval(this.heartbeatInterval);
       this.heartbeatInterval = setInterval(()=>{
         try{
@@ -44,6 +46,16 @@ export default {
           this._closeMsg();
         }
       },Env.socket.heartbeat);
+      // 消息列表
+      Post('msg/list',{
+        token: Storage.getItem('token'),
+      },(res: any)=>{
+        const d = res.data;
+        if(d.code==0){
+          this.state.msg.list = d.list;
+          this.state.msg.num = d.num;
+        }
+      });
     }
     // 关闭
     this.state.socket.onclose = ()=>{

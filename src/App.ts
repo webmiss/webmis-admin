@@ -9,6 +9,7 @@ import Loading from '@/library/ui/loading'
 import Storage from '@/library/Storage'
 import RegRight from '@/library/util/reg_right'
 import NavigateTo from '@/library/ui/navigate_to'
+import { DateTime, StrToTime } from '@/library/time/index'
 /* UI组件 */
 import wmInput from '@/components/form/input/index.vue'
 import wmButton from '@/components/form/button/index.vue'
@@ -233,6 +234,124 @@ export default defineComponent({
       }
       // 是否存在
       this.sea.isData = isData;
+    },
+
+    /* 消息 */
+    msgData(){
+      this.state.msg.show = true;
+    },
+    /* 消息-搜索 */
+    msgInput(){
+      const key: string = this.state.msg.key;
+      if(!key) return this.state.msg.seaList=[];
+      Post('msg/sea',{
+        token: Storage.getItem('token'),
+        key: key,
+      },(res: any)=>{
+        const d = res.data;
+        if(d.code==0){
+          this.state.msg.seaList = d.list;
+        }
+      });
+    },
+    /* 消息-搜索点击 */
+    msgSeaClick(row: any){
+      this.state.msg.key = '';
+      const list: any = this.state.msg.list;
+      for(let v of list){
+        if(v.fid==row.uid){
+          return this.msgClick(v);
+        }
+      }
+      // 添加
+      const data: any = {gid:0, fid:row.uid, title:row.name, img:row.img, list:[]}
+      this.state.msg.list.unshift(data);
+      return this.msgClick(data);
+    },
+    /* 消息-点击列表 */
+    msgClick(row: any){
+      const msg: any = this.state.msg;
+      msg.gid = row.gid;
+      msg.fid = row.fid;
+      msg.title = row.title;
+      this.msgToBottom();
+      // 标记阅读
+      let ids: any = [];
+      for(let v of row.list){
+        if(v.is_new){
+          v.is_new = false;
+          ids.push(v.id);
+        }
+      }
+      this.msgRead(ids);
+    },
+    /* 消息-发送 */
+    msgSub(){
+      // 参数
+      const msg: any = this.state.msg;
+      const gid: string = msg.gid;
+      const fid: string = msg.fid;
+      const content: string = msg.content;
+      const uid: string = this.state.uInfo.uid;
+      const name: string = this.state.uInfo.name;
+      const img: string = this.state.uInfo.img;
+      if(!msg.gid && !msg.fid) return Toast('请选择联系人');
+      if(!content) return Toast('请输入消息');
+      // 添加
+      for(let v of msg.list){
+        if(fid==v.fid){
+          v.msg = content;
+          v.time = DateTime();
+          v.list.push({gid:0, type:'msg', fid:fid, uid:uid, title:name, msg:content, time:v.time, img:img});
+          let k: number = msg.list.indexOf(v);
+          msg.list.unshift(v);
+          msg.list.splice(k+1, 1);
+          this.msgToBottom();
+          break;
+        }
+      }
+      if(gid=='1'){
+        msg.content = '';
+        return Toast('无法回复系统消息!');
+      }
+      // 发送
+      this.state.socket.send(JSON.stringify({
+        gid: gid,
+        to: fid,
+        uid: uid,
+        type: 'msg',
+        title: name,
+        img: img,
+        msg: content,
+      }));
+      // 清空
+      msg.content = '';
+    },
+    /* 消息-标记阅读 */
+    msgRead(ids: any=[]){
+      if(ids.length==0) return;
+      Post('msg/read',{
+        token: Storage.getItem('token'),
+        ids: JSON.stringify(ids),
+      },(res: any)=>{
+        const d = res.data;
+        if(d.code==0) this.state.msg.num -= ids.length;
+      });
+    },
+    /* 消息-跳转底部 */
+    msgToBottom(){
+      setTimeout(()=>{
+        document.querySelector('#msgBottom')?.scrollIntoView(true);
+      }, 300);
+    },
+    /* 消息-时间 */
+    getMsgDate(d: string){
+      if(!d) return '';
+      const day: string = DateTime('Y-m-d');
+      const t1: number = StrToTime(day+' 00:00:00');
+      const t2: number = StrToTime(d);
+      let str: string = t2>=t1?d.substring(11, 16):d.substring(5, 10);
+      return str;
     },
 
   }

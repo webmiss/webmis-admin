@@ -20,6 +20,7 @@
         textAlign: align,
         borderRadius: borderRadius,
         backgroundColor: bgColor,
+        fontSize: fontSize,
       }"
       :disabled="disabled"
       :readonly="readonly"
@@ -40,6 +41,7 @@
         textAlign: align,
         borderRadius: borderRadius,
         backgroundColor: bgColor,
+        fontSize: fontSize,
       }"
       :disabled="disabled"
       :readonly="readonly"
@@ -62,7 +64,7 @@
 .wm-input_botton{user-select: none; cursor: pointer; padding: 0 10px; position: absolute; z-index: 1; top: 50%; right: 1px; transform: translateY(-50%); color: @Info;}
 .wm-input_botton:hover{color: @Primary;}
 
-.wm-input{border: none; background: none; -webkit-appearance: none; outline: none; font: 400 14px Arial; caret-color: @Primary;}
+.wm-input{border: none; background: none; appearance: none; outline: none; font: 400 14px Arial; caret-color: @Primary;}
 .wm-input{width: 100%; box-sizing: border-box; border-radius: 4px; border: @BorderColor 1px solid; background-color: #FFF;}
 .wm-input:hover{box-shadow: 0 0 4px rgba(0,0,0,.1); border-color: @BorderHover;}
 .wm-input:focus{outline: none; border-color: @Primary; background-color: @Minor;}
@@ -87,6 +89,7 @@ export default defineComponent({
     align: {type: String, default: ''},               //文本对齐方式: 'left'
     borderRadius: {type: String, default: '4px'},     //边框圆角: '4px'
     bgColor: {type: String, default: ''},             //背景颜色: ''
+    fontSize: {type: String, default: '14px'},        //文本大小: '14px'
     disabled: {type: Boolean, default: false},        //是否禁用
     readonly: {type: Boolean, default: false},        //是否读写
     clearable: {type: Boolean, default: false},       //一键清空

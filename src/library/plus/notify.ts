@@ -13,7 +13,7 @@ export default (title: string, content: string, isRead: boolean=false)=>{
   }
   // 显示消息
   const text = Env.msg.content=='title'?title:content;
-  Toast(text);
+  Toast(title+': '+content);
   /* 是否阅读 */
   if(!isRead) return;
   // 百度语音

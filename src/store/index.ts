@@ -19,6 +19,8 @@ export default createStore({
     menuTitle: [],      //菜单名称
     /* 缓存路由 */
     keepAlive: ['Home'],
+    /* 消息 */
+    msg: {show: false, key:'', seaList:[], gid:'', fid:'', title:'', content:'', num: 0, list:[]},
   },
   getters: {
     /* 动作菜单 */

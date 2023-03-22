@@ -64,7 +64,10 @@
           <!-- Tools -->
           <ul class="app_top_tools flex">
             <li><i class="ui ui_data"></i></li>
-            <li><i class="ui ui_message"></i></li>
+            <li title="消息" @click="msgData()">
+              <span class="redNum">{{ state.msg.num }}</span>
+              <i class="ui ui_message"></i>
+            </li>
           </ul>
           <!-- User -->
           <div class="app_top_user">
@@ -132,6 +135,108 @@
       <!-- Body End -->
     </div>
     <!-- Main End -->
+
+    <!-- Msg -->
+    <wm-popup ref="Msg" v-model:show="state.msg.show">
+      <div class="app_msg_body flex">
+        <div class="app_msg_left">
+          <!-- Search -->
+          <div class="sea">
+            <div class="sea_ico"><i class="ui ui_search"></i></div>
+            <input type="text" class="input" placeholder="搜索联系人" v-model="state.msg.key" @input="msgInput()" />
+            <div class="sea_body scrollbar" v-if="state.msg.key">
+              <ul class="sea_list" v-if="state.msg.seaList.length>0">
+                <li class="flex" v-for="(v,k) in state.msg.seaList" :key="k" @click="msgSeaClick(v)">
+                  <div class="img" :style="{backgroundImage: v.img?'url('+v.img+')':''}">
+                    <i class="ui ui_image" v-if="!v.img"></i>
+                  </div>
+                  <div class="name nowrap">{{ v.name }}</div>
+                </li>
+              </ul>
+              <div class="null" v-else></div>
+            </div>
+          </div>
+          <!-- List -->
+          <div class="user_body scrollbar">
+            <ul class="user_list" v-if="state.msg.list.length>0">
+              <li class="flex" v-for="(v,k) in state.msg.list" :key="k" :class="v.fid===state.msg.fid?'active':''" @click="msgClick(v)">
+                <div class="img" :style="{backgroundImage: v.img?'url('+v.img+')':''}">
+                  <i class="ui ui_image" v-if="!v.img"></i>
+                </div>
+                <div class="info">
+                  <div class="flex">
+                    <div class="name nowrap">{{ v.title }}</div>
+                    <div class="time">{{ getMsgDate(v.time) }}</div>
+                  </div>
+                  <div class="text nowrap">{{ v.msg }}</div>
+                </div>
+              </li>
+            </ul>
+            <div class="null" v-else></div>
+          </div>
+          <!-- List End -->
+        </div>
+        <div class="app_msg_right">
+          <!-- Title -->
+          <div class="app_msg_title">
+            <span>{{ state.msg.title }}</span>
+            <span class="close" @click="$refs.Msg.close()"><i class="ui ui_close"></i></span>
+          </div>
+          <!-- MsgList -->
+          <div class="app_msg_list scrollbar">
+            <template v-for="(v1,k1) in state.msg.list" :key="k1">
+              <div class="msg_null" v-if="v1.fid==state.msg.fid&&v1.list.length==0">暂无新消息</div>
+              <template v-else>
+                <div v-for="(v, k) in v1.list" :key="k" v-show="v1.fid==state.msg.fid">
+                  <!-- Time -->
+                  <div class="time">{{ v.time }}</div>
+                  <!-- Msg Left -->
+                  <div class="msg_left flex_left" v-if="v.uid!=state.uInfo.uid">
+                    <div class="img" :style="{backgroundImage: v.img?'url('+v.img+')':''}">
+                      <i class="ui ui_image" v-if="!v.img"></i>
+                    </div>
+                    <div class="msg_body flex_left">
+                      <div class="content">
+                        <span class="arrow"></span>
+                        <span>{{ v.msg }}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Msg Right -->
+                  <div class="msg_right flex_right" v-else>
+                    <div class="msg_body flex_right">
+                      <div class="content">
+                        <span class="arrow"></span>
+                        <span>{{ v.msg }}</span>
+                      </div>
+                    </div>
+                    <div class="img" :style="{backgroundImage: v.img?'url('+v.img+')':''}">
+                      <i class="ui ui_image" v-if="!v.img"></i>
+                    </div>
+                  </div>
+                </div>
+              </template>
+            </template>
+            <div id="msgBottom"></div>
+          </div>
+          <!-- MsgTool -->
+          <ul class="app_msg_tool flex_left">
+            <li title="正在开发"><i class="ui ui_image" /></li>
+            <li title="正在开发"><i class="ui ui_folder" /></li>
+          </ul>
+          <!-- MsgSend -->
+          <div class="app_msg_send flex">
+            <div class="msg">
+              <wm-input v-model:value="state.msg.content" type="textarea" height="80px" maxlength="128" bgColor="#EEE" placeholder="输入内容" @keyup.enter="msgSub()" />
+            </div>
+            <div class="send">
+              <wm-button width="80px" height="80px" radius="4px" @click="msgSub()">发送</wm-button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </wm-popup>
+    <!-- Msg End -->
     
   </div>
 </template>

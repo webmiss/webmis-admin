@@ -24,7 +24,7 @@ export default {
         // 数据
         v.time = d.time;
         v.msg = d.msg;
-        if(msg.fid==d.uid){
+        if(msg.show && msg.fid==d.uid){
           v.num += 0;
           data.is_new = false;
           this.msgRead([d.id]);

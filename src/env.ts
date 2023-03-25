@@ -89,7 +89,7 @@ export default {
   /* Socket */
   socket: {
     channel: 'admin',
-    start: false, //启动
+    start: true, //启动
     server: socket, //链接地址
     time: 3000, //重连时间
     heartbeat: 10000, //心跳检测时间
@@ -97,6 +97,6 @@ export default {
   /* 消息 */
   msg: {
     content: 'content',  //阅读：title(标题)、content(内容)
-    browser: false,  //浏览器信息
+    browser: true,  //浏览器信息
   },
 }

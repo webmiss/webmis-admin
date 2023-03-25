@@ -1,5 +1,6 @@
 /* 当前时间戳 */
 export default (data: string='')=>{
-  let now: any = new Date(data?data:'').getTime();
+  let t: any = data?new Date(data):new Date();
+  let now: number = t.getTime();
   return Math.round(now/1000);
 }

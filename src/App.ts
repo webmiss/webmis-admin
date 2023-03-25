@@ -14,10 +14,11 @@ import { DateTime, StrToTime, TimeSize, FormatTime } from '@/library/time/index'
 import wmInput from '@/components/form/input/index.vue'
 import wmButton from '@/components/form/button/index.vue'
 import wmPopover from '@/components/popover/index.vue'
+import wmPopup from '@/components/popup/index.vue'
 
 export default defineComponent({
   name: 'APP',
-  components: {wmInput,wmButton,wmPopover},
+  components: {wmInput,wmButton,wmPopover,wmPopup},
   data(){
     const store: any = useStore();
     const state: any = store.state;

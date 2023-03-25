@@ -1,46 +1,18 @@
-/* Date */
-export const DateTime: Function = (format: string='Y-m-d H:i:s', timestamp: number=0)=>{
-  // 获取时间
-  let time: Date = timestamp>0?new Date(timestamp*1000):new Date();
-  const y: string = ''+time.getFullYear();
-  const m: string = time.getMonth()+1<10?'0'+(time.getMonth()+1):''+(time.getMonth()+1);
-  const d: string = time.getDate()<10?'0'+time.getDate():''+time.getDate();
-  const h: string = time.getHours()<10?'0'+time.getHours():''+time.getHours();
-  const i: string = time.getMinutes()<10?'0'+time.getMinutes():''+time.getMinutes();
-  const s: string = time.getSeconds()<10?'0'+time.getSeconds():''+time.getSeconds();
-  // 格式化
-  let res: string = format;
-  res = res.replace("Y", y);
-  res = res.replace("m", m);
-  res = res.replace("d", d);
-  res = res.replace("H", h);
-  res = res.replace("i", i);
-  res = res.replace("s", s);
-  return res;
-}
+import DateTime from './date'
+import StrToTime from './strtotime'
+import Time from './time'
+import TimeSize from './time_size'
+import TimeWeek from './time_week'
+import FormatHour from './format_hour'
+import FormatTime from './format_time'
 
-/* Time */
-export const Time: Function = ()=>{
-  let now: number = new Date().getTime();
-  now = Math.round(now/1000);
-  return now;
-}
-
-/* 时间戳 */
-export const StrToTime: Function = (datetime: string='')=>{
-  const arr = datetime.split(' ');
-  const num: number = parseInt(arr[0]);
-  let n = 0;
-  switch (arr[1]) {
-    case 'second': n=num*1; break;
-    case 'minute': n=num*60; break;
-    case 'hour': n=num*60*60; break;
-    case 'day': n=num*60*60*24; break;
-    case 'week': n=num*60*60*24*7; break;
-    case 'month': n=num*60*60*24*7*30; break;
-    case 'year': n=num*60*60*24*365; break;
-  }
-  let now: number = n!=0?new Date().getTime():new Date(datetime).getTime();
-  now = Math.round(now/1000)+n;
-  return now>0?now:0;
+/* 请求方式 */
+export {
+  DateTime,
+  StrToTime,
+  Time,
+  TimeSize,
+  TimeWeek,
+  FormatHour,
+  FormatTime,
 }

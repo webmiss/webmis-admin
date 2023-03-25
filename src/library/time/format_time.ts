@@ -1,4 +1,4 @@
-/* 时间格式化 */
+/* 格式化-时间 */
 export default (date: string)=>{
   let time = date;
   // 现在

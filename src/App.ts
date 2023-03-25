@@ -9,7 +9,7 @@ import Loading from '@/library/ui/loading'
 import Storage from '@/library/Storage'
 import RegRight from '@/library/util/reg_right'
 import NavigateTo from '@/library/ui/navigate_to'
-import { DateTime, StrToTime } from '@/library/time/index'
+import { DateTime, StrToTime, TimeSize, FormatTime } from '@/library/time/index'
 /* UI组件 */
 import wmInput from '@/components/form/input/index.vue'
 import wmButton from '@/components/form/button/index.vue'
@@ -335,7 +335,13 @@ export default defineComponent({
         ids: JSON.stringify(ids),
       },(res: any)=>{
         const d = res.data;
-        if(d.code==0) this.state.msg.num -= ids.length;
+        if(d.code==0){
+          const msg: any = this.state.msg;
+          msg.num -= ids.length;
+          for(let v of msg.list){
+            if(v.fid==msg.fid) return v.num=0;
+          }
+        }
       });
     },
     /* 消息-跳转底部 */
@@ -352,6 +358,10 @@ export default defineComponent({
       const t2: number = StrToTime(d);
       let str: string = t2>=t1?d.substring(11, 16):d.substring(5, 10);
       return str;
+    },
+    /* 消息-时间 */
+    getMsgTime(t1: string, t2: string){
+      return TimeSize(t1, t2)>600?FormatTime(t1):'';
     },
 
   }

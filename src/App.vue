@@ -190,7 +190,7 @@
               <template v-else>
                 <div v-for="(v, k) in v1.list" :key="k" v-show="v1.fid==state.msg.fid">
                   <!-- Time -->
-                  <div class="time">{{ v.time }}</div>
+                  <div class="time">{{ getMsgTime(v.time, v1.list[k+1]?v1.list[k+1].time:v.time) }}</div>
                   <!-- Msg Left -->
                   <div class="msg_left flex_left" v-if="v.uid!=state.uInfo.uid">
                     <div class="img" :style="{backgroundImage: v.img?'url('+v.img+')':''}">

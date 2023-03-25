@@ -23,7 +23,7 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import wmInput from '../input/index.vue'
-import TimeDay from '../../../library/time/day'
+import { DateTime } from '@/library/time/index'
 export default defineComponent({
   name: 'Date',
   components: {wmInput},
@@ -38,7 +38,7 @@ export default defineComponent({
 
     /* 点击 */
     getDate(){
-      const day = TimeDay(0);
+      const day: string = DateTime('Y-m-d');
       this.$emit('update:value',day);
     }
 

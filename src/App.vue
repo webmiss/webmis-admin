@@ -161,6 +161,7 @@
             <ul class="user_list" v-if="state.msg.list.length>0">
               <li class="flex" v-for="(v,k) in state.msg.list" :key="k" :class="v.fid===state.msg.fid?'active':''" @click="msgClick(v)">
                 <div class="img" :style="{backgroundImage: v.img?'url('+v.img+')':''}">
+                  <span class="redNum" v-if="v.num>0">{{ v.num }}</span>
                   <i class="ui ui_image" v-if="!v.img"></i>
                 </div>
                 <div class="info">

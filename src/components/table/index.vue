@@ -1,5 +1,8 @@
 <template>
   <table class="wm-table">
+    <tbody class="wm-table_top">
+      <slot name="top"></slot>
+    </tbody>
     <tbody class="wm-table_title" v-if="isTitle">
       <td width="24" class="checkbox" v-if="isCheckbox">
         <wm-checkbox v-model:checked="show"></wm-checkbox>
@@ -17,9 +20,8 @@
 .wm-table .checkbox{position: relative;}
 .wm-table .wm-checkbox{position: absolute; top: 50%; transform: translateY(-50%);}
 .wm-table td{position: relative; padding: 4px 8px; line-height: 28px; border: #FFF 1px solid;}
+.wm-table_top td{line-height: 24px; text-align: center; padding: 10px 0;}
 .wm-table_title{position: relative; font-size: 12px; font-weight: 600; color: #606266; background-color: #F2F2F2;}
-// .wm-table_title td:first-child{border-radius: 8px 0 0 0;}
-// .wm-table_title td:last-child{border-radius: 0 8px 0 0;}
 .wm-table_list tr:nth-child(odd){background-color: #FFF;}
 .wm-table_list tr:nth-child(even){background-color: #F8F8F8;}
 .wm-table_list tr:hover{background-color: #ECF0F1;}

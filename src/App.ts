@@ -363,7 +363,7 @@ export default defineComponent({
     /* 消息-时间 */
     getMsgTime(t1: string, t2: string){
       if(t1==t2) return FormatTime(t1);
-      return TimeSize(t1, t2)>600?FormatTime(t1):'';
+      return TimeSize(t1, t2)>120?FormatTime(t1):'';
     },
 
   }

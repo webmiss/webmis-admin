@@ -5,6 +5,7 @@ import Loading from '@/library/ui/loading'
 import Toast from '@/library/ui/toast'
 import Post from '@/library/request/post'
 import Storage from '@/library/Storage'
+import DownFile from '@/library/down/file'
 /* UI组件 */
 import wmSearch from '@/components/search/index.vue'
 import wmMain from '@/components/main/index.vue'
@@ -24,13 +25,14 @@ import wmButton from '@/components/form/button/index.vue'
 import wmPage from '@/components/page/index.vue'
 import wmTree from '@/components/tree/index.vue'
 import wmTabs from '@/components/tabs/index.vue'
+import wmSelect from '@/components/form/select/index.vue'
 
 /* 用户管理 */
 export default defineComponent({
   components: {
     wmSearch,wmMain,wmRow,wmTable,wmTableForm,wmTableOrder,wmCheckbox,wmImg,wmTag,
     wmSwitch,wmDialog,wmInput,wmRadio,wmDate,wmButton,wmPage,wmTree,
-    wmTabs,
+    wmTabs,wmSelect,
   },
   data(){
     // 状态
@@ -39,18 +41,19 @@ export default defineComponent({
     const getters: any = store.getters;
     // 分页
     const page: any = {list:[], page:1, limit:100, total:0};
-    // 搜索、排序、添加、编辑、删除
+    // 搜索、排序、添加、编辑、删除、头像
     const sea: any = {show:false, form:{}};
     const oby: any = {name:'', list:{'a.id':'', 'a.tel':'', 'a.ltime':'', 'b.nickname':'', 'b.name':'', 'b.gender':'', 'b.birthday':'', 'b.department':'', 'b.position':''}};
     const add: any = {show:false, form:{}};
     const edit: any = {show:false, id:'', form:{}};
     const del: any = {show:false, ids:''};
+    const img: any = {show:false, uid:'', img:''};
     // 权限
     const perm: any = {show:false, active:'role', m:'', uid:'', role: 0, roleList:[], perm:'', permList:[]};
     // 用户信息
     const info: any = {show:false, id:'', form:{}};
     const gender: any = [{label:'男',value:'男'},{label:'女',value:'女'}];
-    return {state, getters, page, sea, oby, add, edit, del, perm, info, gender};
+    return {state, getters, page, sea, oby, add, edit, del, img, perm, info, gender};
   },
   mounted(){
     // 加载数据
@@ -243,12 +246,13 @@ export default defineComponent({
       this.info.show = true;
       // 默认值
       this.info.uid = row.uid;
-      this.info.form.nickname = row.nickname || '';
-      this.info.form.name = row.name || '';
-      this.info.form.gender = row.gender || '';
-      this.info.form.birthday = row.birthday || '';
-      this.info.form.department = row.department || '';
-      this.info.form.position = row.position || '';
+      this.info.form.nickname = row.nickname;
+      this.info.form.name = row.name;
+      this.info.form.gender = row.gender;
+      this.info.form.birthday = row.birthday;
+      this.info.form.department = row.department;
+      this.info.form.position = row.position;
+      this.info.form.remark = row.remark;
     },
     subInfo(){
       this.info.show = false;
@@ -266,6 +270,30 @@ export default defineComponent({
         if(d.code===0) this.loadData();
         return Toast(d.msg);
       });
+    },
+
+    /* 导出 */
+    exportData(){
+      const load: any = Loading();
+      Post('sys_user/export',{
+        token: Storage.getItem('token'),
+        data: JSON.stringify(this.sea.form),
+      },(res: any)=>{
+        load.clear();
+        const d = res.data;
+        if(d.code==0){
+          DownFile(d.path+d.filename, d.filename);
+          (this.$refs.Table as any).setCheck(false);
+        }
+        Toast(d.msg);
+      });
+    },
+
+    /* 图片 */
+    imgData(uid: string, img: string){
+      this.img.show = true;
+      this.img.uid = uid;
+      this.img.img = img;
     },
 
   },

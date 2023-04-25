@@ -1,10 +1,10 @@
 <template>
   <div class="wm-tabs">
     <ul class="wm-tabs_list">
-      <li v-for="(v,k) in data" :key="k" :class="v.name==active?'active':''" @click="$emit('update:active', v.name)">{{v.label}}</li>
+      <li v-for="(v,k) in data" :key="k" :class="v.value==active?'active':''" @click="$emit('update:active', v.value)">{{v.label}}</li>
     </ul>
-    <div class="wm-tabs_body" v-for="(v,k) in data" :key="k" v-show="v.name==active">
-      <slot :name="v.name"></slot>
+    <div class="wm-tabs_body" v-for="(v,k) in data" :key="k" v-show="v.value==active">
+      <slot :name="v.value"></slot>
     </div>
   </div>
 </template>
@@ -24,7 +24,7 @@ export default defineComponent({
   name:'Tabs',
   props: {
     active: {type:String, default:''},  //默认选择
-    data: {type:Array, default:[]},     //数据: [{label:'Tab1', name:'tab1'},{label:'Tab2', name:'tab2'}]
+    data: {type:Array, default:[]},     //数据: [{label:'Tab1', value:'tab1'},{label:'Tab2', value:'tab2'}]
   },
 });
 </script>

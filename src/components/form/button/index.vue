@@ -67,7 +67,7 @@ export default defineComponent({
     padding: {type: String, default: '0 20px'},       //内部间距
     margin: {type: String, default: '0 4px'},         //外部间距
     radius: {type: String, default: '2px'},           //圆角
-    fontSize: {type: String, default: '16px'},        //文字大小
+    fontSize: {type: String, default: '14px'},        //文字大小
     icon: {type: String, default: ''},                //图标
     disabled: {type: Boolean, default: false},        //是否禁用
   },

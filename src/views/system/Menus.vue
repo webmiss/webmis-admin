@@ -43,9 +43,7 @@
             <li v-if="getters.actionShow('del')"><wm-button type="danger" effect="text" padding="0 4px" @click="delData()">删除</wm-button></li>
           </ul>
           <ul class="app_action_list flex_left">
-            <li><wm-button type="primary" effect="text" padding="0 2px">导出</wm-button></li>
-            <li class="line">|</li>
-            <li><wm-button type="primary" effect="text" padding="0 2px">打印</wm-button></li>
+            <li v-if="getters.actionShow('del')"><wm-button type="primary" effect="text" padding="0 2px" @click="exportData()">导出</wm-button></li>
           </ul>
         </div>
         <!-- 动作菜单 End -->
@@ -105,7 +103,7 @@
         <tr>
           <td class="lable">所属</td>
           <td>
-            <wm-cascader width="240px" v-model:value="menus.value" :data="menus.data" checkStrictly clearable />
+            <wm-cascader width="240px" v-model:keys="menus.keys" v-model:values="menus.values" :data="menus.data" clearable />
           </td>
         </tr>
         <tr>
@@ -157,7 +155,7 @@
         <tr>
           <td class="lable">所属</td>
           <td>
-            <wm-cascader width="240px" v-model:value="menus.value" :data="menus.data" checkStrictly clearable />
+            <wm-cascader width="240px" v-model:keys="menus.keys" v-model:values="menus.values" :data="menus.data" clearable />
           </td>
         </tr>
         <tr>

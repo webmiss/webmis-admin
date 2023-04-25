@@ -12,12 +12,12 @@
       </div>
       <!-- Tabs -->
       <ul class="wm-tabs_list wm-dialog_tabs" v-if="tabs.length>0">
-        <li v-for="(v,k) in tabs" :key="k" :class="v.name==active?'active':''" @click="tabsClick(v.name)">{{v.label}}</li>
+        <li v-for="(v,k) in tabs" :key="k" :class="v.value==active?'active':''" @click="tabsClick(v.value)">{{v.label}}</li>
       </ul>
       <div v-if="tabs.length>0" ref="DialogBody" class="wm-dialog_body scrollbar">
         <div ref="DialogContent" class="wm-dialog_content">
-          <div class="wm-tabs_body" v-for="(v,k) in tabs" :key="k" v-show="v.name==active">
-            <slot :name="v.name"></slot>
+          <div class="wm-tabs_body" v-for="(v,k) in tabs" :key="k" v-show="v.value==active">
+            <slot :name="v.value"></slot>
           </div>
         </div>
       </div>
@@ -92,6 +92,9 @@ export default defineComponent({
         this.autoHeight();
       }
     },
+    tabsActive(val){
+      this.tabsClick(val);
+    },
   },
   mounted(){
     this.active = this.tabsActive;
@@ -121,9 +124,9 @@ export default defineComponent({
     },
 
     /* Tabs */
-    tabsClick(name: string){
-      this.active = name;
-      this.$emit('update:tabsActive', name);
+    tabsClick(value: string){
+      this.active = value;
+      this.$emit('update:tabsActive', value);
     },
 
   },

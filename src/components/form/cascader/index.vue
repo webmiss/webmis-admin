@@ -2,7 +2,7 @@
   <div class="wm-cascader" :style="{width: width}">
     <div class="wm-cascader_input" :style="{height: height, lineHeight: height}" @click="show=!show">
       <!-- Clear -->
-      <div class="wm-cascader_clear_body" v-if="value.length>0&&clearable">
+      <div class="wm-cascader_clear_body" v-if="keys.length>0&&clearable">
         <span class="wm-cascader_clear" @click.stop="clear()"></span>
       </div>
       <!-- Arrow -->
@@ -109,11 +109,11 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { Explode, RTrim } from '@/library/util/index'
 export default defineComponent({
   name:'Cascader',
   props: {
-    value: {type:Array, default:[]},                //默认值
+    keys: {type:Array, default:[]},                 //默认值
+    values: {type:Array, default:[]},               //默认值
     data: {type:Array, default:[]},                 //数据: [{label:'A', value:'1', children: [{label:'1', value:'3'},{label:'2', value:'4'}]},{label:'b', value:'2', disabled: true}];
     width: {type:String, default:'100%'},           //宽度
     height: {type:String, default:'32px'},          //高度
@@ -126,14 +126,15 @@ export default defineComponent({
   data(){
     const show: boolean = false;
     const text: string = '';
-    const keys: any = [];
     const dataList: any = null;
     let k1: any=-1, k2: any=-1, k3: any=-1, k4: any=-1;
-    return {show, text, keys, dataList, k1, k2, k3, k4}
+    let res: any = {key:[], label:[], value:[]};
+    return {show, text, dataList, k1, k2, k3, k4, res}
   },
   watch:{
-    value(v: any){
+    keys(v: any){
       const n: number = v.length;
+      if(n==0) this.selectClear(this.dataList);
       if(n>0){
         this.k1= v[0];
         this.selectChechked(v[0], this.dataList);
@@ -197,7 +198,7 @@ export default defineComponent({
           // 获取值
           this.getValue();
           setTimeout(()=>{
-            this.$emit('update:value', this.keys);
+            this.$emit('update:keys', this.res.key);
           },400);
         }else{
           data[i].checked = false;
@@ -222,31 +223,24 @@ export default defineComponent({
 
     /* 获取选中值 */
     getValue(){
-      let res: any = this.selectValue(this.dataList);
-      this.text = RTrim(res.label, '/');
-      if(res.key) this.keys = Explode('/', RTrim(res.key, '/'));
+      this.res = {key:[], label:[], value:[]};
+      setTimeout(()=>{
+        this.selectValue(this.dataList);
+        this.text = this.res.label.join('/');
+        this.$emit('update:labels', this.res.label);
+        this.$emit('update:values', this.res.value);
+      }, 200);
     },
     // 递归
     selectValue(data: any){
-      let key: string = '';
-      let label: string = '';
-      let value: string = '';
-      let tmp: any = {};
       for(let i in data){
         if(data[i].checked){
-          key = i;
-          label = data[i].label;
-          value = data[i].value;
-          if(data[i].children){
-            tmp = this.selectValue(data[i].children);
-            key += '/'+tmp['key'];
-            label += '/'+tmp['label'];
-            value += '/'+tmp['value'];
-          }
-          break;
+          this.res.key.push(i);
+          this.res.label.push(data[i].label);
+          this.res.value.push(data[i].value);
         }
+        if(data[i].children) this.selectValue(data[i].children);
       }
-      return {key:key, label:label, value:value};
     },
 
     /* 清空 */

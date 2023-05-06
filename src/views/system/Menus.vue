@@ -16,18 +16,15 @@
     <div class="app_content flex">
       <div class="app_ct_left" v-show="sea.show">
         <!-- 搜索 -->
-        <wm-search v-model:show="sea.show" @update:submit="subSea()">
+        <wm-search v-model:show="sea.show" @update:submit="subSea('title')">
           <li>
-            <wm-input v-model:value="sea.form.fid" placeholder="FID" clearable @keyup.enter="subSea()" />
+            <wm-input v-model:value="sea.form.title" placeholder="菜单名称" clearable @input="subSea('title')" />
           </li>
           <li>
-            <wm-input v-model:value="sea.form.title" placeholder="菜单名称" clearable @keyup.enter="subSea()" />
+            <wm-input v-model:value="sea.form.en" placeholder="英文名称" clearable @input="subSea('en')" />
           </li>
           <li>
-            <wm-input v-model:value="sea.form.en" placeholder="英文名称" clearable @keyup.enter="subSea()" />
-          </li>
-          <li>
-            <wm-input v-model:value="sea.form.url" placeholder="API关键字" clearable @keyup.enter="subSea()" />
+            <wm-input v-model:value="sea.form.controller" placeholder="API关键字" clearable @input="subSea('controller')" />
           </li>
         </wm-search>
         <!-- 搜索 End -->
@@ -38,9 +35,7 @@
           <ul class="app_action_list flex_left">
             <li><wm-button type="primary" effect="text" padding="0 4px" class="flex" @click="sea.show=!sea.show"><i class="ui ui_search"></i>&nbsp;搜索</wm-button></li>
             <li class="line">|</li>
-            <li v-if="getters.actionShow('add')"><wm-button effect="text" padding="0 4px" @click="add.show=true">添加</wm-button></li>
-            <li v-if="getters.actionShow('edit')"><wm-button type="primary" effect="text" padding="0 4px" @click="editData()">编辑</wm-button></li>
-            <li v-if="getters.actionShow('del')"><wm-button type="danger" effect="text" padding="0 4px" @click="delData()">删除</wm-button></li>
+            <li v-if="getters.actionShow('add')"><wm-button type="primary" padding="0 16px" @click="add.show=true">添加</wm-button></li>
           </ul>
           <ul class="app_action_list flex_left">
             <li v-if="getters.actionShow('del')"><wm-button type="primary" effect="text" padding="0 2px" @click="exportData()">导出</wm-button></li>
@@ -49,49 +44,91 @@
         <!-- 动作菜单 End -->
         <!-- List -->
         <div class="app_table scrollbar">
-          <wm-table ref="Table" :data="page.list" style="min-width: 1200px;">
+          <wm-table ref="Table" :isCheckbox="false" style="min-width: 1280px;">
             <template #title>
-              <td width="40">ID<wm-table-order :value="oby.list.id" @update:value="OrderBy('id', $event)" /></td>
-              <td width="40">FID<wm-table-order :value="oby.list.fid" @update:value="OrderBy('fid', $event)" /></td>
               <td width="40" class="tCenter">图标</td>
-              <td>名称<wm-table-order :value="oby.list.title" @update:value="OrderBy('title', $event)" /></td>
-              <td>英文<wm-table-order :value="oby.list.en" @update:value="OrderBy('en', $event)" /></td>
-              <td width="100">更新时间<wm-table-order :value="oby.list.utime" @update:value="OrderBy('utime', $event)" /></td>
+              <td>菜单名称</td>
+              <td width="100" class="tCenter">日期</td>
+              <td width="100" class="tCenter">操作</td>
               <td width="60" class="tCenter">权限</td>
               <td width="60" class="tCenter">排序</td>
-              <td>URL<wm-table-order :value="oby.list.url" @update:value="OrderBy('url', $event)" /></td>
-              <td>API<wm-table-order :value="oby.list.controller" @update:value="OrderBy('controller', $event)" /></td>
+              <td>英文</td>
+              <td>URL</td>
+              <td>API</td>
             </template>
-            <tr v-for="(v,k) in page.list" :key="k">
-              <td width="30" class="checkbox wm-table_checkbox">
-                <wm-checkbox :value="v.id"></wm-checkbox>
-              </td>
-              <td>{{ v.id }}</td>
-              <td>{{ v.fid }}</td>
-              <td class="tCenter">
-                <span class="menus_icon" v-if="v.ico"><i :class="v.ico"></i></span>
-                <span v-else>-</span>
-              </td>
-              <td><b>{{ v.title }}</b></td>
-              <td>{{ v.en || '-' }}</td>
-              <td>
-                <wm-tag size="medium" :title="'创建: '+v.ctime+'\n更新: '+v.utime">{{ v.utime.substr(0,10) }}</wm-tag>
-              </td>
-              <td class="tCenter">
-                <wm-button type="danger" effect="text" padding="0 4px" v-if="getters.actionShow('perm') && v.controller && !v.action" @click="permData(v.id, v.title, v.controller, v.action)">设置</wm-button>
-                <wm-button type="primary" effect="text" padding="0 4px" v-else-if="getters.actionShow('perm') && v.controller && v.action" @click="permData(v.id, v.title, v.controller, v.action)">编辑</wm-button>
-                <span v-else>-</span>
-              </td>
-              <td class="tCenter">{{ v.sort }}</td>
-              <td>{{ v.url || '-' }}</td>
-              <td>{{ v.controller || '-' }}</td>
-            </tr>
-            <tr v-if="page.list.length==0">
-              <td height="160" class="null" colspan="11"></td>
-            </tr>
+            <!-- 一级菜单 -->
+            <template v-for="(v1,k1) in page.list" :key="k1">
+              <tr v-if="v1.show">
+                <td class="tCenter">
+                  <span class="menus_icon" v-if="v1.ico"><i :class="v1.ico"></i></span>
+                </td>
+                <td>- {{ v1.title }}</td>
+                <td class="tCenter">
+                  <wm-tag size="medium" :title="'创建: '+v1.ctime+'\n更新: '+v1.utime">{{ v1.utime.substr(0,10) }}</wm-tag>
+                </td>
+                <td class="tCenter">
+                  <wm-button type="primary" effect="text" padding="0 4px" v-if="getters.actionShow('edit')" @click="editData(v1)">编辑</wm-button>
+                  <wm-button type="danger" effect="text" padding="0 4px" v-if="getters.actionShow('del')" @click="delData(v1.id)">删除</wm-button>
+                </td>
+                <td class="tCenter">-</td>
+                <td class="tCenter">{{ v1.sort }}</td>
+                <td>{{ v1.en || '-' }}</td>
+                <td>{{ v1.url }}</td>
+                <td>{{ v1.controller }}</td>
+              </tr>
+              <!-- 二级菜单 -->
+              <template v-for="(v2,k2) in v1.children" :key="k2">
+                <tr v-if="v2.show">
+                  <td class="tCenter">
+                    <span class="menus_icon" v-if="v2.ico"><i :class="v2.ico"></i></span>
+                  </td>
+                  <td style="text-indent: 2em;">- {{ v2.title }}</td>
+                  <td class="tCenter">
+                    <wm-tag size="medium" :title="'创建: '+v2.ctime+'\n更新: '+v2.utime">{{ v2.utime.substr(0,10) }}</wm-tag>
+                  </td>
+                  <td class="tCenter">
+                    <wm-button type="primary" effect="text" padding="0 4px" v-if="getters.actionShow('edit')" @click="editData(v2)">编辑</wm-button>
+                    <wm-button type="danger" effect="text" padding="0 4px" v-if="getters.actionShow('del')" @click="delData(v2.id)">删除</wm-button>
+                  </td>
+                  <td class="tCenter">-</td>
+                  <td class="tCenter">{{ v2.sort }}</td>
+                  <td>{{ v2.en || '-' }}</td>
+                  <td>{{ v2.url }}</td>
+                  <td>{{ v2.controller }}</td>
+                </tr>
+                <!-- 三级级菜单 -->
+                <template v-for="(v3,k3) in v2.children" :key="k3">
+                  <tr v-if="v3.show">
+                    <td class="tCenter">
+                      <span class="menus_icon" v-if="v3.ico"><i :class="v3.ico"></i></span>
+                    </td>
+                    <td style="text-indent: 4em;">{{ v3.title }}</td>
+                    <td class="tCenter">
+                      <wm-tag size="medium" :title="'创建: '+v3.ctime+'\n更新: '+v3.utime">{{ v3.utime.substr(0,10) }}</wm-tag>
+                    </td>
+                    <td class="tCenter">
+                      <wm-button type="primary" effect="text" padding="0 4px" v-if="getters.actionShow('edit')" @click="editData(v3)">编辑</wm-button>
+                      <wm-button type="danger" effect="text" padding="0 4px" v-if="getters.actionShow('del')" @click="delData(v3.id)">删除</wm-button>
+                    </td>
+                    <td class="tCenter">
+                      <wm-button type="danger" effect="text" padding="0 4px" v-if="getters.actionShow('perm') && v3.controller && !v3.action" @click="permData(v3.id, v3.title, v3.controller, v3.action)">设置</wm-button>
+                      <wm-button type="primary" effect="text" padding="0 4px" v-else-if="getters.actionShow('perm') && v3.controller && v3.action" @click="permData(v3.id, v3.title, v3.controller, v3.action)">动作</wm-button>
+                      <span v-else>-</span>
+                    </td>
+                    <td class="tCenter">{{ v3.sort }}</td>
+                    <td>{{ v3.en || '-' }}</td>
+                    <td>{{ v3.url }}</td>
+                    <td>{{ v3.controller }}</td>
+                  </tr>
+                </template>
+                <!-- 三级菜单 End -->
+              </template>
+              <!-- 二级菜单 End -->
+            </template>
+            <!-- 一级菜单 End -->
           </wm-table>
         </div>
-        <wm-page :page="page.page" :limit="page.limit" :total="page.total" @update:page="subPage"></wm-page>
+        <wm-page :page="page.page" :limit="page.limit" :total="page.total"></wm-page>
         <!-- List End -->
       </div>
     </div>

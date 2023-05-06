@@ -32,7 +32,7 @@ export default defineComponent({
     const state: any = store.state;
     const getters: any = store.getters;
     // 分页
-    const page: any = {list:[], page:1, limit:100, total:0};
+    const page: any = {list:[], page:1, limit:10000, total:0};
     // 搜索、排序、添加、编辑、删除
     const sea: any = {show:false, form:{}};
     const oby: any = {name:'', list:{id:'', fid:'', title:'', en:'', utime:'', url:'', controller:''}};
@@ -62,30 +62,52 @@ export default defineComponent({
       const load: any = Loading();
       Post('sys_menus/list',{
         token: Storage.getItem('token'),
-        page: this.page.page,
-        limit: this.page.limit,
-        data: JSON.stringify(this.sea.form),
-        order: this.oby.name,
       },(res: any)=>{
         load.clear();
         const d = res.data;
         if(d.code==0){
           this.page.list = d.list;
           this.page.total = d.total;
+          this.subSea('title');
         }else return Toast(d.msg);
       });
     },
 
-    /* 分页 */
-    subPage(page: number){
-      this.page.page = page;
-      this.loadData();
-    },
-
     /* 搜索 */
-    subSea(){
-      this.page.page = 1;
-      this.loadData();
+    subSea(name: string){
+      let key: string = this.sea.form[name];
+      const d: any = this.page.list;
+      let reg: any = new RegExp(key);
+      // 一级
+      for(let k1 in d){
+        if(reg.test(d[k1][name])){
+          d[k1].show=true;
+        }else{
+          d[k1].show=false;
+        }
+        // 二级
+        if(!d[k1].children) continue;
+        for(let k2 in d[k1].children){
+          if(reg.test(d[k1].children[k2][name])){
+            d[k1].show=true;
+            d[k1].children[k2].show=true;
+          }else{
+            d[k1].children[k2].show=false;
+          }
+          // 三级
+          if(!d[k1].children[k2].children) continue;
+          for(let k3 in d[k1].children[k2].children){
+            if(reg.test(d[k1].children[k2].children[k3][name])){
+              d[k1].show=true;
+              d[k1].children[k2].show=true;
+              d[k1].children[k2].children[k3].show=true;
+            }else{
+              d[k1].children[k2].children[k3].show=false;
+            }
+          }
+        }
+      }
+
     },
 
     /* 排序 */
@@ -126,10 +148,7 @@ export default defineComponent({
     },
 
     /* 编辑 */
-    editData(){
-      const table: any = this.$refs.Table;
-      const row: any = table.getRow();
-      if(!row) return Toast('请选择数据!');
+    editData(row: any){
       this.edit.show = true;
       // 默认值
       this.edit.id = row.id;
@@ -190,12 +209,9 @@ export default defineComponent({
     },
 
     /* 删除 */
-    delData(){
-      const table: any = this.$refs.Table;
-      const vals: any = table.getVals();
-      if(!vals) return Toast('请选择数据!');
+    delData(id: string){
       this.del.show = true;
-      this.del.ids = JSON.stringify(vals);
+      this.del.ids = id;
     },
     subDel(){
       this.del.show = false;
@@ -278,7 +294,6 @@ export default defineComponent({
       const load: any = Loading();
       Post('sys_menus/export',{
         token: Storage.getItem('token'),
-        data: JSON.stringify(this.sea.form),
       },(res: any)=>{
         load.clear();
         const d = res.data;

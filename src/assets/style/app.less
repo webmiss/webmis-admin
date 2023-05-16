@@ -14,8 +14,8 @@
 .app_body{position: relative; overflow: hidden; width: 100%; height: 100%; min-width: 768px; background-color: #F2F4F6;}
 .app_top{height: 48px; background-color: #242628;}
 .app_ct{height: calc(100% - 48px);}
-.app_left{width: 120px; height: 100%; background-color: #FFF; border-right: #E2E4E8 1px solid; box-sizing: border-box; box-shadow: 0 0 4px rgba(0,0,0,.1);}
-.app_right{width: calc(100% - 120px); height: 100%;}
+.app_left{width: 60px; height: 100%; background-color: #FFF; border-right: #E2E4E8 1px solid; box-sizing: border-box; box-shadow: 0 0 4px rgba(0,0,0,.1);}
+.app_right{width: calc(100% - 60px); height: 100%;}
 /* Logo */
 .app_top_logo{cursor: pointer; float: left; padding: 0 8px; border-right: #000 1px solid;}
 .app_top_logo .logo{display: block; width: 36px; height: 36px; margin: 6px 0; border-radius: 50%; background-color: #000; background-size: 70%;}
@@ -58,21 +58,22 @@
 /* Menus */
 .app_menus_body{overflow-y: auto; height: calc(100% - 32px);}
 .app_menus{color: #2D2D2D;}
-.app_menus li{user-select: none; line-height: 24px; border-bottom: #E8E8E8 1px solid;}
+.app_menus li{user-select: none; padding: 8px 0; line-height: 24px;}
 .app_menus li:hover{color: @Primary;}
-.app_menus .m1 div{cursor: pointer; padding: 8px 8px;}
-.app_menus .ico{width: 24px; height: 24px; text-align: center; border-radius: 50%;}
-.app_menus .ico i{font-size: 18px;}
-.app_menus .title{font-size: 14px; padding-left: 4px;}
+.app_menus .m1 div{cursor: pointer; padding: 5px 8px;}
+.app_menus .m1 span{display: block; text-align: center;}
+.app_menus .ico{height: 24px; text-align: center; border-radius: 50%;}
+.app_menus .ico i{font-size: 22px; margin: 0 auto;}
+.app_menus .title{font-size: 14px;}
 .app_menus .active{color: @Primary; background-color: @Minor;}
-.app_menus_list{visibility: hidden; opacity: 0; overflow-y: auto; position: fixed; z-index: 98; left: 110px; top: 48px; padding: 10px 16px; width: 240px; height: calc(100% - 68px); background-color: #FFF; box-shadow: 4px 0 4px rgba(0,0,0,.08); transition: @Transition;}
+.app_menus_list{visibility: hidden; opacity: 0; overflow-y: auto; position: fixed; z-index: 98; left: 70px; top: 48px; padding: 10px 16px; width: 240px; height: calc(100% - 68px); background-color: #FFF; box-shadow: 4px 0 4px rgba(0,0,0,.08); transition: @Transition;}
 .app_menus_list .class{line-height: 32px; font-size: 14px; font-weight: 700; border-bottom: #F2F2F2 1px solid;}
 .app_menus_list li{cursor: pointer; border: none; line-height: 32px; padding: 0 8px; margin: 2px 0; font-size: 14px; color: #323438; border-radius: 4px;}
 .app_menus_list li:hover{color: @Primary; background-color: @Minor;}
 .app_menus_list li:hover.class{cursor: default; color: #666; background-color: #FFF;}
-.app_menus .m1:hover .app_menus_list{visibility: visible; opacity: 1; left: 120px;}
+.app_menus .m1:hover .app_menus_list{visibility: visible; opacity: 1; left: 60px;}
 /* 版本信息 */
-.app_copy{height: 32px; line-height: 32px; text-align: center; font-size: 12px; color: @Info; box-shadow: 0 0 2px rgba(0,0,0,.1);}
+.app_copy{height: 32px; line-height: 32px; text-align: center; font-size: 12px; color: @Info; box-shadow: 0 0 2px rgba(0,0,0,.2);}
 
 /* 地址栏 */
 .app_addr{position: absolute; z-index: 10; width: 100%; height: 40px; line-height: 40px; background-color: #FFF; box-shadow: 4px 0 4px rgba(0,0,0,.2);}

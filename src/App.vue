@@ -95,8 +95,8 @@
           <!-- Menus -->
           <div class="app_menus_body scrollbar">
             <ul class="app_menus">
-              <li class="m1" v-for="(m1,k1) in state.menus" :key="k1" :class="menusPos[0]==k1?'active':''">
-                <div class="flex_left" @click="sea.show=!sea.show">
+              <li class="m1" v-for="(m1,k1) in state.menus" :key="k1">
+                <div :class="menusPos[0]==k1?'active':''" @click="sea.show=!sea.show">
                   <span class="ico"><i :class="m1.icon"></i></span>
                   <span class="title">{{m1.label}}</span>
                 </div>

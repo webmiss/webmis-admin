@@ -38,31 +38,36 @@
       <!-- Top -->
       <div class="app_top flex">
         <!-- Logo -->
-        <div class="flex">
-          <div class="app_top_logo flex" @click="menusClick([0,0,0])">
-            <span class="logo bgImg" :style="{backgroundImage:'url('+require('./assets/logo.svg')+')'}"></span>
-            <span class="title">{{info.title}}</span>
-          </div>
-          <!-- Search -->
-          <div class="app_top_sea flex">
-            <i class="ui ui_search ico"></i>
-            <input type="text" placeholder="搜索菜单名称" v-model="sea.key" @input="seaInput()" />
-            <div class="box scrollbar">
-              <ul class="list">
-                <template  v-if="!sea.key && menusLately.length>0">
-                  <li v-for="(v,k) in menusLately" :key="k" @click="menusClick(v.pos)">{{ v.label }}</li>
-                </template>
-                <template v-else>
-                  <li v-for="(m,k) in sea.list" :key="k" v-show="m.show" @click="menusClick(m.value)">{{ m.label }}</li>
-                </template>
-                <li v-if="!sea.isData" class="null"></li>
-              </ul>
-            </div>
-          </div>
+        <div class="app_top_logo flex" @click="menusClick([0,0,0])">
+          <span class="logo bgImg" :style="{backgroundImage:'url('+require('./assets/logo.svg')+')'}"></span>
         </div>
-        <div class="flex">
+        <!-- Search -->
+        <!-- <div class="app_top_sea flex">
+          <i class="ui ui_search ico"></i>
+          <input type="text" placeholder="搜索菜单名称" v-model="sea.key" @input="seaInput()" />
+          <div class="box scrollbar">
+            <ul class="list">
+              <template  v-if="!sea.key && menusLately.length>0">
+                <li v-for="(v,k) in menusLately" :key="k" @click="menusClick(v.pos)">{{ v.label }}</li>
+              </template>
+              <template v-else>
+                <li v-for="(m,k) in sea.list" :key="k" v-show="m.show" @click="menusClick(m.value)">{{ m.label }}</li>
+              </template>
+              <li v-if="!sea.isData" class="null"></li>
+            </ul>
+          </div>
+        </div> -->
+        <ul class="app_tabs flex_left">
+          <li :class="tabs.active=='Home'?'active':''" @click="menusClick([0,0,0])">{{ info.title }}</li>
+          <li class="flex" v-for="(v,k) in tabs.list" :key="k" :class="v.url==tabs.active?'active':''" @click="menusClick(v.pos)">
+            <span>{{ v.name }}</span>
+            <span class="close" @click="tabsChose(k)" v-if="v.url==tabs.active"><i class="ui ui_close"></i></span>
+          </li>
+        </ul>
+        <div class="app_top_left flex">
           <!-- Tools -->
           <ul class="app_top_tools flex">
+            <li><i class="ui ui_chart_pie"></i></li>
             <li><i class="ui ui_data"></i></li>
             <li title="消息" @click="msgData()">
               <span class="redNum">{{ state.msg.num }}</span>
@@ -125,9 +130,12 @@
         <div class="app_right">
           <router-view v-slot="{ Component }">
             <transition :name="transitionName">
-              <keep-alive :include="state.keepAlive">
-                <component :is="Component" class="view" />
+              <keep-alive>
+                <component class="view" :is="Component" :key="$route.name" v-if="$route.meta.keepAlive"/>
               </keep-alive>
+            </transition>
+            <transition :name="transitionName">
+              <component class="view" :is="Component" :key="$route.name" v-if="!$route.meta.keepAlive"/>
             </transition>
           </router-view>
         </div>

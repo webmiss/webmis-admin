@@ -34,6 +34,8 @@ export default defineComponent({
     const menusPos: any = [0,0,0];
     const menusChildren: any = [];
     const menusLately: any = [];
+    // Tabs
+    const tabs: any = {active:'Home', list:[]};
     // 语言
     const language: any = {
       num: 0,
@@ -45,7 +47,7 @@ export default defineComponent({
         {name:'go',val:'GoLang( Gin )'},
       ]
     };
-    return {state,router,transitionName,info,login,menusChildren,sea,menusPos,menusLately,language}
+    return {state,router,transitionName,info,login,menusChildren,sea,menusPos,menusLately,tabs,language}
   },
   watch:{
     $route(to,from){
@@ -191,6 +193,7 @@ export default defineComponent({
       this.menusChildren = this.state.menus[pos[0]].children || [];
       this.state.menuTitle[0] = this.state.menus[pos[0]].label;
       if(pos[0]==0){
+        this.tabs.active = 'Home';
         return NavigateTo(url);
       }
       if(!this.menusChildren[pos[1]] || !this.menusChildren[pos[1]].children) return;
@@ -201,8 +204,29 @@ export default defineComponent({
       this.sea.show = false;
       // 最近浏览
       this.menusSetLately({label:menu.label, pos:pos});
+      // Tabs
+      const tmp: any = {name:this.state.menuTitle[2], url:menu.value.url, pos:pos};
+      let inArray: boolean = false;
+      for(let v of this.tabs.list) if(v.url==tmp.url) inArray=true;
+      if(!inArray) this.tabs.list.push(tmp);
+      this.tabs.active = tmp.url;
       // 跳转
       NavigateTo(menu.value.url);
+    },
+    /* Tab-关闭 */
+    tabsChose(k:number){
+      const list:any = JSON.parse(JSON.stringify(this.tabs.list));
+      list.splice(k, 1);
+      setTimeout(()=>{
+        if(list==0){
+          this.menusClick([0,0,0]);
+        }else{
+          const d: any = this.tabs.list[k-1];
+          if(d) this.menusClick(d.pos);
+          else this.menusClick([0,0,0]);
+        }
+        this.tabs.list = list;
+      }, 200);
     },
     /* 最近浏览 */
     menusSetLately(data: any=null){

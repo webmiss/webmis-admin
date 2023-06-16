@@ -55,7 +55,7 @@ export default defineComponent({
     const gender: any = [{label:'男',value:'男'},{label:'女',value:'女'}];
     return {state, getters, page, sea, oby, add, edit, del, img, perm, info, gender};
   },
-  mounted(){
+  activated(){
     // 加载数据
     if(Storage.getItem('token')) this.loadData();
   },

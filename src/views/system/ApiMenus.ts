@@ -40,7 +40,7 @@ export default defineComponent({
     const perm: any = {show:false, id:'', title:'权限', list:[]};
     return {state, getters, page, sea, oby, add, edit, del, perm};
   },
-  mounted(){
+  activated(){
     // 加载数据
     if(Storage.getItem('token')) this.loadData();
   },

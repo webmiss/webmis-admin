@@ -39,7 +39,7 @@ export default defineComponent({
     const imgView: any = {show: false, imgs:[], index: 0};
     return {state, getters, info, lists, folder, rename, upload, down, zip, del, imgView};
   },
-  mounted(){
+  activated(){
     // 加载数据
     if(Storage.getItem('token')) this.loadData();
   },

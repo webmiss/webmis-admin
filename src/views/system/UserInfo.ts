@@ -32,7 +32,7 @@ export default defineComponent({
     };
     return {state,form,gender,upload}
   },
-  mounted(){
+  activated(){
     // 加载数据
     if(Storage.getItem('token')) this.loadData();
   },

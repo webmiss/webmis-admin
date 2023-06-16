@@ -46,7 +46,7 @@ export default defineComponent({
     const menus: any = {keys:[], values:[], data:[]};
     return {state, getters, page, sea, oby, add, edit, del, perm, keys, menus};
   },
-  mounted(){
+  activated(){
     // 加载数据
     if(Storage.getItem('token')){
       this.loadData();

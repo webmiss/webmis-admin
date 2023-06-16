@@ -13,7 +13,7 @@ export default defineComponent({
     const state: any = store.state;
     return {state}
   },
-  mounted(){
+  activated(){
   },
   methods:{
 

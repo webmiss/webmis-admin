@@ -36,7 +36,7 @@ export default defineComponent({
     const del: any = {show:false, ids:''};
     return {state, getters, page, sea, oby, add, edit, del};
   },
-  mounted(){
+  activated(){
     // 加载数据
     if(Storage.getItem('token')) this.loadData();
   },

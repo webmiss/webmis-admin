@@ -46,7 +46,7 @@ export default defineComponent({
     
     return {state, upload, form, select, cascader, radio, checkbox, tinymce}
   },
-  mounted(){
+  activated(){
     // 加载数据
     if(Storage.getItem('token')) this.loadData();
   },

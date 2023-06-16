@@ -19,7 +19,7 @@ export default defineComponent({
   },
   watch:{
   },
-  mounted(){
+  activated(){
     // 加载数据
     if(Storage.getItem('token')) this.loadData();
   },

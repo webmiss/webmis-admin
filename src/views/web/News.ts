@@ -55,7 +55,7 @@ export default defineComponent({
     };
     return {state, getters, page, sea, oby, add, edit, del, menus, menusName, content};
   },
-  mounted(){
+  activated(){
     // 加载数据
     if(Storage.getItem('token')){
       this.getClass();

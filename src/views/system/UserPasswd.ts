@@ -26,7 +26,7 @@ export default defineComponent({
     };
     return {state,form}
   },
-  mounted(){
+  activated(){
   },
   methods:{
 

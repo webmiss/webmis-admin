@@ -263,7 +263,7 @@
           <td><wm-input :value="v.action" @update:value="v.action=$event" /></td>
           <td><wm-input :value="v.perm" @update:value="v.perm=$event" /></td>
           <td>
-            <div class="center perm_an" ><wm-close @click="permRemove(key)" /></div>
+            <div class="center perm_an" ><wm-close @click="permRemove(k)" /></div>
           </td>
         </tr>
         <tr v-if="perm.list.length==0">

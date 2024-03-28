@@ -145,7 +145,7 @@
     <!-- Main End -->
 
     <!-- Msg -->
-    <wm-popup ref="Msg" v-model:show="state.msg.show">
+    <wm-popup ref="Msg" v-if="state.isLogin" v-model:show="state.msg.show">
       <div class="app_msg_body flex">
         <div class="app_msg_left">
           <!-- Search -->
@@ -177,7 +177,7 @@
                     <div class="name nowrap">{{ v.title }}</div>
                     <div class="time">{{ getMsgDate(v.time) }}</div>
                   </div>
-                  <div class="text nowrap">{{ v.msg }}</div>
+                  <div class="text nowrap" v-html="v.content"></div>
                 </div>
               </li>
             </ul>
@@ -200,14 +200,14 @@
                   <!-- Time -->
                   <div class="time">{{ getMsgTime(v.time, v1.list[k+1]?v1.list[k+1].time:v.time) }}</div>
                   <!-- Msg Left -->
-                  <div class="msg_left flex_left" v-if="v.uid!=state.uInfo.uid">
+                  <div class="msg_left flex_left" v-if="v.fid!=state.uInfo.uid">
                     <div class="img" :style="{backgroundImage: v.img?'url('+v.img+')':''}">
                       <i class="ui ui_image" v-if="!v.img"></i>
                     </div>
                     <div class="msg_body flex_left">
                       <div class="content">
                         <span class="arrow"></span>
-                        <span>{{ v.msg }}</span>
+                        <span v-if="v.format==0">{{ v.content }}</span>
                       </div>
                     </div>
                   </div>
@@ -216,7 +216,7 @@
                     <div class="msg_body flex_right">
                       <div class="content">
                         <span class="arrow"></span>
-                        <span>{{ v.msg }}</span>
+                        <span v-if="v.format==0">{{ v.content }}</span>
                       </div>
                     </div>
                     <div class="img" :style="{backgroundImage: v.img?'url('+v.img+')':''}">

@@ -327,7 +327,7 @@ export default defineComponent({
         if(fid==v.fid){
           v.msg = content;
           v.time = DateTime();
-          v.list.push({gid:0, type:'msg', fid:fid, uid:uid, title:name, msg:content, time:v.time, img:img});
+          v.list.push({fid:uid, uid:fid, format:0, title:name, content:content, time:v.time, img:img});
           let k: number = msg.list.indexOf(v);
           msg.list.unshift(v);
           msg.list.splice(k+1, 1);
@@ -341,13 +341,13 @@ export default defineComponent({
       }
       // 发送
       this.state.socket.send(JSON.stringify({
-        gid: gid,
-        to: fid,
-        uid: uid,
         type: 'msg',
+        gid: gid,
+        fid: fid,
+        format: 0,
         title: name,
         img: img,
-        msg: content,
+        content: content,
       }));
       // 清空
       msg.content = '';

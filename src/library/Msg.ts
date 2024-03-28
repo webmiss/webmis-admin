@@ -15,16 +15,16 @@ export default {
   /* 消息 */
   msg(socket: any, d: any){
     const msg: any = App.$store.state.msg;
-    const data: any = {id:d.id, gid:d.gid, type:'msg', fid:d.to, uid:d.uid, title:d.title, msg:d.msg, time:d.time, img:d.img};
+    const data: any = {id:d.id, fid:d.fid, uid:d.uid, format:0, title:d.title, content:d.content, time:d.time, img:d.img};
     // 存在列表
     let in_arr: boolean = false;
     for(let v of msg.list){
-      if(v.fid==d.gid || v.fid==d.uid){
+      if(v.fid==d.fid){
         in_arr = true;
         // 数据
         v.time = d.time;
         v.msg = d.msg;
-        if(msg.show && msg.fid==d.uid){
+        if(msg.show && msg.fid==d.fid){
           v.num += 0;
           data.is_new = false;
           this.msgRead([d.id]);
@@ -32,11 +32,12 @@ export default {
           v.num += 1;
           data.is_new = true;
           msg.num += 1;
-          Notify(d.title, d.msg);
+          Notify(d.title, d.content);
         }
         v.list.push(data);
         // 调换位置
         let k: number = msg.list.indexOf(v);
+        msg.list[k].content = d.content;
         msg.list.unshift(v);
         msg.list.splice(k+1, 1);
         this.msgToBottom();
@@ -47,8 +48,8 @@ export default {
     if(!in_arr){
       msg.num += 1;
       data.is_new = true;
-      msg.list.unshift({gid:d.gid, fid:d.uid, num:1, time:d.time, title:d.title, msg:d.msg, img:d.img, list:[data]});
-      Notify(d.title, d.msg);
+      msg.list.unshift({gid:d.gid, fid:d.fid, num:1, title:d.title, time:d.time, content:d.content, img:d.img, list:[data]});
+      Notify(d.title, d.content);
     }
   },
   /* 消息-标记阅读 */
@@ -72,7 +73,7 @@ export default {
 
   /* 通知 */
   notify(socket: any, d: any){
-    console.log(socket,d);
+    // console.log(socket,d);
   },
 
 }

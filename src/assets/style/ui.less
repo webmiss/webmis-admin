@@ -1,6 +1,6 @@
 /* 初始化 */
 *{margin: 0; padding: 0; -webkit-tap-highlight-color: transparent;}
-html,body,#app{height: 100%;}
+html,body,#app{position: relative; overflow: hidden; height: 100%;}
 body{
   font-family:Microsoft YaHei,SimHei,helvetica,arial,verdana,tahoma,sans-serif;
   font-size: 14px;
@@ -55,8 +55,8 @@ h3{font-size: 16px; font-weight: 500;}
 .bgImg{background-size: cover; background-position: center; background-repeat: no-repeat;}
 .bgTu{width: 100%; height: 100%; border-radius: 50%;}
 /* 滚动条 */
-.scrollbar::-webkit-scrollbar{width: 8px; height: 8px;}
-.scrollbar::-webkit-scrollbar-thumb{border-radius: 5px; background: transparent;}
+.scrollbar::-webkit-scrollbar{width: 10px; height: 10px; background-color: rgba(0,0,0,.02);}
+.scrollbar::-webkit-scrollbar-thumb{border-radius: 5px; background: rgba(0,0,0,.02);}
 .scrollbar:hover::-webkit-scrollbar-thumb{background: rgba(0,0,0,.2);}
 .scrollbar:hover::-webkit-scrollbar-track{background: rgba(0,0,0,.08);}
 /* 布局 */
@@ -83,7 +83,7 @@ h3{font-size: 16px; font-weight: 500;}
 @keyframes loading { 0% {transform: rotate(0deg);} 50% {transform: rotate(180deg);} 100% {transform: rotate(360deg);} }
 .wm-ui_load{position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,.5);}
 .wm-ui_load span{position: absolute; z-index: 100; margin: -20px 0 0 -20px; width: 40px; height: 40px; line-height: 40px; text-align: center; animation: loading 2s linear 0s infinite; left: 50%; top: 50%;}
-.wm-ui_load .ui{font-size: 24px; color: @Primary;}
+.wm-ui_load .ui{font-size: 32px; color: @Minor;}
 
 /* 轻提示 */
 .wm-ui_toast{position: fixed; z-index: 9999; opacity: 0; text-align: center; max-width: 320px; top: 0; left: 0; right: 0; margin: auto; line-height: 40px; transition: All 0.4s ease-in-out;}

@@ -12,7 +12,5 @@ document.body.ontouchstart = ()=>{
     document.createElement('audio');
   }
 }
-
-/* App */
-const app: any = createApp(App).use(store).use(router).mount('#app');
-export default app;
+/* APP */
+createApp(App).use(store).use(router).mount('#app');

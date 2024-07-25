@@ -1,16 +1,24 @@
-# webmis-admin
-采用 Vue3 + TypeScript 开发后台基础框架
+# demo
 
-## 安装
-
-```bash
-$ git clone https://github.com/webmiss/webmis-admin.git
-$ cd webmis-admin
-$ yarn install
+## Project setup
+```
+yarn install
 ```
 
-## 运行
-
-```bash
-$ ./bash serve
+### Compiles and hot-reloads for development
 ```
+yarn serve
+```
+
+### Compiles and minifies for production
+```
+yarn build
+```
+
+### Lints and fixes files
+```
+yarn lint
+```
+
+### Customize configuration
+See [Configuration Reference](https://cli.vuejs.org/config/).

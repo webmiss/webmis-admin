@@ -38,7 +38,7 @@ export default class Popup extends Vue {
   opacity: Number = 0.4;       // 背景透明度
   bgColor: String = '';        // 内容背景颜色
   bgClose: Boolean = true;     // 点击背景关闭
-  time: Number = 500;          // 动画时间
+  time: Number = 400;          // 动画时间
 
   /* 创建成功 */
   created(): void {

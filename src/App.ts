@@ -4,6 +4,7 @@ import { useStore } from 'vuex';
 import Base from './service/Base'
 import Env from './config/Env';
 import Request from './library/request'
+import Storage from './library/storage'
 import UI from './library/ui'
 /* UI组件 */
 import wmPopup from '@/components/popup/index.vue'
@@ -17,8 +18,11 @@ export default class App extends Base {
   private route: any = useRoute();       // 路由信息
   private router: any = useRouter();     // 路由
   private store: any = useStore();       // 状态
+  // 用户
+  public uinfo: any = {'show': false};
   // 菜单
   public menus: any = {'show': false};
+  public is_menus: Boolean = true;
   // 测试数据
   public msg: string = '123456';
   private num: number = 0;
@@ -35,19 +39,26 @@ export default class App extends Base {
   /* 创建完成 */
   public mounted(): void {
     // 请求
-    this.Print('baseUrl', this.cfg.apiUrl);
-    const load: any = UI.Loading();
-    Request.Post(this.cfg.apiUrl+'', {}, (res:any)=>{
-      load.clear();
-      UI.Toast('请求成功!');
-      this.Print(res.data);
-    });
+    // this.Print('baseUrl', this.cfg.apiUrl);
+    // const load: any = UI.Loading();
+    // Request.Post(this.cfg.apiUrl+'', {}, (res:any)=>{
+    //   load.clear();
+    //   UI.Toast('请求成功!');
+    //   this.Print(res.data);
+    // });
+    // 本地缓存
+    this.is_menus = Storage.getItem('IsMenus')?true:false;
   }
 
-  /* 测试 */
-  public Test(): void {
-    this.msg = 'Test'+(this.num++);
-    console.log('Test', this.num);
+  /* 右侧菜单-显示/隐藏 */
+  public MenusShow(): void {
+    if(this.is_menus){
+      this.is_menus = false;
+      Storage.setItem('IsMenus', '');
+    }else{
+      this.is_menus = true;
+      Storage.setItem('IsMenus', '1');
+    }
   }
 
 }

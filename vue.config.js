@@ -14,9 +14,9 @@ module.exports = defineConfig({
     });
     // 项目配置
     config.plugin('html').tap(args => {
-      args[0].title = '婵石珠宝ERP'
-      args[0].keywords = '婵石珠宝ERP'
-      args[0].description = '婵石珠宝ERP'
+      args[0].title = 'WebMIS 3.0'
+      args[0].keywords = 'WebMIS'
+      args[0].description = 'WebMIS'
       return args
     })
     // Less全局变量

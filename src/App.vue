@@ -39,12 +39,13 @@
             <div class="menus_ct scrollbar">
               <ul>
                 <li>
-                  <div class="title">+ 二级菜单</div>
-                  <div class="m flex_left active"><i class="icons icon_web"></i>菜单名称</div>
-                  <div class="m flex_left"><i class="icons icon_web"></i>菜单名称</div>
-                  <div class="m flex_left"><i class="icons icon_web"></i>菜单名称</div>
-                  <div class="m flex_left"><i class="icons icon_web"></i>菜单名称</div>
-                  <div class="m flex_left"><i class="icons icon_web"></i>菜单名称</div>
+                  <div class="title">+ 系统管理</div>
+                  <div class="m flex_left" :class="tabs.active=='/SysMenus'?'active':''" @click="MenusClick('菜单管理', '/SysMenus', true)">
+                    <i class="icons icon_web"></i>菜单管理
+                  </div>
+                  <div class="m flex_left" :class="tabs.active=='/SysUser'?'active':''" @click="MenusClick('系统用户', '/SysUser', true)">
+                    <i class="icons icon_web"></i>系统用户
+                  </div>
                 </li>
                 <li>
                   <div class="title">+ 二级菜单</div>
@@ -68,7 +69,7 @@
     </div>
     <!-- Left -->
     <div class="app_left" :style="{width: is_menus?'240px':'56px'}">
-      <div class="app_on" @click="MenusShow()"><i class="ui ui_arrow_left"></i></div>
+      <div class="app_on" @click="MenusShow()"><i class="ui" :class="is_menus?'ui_arrow_left':'ui_arrow_right'"></i></div>
       <!-- Logo -->
       <div class="app_logo flex">
         <div class="logo" @click="menus.show=!menus.show" :style="{backgroundImage:'url('+require('./assets/logo.svg')+')'}"></div>
@@ -89,9 +90,12 @@
           <i class="arrow ui ui_arrow_up"></i>
         </div>
         <ul class="m2" v-if="is_menus">
-          <li class="flex_left active"><i class="icons icon_web"></i>三级菜单</li>
-          <li class="flex_left"><i class="icons icon_work"></i>三级菜单</li>
-          <li class="flex_left"><i class="icons icon_work"></i>三级菜单</li>
+          <li class="flex_left" :class="tabs.active=='/SysMenus'?'active':''" @click="MenusClick('菜单管理', '/SysMenus')">
+            <i class="icons icon_web"></i>菜单管理
+          </li>
+          <li class="flex_left" :class="tabs.active=='/SysUser'?'active':''" @click="MenusClick('系统用户', '/SysUser')">
+            <i class="icons icon_work"></i>系统用户
+          </li>
         </ul>
       </div>
       <!-- Copy -->
@@ -100,6 +104,7 @@
     <!-- Left End -->
      <!-- Right -->
     <div class="app_right" :style="{width: is_menus?'calc(100% - 240px)':'calc(100% - 56px)'}">
+      <!-- UserInfo -->
       <div class="app_user_info_body" :style="{visibility:uinfo.show?'inherit':'hidden'}">
         <wm-popup height="100%" width="280px"  v-model:show="uinfo.show" position="right" bgColor="#FFF">
           <div class="app_user_info scrollbar">
@@ -122,9 +127,11 @@
       <!-- Tabs -->
       <div class="app_tabs_body flex">
         <ul class="app_tabs flex_left">
-          <li class="home active">首页</li>
-          <li>菜单管理<span class="close"><i class="ui ui_close"></i></span></li>
-          <li>系统用户<span class="close"><i class="ui ui_close"></i></span></li>
+          <li class="home" :class="tabs.active=='/'?'active':''" @click="MenusClick('首页', '/')">首页</li>
+          <li v-for="(v,k) in tabs.list" :key="k" @click="MenusClick(v.name, v.url)" :class="tabs.active==v.url?'active':''">
+            {{ v.name }}<span class="close" @click.stop="MenusClose(v.url)"><i class="ui ui_close"></i></span>
+          </li>
+          <!-- <li @click="MenusClick('/SysUser')">系统用户<span class="close"><i class="ui ui_close"></i></span></li> -->
         </ul>
         <ul class="app_tools flex">
           <li class="msg" title="消息"><i class="ui ui_message"></i></li>
@@ -140,7 +147,7 @@
       </div>
       <!-- Content -->
       <div class="app_content">
-        <div class="app_total">统计: 123</div>
+        <router-view></router-view>
       </div>
     </div>
     <!-- Right End -->

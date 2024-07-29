@@ -1,8 +1,10 @@
 import { Options } from 'vue-class-component';
 import Base from '../service/Base'
+/* UI组件 */
+import wmChartPie from '../components/chart/pie.vue'
 
 @Options({
-  components: {},
+  components: {wmChartPie},
 })
 export default class Home extends Base {
 

@@ -18,37 +18,31 @@ import { Options, Vue } from 'vue-class-component';
 
 @Options({
   props: {
-    show: Boolean,
-    position: String,
-    width: String,
-    height: String,
-    opacity: Number,
-    bgColor: String,
-    bgClose: String,
-    time: Number,
+    show: Boolean,                                  // 是否显示
+    position: {type: String, default: 'center'},    // 位置: center、left、right、top、bottom
+    width: String,                                  // 内容宽度
+    height: String,                                 // 内容高度
+    opacity: {type: Number, default: 0.4},          // 背景透明度
+    bgColor: {type: String, default: ''},           // 内容背景颜色
+    bgClose: {type: Boolean, default: true},        // 点击背景关闭
+    time: {type: Number, default: 400},             // 动画时间
   }
 })
 export default class Popup extends Vue {
-
   // 参数
-  show!: Boolean;              // 是否显示
-  position!: string;           // 位置: center、left、right、top、bottom
-  width!: String;              // 内容宽度
-  height!: String;             // 内容高度
-  opacity: Number = 0.4;       // 背景透明度
-  bgColor: String = '';        // 内容背景颜色
-  bgClose: Boolean = true;     // 点击背景关闭
-  time: Number = 400;          // 动画时间
+  show!: Boolean;
+  position!: string;
+  width!: String;
+  height!: String;
+  opacity!: Number;
+  bgColor!: String;
+  bgClose!: Boolean;
+  time!: Number
 
   /* 创建成功 */
   created(): void {
     // 监听
     this.$watch('$props', (props:any)=>{
-      // 赋值
-      if(props.opacity) this.opacity = props.opacity;
-      if(props.bgColor) this.bgColor = props.bgColor;
-      if(props.bgClose) this.bgClose = props.bgClose;
-      if(props.time) this.time = props.time;
       // 动画
       this._animation(props.show);
     }, { deep: true });

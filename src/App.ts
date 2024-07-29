@@ -47,8 +47,6 @@ export default class App extends Base {
     //   UI.Toast('请求成功!');
     //   this.Print(res.data);
     // });
-    // 跳转
-    this.Print(this.$route);
   }
 
   /* 菜单-显示/隐藏 */

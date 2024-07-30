@@ -25,7 +25,7 @@
       <!-- Left -->
       <div class="index_left">
         <div class="index_chart bg line_top c1">
-          <wm-chart-pie type="stack" :value="[{label: 'n1', value: 100}, {label: 'n2', value: 200}]" :height="328" />
+          <wm-chart-pie type="stack" theme="classicDark" :value="chart.pie" />
         </div>
         <div class="index_chart bg line_top c2">c2</div>
       </div>
@@ -34,35 +34,35 @@
         <div class="index_chart bg line_top line_bottom c3">
           <ul class="c3_list">
             <li>
-              <div class="active">
+              <div :class="chart.active=='c1'?'active':''" @click="chickChart('c1')">
                 <span class="title line_bottom">采购入库</span>
                 <h2>8920</h2>
                 <span class="ratio">同比上期&nbsp;&nbsp;<b class="up">12%</b></span>
               </div>
             </li>
             <li>
-              <div>
+              <div :class="chart.active=='c2'?'active':''" @click="chickChart('c2')">
                 <span class="title">采购退货</span>
                 <h2>720</h2>
                 <span class="ratio">同比上期&nbsp;&nbsp;<b class="down">32%</b></span>
               </div>
             </li>
             <li>
-              <div>
+              <div :class="chart.active=='c3'?'active':''" @click="chickChart('c3')">
                 <span class="title">调拨出</span>
                 <h2>5960</h2>
                 <span class="ratio">同比上期&nbsp;&nbsp;<b class="up">8%</b></span>
               </div>
             </li>
             <li>
-              <div>
+              <div :class="chart.active=='c4'?'active':''" @click="chickChart('c4')">
                 <span class="title">调拨入</span>
                 <h2>5810</h2>
                 <span class="ratio">同比上期&nbsp;&nbsp;<b class="down">8%</b></span>
               </div>
             </li>
             <li>
-              <div>
+              <div :class="chart.active=='c5'?'active':''" @click="chickChart('c5')">
                 <span class="title">销售出仓</span>
                 <h2>2343</h2>
                 <span class="ratio">同比上期&nbsp;&nbsp;<b class="up">5%</b></span>
@@ -70,7 +70,9 @@
             </li>
           </ul>
         </div>
-        <div class="index_chart bg line_top line_bottom c4">c4</div>
+        <div class="index_chart bg line_top line_bottom c4">
+          <wm-chart-interval type="dodge" theme="classicDark" :value="chart.interval" />
+        </div>
       </div>
     </div>
     <!-- Content End -->

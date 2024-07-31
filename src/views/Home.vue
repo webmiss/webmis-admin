@@ -32,16 +32,6 @@
             <li class="flex"><div class="title">瑞丽库房</div><div class="num">7890</div></li>
             <li class="flex"><div class="title">平洲库房</div><div class="num">3495</div></li>
             <li class="flex"><div class="title">缅甸库房</div><div class="num">4056</div></li>
-            <li class="flex"><div class="title">缅甸库房</div><div class="num">4056</div></li>
-            <li class="flex"><div class="title">缅甸库房</div><div class="num">4056</div></li>
-            <li class="flex"><div class="title">缅甸库房</div><div class="num">4056</div></li>
-            <li class="flex"><div class="title">缅甸库房</div><div class="num">4056</div></li>
-            <li class="flex"><div class="title">缅甸库房</div><div class="num">4056</div></li>
-            <li class="flex"><div class="title">缅甸库房</div><div class="num">4056</div></li>
-            <li class="flex"><div class="title">缅甸库房</div><div class="num">4056</div></li>
-            <li class="flex"><div class="title">缅甸库房</div><div class="num">4056</div></li>
-            <li class="flex"><div class="title">缅甸库房</div><div class="num">4056</div></li>
-            <li class="flex"><div class="title">缅甸库房</div><div class="num">4056</div></li>
           </ul>
         </div>
       </div>
@@ -128,16 +118,16 @@
 
 .c2_list{overflow: hidden;}
 .c2_list li{line-height: 40px; padding: 0 8px; border-bottom: rgba(0, 0, 0, 0.2) 1px solid; border-radius: 4px;}
-.c2_list li:hover{background-color: rgba(0, 100, 200, 0.8);}
+.c2_list li:hover{background-color: @Primary;}
 .c2_list .title{width: calc(100% - 80px);}
 .c2_list .num{width: 80px; text-align: right;}
 
 .c3_list{white-space: nowrap; text-align: center;}
 .c3_list li{cursor: pointer; display: inline-block; padding: 0 8px; width: 20%; box-sizing: border-box;}
 .c3_list li div{padding: 8px 0; border-radius: 8px;}
-.c3_list li div:hover{background-color: rgba(0, 100, 200, 0.8);}
+.c3_list li div:hover{background-color: @Primary;}
 .c3_list li div:hover .ratio{background-color: transparent;}
-.c3_list .active{background-color: rgba(0, 100, 200, 0.8);}
+.c3_list .active{background-color: @Primary;}
 .c3_list .active .ratio{background-color: transparent;}
 .c3_list .active:hover .ratio{background-color: transparent;}
 .c3_list li h2{line-height: 48px; font-size: 32px;}

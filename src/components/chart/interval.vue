@@ -28,6 +28,8 @@ export default class Interval extends Vue {
   height!: Number;
   unit!: String;
 
+  private auto_height: Number = 0;
+
   /* 创建成功 */
   created(): void {
     // 监听
@@ -48,20 +50,21 @@ export default class Interval extends Vue {
     this.$nextTick(()=>{
       // 对象
       let obj: any = this.$refs.chart;
+      if(!this.auto_height) this.auto_height=obj.offsetHeight;
       const config: any = {
         container: obj,
         autoFit: true,
         forceFit: true,
-        height: this.height??obj.offsetHeight,
         theme: this.theme,
       };
+      if(this.height) config.height=this.height;
       const chart = new Chart(config);
       // 配置
       chart.interval().data(this.value)
       .encode('x', 'label')
       .encode('y', 'value')
       .encode('color', 'label')
-      .style('maxWidth', 128);
+      .style('maxWidth', 80);
       // 显示
       chart.render();
     });

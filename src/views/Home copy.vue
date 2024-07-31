@@ -21,28 +21,32 @@
       </ul>
     </div>
     <!-- Content -->
-    <div class="index_ct flex">
+    <div class="index_ct">
       <!-- Left -->
       <div class="index_left">
         <div class="index_chart bg line_top c1">
-          <wm-chart-pie type="stack" theme="classicDark" :value="chart.pie" />
+          <!-- <wm-chart-pie type="stack" theme="classicDark" :value="chart.pie" /> -->
         </div>
-        <div class="index_chart bg line_top c2 scrollbar">
-          <ul class="c2_list">
-            <li class="flex"><div class="title">瑞丽库房</div><div class="num">7890</div></li>
-            <li class="flex"><div class="title">平洲库房</div><div class="num">3495</div></li>
-            <li class="flex"><div class="title">缅甸库房</div><div class="num">4056</div></li>
-            <li class="flex"><div class="title">缅甸库房</div><div class="num">4056</div></li>
-            <li class="flex"><div class="title">缅甸库房</div><div class="num">4056</div></li>
-            <li class="flex"><div class="title">缅甸库房</div><div class="num">4056</div></li>
-            <li class="flex"><div class="title">缅甸库房</div><div class="num">4056</div></li>
-            <li class="flex"><div class="title">缅甸库房</div><div class="num">4056</div></li>
-            <li class="flex"><div class="title">缅甸库房</div><div class="num">4056</div></li>
-            <li class="flex"><div class="title">缅甸库房</div><div class="num">4056</div></li>
-            <li class="flex"><div class="title">缅甸库房</div><div class="num">4056</div></li>
-            <li class="flex"><div class="title">缅甸库房</div><div class="num">4056</div></li>
-            <li class="flex"><div class="title">缅甸库房</div><div class="num">4056</div></li>
-          </ul>
+        <div class="index_chart bg line_top c2">
+          <div class="c2_body">
+            123<br>123<br>123<br>123<br>123<br>123<br>123<br>123<br>123<br>123<br>123<br>
+            123<br>123<br>123<br>123<br>123<br>123<br>123<br>123<br>123<br>123<br>123<br>
+            <!-- <ul class="c2_list">
+              <li class="flex"><div class="title">瑞丽库房</div><div class="num">7890</div></li>
+              <li class="flex"><div class="title">平洲库房</div><div class="num">3495</div></li>
+              <li class="flex"><div class="title">缅甸库房</div><div class="num">4056</div></li>
+              <li class="flex"><div class="title">缅甸库房</div><div class="num">4056</div></li>
+              <li class="flex"><div class="title">缅甸库房</div><div class="num">4056</div></li>
+              <li class="flex"><div class="title">缅甸库房</div><div class="num">4056</div></li>
+              <li class="flex"><div class="title">缅甸库房</div><div class="num">4056</div></li>
+              <li class="flex"><div class="title">缅甸库房</div><div class="num">4056</div></li>
+              <li class="flex"><div class="title">缅甸库房</div><div class="num">4056</div></li>
+              <li class="flex"><div class="title">缅甸库房</div><div class="num">4056</div></li>
+              <li class="flex"><div class="title">缅甸库房</div><div class="num">4056</div></li>
+              <li class="flex"><div class="title">缅甸库房</div><div class="num">4056</div></li>
+              <li class="flex"><div class="title">缅甸库房</div><div class="num">4056</div></li>
+            </ul> -->
+          </div>
         </div>
       </div>
       <!-- Right -->
@@ -87,7 +91,7 @@
           </ul>
         </div>
         <div class="index_chart bg line_top line_bottom c4">
-          <wm-chart-interval type="dodge" theme="classicDark" :value="chart.interval" />
+          <!-- <wm-chart-interval type="dodge" theme="classicDark" :value="chart.interval" /> -->
         </div>
       </div>
     </div>
@@ -117,15 +121,16 @@
 .index_tools .day .line{cursor: default;}
 .index_tools .day .line:hover{font-weight: normal;}
 /* Content */
-.index_ct{position: relative; height: calc(100% - 120px); margin-top: 10px;}
+.index_ct{position: relative; overflow: hidden; height: calc(100% - 124px); margin-top: 10px;}
 .index_left{width: 360px; height: 100%;}
 .index_right{width: calc(100% - 370px); height: 100%;}
 .index_chart{position: relative; overflow: hidden; padding: 16px; border-radius: 4px;}
 .index_chart.c1{height: 328px;}
-.index_chart.c2{margin-top: 10px; height: calc(100% - 400px); overflow: hidden; overflow-y: auto;}
+.index_chart.c2{margin-top: 10px; height: calc(100% - 400px);}
 .index_chart.c3{height: 120px;}
 .index_chart.c4{margin-top: 10px; height: calc(100% - 192px);}
 
+.c2_body{height: 100%; overflow: hidden;}
 .c2_list{overflow: hidden;}
 .c2_list li{line-height: 40px; padding: 0 8px; border-bottom: rgba(0, 0, 0, 0.2) 1px solid; border-radius: 4px;}
 .c2_list li:hover{background-color: rgba(0, 100, 200, 0.8);}

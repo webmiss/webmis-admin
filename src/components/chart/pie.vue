@@ -55,9 +55,9 @@ export default class Pie extends Vue {
         container: obj,
         autoFit: true,
         forceFit: true,
-        height: this.height??obj.offsetHeight,
         theme: this.theme,
       };
+      if(this.height) config.height=this.height;
       const chart: any = new Chart(config);
       // 配置
       chart.interval().data(this.value)

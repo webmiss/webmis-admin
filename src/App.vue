@@ -73,7 +73,7 @@
       <!-- Logo -->
       <div class="app_logo flex">
         <div class="logo" @click="menus.show=!menus.show" :style="{backgroundImage:'url('+require('./assets/logo.svg')+')'}"></div>
-        <div class="logo_text" v-if="is_menus">WebMIS 3.0</div>
+        <div class="logo_text" v-if="is_menus">WebMIS ERP</div>
       </div>
       <!-- Search -->
       <div class="app_search" v-if="is_menus">

@@ -2,7 +2,7 @@
   <div class="index_body" :class="full_screen?'full_screen':''">
     <div class="index_title">
       <h1>实时数据大屏</h1>
-      <i class="ui" :class="!full_screen?'ui_video_fullscreen':'ui_video_fullscreen_exit'" @click="full_screen=!full_screen"></i>
+      <i class="ui" :class="!full_screen?'ui_video_fullscreen':'ui_video_fullscreen_exit'" @click="full_screen=!full_screen;loadData()"></i>
     </div>
     <!-- Tools -->
     <div class="index_tools bg line_top flex">

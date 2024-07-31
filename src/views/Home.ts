@@ -9,27 +9,35 @@ import wmChartInterval from '../components/chart/interval.vue'
 })
 export default class Home extends Base {
 
+  // 全屏
   full_screen: boolean = false;
-  chart: any = {active: 'c1', pie:[], interval: []};
+  // 图表
+  chart: any = {active:'c1', pie:[], interval: []};
 
   /* 创建成功 */
-  public created(): void {
+  created(): void {
 
   }
 
   /* 创建完成 */
-  public mounted(): void {
+  mounted(): void {
+    this.chickChart('c1');
+    this.loadData();
+  }
+
+  /* 加载数据 */
+  loadData(): void {
     // 图表数据
     this.chart.pie = [
       {label: 'n1', value: 90},
       {label: 'n2', value: 200},
       {label: 'n3', value: 120},
     ];
-    this.chickChart('c1');
+    this.chickChart(this.chart.active);
   }
 
   /* 图表 */
-  public chickChart(name: string): void {
+  chickChart(name: string): void {
     const data: any = {
       c1: [
         {label: 'n1', value: 100},

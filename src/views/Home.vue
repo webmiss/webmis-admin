@@ -25,7 +25,7 @@
       <!-- Left -->
       <div class="index_left">
         <div class="index_chart bg line_top c1">
-          <wm-chart-pie type="stack" theme="classicDark" :value="chart.pie" />
+          <wm-chart-pie type="stack" theme="classicDark" html="<span style='font-size: 18px;'>库存</span>" :value="chart.pie" />
         </div>
         <div class="index_chart bg line_top c2 scrollbar">
           <ul class="c2_list">

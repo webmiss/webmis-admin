@@ -86,10 +86,10 @@
 </template>
 
 <style lang="less" scoped>
-.index_body{position: relative; top: 0; left: 0; padding: 16px; width: calc(100% - 32px); height: calc(100% - 32px); overflow: hidden; color: @Minor6; background: -webkit-radial-gradient(20% 30% ,farthest-corner,#0064C8,#0054A8,#00458A,#00284F);}
+.index_body{position: relative; top: 0; left: 0; padding: 16px; width: calc(100% - 32px); height: calc(100% - 32px); overflow: hidden; color: @Minor6; background: -webkit-radial-gradient(20% 30% ,farthest-corner,#0064C8,#0054A8,#00458A,#172E8C);}
 .full_screen{position: absolute;}
 .index_body .bg{background-color: rgba(0, 0, 0, 0.4);}
-.index_body .line_top::before{opacity: 0.9; content: ""; position: absolute; left: 50%; top: 0; transform: translateX(-50%); width: 60%; height: 1px; background-image: linear-gradient(to right, rgba(0, 100, 200, 0), #0064C8, #595, #0064C8, rgba(0, 100, 200, 0));}
+.index_body .line_top::before{opacity: 0.9; content: ""; position: absolute; left: 50%; top: 0; transform: translateX(-50%); width: 60%; height: 1px; background-image: linear-gradient(to right, rgba(0, 100, 200, 0), #0064C8, #595, #172E8C, rgba(0, 100, 200, 0));}
 .index_body .line_bottom::after{opacity: 0.8; content: ""; position: absolute; left: 50%; bottom: 0; zoom: 0.8; transform: translateX(-50%); width: 90%; height: 1px; background-image: linear-gradient(to right, rgba(0, 100, 200, 0), #EFA31E, #761354, #6AD177, rgba(0, 100, 200, 0));}
 /* Title */
 .index_title{overflow: hidden;}

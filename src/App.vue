@@ -1,5 +1,6 @@
 <template>
   <!-- Login -->
+   <login></login>
   <!-- <div class="app_login">
     <div class="center">Login</div>
   </div> -->
@@ -7,8 +8,8 @@
   <!-- Main -->
   <div class="app_main flex">
     <!-- MenusAll -->
-    <div class="app_menus_all" :style="{visibility:menus.show?'inherit':'hidden'}">
-      <wm-popup ref="menusData" height="100%" width="940px"  v-model:show="menus.show" position="left" bgColor="#FFF" :time="600">
+    <div class="app_menus_all" :style="{visibility:menus.show&&state.isLogin?'inherit':'hidden'}">
+      <wm-popup height="100%" width="940px" v-model:show="menus.show" position="left" bgColor="#FFF" :time="600">
         <div class="menus_body flex">
           <!-- MenusLeft -->
           <div class="menus_left">
@@ -105,7 +106,7 @@
      <!-- Right -->
     <div class="app_right" :style="{width: is_menus?'calc(100% - 240px)':'calc(100% - 56px)'}">
       <!-- UserInfo -->
-      <div class="app_user_info_body" :style="{visibility:uinfo.show?'inherit':'hidden'}">
+      <div class="app_user_info_body" :style="{visibility:uinfo.show&&state.isLogin?'inherit':'hidden'}">
         <wm-popup height="100%" width="280px"  v-model:show="uinfo.show" position="right" bgColor="#FFF">
           <div class="app_user_info scrollbar">
             <div class="img" :style="{backgroundImage: 'url(https://cszbvip.oss-cn-guangzhou.aliyuncs.com/user/img/1.jpg?1721955717)'}"><i class="ui ui_image"></i></div>
@@ -121,7 +122,7 @@
               <li>修改密码</li>
             </ul>
           </div>
-          <div class="app_user_close">退出登录</div>
+          <div class="app_user_close" @click="logout()">退出登录</div>
         </wm-popup>
       </div>
       <!-- Tabs -->

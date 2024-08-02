@@ -1,16 +1,18 @@
 import { Options } from 'vue-class-component';
 import { useRoute,useRouter } from 'vue-router'
 import { useStore } from 'vuex';
-import Base from './service/Base'
-import Env from './config/Env';
-import Request from './library/request'
-import Storage from './library/storage'
-import Ui from './library/ui'
 /* UI组件 */
+import Base from '@/service/Base'
+import Env from '@/config/Env';
+import Request from '@/library/request'
+import Storage from '@/library/storage'
+import Ui from '@/library/ui'
+/* 组件 */
+import Login from '@/views/Login.vue'
 import wmPopup from '@/components/popup/index.vue'
 
 @Options({
-  components: {wmPopup},
+  components: {Login, wmPopup},
 })
 export default class App extends Base {
 
@@ -18,6 +20,9 @@ export default class App extends Base {
   // private route: any = useRoute();       // 路由信息
   // private router: any = useRouter();     // 路由
   // private store: any = useStore();       // 状态
+  // 状态
+  store: any = useStore();
+  state: any = this.store.state;
   // 用户
   public uinfo: any = {'show': false};
   // 菜单
@@ -47,6 +52,7 @@ export default class App extends Base {
     //   UI.Toast('请求成功!');
     //   this.Print(res.data);
     // });
+    
   }
 
   /* 菜单-显示/隐藏 */
@@ -100,6 +106,13 @@ export default class App extends Base {
     }
     // 缓存
     Storage.setItem('MenusTabs', JSON.stringify(this.tabs.list));
+  }
+
+  /* 退出登录 */
+  logout(): void {
+    this.uinfo.show = false;
+    this.menus.show = false;
+    this.state.isLogin = false;
   }
 
 }

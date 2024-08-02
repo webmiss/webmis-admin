@@ -14,7 +14,7 @@ export default class Menus extends Base {
 
   /* 创建完成 */
   public mounted(): void {
-    this.Print('Menus created');
+    // this.Print('Menus created');
   }
 
 }

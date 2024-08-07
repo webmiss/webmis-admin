@@ -1,9 +1,6 @@
 <template>
   <!-- Login -->
-   <login></login>
-  <!-- <div class="app_login">
-    <div class="center">Login</div>
-  </div> -->
+  <login></login>
 
   <!-- Main -->
   <div class="app_main flex">
@@ -148,7 +145,12 @@
       </div>
       <!-- Content -->
       <div class="app_content">
-        <router-view></router-view>
+        <router-view v-slot="{ Component }">
+          <keep-alive>
+            <component :is="Component" :key="$route.name" />
+          </keep-alive>
+        </router-view>
+        <!-- <router-view></router-view> -->
       </div>
     </div>
     <!-- Right End -->

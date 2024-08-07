@@ -16,5 +16,8 @@ export default class Menus extends Base {
   public mounted(): void {
     // this.Print('Menus created');
   }
+  activated(): void {
+    console.log('Menus');
+  }
 
 }

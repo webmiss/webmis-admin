@@ -52,6 +52,9 @@ export default class Login extends Vue {
   changeVcode(): void {
     let arr = this.login.vcode_url.split('?');
     this.login.vcode_url = arr[0]+'?'+Time.Time();
+    // 激活输入框
+    const pwd: any = this.$refs.loginVcode;
+    pwd.focus();
   }
 
   /* 登录 */
@@ -59,7 +62,7 @@ export default class Login extends Vue {
     // 输入密码 loginPasswd
     if(this.login.uname.length>3 && !this.login.is_passwd) {
       this.login.is_passwd = true;
-      // 激活密码框
+      // 激活输入框
       this.$nextTick(()=>{
         const pwd: any = this.$refs.loginPasswd;
         pwd.focus();
@@ -70,9 +73,9 @@ export default class Login extends Vue {
     if(this.login.passwd.length<6) return Ui.Toast('请输入密码');
     // 验证码
     this.login.is_safety = true;
-    this.login.vcode_url = 'https://api.cszb.vip/admin/user/vcode/admin';
+    this.login.vcode_url = 'https://api.cszb.vip/admin/user/vcode/admin?'+Time.Time();
     if(this.login.vcode.length!=4 && this.login.is_safety){
-      // 激活密码框
+      // 激活输入框
       this.$nextTick(()=>{
         const pwd: any = this.$refs.loginVcode;
         pwd.focus();

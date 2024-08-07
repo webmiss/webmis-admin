@@ -21,7 +21,10 @@ export default class Home extends Base {
 
   /* 创建完成 */
   mounted(): void {
-    this.chickChart('c1');
+  }
+  activated(): void {
+    console.log('Home');
+    this.chickChart('c2');
     this.loadData();
   }
 

@@ -30,17 +30,17 @@
 </template>
 
 <style lang="less" scoped>
-.wm-login_popup{position: fixed; z-index: 99; width: 100%; height: 100%; left: 0; top: 0; background: -webkit-radial-gradient(20% 30% ,farthest-corner,#0064C8,#0054A8,#00458A,#172E8C);}
+.wm-login_popup{position: fixed; z-index: 99; width: calc(100% + 1px); height: calc(100% + 1px); left: 0; top: 0;}
 .wm-login_bg{position: absolute; z-index: 1; width: 100%; height: 100%; background-image: url(../assets/bg.jpg); background-position: center; background-size: cover; background-repeat: no-repeat;}
-.wm-login_mask{position: absolute; z-index: 2; width: 100%; height: 100%; background: -webkit-radial-gradient(50% 10% ,farthest-corner,rgba(0, 100, 200, 0),rgba(0, 100, 200, 0.6),#0064C8,#172E8C);}
+.wm-login_mask{position: absolute; z-index: 2; width: 100%; height: 100%; background: -webkit-radial-gradient(50% 20% ,farthest-corner,rgba(0, 0, 0, 0),rgba(0, 0, 0, 0.2),rgba(0, 0, 0, 0.8),#020408);}
 .wm-login_body{position: absolute; z-index: 3; width: 100%; height: 100%; color: @Minor6;}
 .wm-login_ct{position: absolute; min-width: 300px; left: 50%; top: 50%; transform: translate(-50%, -60%);}
-.wm-login_logo{margin: 48px auto; width: 160px; height: 160px; background-color: rgba(0,0,0,0.5); border-radius: 50%; background-repeat: no-repeat; background-position: center; background-size: 60%;}
-.wm-login_logo:hover{background-color: rgba(0,0,0,0.7);}
+.wm-login_logo{margin: 48px auto; width: 160px; height: 160px; background-color: rgba(0,0,0,0.7); border-radius: 50%; background-repeat: no-repeat; background-position: center; background-size: 60%;}
+.wm-login_logo:hover{background-color: rgba(0,0,0,0.8);}
 .wm-login_form{position: relative;}
 .wm-login_form input{width: 100%; padding: 0 16px 0 48px; height: 48px; line-height: 48px; color: @Minor8; font-size: 16px; border: transparent 1px solid; background-color: rgba(0,0,0,0.5); border-radius: 8px; box-sizing: border-box;}
-.wm-login_form input:hover{border-color: @Minor; background-color: rgba(0,0,0,0.7);}
-.wm-login_form input:focus{border-color: @Minor; background-color: rgba(0,0,0,0.7);}
+.wm-login_form input:hover{border-color: @Minor; background-color: rgba(0,0,0,0.8);}
+.wm-login_form input:focus{border-color: @Minor; background-color: rgba(0,0,0,0.8);}
 .wm-login_form .ico{position: absolute; width: 48px; line-height: 48px; color: @Minor5; font-size: 20px; text-align: center;}
 .wm-login_form .vcode{cursor: pointer; position: absolute; height: 40px; top: 50%; right: 4px; transform: translateY(-50%); border-radius: 4px;}
 .wm-login_text{text-align: center; line-height: 64px;}

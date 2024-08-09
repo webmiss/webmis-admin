@@ -4,7 +4,7 @@ import Home from '../views/Home.vue'
 /* 路由 */
 const routes: Array<RouteRecordRaw> = [
   {path: '/', name: 'Home', component: Home },
-  {path: '/refresh', name: 'Refresh', component: ()=>import('../views/Refresh.vue') },
+  {path: '/refresh', name: 'Refresh', component: ()=>import('../views/tools/Refresh.vue') },
   // 系统管理
   {path: '/SysMenus', name: 'SysMenus', component: ()=>import('../views/system/Menus.vue') },
   {path: '/SysUser', name: 'SysUser', component: ()=>import('../views/system/User.vue') },

@@ -8,7 +8,7 @@ import Request from '@/library/request'
 import Storage from '@/library/storage'
 import Ui from '@/library/ui'
 /* 组件 */
-import Login from '@/views/Login.vue'
+import Login from '@/views/tools/Login.vue'
 import wmPopup from '@/components/popup/index.vue'
 
 @Options({

@@ -17,15 +17,10 @@ export default class Login extends Vue {
   store: any = useStore();
   state: any = this.store.state;
   // 登录
-  login: any = {
-    show: false,
-    is_passwd: false,
-    is_safety: false,
-    uname: '',
-    passwd: '',
-    vcode: '',
-    vcode_url: '',
-  };
+  login: any = {show: false, is_passwd: false, is_safety: false, uname: '', passwd: '', vcode: '', vcode_url: '', bg:''};
+  bg_class: Array<string> = ['bg0', 'bg1', 'bg2', 'bg3', 'bg4', 'bg5', 'bg6', 'bg7', 'bg8', 'bg9'];
+  // 动画时间
+  time: any = null;
 
   /* 创建成功 */
   created(): void {
@@ -33,11 +28,27 @@ export default class Login extends Vue {
     this.$watch('state.isLogin', (val:Boolean)=>{
       this.login.show = !val;
     }, { deep: true });
+    // 登录动画
+    this.$watch('login.show', (val:Boolean)=>{
+      if(val){
+        if(!this.login.bg) this.login.bg = this.bg_class[0];
+        clearInterval(this.time);
+        this.time = setInterval(this.bgAnimation, 10000);
+      }else{
+        clearInterval(this.time);
+      }
+    }, { deep: true });
   }
 
   /* 创建完成 */
   mounted(): void {
     if(!this.state.isLogin) this.login.show = true;
+  }
+
+  /* 背景动画 */
+  bgAnimation(): void {
+    const n: number = Math.floor(Math.random()*10);
+    this.login.bg = this.bg_class[n];
   }
 
   /* 切换用户 */

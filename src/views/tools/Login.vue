@@ -21,7 +21,7 @@
           </div>
           <div class="wm-login_text">
             <span v-if="login.uname" @click="clearUser()" class="change">切换用户</span>
-            <span v-else>&copy;2024 webmis.vip{{ login.uname }}</span>
+            <span v-else>{{ copy }}</span>
           </div>
         </div>
       </div> 

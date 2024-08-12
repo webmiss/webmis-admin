@@ -2,8 +2,11 @@ import { Options, Vue } from 'vue-class-component';
 import { useStore } from 'vuex';
 import wmPopup from '@/components/popup/index.vue'
 /* UI组件 */
+import Env from '@/config/Env';
 import Ui from '@/library/ui'
 import Storage from '@/library/storage'
+import Request from '@/library/request'
+/* JS组件 */
 import Time from '@/library/time'
 
 @Options({
@@ -12,29 +15,47 @@ import Time from '@/library/time'
   }
 })
 export default class Login extends Vue {
-
+  // 参数
+  private animationTime: number = 10000;      // 动画切换间隔时间
+  private verifyTokenTime: number = 6000;    // Token验证间隔时间
   // 状态
-  store: any = useStore();
-  state: any = this.store.state;
+  private store: any = useStore();
+  private state: any = this.store.state;
+  copy: string = Env.copy;
   // 登录
   login: any = {show: false, is_passwd: false, is_safety: false, uname: '', passwd: '', vcode: '', vcode_url: '', bg:''};
   bg_class: Array<string> = ['bg0', 'bg1', 'bg2', 'bg3', 'bg4', 'bg5', 'bg6', 'bg7', 'bg8', 'bg9'];
   // 动画时间
-  time: any = null;
+  private time: any = null;
+  // Token
+  private tokenTime: any = null;
 
   /* 创建成功 */
   created(): void {
     // 登录状态
     this.$watch('state.isLogin', (val:Boolean)=>{
       this.login.show = !val;
+      if(val) {
+        // 验证Token
+        clearInterval(this.tokenTime);
+        this.tokenTime = setInterval(()=>{
+          this.verifyToken();
+        }, this.verifyTokenTime);
+      } else {
+        clearInterval(this.tokenTime);
+      }
     }, { deep: true });
-    // 登录动画
+    // 背景状态
     this.$watch('login.show', (val:Boolean)=>{
-      if(val){
-        if(!this.login.bg) this.login.bg = this.bg_class[0];
+      if(val) {
+        // 背景动画
         clearInterval(this.time);
-        this.time = setInterval(this.bgAnimation, 10000);
-      }else{
+        this.time = setInterval(()=>{
+          this.bgAnimation();
+        }, this.animationTime);
+        // 用户信息
+        this.showUser();
+      } else {
         clearInterval(this.time);
       }
     }, { deep: true });
@@ -42,21 +63,38 @@ export default class Login extends Vue {
 
   /* 创建完成 */
   mounted(): void {
-    if(!this.state.isLogin) this.login.show = true;
+    // 显示登录
+    if(!this.state.isLogin) {
+      this.login.show = true;
+      this.bgAnimation();
+    }
+    // 验证登录
+    const token: string | null = Storage.getItem('token');
+    this.state.token = token?token:'';
+    if(token) this.verifyToken();
   }
 
   /* 背景动画 */
   bgAnimation(): void {
     const n: number = Math.floor(Math.random()*10);
-    this.login.bg = this.bg_class[n];
+    this.login.bg = !this.login.bg?this.bg_class[0]:this.bg_class[n];
   }
 
-  /* 切换用户 */
+  /* 用户-显示 */
+  showUser(): void {
+    const uname: string | null = Storage.getItem('uname');
+    if(!uname) return;
+    this.login.uname = uname;
+    this.login.is_passwd = true;
+    console.log('uname', uname);
+  }
+
+  /* 用户-切换 */
   clearUser(): void {
-    this.login.uname = '';
     this.login.passwd = '';
     this.login.vcode = '';
     this.login.is_passwd = false;
+    this.login.is_safety = false;
   }
 
   /* 刷新验证码 */
@@ -64,55 +102,109 @@ export default class Login extends Vue {
     let arr = this.login.vcode_url.split('?');
     this.login.vcode_url = arr[0]+'?'+Time.Time();
     // 激活输入框
-    const pwd: any = this.$refs.loginVcode;
-    pwd.focus();
+    this.$nextTick(()=>{
+      (this.$refs.loginVcode as any).focus();
+    });
   }
 
   /* 登录 */
   clickLogin(): void {
-    // 输入密码 loginPasswd
-    if(this.login.uname.length>3 && !this.login.is_passwd) {
+    const uname: string = this.login.uname;
+    const passwd: string = this.login.passwd;
+    // 输入密码
+    if(uname.length>3 && !this.login.is_passwd) {
       this.login.is_passwd = true;
       // 激活输入框
       this.$nextTick(()=>{
-        const pwd: any = this.$refs.loginPasswd;
-        pwd.focus();
+        (this.$refs.loginPasswd as any).focus();
       });
       return ;
     }
     // 验证密码
-    if(this.login.passwd.length<6) return Ui.Toast('请输入密码');
+    if(passwd.length<6) return Ui.Toast('请输入密码');
     // 验证码
-    this.login.is_safety = true;
-    this.login.vcode_url = 'https://api.cszb.vip/admin/user/vcode/admin?'+Time.Time();
-    if(this.login.vcode.length!=4 && this.login.is_safety){
+    if(this.login.vcode.length!=4 && this.login.is_safety) {
       // 激活输入框
       this.$nextTick(()=>{
-        const pwd: any = this.$refs.loginVcode;
-        pwd.focus();
+        (this.$refs.loginVcode as any).focus();
       });
       return ;
     }
+    // 请求
+    const load: any = Ui.Loading();
+    Request.Post('user/login', {uname: uname, passwd: passwd, vcode:this.login.vcode}, (res:any)=>{
+      load.clear();
+      const d: any = res.data;
+      if(d.code==0){
+        this.login.is_passwd = true;
+        this.login.is_safety = false;
+        this.login.passwd = '';
+        this.login.vcode = '';
+        // 缓存信息
+        this.state.isLogin = true;
+        this.state.token = d.data.token;
+        Storage.setItem('token', d.data.token);
+        Storage.setItem('uname', d.data.uinfo.uname);
+        Storage.setItem('uinfo', JSON.stringify(d.data.uinfo));
+      }else{
+        // 验证
+        this.login.vcode = '';
+        const vcode_url: string = d.vcode_url || '';
+        if(vcode_url && d.code==4001){
+          // 开启验证
+          this.login.is_safety = true;
+          this.login.vcode_url = vcode_url;
+          this.$nextTick(()=>{
+            (this.$refs.loginVcode as any).focus();
+          });
+        }else if(vcode_url && d.code==4002){
+          // 验证码错误
+          this.changeVcode();
+        }else{
+          // 帐号密码错误
+          this.login.passwd = '';
+          this.login.vcode = '';
+          this.login.is_passwd = true;
+          this.login.is_safety = false;
+          this.$nextTick(()=>{
+            (this.$refs.loginPasswd as any).focus();
+          });
+        }
+        return Ui.Toast(d.msg);
+      }
+    },()=>{
+      load.clear();
+      Ui.Toast('无法连接服务器!');
+    });
+  }
 
-    // 登录成功
-    if(this.login.uname=='admin' && this.login.passwd=='123456') {
-      this.state.isLogin = true;
-      this.login.is_passwd = true;
-      this.login.is_safety = false;
-      this.login.passwd = '';
-      this.login.vcode = '';
-    } else {
-      this.login.is_passwd = true;
-      this.login.is_safety = false;
-      this.login.passwd = '';
-      this.login.vcode = '';
-      Ui.Toast('帐号或密码错误!');
-      // 激活密码框
-      this.$nextTick(()=>{
-        const pwd: any = this.$refs.loginPasswd;
-        pwd.focus();
-      });
-    }
+  /* 验证Token */
+  verifyToken(uinfo: boolean=false): void {
+    Request.Post('user/token', {token: this.state.token, uinfo: uinfo}, (res:any)=>{
+      const d: any = res.data;
+      if(d.code==0 && d.data.token_time>0) {
+        this.state.isLogin = true;
+        if(Object.keys(d.data.uinfo).length!=0) {
+          Storage.setItem('uname', d.data.uinfo.uname);
+          Storage.setItem('uinfo', JSON.stringify(d.data.uinfo));
+        }
+      } else {
+        Ui.Toast(d.msg);
+        this.logout();
+      }
+    },()=>{
+      Ui.Toast('无法连接服务器!');
+    });
+  }
+
+  /* 退出登录 */
+  logout(): void {
+    // 缓存信息
+    this.state.isLogin = false;
+    this.state.token = '';
+    Storage.setItem('token', '');
+    Storage.setItem('uinfo', '');
+    Storage.setItem('MenusTabs', '');
   }
 
 }

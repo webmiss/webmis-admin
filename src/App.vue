@@ -1,6 +1,6 @@
 <template>
   <!-- Login -->
-  <login></login>
+  <login ref="Login"></login>
 
   <!-- Main -->
   <div class="app_main flex">

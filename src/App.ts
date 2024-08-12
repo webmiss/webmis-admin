@@ -24,7 +24,7 @@ export default class App extends Base {
   store: any = useStore();
   state: any = this.store.state;
   // 用户
-  public uinfo: any = {'show': false};
+  public uinfo: any = {'show': false, data:{}};
   // 菜单
   public tabs: any = {active:'/', list:[]};
   public menus: any = {'show': false};
@@ -36,21 +36,25 @@ export default class App extends Base {
     this.$watch('$route', (to: any, from: any)=>{
       this.tabs.active = to.path;
     });
-    // 本地缓存
-    this.is_menus = Storage.getItem('IsMenus')?true:false;
-    const tabs: string|null = Storage.getItem('MenusTabs');
-    this.tabs.list = tabs?JSON.parse(tabs):[];
+    // 登录状态
+    this.$watch('state.isLogin', (val: boolean)=>{
+      const uinfo: string | null = Storage.getItem('uinfo');
+      if(uinfo) this.uinfo.data = JSON.parse(uinfo);
+      console.log('isLogin', val, this.uinfo.data);
+    });
   }
 
   /* 创建完成 */
   public mounted(): void {
-    // 请求
-    // this.Print('baseUrl', this.cfg.apiUrl);
-    // const load: any = UI.Loading();
-    // Request.Post(this.cfg.apiUrl+'', {}, (res:any)=>{
-    //   load.clear();
-    //   UI.Toast('请求成功!');
-    //   this.Print(res.data);
+    // 菜单导航
+    this.is_menus = Storage.getItem('IsMenus')?true:false;
+    const tabs: string|null = Storage.getItem('MenusTabs');
+    this.tabs.list = tabs?JSON.parse(tabs):[];
+    // 登录状态
+    // this.$nextTick(()=>{
+    //   if(this.state.isLogin) {
+    //     console.log('login');
+    //   }
     // });
     
   }
@@ -110,9 +114,11 @@ export default class App extends Base {
 
   /* 退出登录 */
   logout(): void {
+    // 隐藏
     this.uinfo.show = false;
     this.menus.show = false;
-    this.state.isLogin = false;
+    // 清除
+    (this.$refs.Login as any).logout();
   }
 
 }

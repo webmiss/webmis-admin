@@ -19,7 +19,6 @@ export default class App extends Base {
   // private cfg: any = new Env();          // 配置信息
   // private route: any = useRoute();       // 路由信息
   // private router: any = useRouter();     // 路由
-  // private store: any = useStore();       // 状态
   // 状态
   store: any = useStore();
   state: any = this.store.state;
@@ -27,40 +26,46 @@ export default class App extends Base {
   public uinfo: any = {'show': false, data:{}};
   // 菜单
   public tabs: any = {active:'/', list:[]};
-  public menus: any = {'show': false};
+  public menus: any = {'show': false, list:[], key:'', seaList:[]};
   public is_menus: Boolean = true;
 
   /* 创建成功 */
-  public created(): void {
+  created(): void {
     // 监听
     this.$watch('$route', (to: any, from: any)=>{
       this.tabs.active = to.path;
     });
-    // 登录状态
+    // 登录
     this.$watch('state.isLogin', (val: boolean)=>{
-      const uinfo: string | null = Storage.getItem('uinfo');
-      if(uinfo) this.uinfo.data = JSON.parse(uinfo);
-      console.log('isLogin', val, this.uinfo.data);
+      if(val) this.MenusList();
     });
   }
 
   /* 创建完成 */
-  public mounted(): void {
+  mounted(): void {
     // 菜单导航
     this.is_menus = Storage.getItem('IsMenus')?true:false;
     const tabs: string|null = Storage.getItem('MenusTabs');
     this.tabs.list = tabs?JSON.parse(tabs):[];
     // 登录状态
-    // this.$nextTick(()=>{
-    //   if(this.state.isLogin) {
-    //     console.log('login');
-    //   }
-    // });
-    
+    this.$nextTick(()=>{
+    });
+  }
+
+  /* 获取菜单 */
+  MenusList(): void {
+    Request.Post('sys_menus/getMenusPerm', {token: this.state.token}, (res:any)=>{
+      const d: any = res.data;
+      if(d.code==0) {
+        this.menus.list = d.data;
+      }else{
+        Ui.Toast(d.msg);
+      }
+    });
   }
 
   /* 菜单-显示/隐藏 */
-  public MenusShow(): void {
+  MenusShow(): void {
     if(this.is_menus){
       this.is_menus = false;
       Storage.setItem('IsMenus', '');
@@ -69,10 +74,65 @@ export default class App extends Base {
       Storage.setItem('IsMenus', '1');
     }
   }
+  /* 菜单-搜索 */
+  MenusSearch(): void {
+    const key: string = this.menus.key;
+    const reg =new RegExp(key.toLowerCase());
+    const list: any = this.menus.list;
+    let tmp:any, label: string, en: string, display: boolean;
+    let keys: Array<any> = [];
+    this.menus.seaList = [];
+    // 一级
+    for(const k1 in list) {
+      // 二级
+      if(!list[k1].children) continue;
+      for(const k2 in list[k1].children) {
+        // 三级
+        if(!list[k1].children[k2].children) continue;
+        for(const k3 in list[k1].children[k2].children) {
+          // 是否显示
+          if(key.length>0) {
+            tmp = list[k1].children[k2].children[k3];
+            label = tmp.label.toLowerCase();
+            en = tmp.en.toLowerCase();
+            display = reg.test(label) || reg.test(en);
+            // 结果
+            if(display) {
+              keys.push([k1, k2]);
+              this.menus.seaList.push({label:tmp.label, icon:tmp.icon, url:tmp.value.url});
+            }
+          } else {
+            display = true;
+          }
+          // 赋值
+          list[k1].children[k2].display = true;
+          list[k1].children[k2].children[k3].display = display;
+        }
+      }
+    }
+    // 隐藏二级菜单
+    if(!key) return;
+    for(const k1 in list) {
+      if(!list[k1].children) continue;
+      for(const k2 in list[k1].children) {
+        let is_true: boolean = false;
+        for(const i in keys) {
+          if(keys[i][0]==k1&&keys[i][1]==k2) {
+            is_true = true;
+            continue;
+          }
+        }
+        list[k1].children[k2].display = is_true;
+      }
+    }
+  }
   /* 菜单-切换 */
-  public MenusClick(name: string, url: string, isShow: boolean=false): void {
+  MenusClick(name: string, url: string, isShow: boolean=false): void {
     // 隐藏菜单
-    if(isShow) this.menus.show=false;
+    if(isShow) {
+      this.menus.show=false;
+      this.uinfo.show = false;
+    }
     // 是否首页
     if(url!='/') {
       // 是否存在

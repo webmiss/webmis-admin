@@ -5,7 +5,7 @@
       <div class="wm-login_mask"></div>
       <div class="wm-login_body">
         <div class="wm-login_ct">
-          <div class="wm-login_logo" :style="{backgroundImage:'url('+require('@/assets/logo.svg')+')'}"></div>
+          <div class="wm-login_logo" :style="{backgroundImage:'url('+(login.uname&&login.uname==login.local_uname&&login.img?login.img:require('@/assets/logo.svg'))+')', backgroundSize:login.uname&&login.uname==login.local_uname&&login.img?'100%':'60%'}"></div>
           <div class="wm-login_form" v-if="!login.is_passwd">
             <i class="ui ui_user ico"></i>
             <input type="text" class="input" v-model="login.uname" @keyup.enter="clickLogin()" maxlength="32" placeholder="用户名 / 手机号码 / 邮箱">
@@ -45,18 +45,18 @@
 .wm-login_mask{position: absolute; z-index: 2; width: 100%; height: 100%; background: -webkit-radial-gradient(50% 30% ,farthest-corner,rgba(0, 0, 0, 0),rgba(0, 0, 0, 0.3),rgba(0, 0, 0, 0.9));}
 .wm-login_body{position: absolute; z-index: 3; width: 100%; height: 100%; color: @Minor6;}
 .wm-login_ct{position: absolute; min-width: 300px; left: 50%; top: 50%; transform: translate(-50%, -60%);}
-.wm-login_logo{margin: 48px auto; width: 160px; height: 160px; border: rgba(0, 0, 0, 0.8) 1px solid; background-color: rgba(0,0,0,0.7); border-radius: 50%; background-repeat: no-repeat; background-position: center; background-size: 60%;}
-.wm-login_logo:hover{background-color: rgba(0,0,0,0.8);}
+.wm-login_logo{margin: 48px auto; width: 200px; height: 200px; border: @Minor 1px solid; background-color: rgba(0,0,0,0.7); border-radius: 50%; background-repeat: no-repeat; background-position: center;}
+.wm-login_logo:hover{border-color: @Minor; background-color: rgba(0,0,0,0.8);}
 .wm-login_form{position: relative;}
 .wm-login_form input{width: 100%; padding: 0 16px 0 48px; height: 48px; line-height: 48px; color: @Minor8; font-size: 16px; border: transparent 1px solid; background-color: rgba(0,0,0,0.7); border-radius: 8px; box-sizing: border-box;}
 .wm-login_form input:hover{border-color: @Minor; background-color: rgba(0,0,0,0.8);}
 .wm-login_form input:focus{border-color: @Minor; background-color: rgba(0,0,0,0.8);}
 .wm-login_form .ico{position: absolute; width: 48px; line-height: 48px; color: @Minor5; font-size: 20px; text-align: center;}
 .wm-login_form .vcode{cursor: pointer; position: absolute; height: 40px; top: 50%; right: 4px; transform: translateY(-50%); border-radius: 4px;}
-.wm-login_text{text-align: center; line-height: 64px; text-shadow: 0 0 4px rgba(0,0,0,0.7);}
-.wm-login_text span{padding: 8px 16px; color: @Minor6;}
-.wm-login_text .change{cursor: pointer; border-radius: 4px;}
-.wm-login_text .change:hover{background-color: rgba(0,0,0,0.5);}
+.wm-login_text{text-align: center; line-height: 64px; text-shadow: 0 0 2px rgba(0,0,0,0.3);}
+.wm-login_text span{display: inline-block; line-height: 32px; padding: 0 16px; color: @Minor6;}
+.wm-login_text .change{cursor: pointer; border-radius: 16px;}
+.wm-login_text .change:hover{background-color: @Minor;}
 </style>
 
 <script lang="ts" src="./Login.ts"></script>

@@ -17,13 +17,13 @@ import Time from '@/library/time'
 export default class Login extends Vue {
   // 参数
   private animationTime: number = 10000;      // 动画切换间隔时间
-  private verifyTokenTime: number = 6000;    // Token验证间隔时间
+  private verifyTokenTime: number = 30000;    // Token验证间隔时间
   // 状态
   private store: any = useStore();
   private state: any = this.store.state;
   copy: string = Env.copy;
   // 登录
-  login: any = {show: false, is_passwd: false, is_safety: false, uname: '', passwd: '', vcode: '', vcode_url: '', bg:''};
+  login: any = {show: false, is_passwd: false, is_safety: false, uname: '', local_uname:'', passwd: '', vcode: '', vcode_url: '', img:'', bg:''};
   bg_class: Array<string> = ['bg0', 'bg1', 'bg2', 'bg3', 'bg4', 'bg5', 'bg6', 'bg7', 'bg8', 'bg9'];
   // 动画时间
   private time: any = null;
@@ -83,14 +83,19 @@ export default class Login extends Vue {
   /* 用户-显示 */
   showUser(): void {
     const uname: string | null = Storage.getItem('uname');
+    const img: string | null = Storage.getItem('user_img');
+    const uinfo: string | null = Storage.getItem('uinfo');
     if(!uname) return;
     this.login.uname = uname;
+    this.login.local_uname = uname;
+    this.login.img = img;
     this.login.is_passwd = true;
-    console.log('uname', uname);
+    this.state.uinfo = uinfo?JSON.parse(uinfo):{};
   }
 
   /* 用户-切换 */
   clearUser(): void {
+    this.login.uname = '';
     this.login.passwd = '';
     this.login.vcode = '';
     this.login.is_passwd = false;
@@ -140,12 +145,15 @@ export default class Login extends Vue {
         this.login.is_safety = false;
         this.login.passwd = '';
         this.login.vcode = '';
+        this.login.img = d.data.uinfo.img;
         // 缓存信息
         this.state.isLogin = true;
         this.state.token = d.data.token;
+        this.state.uinfo = d.data.uinfo;
         Storage.setItem('token', d.data.token);
         Storage.setItem('uname', d.data.uinfo.uname);
         Storage.setItem('uinfo', JSON.stringify(d.data.uinfo));
+        Storage.setItem('user_img', d.data.uinfo.img);
       }else{
         // 验证
         this.login.vcode = '';
@@ -187,6 +195,7 @@ export default class Login extends Vue {
         if(Object.keys(d.data.uinfo).length!=0) {
           Storage.setItem('uname', d.data.uinfo.uname);
           Storage.setItem('uinfo', JSON.stringify(d.data.uinfo));
+          Storage.setItem('user_img', d.data.uinfo.img);
         }
       } else {
         Ui.Toast(d.msg);

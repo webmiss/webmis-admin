@@ -1,5 +1,5 @@
 /* UI */
-export default class UI {
+export default class Ui {
 
   /* 提示 */
   public static Toast(text: string='提示', type: string="primary", time: number = 3000): void {

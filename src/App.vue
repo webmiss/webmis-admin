@@ -11,19 +11,26 @@
           <!-- MenusLeft -->
           <div class="menus_left">
             <div class="m1">最近访问</div>
-            <div class="m2 flex_left active">
-              <i class="icons icon_home"></i>三级菜单
-            </div>
-            <div class="m2 flex_left">
-              <i class="icons icon_web"></i>三级菜单
-            </div>
+            <ul class="m2" v-if="menus.tmpList.length>0">
+              <li class="flex_left" v-for="(v,k) in menus.tmpList" :key="k" @click="MenusClick(v.label, v.url, true)">
+                <i v-if="v.icon" :class="v.icon"></i>
+                <span :style="{paddingLeft:v.icon?'':'8px'}">{{ v.label }}</span>
+              </li>
+            </ul>
+            <div class="null" v-else></div>
             <div class="m1">推荐功能</div>
-            <div class="m2 flex_left active">
+            <ul class="m2">
+              <li class="flex_left" v-for="(v,k) in menus.hotList" :key="k" @click="MenusClick(v.label, v.url, true)">
+                <i v-if="v.icon" :class="v.icon"></i>
+                <span :style="{paddingLeft:v.icon?'':'8px'}">{{ v.label }}</span>
+              </li>
+            </ul>
+            <!-- <div class="m2 flex_left active">
               <i class="icons icon_home"></i>个人信息
             </div>
             <div class="m2 flex_left">
               <i class="icons icon_web"></i>修改密码
-            </div>
+            </div> -->
           </div>
           <!-- MenusRight -->
           <div class="menus_right">
@@ -35,7 +42,8 @@
               <i class="ui ui_close" @click="menus.show=false"></i>
             </div>
             <div class="menus_ct scrollbar">
-              <ul>
+              <div class="null center" v-if="menus.key&&menus.seaList.length==0"></div>
+              <ul v-else>
                 <template v-for="(v1,k1) in menus.list" :key="k1">
                   <template v-if="v1.children">
                     <template v-for="(v2,k2) in v1.children" :key="k2">
@@ -44,7 +52,7 @@
                         <template v-for="(v3,k3) in v2.children" :key="k3">
                           <div v-if="v3.display" class="m flex_left" :class="tabs.active==v3.value.url?'active':''" @click="MenusClick(v3.label, v3.value.url, true)">
                             <i v-if="v3.icon" :class="v3.icon"></i>
-                            <span>{{ v3.label }}</span>
+                            <span :style="{paddingLeft: v3.icon?'':'10px'}">{{ v3.label }}</span>
                           </div>
                         </template>
                       </li>
@@ -64,33 +72,49 @@
       <!-- Logo -->
       <div class="app_logo flex">
         <div class="logo" @click="menus.show=!menus.show;uinfo.show=false" :style="{backgroundImage:'url('+require('./assets/logo.svg')+')'}"></div>
-        <div class="logo_text" v-if="is_menus">WebMIS ERP</div>
+        <div class="logo_text" v-if="is_menus">WebMIS 3.0</div>
       </div>
       <!-- Search -->
       <div class="app_search" v-if="is_menus">
         <i class="ui ui_search"></i>
-        <input type="text" class="input" placeholder="请输入菜单功能">
+        <input type="text" class="input" v-model="menus.key" @input="MenusSearch()" placeholder="请输入菜单功能">
       </div>
       <!-- Menus -->
       <div class="app_menus scrollbar" :style="{height: 'calc(100% - '+(is_menus?'152px':'98px')+')',}">
-        <div class="m" v-if="!is_menus">
-          <i class="icons icon_home"></i>
-        </div>
-        <div class="m1 flex" v-else>
-          <span>二级菜单</span>
-          <i class="arrow ui ui_arrow_up"></i>
-        </div>
-        <ul class="m2" v-if="is_menus">
-          <li class="flex_left" :class="tabs.active=='/SysMenus'?'active':''" @click="MenusClick('菜单管理', '/SysMenus')">
-            <i class="icons icon_web"></i>菜单管理
-          </li>
-          <li class="flex_left" :class="tabs.active=='/SysUser'?'active':''" @click="MenusClick('系统用户', '/SysUser')">
-            <i class="icons icon_work"></i>系统用户
+        <!-- Search Menus -->
+        <div class="null center" v-if="menus.key&&menus.seaList.length==0"></div>
+        <ul class="m2" v-else-if="menus.key&&menus.seaList.length>0&&is_menus">
+          <li class="flex_left" v-for="(v,k) in menus.seaList" :key="k" :class="tabs.active==v.url?'active':''" @click="MenusClick(v.label, v.url)">
+            <i v-if="v.icon" :class="v.icon"></i>
+            <span :style="{paddingLeft: v.icon?'':'16px'}">{{ v.label }}</span>
           </li>
         </ul>
+        <template v-else>
+          <!-- LeftMenus -->
+          <template v-for="(v1,k1) in menus.list" :key="k1">
+            <div class="m" v-if="!is_menus">
+              <i :class="v1.icon" :title="v1.label" @click="MenusShow()"></i>
+            </div>
+            <template v-if="v1.children&&is_menus">
+              <template v-for="(v2,k2) in v1.children" :key="k2">
+                <div class="m1 flex" @click="v2.show=!v2.show">
+                  <span>{{ v2.label }}</span>
+                  <i class="ui ui_arrow_up" :style="{transform: v2.show?'rotate(0deg)':'rotate(180deg)'}"></i>
+                </div>
+                <ul class="m2" v-if="v2.children&&v2.show">
+                  <li class="flex_left" v-for="(v3,k3) in v2.children" :key="k3" :class="tabs.active==v3.value.url?'active':''" @click="MenusClick(v3.label, v3.value.url)">
+                    <i v-if="v3.icon" :class="v3.icon"></i>
+                    <span :style="{paddingLeft: v3.icon?'':'16px'}">{{ v3.label }}</span>
+                  </li>
+                </ul>
+              </template>
+            </template>
+          </template>
+          <!-- LeftMenus End -->
+        </template>
       </div>
       <!-- Copy -->
-      <div class="app_copy">2024&copy; WebMIS 3.0</div>
+      <div class="app_copy">{{ copy }}</div>
     </div>
     <!-- Left End -->
      <!-- Right -->
@@ -99,7 +123,7 @@
       <div class="app_user_info_body" :style="{visibility:uinfo.show&&state.isLogin?'inherit':'hidden'}">
         <wm-popup height="100%" width="280px"  v-model:show="uinfo.show" position="right" bgColor="#FFF">
           <div class="app_user_info scrollbar">
-            <div class="img" :style="{backgroundImage: state.uinfo.img?'url('+state.uinfo.img+')':'none'}">
+            <div class="img" :style="{backgroundImage: state.uinfo.img?'url('+state.uinfo.img+')':'none'}" @click="userUpImg()">
               <i class="ui ui_image" v-if="!state.uinfo.img"></i>
             </div>
             <div class="user"><h2>{{ state.uinfo.uname || '-' }}</h2><p>账号ID: {{ state.uinfo.uid || '-' }}</p></div>
@@ -110,8 +134,8 @@
               <li class="flex"><span class="name">姓名</span><span class="value">{{ state.uinfo.name || '-' }}</span></li>
             </ul>
             <ul class="tools">
-              <li>基本信息</li>
-              <li>修改密码</li>
+              <li @click="MenusClick('基础信息', '/UserInfo', true)">基本信息</li>
+              <li @click="MenusClick('修改密码', '/UserPasswd', true)">修改密码</li>
             </ul>
           </div>
           <div class="app_user_close" @click="logout()">退出登录</div>

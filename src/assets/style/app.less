@@ -8,7 +8,7 @@
 .app_top{height: 40px; line-height: 40px; padding: 8px 16px; background-color: #FFF;}
 .app_content{height: calc(100% - 50px); box-shadow: 0 0 1px rgba(0, 0, 0, 0.1);}
 .app_copy{line-height: 50px; font-size: 12px; text-align: center; border-top: @Minor1 1px solid; color: @Minor4;}
-.app_on{display: none; cursor: pointer; zoom: 0.8; position: absolute; z-index: 1; top: 50%; right: 0; transform: translateY(-50%); width: 16px; line-height: 56px; font-size: 12px; text-align: center; background-color: @Minor; color: #FFF; border-radius: 4px 0 0 4px; box-shadow: 0 0 2px rgba(0, 0, 0, 0.8);}
+.app_on{display: none; cursor: pointer; zoom: 0.8; width: 18px; line-height: 64px; position: absolute; z-index: 1; top: 50%; right: -8px; transform: translateY(-50%); font-size: 12px; text-align: center; border: @Minor2 2px solid; background-color: @Minor; color: #FFF; border-radius: 10px;}
 .app_left:hover .app_on{display: block;}
 /* 左侧-Logo */
 .app_logo{padding: 4px 8px; border-bottom: @Minor1 1px solid;}
@@ -18,9 +18,10 @@
 .app_menus_all{position: absolute; z-index: 9999; top: 50px; width: 100%; height: calc(100% - 50px);}
 .app_menus_all .menus_body{height: 100%;}
 .app_menus_all .menus_left{width: 241px; height: 100%; border-right: @Minor6 1px solid; box-sizing: border-box;}
-.app_menus_all .m1{padding: 0 16px; line-height: 48px; font-weight: bold; background-color: @Minor8;}
-.app_menus_all .m2{cursor: pointer; height: 40px; line-height: 40px; padding-left: 8px;}
-.app_menus_all .m2:hover{background-color: @Primary6; color: @Primary;}
+.app_menus_all .m1{padding: 0 16px; line-height: 40px; font-weight: bold; border: @Minor8 1px solid;}
+.app_menus_all .m2{overflow: hidden; padding: 8px 0;}
+.app_menus_all .m2 li{cursor: pointer; height: 40px; line-height: 40px; padding-left: 8px;}
+.app_menus_all .m2 li:hover{background-color: @Primary6; color: @Primary;}
 .app_menus_all .m2 i{width: 32px; font-size: 18px; text-align: center;}
 .app_menus_all .menus_right{width: calc(100% - 241px); height: 100%;}
 .app_menus_all .m_top{padding: 8px 8px 8px 16px; line-height: 40px;}
@@ -29,24 +30,25 @@
 .app_menus_all .search input{padding: 0 10px 0 40px; width: 240px; height: 40px; line-height: 40px; background-color: @Minor8; border-radius: 8px;}
 .app_menus_all .ui_close{cursor: pointer; width: 40px; height: 40px; font-size: 14px; text-align: center;}
 .app_menus_all .ui_close:hover{color: @Primary;}
-.app_menus_all .menus_ct{overflow-x: hidden; overflow-y: auto; padding: 10px; height: calc(100% - 76px);}
+.app_menus_all .menus_ct{position: relative; overflow-x: hidden; overflow-y: auto; padding: 10px; height: calc(100% - 76px);}
+.app_menus_all .menus_ct .null{position: absolute;}
 .app_menus_all .menus_ct ul{columns: 3;}
 .app_menus_all .menus_ct li{break-inside: avoid; padding-bottom: 8px;}
 .app_menus_all .menus_ct .title{padding: 0 10px; height: 32px; line-height: 32px; font-weight: bold;}
-.app_menus_all .menus_ct .m{cursor: pointer; padding: 0 10px; height: 32px; line-height: 32px; border-radius: 4px; border: #FFF 1px solid;}
+.app_menus_all .menus_ct .m{cursor: pointer; height: 32px; line-height: 32px; border-radius: 4px; border: #FFF 1px solid;}
 .app_menus_all .menus_ct .m:hover{background-color: @Primary6; color: @Primary;}
 .app_menus_all .menus_ct .m i{width: 32px; text-align: center;}
 .app_menus_all .menus_ct .m span{display: inline-block;}
 .app_menus_all .menus_ct .active{background-color: @Primary6; color: @Primary;}
 /* 左侧-菜单 */
-.app_menus{position: relative; overflow-x: hidden; overflow-y: auto;}
+.app_menus{user-select: none; position: relative; overflow-x: hidden; overflow-y: auto;}
 .app_menus .m{padding: 8px; height: 40px; line-height: 40px; color: @Minor5;}
 .app_menus .m:hover{color: @Minor;}
 .app_menus .m i{display: inline-block; width: 40px; font-size: 24px; text-align: center;}
 .app_menus .m1{padding-left: 16px; height: 40px; line-height: 40px; color: @Minor5; font-weight: bold; border-bottom: rgba(0, 0, 0, 0.3) 1px solid; box-sizing: border-box;}
-.app_menus .m1 i{cursor: pointer; width: 40px; text-align: center; font-size: 14px;}
+.app_menus .m1 i{cursor: pointer; width: 40px; text-align: center; font-size: 14px; transition: @Transition;}
 .app_menus .m1 i:hover{color: @Minor;}
-.app_menus .m2{overflow: hidden;}
+.app_menus .m2{overflow: hidden; padding: 8px 0;}
 .app_menus .m2 li{cursor: pointer; height: 40px; line-height: 40px; padding-left: 4px;}
 .app_menus .m2 li:hover{background-color: @Minor3; color: @Minor;}
 .app_menus .m2 li i{display: inline-block; width: 40px; font-size: 18px; text-align: center;}
@@ -69,7 +71,8 @@
 .app_tools .user .img{height: 32px; background-size: cover; background-position: center center; background-repeat: no-repeat; border-radius: 50%;}
 .app_user_info_body{position: absolute; top: 50px; right: 0; width: 100%; height: calc(100% - 50px);}
 .app_user_info{overflow-x: hidden; overflow-y: auto; padding: 16px 0; height: calc(100% - 82px);}
-.app_user_info .img{width: 160px; height: 160px; line-height: 160px; text-align: center; margin: 8px auto; border-radius: 50%; background-color: @Minor8; background-size: cover; background-position: center center; background-repeat: no-repeat;}
+.app_user_info .img{cursor: pointer; width: 160px; height: 160px; line-height: 160px; text-align: center; margin: 8px auto; border: @Minor8 1px solid; border-radius: 50%; background-color: @Minor8; background-size: cover; background-position: center center; background-repeat: no-repeat;}
+.app_user_info .img:hover{border-color: @Minor;}
 .app_user_info .img i{font-size: 48px; color: @Minor5;}
 .app_user_info .user{padding-bottom: 16px; text-align: center;}
 .app_user_info .user h2{line-height: 32px; font-size: 16px; font-weight: 600;}
@@ -85,14 +88,15 @@
 .app_user_close:hover{color: @Danger;}
 /* 导航 */
 .app_tabs_body{overflow: hidden; padding: 10px 10px 0 10px; width: calc(100% - 20px); height: 40px; line-height: 40px;}
-.app_tabs{width: calc(100% - 100px); height: 40px; white-space: nowrap;}
+.app_tabs{user-select: none; width: calc(100% - 100px); height: 40px; white-space: nowrap;}
 .app_tabs li{display: inline-block; position: relative; overflow: hidden; cursor: pointer; margin: 0 5px; padding: 0 24px 0 16px; background-color: @Minor7; border-radius: 8px 8px 0 0;}
 .app_tabs li:hover{color: @Primary;}
 .app_tabs .home{padding: 0 16px;}
 .app_tabs .active{color: @Primary; background-color: #FFF; box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);}
 .app_tabs .close{position: absolute; width: 20px; height: 20px; line-height: 20px; text-align: center; border-radius: 50%; top: 50%; right: 4px; transform: translateY(-50%);}
-.app_tabs .close i{font-size: 12px; zoom: 0.8;}
+.app_tabs .close i{font-size: 12px; zoom: 0.8; color: @Minor4;}
 .app_tabs .close:hover{background-color: @Minor6;}
+.app_tabs .close:hover i{color: @Primary;}
 .app_tabs_time{overflow: hidden; white-space: nowrap;}
 .app_tabs_time li{display: inline-block;}
 .app_tabs_time .time{padding: 0 5px;}
@@ -101,257 +105,16 @@
 /* 统计 */
 .app_total{padding: 0 10px; line-height: 40px; background-color: #FFF; border-radius: 4px;}
 
-
-
-
-
-// /* 登录 */
-// .login_bg{position: fixed; z-index: 99; left: 0; top: 0; width: 100%; height: 100%; background-color: #E2E4E8;}
-// .login_body{position: absolute; width: 100%; max-width: 360px; left: 50%; top: 50%; transform: translate(-50%,-50%);}
-// .login_logo{position: absolute; z-index: 1; margin-top: -36px; width: 72px; height: 72px; border-radius: 50%; box-shadow: 0 2px 4px rgba(0,0,0,.04); background-size: 64%; background-color: #FFF;}
-// .login_title{font-size: 18px; padding-top: 26px; text-align: center;}
-// .login_ct{position: relative; padding: 16px 32px; border-radius: 8px; background-color: #F2F4F6; box-shadow: 0 0 8px rgba(0,0,0,.2);}
-// .login_input{padding: 8px 0;}
-// .login_input input{background-color: #FFF;}
-// .login_input button{width: 100%;}
-// .login_copy{line-height: 40px; text-align: center; font-size: 12px; color: #000; text-shadow: 0 0 8px #FFF;}
-
-// /* 主要框架 */
-// .app_body{position: relative; overflow: hidden; width: 100%; height: 100%; min-width: 768px; background-color: #242628;}
-// .app_top{height: 48px;}
-// .app_top_left{width: 190px;}
-// .app_ct{height: calc(100% - 48px);}
-// .app_left{width: 60px; height: 100%; box-sizing: border-box;}
-// .app_right{width: calc(100% - 60px); height: 100%; background-color: #F2F4F6;}
-// /* Logo */
-// .app_top_logo{cursor: pointer; width: 60px;}
-// .app_top_logo .logo{display: block; width: 36px; height: 36px; line-height: 36px; margin: 6px auto; border-radius: 50%; background-color: #000; background-size: 70%;}
-// /* Tabs */
-// .app_tabs{overflow: hidden; width: calc(100% - 250px); padding-top: 18px;}
-// .app_tabs li{user-select: none; position: relative; cursor: pointer; overflow: hidden; display: inline-block; line-height: 30px; padding: 0 16px; margin-right: 4px; color: #3D3D3D; background-color: #C2C4C8; border-radius: 4px 4px 0 0;}
-// .app_tabs .close{position: absolute; display: none; width: 16px; top: 0; right: 0; line-height: 30px; text-align: center;}
-// .app_tabs .close i{font-size: 12px; zoom: 0.8;}
-// .app_tabs .close:hover i{color: @Danger;}
-// .app_tabs .active{background-color: #FFF; color: @Primary;}
-// .app_tabs .active:hover .close{display: block;}
-// /* Search */
-// .app_top_sea{position: relative; width: 200px; height: 30px; padding: 8px 10px;}
-// .app_top_sea .ico{position: absolute; width: 30px; line-height: 30px; font-size: 18px; color: #626468; text-align: center;}
-// .app_top_sea input{padding-left: 30px; border: none; width: 100%; height: 100%; background-color: #000; color: #E2E4E8; border-radius: 4px;}
-// .app_top_sea input:focus{outline: none; caret-color: @Primary;}
-// .app_top_sea .box{visibility: hidden; opacity: 0; overflow-y: auto; position: absolute; z-index: 99; margin-top: 38px; width: calc(100% - 20px); max-height: 240px; background-color: #FFF; box-shadow: 0 0 8px rgba(0,0,0,.2); border-radius: 2px; transition: @Transition;}
-// .app_top_sea .list{overflow: hidden; padding: 8px 0; background-color: #FFF;}
-// .app_top_sea .list li{cursor: pointer; line-height: 32px; padding: 0 16px; background-color: #FFF;}
-// .app_top_sea .list li:hover{color: @Primary; background-color: @Minor;}
-// .app_top_sea .list .null{line-height: 120px;}
-// .app_top_sea:hover .box{visibility: visible; opacity: 1;}
-// /* Tools */
-// .app_top_tools{height: 32px; margin: 8px 8px;}
-// .app_top_tools li{position: relative; cursor: pointer; width: 32px; height: 32px; line-height: 32px; margin: 0 4px; text-align: center; border-radius: 50%;}
-// .app_top_tools li i{color: #C2C4C8;}
-// .app_top_tools li:hover i{color: @Primary;}
-// .app_top_tools li .redNum{margin-left: 10px;}
-// .app_top_tools li .ui_message{font-size: 22px;}
-// .app_top_tools li .ui_data{font-size: 18px;}
-// /* User */
-// .app_top_user{position: relative; width: 32px; height: 32px; padding: 8px 8px; border-left: #000 1px solid;}
-// .app_top_user .img{cursor: pointer; display: block; width: 100%; height: 100%; line-height: 32px; background-color: #000; background-size: contain; color: #C2C4C8; font-size: 16px; border-radius: 50%; text-align: center;}
-// .app_top_user .img:hover{background-color: @Primary; color: #FFF;}
-// .app_top_user .img i{font-size: 18px;}
-// .app_top_user .box{visibility: hidden; opacity: 0; position: absolute; z-index: 99; margin-top: 8px; width: 280px; right: -4px; background-color: #FFF; box-shadow: 0 0 8px rgba(0,0,0,.2); border-radius: 2px; transition: @Transition;}
-// .app_top_user:hover .box{visibility: visible; opacity: 1;}
-// .app_top_user:hover .img{background-color: @Primary; color: #FFF;}
-// .app_top_user .info{line-height: 24px; padding: 10px; background-color: #F2F4F8;}
-// .app_top_user .info h2{font-size: 16px; font-weight: 600;}
-// .app_top_user .info p{font-size: 12px; color: @Info;}
-// .app_top_user .list{padding: 8px 0; border-top: #E2E4E8 1px solid; border-bottom: #E2E4E8 1px solid;}
-// .app_top_user .list li{cursor: pointer; line-height: 32px; padding: 0 16px; margin: 5px 0;}
-// .app_top_user .list li:hover{color: @Primary; background-color: @Minor;}
-// .app_top_user .logout{cursor: pointer; line-height: 56px; text-align: center; font-size: 14px; color: @Danger;}
-// .app_top_user .logout:hover{color: @Danger;}
-// /* Menus */
-// .app_menus_body{overflow-y: auto; height: calc(100% - 32px);}
-// .app_menus{color: #929498;}
-// .app_menus li{position: relative; user-select: none; line-height: 24px; padding: 4px 0;}
-// .app_menus li:hover{color: @Primary;}
-// .app_menus .m1::before{display: none; content: ""; position: absolute; width: 8px; height: 8px; background-color: #FFF; top: 50%; right: -4px; transform: translateY(-50%) rotate(45deg);}
-// .app_menus .m1 div{cursor: pointer; padding: 8px 5px 4px;}
-// .app_menus .m1 span{display: block; text-align: center;}
-// .app_menus .ico{height: 24px; text-align: center; border-radius: 50%;}
-// .app_menus .ico i{font-size: 22px; margin: 0 auto;}
-// .app_menus .title{font-size: 12px;}
-// .app_menus .active{color: @Primary; background-color: @Minor;}
-// .app_menus_list{visibility: hidden; opacity: 0; overflow-y: auto; position: fixed; z-index: 98; left: 70px; top: 48px; padding: 10px 16px; width: 240px; height: calc(100% - 68px); background-color: #FFF; box-shadow: 4px 0 4px rgba(0,0,0,.08); transition: @Transition;}
-// .app_menus_list .class{line-height: 32px; font-size: 14px; font-weight: 700; border-bottom: #F2F2F2 1px solid; color: #262626;}
-// .app_menus_list li{cursor: pointer; border: none; line-height: 32px; padding: 0 8px; margin: 2px 0; font-size: 14px; color: #323438; border-radius: 4px;}
-// .app_menus_list li:hover{color: @Primary; background-color: @Minor;}
-// .app_menus_list li:hover.class{cursor: default; color: #262626; background-color: #FFF;}
-// .app_menus .m1:hover .app_menus_list{visibility: visible; opacity: 1; left: 60px;}
-// .app_menus .m1:hover::before{display: block;}
-// /* 版本信息 */
-// .app_copy{height: 32px; line-height: 32px; text-align: center; font-size: 12px; color: @Info; box-shadow: 0 0 2px rgba(0,0,0,.2);}
-
-// /* 地址栏 */
-// .app_addr{overflow: hidden; position: absolute; z-index: 10; width: 100%; height: 40px; line-height: 40px; background-color: #FFF; box-shadow: 0 2px 4px rgba(0,0,0,.2);}
-// .app_addr .addr{padding: 0 14px; color: #999;}
-// .app_addr .addr span{padding: 0 2px;}
-// .app_addr .addr i{font-size: 12px; color: #999;}
-// .app_addr_more{font-size: 13px; color: #8294A8;}
-// .app_addr_more span{text-align: center;}
-// .app_addr_more .info{padding: 0 8px; font-size: 12px;}
-// .app_addr_more .info b{color: #3D3D3D; font-size: 14px;}
-// .app_addr_more .reload{cursor: pointer; width: 40px; border-left: #E2E4E8 1px solid; color: @Primary;}
-// .app_addr_more .reload:hover{background-color: @Minor;}
-
-// /* 消息 */
-// .app_msg_body{width: 840px; height: 600px; overflow: hidden; background-color: #FFF; border-radius: 4px;}
-// .app_msg_body .img{background-repeat: no-repeat; background-size: cover;}
-// .app_msg_left{width: 240px; background-color: #2E3238; color: #999;}
-// .app_msg_left .sea{position: relative; padding: 20px 16px;}
-// .app_msg_left .sea input{width: 100%; height: 32px; padding-left: 32px; border-color: #000; background-color: #26292E; color: #FFF; border-radius: 4px; box-sizing: border-box;}
-// .app_msg_left .sea_ico{position: absolute; width: 32px; height: 32px; line-height: 32px; text-align: center;}
-// .app_msg_left .sea_body{overflow-y: auto; position: absolute; z-index: 99; width: calc(100% - 32px); max-height: 360px; background-color: #33363B; box-shadow: 0 4px 8px rgba(0,0,0,.2);}
-// .app_msg_left .sea_list{overflow: hidden;}
-// .app_msg_left .sea_list li{line-height: 30px; padding: 8px; border-bottom: #26292E 1px solid;}
-// .app_msg_left .sea_list li:hover{cursor: pointer; background-color: #595B64;}
-// .app_msg_left .sea_list .img{width: 30px; height: 30px; line-height: 30px; text-align: center; background-color: #595B64; border-radius: 4px;}
-// .app_msg_left .sea_list .name{width: calc(100% - 30px); padding-left: 10px; color: #FFF; box-sizing: border-box;}
-// .app_msg_left .user_body{overflow-y: auto; width: 100%; height: 520px;}
-// .app_msg_left .user_list{overflow: hidden; width: 99%; border-top: #26292E 1px solid; margin: 0 auto;}
-// .app_msg_left .user_list li{line-height: 24px; padding: 10px; border-bottom: #26292E 1px solid;}
-// .app_msg_left .user_list li:hover{cursor: pointer; background-color: #3A3F45;}
-// .app_msg_left .user_list .img{position: relative; width: 48px; height: 48px; line-height: 48px; text-align: center; background-color: #606266; border-radius: 4px;}
-// .app_msg_left .user_list .img .redNum{left: 40px;}
-// .app_msg_left .user_list .img i{font-size: 24px; color: #909399;}
-// .app_msg_left .user_list .info{width: calc(100% - 48px); padding-left: 10px; color: #FFF; box-sizing: border-box;}
-// .app_msg_left .user_list .name{width: calc(100% - 48px);}
-// .app_msg_left .user_list .time{width: 48px; text-align: right;}
-// .app_msg_left .user_list .text{color: #999;}
-// .app_msg_left .user_list .active{background-color: #3A3F45;}
-// .app_msg_left .user_list .active .text{color: #FFF;}
-// .app_msg_right{width: calc(100% - 240px); background-color: #EEE;}
-// .app_msg_title{position: relative; width: calc(100% - 32px); height: 32px; line-height: 32px; margin: 0 auto; padding: 8px 0; text-align: center; border-bottom: #D2D2D2 1px solid;}
-// .app_msg_title .close{cursor: pointer; position: absolute; right: -10px; width: 32px; height: 32px;}
-// .app_msg_title .close i{font-size: 14px;}
-// .app_msg_title .close:hover i{color: @Primary;}
-// .app_msg_tool{overflow: hidden; padding: 0 10px; border-top: #D2D2D2 1px solid;}
-// .app_msg_tool li{cursor: pointer; width: 40px; line-height: 40px; margin: 0 4px; text-align: center;}
-// .app_msg_tool li i{font-size: 20px; color: #8294A8;}
-// .app_msg_tool li:hover i{color: @Primary;}
-// .app_msg_send{width: calc(100% - 32px); height: 80px; margin: 0 auto;}
-// .app_msg_send .msg{width: calc(100% - 90px);}
-// .app_msg_send .send{width: 90px; text-align: center;}
-// .app_msg_list{scroll-behavior: smooth; position: relative; overflow-y: auto; padding: 10px 16px; height: 395px; margin: 0 auto;}
-// .app_msg_list #msgBottom{visibility: hidden;}
-// .app_msg_list .msg_null{position: absolute; color: #999; left: 50%; top: 50%; transform: translate(-50%, -50%);}
-// .app_msg_list .time{line-height: 48px; color: #999; text-align: center; font-size: 12px;}
-// .app_msg_list .img{width: 48px; height: 48px; line-height: 48px; text-align: center; background-color: #FFF; border-radius: 4px;}
-// .app_msg_list .img i{font-size: 24px; color: #DCDFE6;}
-// .app_msg_list .content{position: relative; line-height: 24px; padding: 10px 16px; border-radius: 4px; color: #000; word-break: break-all;}
-// .app_msg_list .arrow{position: absolute; width: 8px; height: 8px; top: 20px; transform: rotate(45deg);}
-// .app_msg_list .msg_left{padding: 10px 0;}
-// .app_msg_list .msg_left .msg_body{margin-left: 10px; width: calc(100% - 116px);}
-// .app_msg_list .msg_left .content{background-color: #FFF;}
-// .app_msg_list .msg_left .arrow{left: -4px; background-color: #FFF;}
-// .app_msg_list .msg_right{padding: 10px 0;}
-// .app_msg_list .msg_right .msg_body{margin-right: 10px; width: calc(100% - 116px);}
-// .app_msg_list .msg_right .content{background-color: #B2E281;}
-// .app_msg_list .msg_right .arrow{right: -4px; background-color: #B2E281;}
-
-// /* 内容 */
-// .app_content{height: calc(100% - 50px); margin-top: 50px; background-color: #FFF; box-shadow: 4px 0 4px rgba(0,0,0,.2);}
-// .app_ct_left{width: 240px; height: 100%; border-right: #E2E4E8 1px solid; box-sizing: border-box;}
-// .app_ct_right{position: relative; width: calc(100% - 20px); height: 100%; padding: 0 10px;}
-// /* 动作菜单 */
-// .app_action_body{padding: 4px 0; border-bottom: #E8E8E8 1px solid;}
-// .app_action_list{position: relative; user-select: none;}
-// .app_action_list li{line-height: 32px; box-sizing: border-box;}
-// .app_action_list .line{color: #C2C4C8; padding: 0 5px;}
-// /* 表格 */
-// .app_table{overflow: auto; margin-top: 8px; padding-bottom: 10px; max-height: calc(100% - 110px); border-bottom: #F2F2F2 1px solid;}
-
-// /* 图表 */
-// .app_chart{overflow-y: auto; padding: 40px 10px 10px; height: calc(100% - 60px);}
-// .chart_body{width: 100%;}
-// .chart_left{width: calc(100% - 250px);}
-// .chart_right{width: 240px;}
-// .chart{width: 100%; padding: 0 16px; margin: 5px 0; background-color: #FFF; border-radius: 4px; box-sizing: border-box;}
-// .chart_title{line-height: 32px; padding: 8px 0; border-bottom: #E2E2E2 1px solid;}
-// .chart_title h2{font-size: 14px; font-weight: 600; margin-right: 16px;}
-// .chart_title .info{font-size: 12px; color: @Info; padding: 0 4px;}
-// .chart_ct{padding: 10px 0;}
-// /* 图表-工具 */
-// .chart_tools{overflow: hidden; border-radius: 8px;}
-// .chart_tools li{cursor: pointer; position: relative; padding: 0 10px; line-height: 32px; color: @IconColor;}
-// .chart_tools li:hover{color: @Primary;}
-// .chart_tools li.active{color: @Primary; font-weight: 600;}
-// .chart_tools li::before{content: ''; position: absolute; width: 1px; height: 12px; background-color: #D2D2D2; right: 0; top: 50%; transform: translateY(-50%);}
-// .chart_tools li:last-child::before{display: none;}
-// /* 图表-统计 */
-// .chart_total{overflow: hidden; padding: 10px 0;}
-// .chart_total li{position: relative; line-height: 20px; border-top: transparent 2px solid; padding: 4px 8px; border-radius: 4px;}
-// .chart_total li:hover{box-shadow: @Shadow;}
-// .chart_total li:hover .num{font-size: 24px;}
-// .chart_total .title{font-size: 12px; color: @Text;}
-// .chart_total .ratio{position: absolute; bottom: 0; right: 0; color: @Info; transform: scale(0.7);}
-// .chart_total .num{line-height: 40px; padding-bottom: 8px; font-size: 20px; font-weight: 600; text-align: center;}
-// .chart_total .bg_primary{background-color: @Minor; color: @Primary; border-color: @Border;}
-// .chart_total .bg_info{background-color: @InfoBg; color: @Text; border-color: @InfoBorder;}
-// .chart_total .bg_warning{background-color: @WarningBg; color: @Warning; border-color: @WarningBorder;}
-// .chart_total .bg_success{background-color: @SuccessBg; color: @Success; border-color: @SuccessBorder;}
-// .chart_total .bg_danger{background-color: @DangerBg; color: @Danger; border-color: @DangerBorder;}
-// /* 图表-表格 */
-// .chart_table{width: 100%; border-collapse: collapse; font-size: 14px; text-align: center;}
-// .chart_table td{position: relative; padding: 8px 8px; line-height: 20px; border: #E2E2E2 1px solid;}
-// .chart_table .title{font-weight: bold; color: @Info; font-size: 10px; background-color: @BorderColor;}
-// .chart_table .day{width: 80px;}
-// /* 图表-列表 */
-// .chart_list{overflow: hidden;}
-// .chart_list li{line-height: 40px; border-bottom: #F2F2F2 1px solid;}
-// .chart_list li:last-child{border: none;}
-
-// /* 打印-表格 */
-// .print_table{overflow: hidden; font-size: 12px;}
-// .print_table .tRight{text-align: right;}
-// .print_table .tCenter{text-align: center;}
-// .print_table .title{line-height: 40px; padding: 16px 0 4px; font-size: 20px; font-weight: 600; text-align: center;}
-// .print_table .info{line-height: 32px; color: #666;}
-// .print_table .info b{color: #333;}
-// .print_table .total_content{padding: 16px 8px; line-height: 24px; font-size: 14px; border: #E2E4E8 1px solid; background-color: #F2F4F8; text-align: center; border-radius: 4px;}
-// .print_table .total_content b{font-size: 15px;}
-// .print_table .total_content .remark{font-size: 12px; color: #333;}
-// .print_table .table_total{width: 100%; font-size: 14px; border-collapse: collapse; box-sizing: border-box;}
-// .print_table .table_total td{line-height: 24px; padding: 5px 8px; border: #C2C4C6 1px solid;}
-// .print_table .table_total b{font-size: 15px; color: #388E3C;}
-// .print_table .table_total .level{padding: 16px 8px;}
-// .print_table .table_list{width: 100%; border-collapse: collapse; box-sizing: border-box; margin-top: 10px; text-align: center;}
-// .print_table .table_list tr:nth-child(odd){background-color: #FFF;}
-// .print_table .table_list tr:nth-child(even){background-color: #F2F2F2;}
-// .print_table .table_list td{line-height: 20px; padding: 4px; border: #FFF 1px solid;  border-bottom: #F2F2F2 1px solid;}
-// .print_table .table_list .title{text-align: center; font-size: 12px; font-weight: bold;}
-// .print_table .other{line-height: 40px; color: #666; text-align: center;}
-// /* 打印-条形码 */
-// .print_barcode{padding: 16px; background-color: #E2E4E8;}
-// .print_barcode #PrintBarcode{overflow: hidden; box-shadow: 0 0 8px rgba(0,0,0,.1);}
-// .print_barcode .select{padding: 16px 0;}
-// .print_barcode .tools{padding: 16px 0; line-height: 24px; text-align: center;}
-// .barcode_m1{margin: 0 auto; width: calc(3.5cm * 1.2882498070656716); height: calc(3.5cm * 1.2882498070656716); background-color: #FFF; text-align: center; border-radius: 4px;}
-// .barcode_m1 .item{position: relative; width: 100%; height: 100%;}
-// .barcode_m1 .item div{position: absolute; left: 50%; transform: translateX(-50%);}
-// .barcode_m1 .item .barcode{ transform: scale(0.62) translateX(-50%); transform-origin: left top;}
-// .barcode_m1 .item .code{bottom: 40px; font-size: 16px;}
-// .barcode_m1 .item .value{bottom: 26px; font-size: 12px;}
-// .barcode_m1 .item .price{bottom: 4px; font-size: 18px;}
-// /* 响应式布局 */
-// @media screen and ( max-width: 1400px ){
-// }
-// @media screen and ( max-width: 1280px ){
-// }
-// @media screen and ( max-width: 1024px ){
-// }
-// @media screen and ( max-width: 780px ){
-// }
-// @media screen and ( max-width: 540px ){
-// }
-// @media screen and ( max-width: 420px ){
-// }
+/* 响应式布局 */
+@media screen and ( max-width: 1400px ){
+}
+@media screen and ( max-width: 1280px ){
+}
+@media screen and ( max-width: 1024px ){
+}
+@media screen and ( max-width: 780px ){
+}
+@media screen and ( max-width: 540px ){
+}
+@media screen and ( max-width: 420px ){
+}

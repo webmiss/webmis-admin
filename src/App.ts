@@ -7,6 +7,7 @@ import Env from '@/config/Env';
 import Request from '@/library/request'
 import Storage from '@/library/storage'
 import Ui from '@/library/ui'
+import Files from '@/library/files'
 /* 组件 */
 import Login from '@/views/tools/Login.vue'
 import wmPopup from '@/components/popup/index.vue'
@@ -22,11 +23,19 @@ export default class App extends Base {
   // 状态
   store: any = useStore();
   state: any = this.store.state;
+  copy: string = Env.copy;
   // 用户
   public uinfo: any = {'show': false, data:{}};
   // 菜单
   public tabs: any = {active:'/', list:[]};
-  public menus: any = {'show': false, list:[], key:'', seaList:[]};
+  public menus: any = {
+    'show': false, key:'',
+    list:[], seaList:[], tmpList:[],
+    hotList:[
+      {label:'基础信息', icon:'ui ui_user', url:'/UserInfo'},
+      {label:'修改密码', icon:'ui ui_safety', url:'/UserPasswd'},
+    ],
+  };
   public is_menus: Boolean = true;
 
   /* 创建成功 */
@@ -47,13 +56,14 @@ export default class App extends Base {
     this.is_menus = Storage.getItem('IsMenus')?true:false;
     const tabs: string|null = Storage.getItem('MenusTabs');
     this.tabs.list = tabs?JSON.parse(tabs):[];
-    // 登录状态
-    this.$nextTick(()=>{
-    });
+    // 最近访问
+    let menus: any = Storage.getItem('MenusTmp');
+    this.menus.tmpList = menus?JSON.parse(menus):[];
   }
 
   /* 获取菜单 */
   MenusList(): void {
+    // 请求
     Request.Post('sys_menus/getMenusPerm', {token: this.state.token}, (res:any)=>{
       const d: any = res.data;
       if(d.code==0) {
@@ -143,12 +153,35 @@ export default class App extends Base {
           inArr=true; break;
         }
       }
-      // 追加
-      if(!inArr){
-        this.tabs.list.push({name: name, url: url});
-      }
-      // 缓存
+      // 追加、缓存
+      if(!inArr) this.tabs.list.push({name: name, url: url});
       Storage.setItem('MenusTabs', JSON.stringify(this.tabs.list));
+    }
+    // 最近访问
+    const list: any = this.menus.list;
+    let menus: any = Storage.getItem('MenusTmp');
+    menus = menus?JSON.parse(menus):[];
+    let tmp: any={}, data: any;
+    for(const k1 in list) {
+      if(!list[k1].children) continue;
+      for(const k2 in list[k1].children) {
+        if(!list[k1].children[k2].children) continue;
+        for(const k3 in list[k1].children[k2].children) {
+          tmp = list[k1].children[k2].children[k3];
+          if(tmp.label==name&&tmp.value.url==url){
+            data = {label:tmp.label, icon:tmp.icon, url:tmp.value.url};
+            break;
+          }
+        }
+      }
+    }
+    for(let i in menus) {
+      if(menus[i].url==url || parseInt(i)>=9) menus.splice(i, 1);
+    }
+    if(data) {
+      menus.unshift(data);
+      this.menus.tmpList = menus;
+      Storage.setItem('MenusTmp', JSON.stringify(menus));
     }
     // 跳转
     this.$router.push({path: url});
@@ -170,6 +203,20 @@ export default class App extends Base {
     }
     // 缓存
     Storage.setItem('MenusTabs', JSON.stringify(this.tabs.list));
+  }
+
+  /* 上传头像 */
+  userUpImg(): void {
+    Files.Select({}, (fileObj:any)=>{
+      console.log(fileObj);
+      Files.FileToBase64(fileObj, (base64: any)=>{
+        console.log(base64);
+        Files.Base64ToFile(base64, 'text.jpg', (res: any)=>{
+          console.log(res);
+        });
+      })
+      
+    });
   }
 
   /* 退出登录 */

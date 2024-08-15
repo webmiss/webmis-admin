@@ -193,6 +193,7 @@ export default class Login extends Vue {
       if(d.code==0 && d.data.token_time>0) {
         this.state.isLogin = true;
         if(Object.keys(d.data.uinfo).length!=0) {
+          this.state.uinfo = d.data.uinfo;
           Storage.setItem('uname', d.data.uinfo.uname);
           Storage.setItem('uinfo', JSON.stringify(d.data.uinfo));
           Storage.setItem('user_img', d.data.uinfo.img);

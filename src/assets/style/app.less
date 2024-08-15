@@ -71,8 +71,10 @@
 .app_tools .user .img{height: 32px; background-size: cover; background-position: center center; background-repeat: no-repeat; border-radius: 50%;}
 .app_user_info_body{position: absolute; top: 50px; right: 0; width: 100%; height: calc(100% - 50px);}
 .app_user_info{overflow-x: hidden; overflow-y: auto; padding: 16px 0; height: calc(100% - 82px);}
-.app_user_info .img{cursor: pointer; width: 160px; height: 160px; line-height: 160px; text-align: center; margin: 8px auto; border: @Minor8 1px solid; border-radius: 50%; background-color: @Minor8; background-size: cover; background-position: center center; background-repeat: no-repeat;}
+.app_user_info .img{position: relative; overflow: hidden; cursor: pointer; width: 160px; height: 160px; line-height: 160px; text-align: center; margin: 8px auto; border: @Minor8 1px solid; border-radius: 50%; background-color: @Minor8; background-size: cover; background-position: center center; background-repeat: no-repeat;}
 .app_user_info .img:hover{border-color: @Minor;}
+.app_user_info .img_load{visibility: hidden; position: absolute; width: 100%; height: 100%; color: #FFF; background-color: rgba(0, 0, 0, 0.5);}
+.app_user_info .img:hover .img_load{visibility: inherit;}
 .app_user_info .img i{font-size: 48px; color: @Minor5;}
 .app_user_info .user{padding-bottom: 16px; text-align: center;}
 .app_user_info .user h2{line-height: 32px; font-size: 16px; font-weight: 600;}

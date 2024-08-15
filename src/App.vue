@@ -124,6 +124,7 @@
         <wm-popup height="100%" width="280px"  v-model:show="uinfo.show" position="right" bgColor="#FFF">
           <div class="app_user_info scrollbar">
             <div class="img" :style="{backgroundImage: state.uinfo.img?'url('+state.uinfo.img+')':'none'}" @click="userUpImg()">
+              <div class="img_load">更新头像</div>
               <i class="ui ui_image" v-if="!state.uinfo.img"></i>
             </div>
             <div class="user"><h2>{{ state.uinfo.uname || '-' }}</h2><p>账号ID: {{ state.uinfo.uid || '-' }}</p></div>

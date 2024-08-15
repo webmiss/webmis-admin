@@ -25,7 +25,7 @@ export default class App extends Base {
   state: any = this.store.state;
   copy: string = Env.copy;
   // 用户
-  public uinfo: any = {'show': false, data:{}};
+  public uinfo: any = {show: false, data:{}};
   // 菜单
   public tabs: any = {active:'/', list:[]};
   public menus: any = {
@@ -207,15 +207,27 @@ export default class App extends Base {
 
   /* 上传头像 */
   userUpImg(): void {
+    // 选择文件
     Files.Select({}, (fileObj:any)=>{
-      console.log(fileObj);
+      // 转Base64
       Files.FileToBase64(fileObj, (base64: any)=>{
-        console.log(base64);
-        Files.Base64ToFile(base64, 'text.jpg', (res: any)=>{
-          console.log(res);
+        // 压缩图片
+        Files.ImageCompress(base64, {width:200, height:200, type:fileObj.type}, (imgBase64: any)=>{
+          // 请求
+          Request.Post('user_info/upimg', {token: this.state.token, base64:imgBase64}, (res:any)=>{
+            const d = res.data;
+            if(d.code==0){
+              // 更新用户信息
+              (this.$refs.Login as any).verifyToken(true);
+            }
+            return Ui.Toast(d.msg);
+          });
+        }, (err: string)=>{
+          Ui.Toast(err);
         });
       })
-      
+    }, (err: string)=>{
+      Ui.Toast(err);
     });
   }
 

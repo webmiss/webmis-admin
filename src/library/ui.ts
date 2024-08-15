@@ -2,7 +2,7 @@
 export default class Ui {
 
   /* 提示 */
-  public static Toast(text: string='提示', type: string="primary", time: number = 3000): void {
+  public static Toast(text: string='提示', type: string="primary", time: number = 5000): void {
     // 创建对象
     let obj: HTMLDivElement = document.createElement('div');
     obj.setAttribute('class','wm-ui_toast');
@@ -16,12 +16,16 @@ export default class Ui {
     },100);
     // 3秒消失
     setTimeout(()=>{
-      document.body.removeChild(obj);
+      obj.style.opacity = '0';
+      obj.style.top = '0%';
     },time);
+    setTimeout(()=>{
+      document.body.removeChild(obj);
+    },time+1000);
   }
 
   /* 加载 */
-  public static Loading(time: number = 60000, alpha: number = 0.2): object {
+  public static Loading(time: number=60000, alpha: number=0.2): object {
     // 清理
   let load = document.getElementsByClassName('wm-ui_load')[0];
   if(load) document.body.removeChild(load);

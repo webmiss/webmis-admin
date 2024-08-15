@@ -71,7 +71,7 @@ export default class Popup extends Vue {
       body.style.transform = 'translate(110%,0)';
     }else if(this.position=='top'){
       body.style.width = '100%';
-      body.style.left = 0;
+      // body.style.left = 0;
       body.style.opacity = 1;
       body.style.transform = 'translate(0,-110%)';
     }else if(this.position=='bottom'){
@@ -112,7 +112,7 @@ export default class Popup extends Vue {
     // 更新状态
     this.$nextTick(()=>{
       this.$emit('update:show', true);
-    })
+    });
   }
 
   /* 隐藏 */
@@ -150,6 +150,7 @@ export default class Popup extends Vue {
 
   /* 点击背景 */
   private _clickBG(): void {
+    console.log('clickBg');
     if(this.bgClose) this._animation(false);
   }
 

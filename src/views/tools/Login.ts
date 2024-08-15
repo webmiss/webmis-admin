@@ -100,6 +100,9 @@ export default class Login extends Vue {
     this.login.vcode = '';
     this.login.is_passwd = false;
     this.login.is_safety = false;
+    this.$nextTick(()=>{
+      (this.$refs.loginUname as any).focus();
+    });
   }
 
   /* 刷新验证码 */
@@ -215,6 +218,10 @@ export default class Login extends Vue {
     Storage.setItem('token', '');
     Storage.setItem('uinfo', '');
     Storage.setItem('MenusTabs', '');
+    // 激活密码框
+    setTimeout(()=>{
+      (this.$refs.loginPasswd as any).focus();
+    }, 1000);
   }
 
 }

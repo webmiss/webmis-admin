@@ -11,9 +11,10 @@ import Files from '@/library/files'
 /* 组件 */
 import Login from '@/views/tools/Login.vue'
 import wmPopup from '@/components/popup/index.vue'
+import wmDialog from '@/components/dialog/index.vue'
 
 @Options({
-  components: {Login, wmPopup},
+  components: {Login, wmPopup, wmDialog},
 })
 export default class App extends Base {
 
@@ -25,7 +26,7 @@ export default class App extends Base {
   state: any = this.store.state;
   copy: string = Env.copy;
   // 用户
-  public uinfo: any = {show: false, data:{}};
+  public uinfo: any = {show: false, is_pwd: false, data:{}};
   // 菜单
   public tabs: any = {active:'/', list:[]};
   public menus: any = {
@@ -59,6 +60,11 @@ export default class App extends Base {
     // 最近访问
     let menus: any = Storage.getItem('MenusTmp');
     this.menus.tmpList = menus?JSON.parse(menus):[];
+    // 是否默认密码
+    // 更新状态
+    this.$nextTick(()=>{
+      // this.uinfo.is_pwd = true;
+    });
   }
 
   /* 获取菜单 */

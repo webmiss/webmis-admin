@@ -6,7 +6,7 @@
   <div class="app_main flex">
     <!-- MenusAll -->
     <div class="app_menus_all" :style="{visibility:menus.show&&state.isLogin?'inherit':'hidden'}">
-      <wm-popup height="100%" width="940px" v-model:show="menus.show" position="left" bgColor="#FFF" :time="600">
+      <wm-popup height="100%" width="900px" v-model:show="menus.show" position="left" bgColor="#FFF" :time="600">
         <div class="menus_body flex">
           <!-- MenusLeft -->
           <div class="menus_left">
@@ -25,12 +25,6 @@
                 <span :style="{paddingLeft:v.icon?'':'8px'}">{{ v.label }}</span>
               </li>
             </ul>
-            <!-- <div class="m2 flex_left active">
-              <i class="icons icon_home"></i>个人信息
-            </div>
-            <div class="m2 flex_left">
-              <i class="icons icon_web"></i>修改密码
-            </div> -->
           </div>
           <!-- MenusRight -->
           <div class="menus_right">
@@ -121,7 +115,7 @@
     <div class="app_right" :style="{width: is_menus?'calc(100% - 240px)':'calc(100% - 56px)'}">
       <!-- UserInfo -->
       <div class="app_user_info_body" :style="{visibility:uinfo.show&&state.isLogin?'inherit':'hidden'}">
-        <wm-popup height="100%" width="280px"  v-model:show="uinfo.show" position="right" bgColor="#FFF">
+        <wm-popup height="100%" width="280px" v-model:show="uinfo.show" position="right" bgColor="#FFF">
           <div class="app_user_info scrollbar">
             <div class="img" :style="{backgroundImage: state.uinfo.img?'url('+state.uinfo.img+')':'none'}" @click="userUpImg()">
               <div class="img_load">更新头像</div>
@@ -157,10 +151,6 @@
             <div class="img" v-else :style="{backgroundImage: 'url('+state.uinfo.img+')'}"></div>
           </li>
         </ul>
-        <!-- <ul class="app_tabs_time">
-          <li class="time">更新时间：<b>2024/07/23 09:03:48</b></li>
-          <li class="refresh"><i class="ui ui_refresh"></i></li>
-        </ul> -->
       </div>
       <!-- Content -->
       <div class="app_content">
@@ -173,6 +163,12 @@
     </div>
     <!-- Right End -->
   </div>
+  <!-- Main END -->
+
+  <!-- ChangePwd -->
+  <wm-dialog v-model:show="uinfo.is_pwd"></wm-dialog>
+  <!-- ChangePwd  -->
+
 </template>
 
 <style lang="less">

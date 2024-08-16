@@ -71,7 +71,7 @@ export default class Login extends Vue {
     // 验证登录
     const token: string | null = Storage.getItem('token');
     this.state.token = token?token:'';
-    if(token) this.verifyToken();
+    if(token) this.verifyToken(true);
   }
 
   /* 背景动画 */
@@ -151,6 +151,7 @@ export default class Login extends Vue {
         this.login.img = d.data.uinfo.img;
         // 缓存信息
         this.state.isLogin = true;
+        this.state.isPasswd = d.data.isPasswd;
         this.state.token = d.data.token;
         this.state.uinfo = d.data.uinfo;
         Storage.setItem('token', d.data.token);
@@ -191,10 +192,16 @@ export default class Login extends Vue {
 
   /* 验证Token */
   verifyToken(uinfo: boolean=false): void {
+    // 加载动画
+    let load: any;
+    if(uinfo) load= Ui.Loading();
+    // 请求
     Request.Post('user/token', {token: this.state.token, uinfo: uinfo}, (res:any)=>{
+      if(load) load.clear();
       const d: any = res.data;
       if(d.code==0 && d.data.token_time>0) {
         this.state.isLogin = true;
+        this.state.isPasswd = d.data.isPasswd;
         if(Object.keys(d.data.uinfo).length!=0) {
           this.state.uinfo = d.data.uinfo;
           Storage.setItem('uname', d.data.uinfo.uname);

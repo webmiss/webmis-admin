@@ -1,14 +1,39 @@
 <template>
   <div class="wm-dialog_body" :style="{visibility:is_show?'inherit':'hidden'}">
-    <wm-popup ref="Popup" v-model:show="is_show" width="100%" height="100%" position="top" :time="600" @click="clickBG()">
-      <div class="wm-dialog">测试</div>
+    <wm-popup ref="Popup" v-model:show="is_show" width="100%" height="100%" position="top" :time="600">
+      <div class="wm-dialog_bg" @click="close(isClose)"></div>
+      <div class="wm-dialog" :style="{width:width+'', height:height+'', borderRadius:borderRadius+''}">
+        <!-- Title -->
+        <div class="wm-dialog_title">
+          <span>{{ title }}</span>
+          <div class="wm-dialog_close" @click="close(true)"></div>
+        </div>
+        <!-- Content -->
+        <div class="wm-dialog_content scrollbar" :style="{maxHeight:'calc('+browser.height+'px - 30px - 40px - '+bottom+')'}">
+          <slot></slot>
+        </div>
+        <!-- Bottom -->
+        <div class="wm-dialog_bottom" v-if="bottom" :style="{height:bottom+'', lineHeight:bottom+''}">
+          <slot name="bottom"></slot>
+        </div>
+      </div>
     </wm-popup>
   </div>
 </template>
   
-<style>
+<style lang="less" scoped>
 .wm-dialog_body{position: fixed; z-index: 999; width: calc(100% + 1px); height: calc(100% + 1px); left: 0; top: 0;}
-.wm-dialog{position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);}
+.wm-dialog_bg{position: absolute; width: 100%; height: 100%;}
+.wm-dialog{overflow: hidden; position: absolute; z-index: 1; max-width: calc(100% - 20px); max-height: calc(100% - 20px); left: 50%; top: 50%; transform: translate(-50%, -50%); background-color: #FFF;}
+.wm-dialog_title{position: relative; padding: 4px 0; height: 32px; line-height: 32px; text-align: center; font-size: 14px; font-weight: bold;}
+.wm-dialog_title:hover i{color: @Primary;}
+.wm-dialog_close{position: absolute; cursor: pointer; top: 4px; right: 4px; width: 32px; height: 32px; line-height: 32px; text-align: center;}
+.wm-dialog_close:hover::after,.wm-dialog_close:hover::before{background-color: @Primary;}
+.wm-dialog_close::after,.wm-dialog_close::before{content: ''; position: absolute; width: 12px; height: 1.6px; background-color: #666; left: 50%; top: 50%; transform-origin: center;}
+.wm-dialog_close::after{transform: rotate(45deg); margin-left: -16%;}
+.wm-dialog_close::before{transform: rotate(-45deg); margin-left: -16%;}
+.wm-dialog_content{overflow: auto; width: 100%; height: 100%;}
+.wm-dialog_bottom{padding: 5px 0; text-align: center;}
 </style>
   
 <script lang="ts">
@@ -18,41 +43,46 @@ import wmPopup from '@/components/popup/index.vue'
 @Options({
   components: { wmPopup },
   props: {
-    show: {type: Boolean, default: false},        // 是否显示
-    width: {type: String, default: '320px'},       // 内容宽度
-    height: {type: String, default: 'auto'},      // 内容高度
+    show: Boolean,                                  // 是否显示
+    title: String,                                  // 标题
+    width: {type: String, default: '360px'},        // 内容宽度
+    height: {type: String, default: 'auto'},        // 内容高度
+    borderRadius: {type: String, default: '4px'},   // 圆角
+    bottom: {type: String, default: ''},            // 底部高度
+    isClose: {type: Boolean, default: false},       // 点击背景关闭
   }
 })
 export default class Dialog extends Vue {
   // 参数
   show!: Boolean;
+  title!: String;
   width!: String;
   height!: String;
+  borderRadius!: String;
+  bottom!: String;
+  isClose!: Boolean;
   // 变量
   is_show: Boolean = false;
+  browser: any = {width:0, height:0};
 
   /* 创建成功 */
   created(): void {
     // 监听
     this.$watch('$props', (props:any)=>{
-      // this.$emit('update:show', props.show);
       this.is_show = props.show;
-      console.log('show', props.show);
-    }, { deep: true });
-    this.$watch('$props', (props:any)=>{
-
+      this.browser.width =  window.innerWidth;
+      this.browser.height =  window.innerHeight;
     }, { deep: true });
   }
 
   /* 创建完成 */
   mounted(): void {
-    console.log('Dialog');
   }
 
-  /* 点击背景 */
-  clickBG(): void {
-    (this.$refs.Popup as any).close();
-    console.log('clickBG');
+  /* 关闭 */
+  close(isTrue: Boolean): void {
+    if(isTrue) this.$emit('update:show', false);
+    this.$emit('bgClick', false);
   }
 
 }

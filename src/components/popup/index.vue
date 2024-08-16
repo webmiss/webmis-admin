@@ -82,7 +82,7 @@ export default class Popup extends Vue {
       body.style.transform = 'translate(0,110%)';
     }else{
       body.style.left = '50%';
-      body.style.top = '30%';
+      body.style.top = '50%';
       body.style.opacity = 0;
       body.style.transform = 'translate(-50%,-50%)';
     }
@@ -149,8 +149,7 @@ export default class Popup extends Vue {
   }
 
   /* 点击背景 */
-  private _clickBG(): void {
-    console.log('clickBg');
+  _clickBG(): void {
     if(this.bgClose) this._animation(false);
   }
 

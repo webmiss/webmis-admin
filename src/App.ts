@@ -26,11 +26,11 @@ export default class App extends Base {
   state: any = this.store.state;
   copy: string = Env.copy;
   // 用户
-  public uinfo: any = {show: false, is_pwd: false, data:{}};
+  public uinfo: any = {show: false};
   // 菜单
   public tabs: any = {active:'/', list:[]};
   public menus: any = {
-    'show': false, key:'',
+    'show':false, key:'',
     list:[], seaList:[], tmpList:[],
     hotList:[
       {label:'基础信息', icon:'ui ui_user', url:'/UserInfo'},
@@ -60,11 +60,6 @@ export default class App extends Base {
     // 最近访问
     let menus: any = Storage.getItem('MenusTmp');
     this.menus.tmpList = menus?JSON.parse(menus):[];
-    // 是否默认密码
-    // 更新状态
-    this.$nextTick(()=>{
-      // this.uinfo.is_pwd = true;
-    });
   }
 
   /* 获取菜单 */

@@ -30,7 +30,7 @@
 </template>
 
 <style lang="less" scoped>
-.wm-login_popup{position: fixed; z-index: 99; width: calc(100% + 1px); height: calc(100% + 1px); left: 0; top: 0;}
+.wm-login_popup{position: fixed; z-index: 9999; width: calc(100% + 1px); height: calc(100% + 1px); left: 0; top: 0;}
 .wm-login_bg{position: absolute; z-index: 1; width: 100%; height: 100%; background-color: #323438; background-position: center; background-size: cover; background-repeat: no-repeat; transition: All 3s ease-in-out;}
 .wm-login_bg.bg0{background-image: url('../../assets/bg/0.jpg');}
 .wm-login_bg.bg1{background-image: url('../../assets/bg/1.jpg');}

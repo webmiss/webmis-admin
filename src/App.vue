@@ -4,16 +4,9 @@
   <login ref="Login"></login>
   <!-- Login End -->
 
-  <!-- ChangePwd -->
-  <wm-dialog v-model:show="state.isPasswd" title="修改密码" width="420px" bottom="32px">
-    <div>
-      <p>内容</p><p>内容</p><p>内容</p><p>内容</p><p>内容</p><p>内容</p><p>内容</p>
-    </div>
-    <template #bottom>
-      <span>按钮</span>
-    </template>
-  </wm-dialog>
-  <!-- ChangePwd End  -->
+  <!-- Passwd -->
+  <passwd></passwd>
+  <!-- Passwd End  -->
 
   <!-- Main -->
   <div class="app_main flex">

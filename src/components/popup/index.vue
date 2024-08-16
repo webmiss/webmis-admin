@@ -8,7 +8,7 @@
 </template>
 
 <style scoped>
-.wm-popup_bg,.wm-popup_body{position: absolute; z-index: 1000;}
+.wm-popup_bg,.wm-popup_body{position: absolute; z-index: 99;}
 .wm-popup_bg{width: 100%; height: 100%; top: 0; left: 0; opacity: 0;}
 .wm-popup_body{opacity: 0;}
 </style>

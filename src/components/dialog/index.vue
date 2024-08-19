@@ -9,7 +9,7 @@
           <div class="wm-dialog_close" @click="close(true)"></div>
         </div>
         <!-- Content -->
-        <div class="wm-dialog_content scrollbar" :style="{maxHeight:'calc('+browser.height+'px - 30px - 40px - '+bottom+')'}">
+        <div class="wm-dialog_content scrollbar" :style="{maxHeight:'calc('+browser.height+'px - 46px - 40px - '+bottom+')'}">
           <slot></slot>
         </div>
         <!-- Bottom -->
@@ -33,7 +33,7 @@
 .wm-dialog_close::after{transform: rotate(45deg); margin-left: -16%;}
 .wm-dialog_close::before{transform: rotate(-45deg); margin-left: -16%;}
 .wm-dialog_content{overflow: auto; width: 100%; height: 100%;}
-.wm-dialog_bottom{padding: 5px 0; text-align: center;}
+.wm-dialog_bottom{padding: 5px 0 16px; text-align: center;}
 </style>
   
 <script lang="ts">

@@ -5,7 +5,7 @@
       width:'calc(100% - '+paddingX+' * 2)',
       height:'calc(100% - '+paddingY+' * 2)',
       padding: paddingY+' '+paddingX,
-      backgroundColor: bgColor+'',
+      backgroundColor: bgColor,
     }"
   >
     <div class="wm-main_ct scrollbar" :style="{overflowX: overflowX, overflowY: overflowY}">
@@ -25,18 +25,20 @@ import { Options, Vue } from 'vue-class-component';
   components: {},
   props: {
     paddingX: {type: String, default: '16px'},        // x轴边距
-    paddingY: {type: String, default: '10px'},        // y轴边距
+    paddingY: {type: String, default: '16px'},        // y轴边距
     bgColor: {type: String, default: 'transparent'},  // 背景颜色
     overflowX: {type: String, default: 'auto'},       // 背景颜色
     overflowY: {type: String, default: 'auto'},       // 背景颜色
   }
 })
 export default class Main extends Vue {
+
   // 参数
-  paddingX!: String;
-  paddingY!: String;
-  bgColor!: String;
+  paddingX!: string;
+  paddingY!: string;
+  bgColor!: string;
   overflowX!: any;
   overflowY!: any;
+
 }
 </script>

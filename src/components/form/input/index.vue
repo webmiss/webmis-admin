@@ -1,43 +1,49 @@
 <template>
   <div class="wm-input_body">
+    <!-- Clear -->
+    <div class="wm-input_clear_body" v-if="value&&clearable" :style="{width: lineHeight, height: lineHeight}" @click.stop="Clear()">
+      <div class="wm-input_clear" :style="{width: 'calc('+lineHeight+' / 2)', height: 'calc('+lineHeight+' / 2)'}"></div>
+    </div>
     <!-- Icon -->
     <i class="wm-input_text" v-if="icon" :class="icon"
       :style="{
-        width: lineHeight+'',
-        lineHeight: lineHeight+'',
-        fontSize: iconSize+'',
+        width: lineHeight,
+        lineHeight: lineHeight,
+        fontSize: iconSize,
         left: iconAlign=='left'?'0':'',
         right: iconAlign=='right'?'0':'',
-        color: iconColor+'',
-        backgroundColor: iconBgcolor+'',
-        borderRadius: iconRadius+'',
+        color: iconColor,
+        backgroundColor: iconBgcolor,
+        borderRadius: iconRadius,
       }"
       @click="iconClick()"
     ></i>
     <!-- Text -->
     <div class="wm-input_text" v-if="text" v-html="text"
       :style="{
-        padding: textPadding+'',
-        lineHeight: lineHeight+'',
+        padding: textPadding,
+        lineHeight: lineHeight,
         left: textAlign=='left'?'0':'',
         right: textAlign=='right'?'0':'',
-        color: textColor+'',
-        backgroundColor: textBgcolor+'',
-        borderRadius: textRadius+'',
+        color: textColor,
+        backgroundColor: textBgcolor,
+        borderRadius: textRadius,
       }"
       @click="textClick()"
     ></div>
     <!-- Text Length -->
-    <div class="wm-input_total" v-if="textLen" :style="{lineHeight:lineHeight+''}">{{ val_len }}/{{ maxlength || '无限制' }}</div>
+    <div class="wm-input_total" v-if="textLen" :style="{lineHeight:lineHeight}">{{ val_len }}/{{ maxlength || '无限制' }}</div>
     <!-- TextArea -->
-    <textarea class="wm-input" v-if="type=='textarea'"
+    <textarea ref="wmTextarea" class="wm-input" v-if="type=='textarea'"
       :value="value"
-      :placeholder="placeholder+''"
-      :maxlength="maxlength+''"
+      :placeholder="placeholder"
+      :maxlength="maxlength"
+      :disabled="disabled"
+      :readonly="readonly"
       :style="{
-        height: height+'',
-        padding: padding+'',
-        lineHeight: lineHeight+'',
+        height: height,
+        padding: padding,
+        lineHeight: lineHeight,
       }"
       @input="input"
       @focus="inputFocus"
@@ -45,15 +51,17 @@
     ></textarea>
     <!-- TextArea End -->
     <!-- Input -->
-    <input class="wm-input" v-else
+    <input ref="wmInput" class="wm-input" v-else
       :value="value"
-      :type="type+''"
-      :placeholder="placeholder+''"
-      :maxlength="maxlength+''"
+      :type="type"
+      :placeholder="placeholder"
+      :maxlength="maxlength"
+      :disabled="disabled"
+      :readonly="readonly"
       :style="{
-        height: height+'',
-        padding: padding+'',
-        lineHeight: lineHeight+'',
+        height: height,
+        padding: padding,
+        lineHeight: lineHeight,
       }"
       @input="input"
       @focus="inputFocus"
@@ -69,11 +77,16 @@
 .wm-input{vertical-align: top; width: 100%; box-sizing: border-box; border: @BaseBorder 1px solid; border-radius: 4px; background-color: #FFF;}
 .wm-input:hover{box-shadow: 0 0 4px rgba(0,0,0,.1); border-color: @BorderHover;}
 .wm-input:focus{outline: none; border-color: @Primary; background-color: @Primary5; border: 1px solid @Primary; box-shadow: none;}
-.wm-input:disabled{border-color: @BaseBorder !important; background-color: #F4F4F4;}
-.wm-input_text{cursor: pointer; position: absolute;}
+.wm-input:disabled{border-color: @BaseBorder; background-color: @BaseFill;}
+.wm-input_text{user-select: none; cursor: pointer; position: absolute;}
 .wm-input_text{text-align: center;}
 .wm-input_text:hover{opacity: 0.7;}
 .wm-input_total{position: absolute; padding: 0 10px; right: 0; bottom: 0;}
+.wm-input_clear_body{cursor: pointer; position: absolute; z-index: 1; top: 0; right: 0;}
+.wm-input_clear{user-select: none; position: absolute; right: 8px; top: 50%; transform: translateY(-50%); background-color: @Danger; border-radius: 50%;}
+.wm-input_clear::after,.wm-input_clear::before{content: ''; position: absolute; width: 50%; height: 0.1rem; background-color: #FFF; left: 50%; top: 50%; transform-origin: center;}
+.wm-input_clear::after{transform: translate(-50%, -50%) rotate(45deg);}
+.wm-input_clear::before{transform: translate(-50%, -50%) rotate(-45deg);}
 </style>
 
 <script lang="ts">
@@ -89,6 +102,9 @@ import { Options, Vue } from 'vue-class-component';
     placeholder: {type: String, default: '请输入'},     // 提示
     maxlength: {type: String, default: ''},             // 最大长度
     padding: {type: String, default: '0 10px'},         // 内部间距
+    disabled: {type: Boolean, default: false},          // 是否禁用
+    readonly: {type: Boolean, default: false},          // 是否读写
+    clearable: {type: Boolean, default: false},         // 一键清空
     icon: {type: String, default: ''},                  // 图标
     iconSize: {type: String, default: '20px'},          // 图标-大小
     iconAlign: {type: String, default: 'left'},         // 图标-对齐方式: left、right
@@ -105,28 +121,32 @@ import { Options, Vue } from 'vue-class-component';
   }
 })
 export default class Input extends Vue {
+
   // 参数
   value!: any;
-  type!: String;
-  width!: String;
-  height!: String;
-  lineHeight!: String;
-  placeholder!: String;
-  maxlength!: String;
-  padding!: String;
-  icon!: String;
-  iconSize!: String;
-  iconAlign!: String;
-  iconColor!: String;
-  iconBgcolor!: String;
-  iconRadius!: String;
-  text!: String;
-  textPadding!: String;
-  textAlign!: String;
-  textColor!: String;
-  textBgcolor!: String;
-  textRadius!: String;
-  textLen!: Boolean;
+  type!: string;
+  width!: string;
+  height!: string;
+  lineHeight!: string;
+  placeholder!: string;
+  maxlength!: string;
+  padding!: string;
+  disabled!: boolean;
+  readonly!: boolean;
+  clearable!: boolean;
+  icon!: string;
+  iconSize!: string;
+  iconAlign!: string;
+  iconColor!: string;
+  iconBgcolor!: string;
+  iconRadius!: string;
+  text!: string;
+  textPadding!: string;
+  textAlign!: string;
+  textColor!: string;
+  textBgcolor!: string;
+  textRadius!: string;
+  textLen!: boolean;
   // 变量
   val_len: any = 0;
 
@@ -159,6 +179,17 @@ export default class Input extends Vue {
   /* 文本事件 */
   textClick(): void {
     this.$emit('textClick');
+  }
+
+  /* 清空 */
+  Clear(): void {
+    this.$emit('Clear');
+    this.$emit('update:value', '');
+    if(this.type=='textarea') {
+      (this.$refs.wmTextarea as any).focus();
+    }else{
+      (this.$refs.wmInput as any).focus();
+    }
   }
 
 }

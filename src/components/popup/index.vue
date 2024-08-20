@@ -1,7 +1,7 @@
 <template>
 <div style="position: relative; width: 100%; height: 100%;" :style="{visibility:show?'inherit':'hidden'}">
   <div ref="PopupBG" class="wm-popup_bg" :style="{backgroundColor:'rgba(0,0,0,'+opacity+')'}" @click="_clickBG"></div>
-  <div ref="PopupBody" class="wm-popup_body" :style="{width:width+'', height:height+'', backgroundColor:bgColor+''}">
+  <div ref="PopupBody" class="wm-popup_body" :style="{width:width, height:height, backgroundColor:bgColor}">
     <slot></slot>
   </div>
 </div>
@@ -29,15 +29,16 @@ import { Options, Vue } from 'vue-class-component';
   }
 })
 export default class Popup extends Vue {
+
   // 参数
-  show!: Boolean;
+  show!: boolean;
   position!: string;
-  width!: String;
-  height!: String;
-  opacity!: Number;
-  bgColor!: String;
-  bgClose!: Boolean;
-  time!: Number
+  width!: string;
+  height!: string;
+  opacity!: number;
+  bgColor!: string;
+  bgClose!: boolean;
+  time!: number
 
   /* 创建成功 */
   created(): void {

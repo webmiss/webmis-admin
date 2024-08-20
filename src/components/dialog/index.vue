@@ -2,7 +2,7 @@
   <div class="wm-dialog_body" :style="{visibility:is_show?'inherit':'hidden'}">
     <wm-popup ref="Popup" v-model:show="is_show" width="100%" height="100%" position="top" :time="600">
       <div class="wm-dialog_bg" @click="close(isClose)"></div>
-      <div class="wm-dialog" :style="{width:width+'', height:height+'', borderRadius:borderRadius+''}">
+      <div class="wm-dialog" :style="{width:width, height:height, borderRadius:borderRadius}">
         <!-- Title -->
         <div class="wm-dialog_title">
           <span>{{ title }}</span>
@@ -53,16 +53,17 @@ import wmPopup from '@/components/popup/index.vue'
   }
 })
 export default class Dialog extends Vue {
+  
   // 参数
-  show!: Boolean;
-  title!: String;
-  width!: String;
-  height!: String;
-  borderRadius!: String;
-  bottom!: String;
-  isClose!: Boolean;
+  show!: boolean;
+  title!: string;
+  width!: string;
+  height!: string;
+  borderRadius!: string;
+  bottom!: string;
+  isClose!: boolean;
   // 变量
-  is_show: Boolean = false;
+  is_show: boolean = false;
   browser: any = {width:0, height:0};
 
   /* 创建成功 */

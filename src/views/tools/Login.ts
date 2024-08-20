@@ -43,6 +43,7 @@ export default class Login extends Vue {
         }, this.verifyTokenTime);
       } else {
         clearInterval(this.tokenTime);
+        this.logout();
       }
     }, { deep: true });
     // 背景状态

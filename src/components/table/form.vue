@@ -6,7 +6,7 @@
 
 <style lang="less">
 .wm-table_form{overflow: hidden;}
-.wm-table_form .lable{width: 25%; max-width: 120px; text-align: right;}
+.wm-table_form .lable{max-width: 120px; text-align: right; color: @RegularText;}
 .wm-table_form td{white-space: nowrap; border-collapse: collapse; line-height: 40px; padding: 4px 8px;}
 </style>
 

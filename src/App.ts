@@ -10,12 +10,13 @@ import Ui from '@/library/ui'
 import Files from '@/library/files'
 /* 组件 */
 import Login from '@/views/tools/Login.vue'
+import Uinfo from '@/views/tools/Uinfo.vue'
 import Passwd from '@/views/tools/Passwd.vue'
 import wmPopup from '@/components/popup/index.vue'
 import wmDialog from '@/components/dialog/index.vue'
 
 @Options({
-  components: {Login, Passwd, wmPopup, wmDialog},
+  components: {Login, Uinfo, Passwd, wmPopup, wmDialog},
 })
 export default class App extends Base {
 

@@ -2,11 +2,10 @@
 
   <!-- Login -->
   <login ref="Login" v-model:show="state.isLogin"></login>
-  <!-- Login End -->
-
+  <!-- Uinfo -->
+  <uinfo v-model:show="state.isUinfo"></uinfo>
   <!-- Passwd -->
   <passwd v-model:show="state.isPasswd"></passwd>
-  <!-- Passwd End  -->
 
   <!-- Main -->
   <div class="app_main flex">
@@ -26,7 +25,7 @@
             <div class="null" v-else></div>
             <div class="m1">推荐功能</div>
             <ul class="m2">
-              <li class="flex_left" @click="null">
+              <li class="flex_left" @click="state.isUinfo=true">
                 <i class="ui ui_user"></i>
                 <span :style="{paddingLeft:''}">基础信息</span>
               </li>
@@ -139,7 +138,7 @@
               <li class="flex"><span class="name">姓名</span><span class="value">{{ state.uinfo.name || '-' }}</span></li>
             </ul>
             <ul class="tools">
-              <li @click="MenusClick('基础信息', '/UserInfo', true)">基本信息</li>
+              <li @click="state.isUinfo=true">基本信息</li>
               <li @click="state.isPasswd=true">修改密码</li>
             </ul>
           </div>

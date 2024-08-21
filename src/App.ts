@@ -33,12 +33,10 @@ export default class App extends Base {
   public menus: any = {
     'show':false, key:'',
     list:[], seaList:[], tmpList:[],
-    hotList:[
-      {label:'基础信息', icon:'ui ui_user', url:'/UserInfo'},
-      {label:'修改密码', icon:'ui ui_safety', url:'/UserPasswd'},
-    ],
   };
   public is_menus: Boolean = true;
+  // 登录
+  login: any = {show: false, passwd: false};
 
   /* 创建成功 */
   created(): void {

@@ -12,10 +12,12 @@ import Time from '@/library/time'
 @Options({
   components: { wmPopup },
   props: {
+    show: {type: Boolean, default: false},   // 是否显示
   }
 })
 export default class Login extends Vue {
   // 参数
+  show!: boolean;
   private animationTime: number = 10000;      // 动画切换间隔时间
   private verifyTokenTime: number = 30000;    // Token验证间隔时间
   // 状态
@@ -33,7 +35,7 @@ export default class Login extends Vue {
   /* 创建成功 */
   created(): void {
     // 登录状态
-    this.$watch('state.isLogin', (val:Boolean)=>{
+    this.$watch('show', (val:Boolean)=>{
       this.login.show = !val;
       if(val) {
         // 验证Token
@@ -186,7 +188,7 @@ export default class Login extends Vue {
         return Ui.Toast(d.msg);
       }
     },()=>{
-      load.clear();
+      if(load) load.clear();
       Ui.Toast('无法连接服务器!');
     });
   }
@@ -214,6 +216,7 @@ export default class Login extends Vue {
         this.logout();
       }
     },()=>{
+      if(load) load.clear();
       Ui.Toast('无法连接服务器!');
     });
   }

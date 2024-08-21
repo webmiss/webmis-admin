@@ -1,11 +1,11 @@
 <template>
 
   <!-- Login -->
-  <login ref="Login"></login>
+  <login ref="Login" v-model:show="state.isLogin"></login>
   <!-- Login End -->
 
   <!-- Passwd -->
-  <passwd></passwd>
+  <passwd v-model:show="state.isPasswd"></passwd>
   <!-- Passwd End  -->
 
   <!-- Main -->
@@ -26,9 +26,13 @@
             <div class="null" v-else></div>
             <div class="m1">推荐功能</div>
             <ul class="m2">
-              <li class="flex_left" v-for="(v,k) in menus.hotList" :key="k" @click="MenusClick(v.label, v.url, true)">
-                <i v-if="v.icon" :class="v.icon"></i>
-                <span :style="{paddingLeft:v.icon?'':'8px'}">{{ v.label }}</span>
+              <li class="flex_left" @click="null">
+                <i class="ui ui_user"></i>
+                <span :style="{paddingLeft:''}">基础信息</span>
+              </li>
+              <li class="flex_left" @click="state.isPasswd=true">
+                <i class="ui ui_safety"></i>
+                <span :style="{paddingLeft:''}">修改密码</span>
               </li>
             </ul>
           </div>
@@ -136,7 +140,7 @@
             </ul>
             <ul class="tools">
               <li @click="MenusClick('基础信息', '/UserInfo', true)">基本信息</li>
-              <li @click="MenusClick('修改密码', '/UserPasswd', true)">修改密码</li>
+              <li @click="state.isPasswd=true">修改密码</li>
             </ul>
           </div>
           <div class="app_user_close" @click="logout()">退出登录</div>

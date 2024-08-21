@@ -1,8 +1,8 @@
 <template>
-  <wm-dialog v-model:show="state.isPasswd" title="修改密码" width="420px" bottom="40px">
+  <wm-dialog v-model:show="form.show" title="修改密码" width="400px" bottom="40px" @close="Close()">
     <wm-main>
       <wm-table-form>
-        <template  v-if="!form.is_vcode">
+        <template v-if="!form.is_vcode">
           <tr>
             <td>
               <wm-input v-model:value="form.uname" disabled placeholder="手机号码" maxlength="32" icon="ui ui_user" padding="0 10px 0 40px"></wm-input>

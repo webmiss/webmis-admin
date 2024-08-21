@@ -1,6 +1,6 @@
 <template>
-  <div class="wm-dialog_body" :style="{visibility:is_show?'inherit':'hidden'}">
-    <wm-popup ref="Popup" v-model:show="is_show" width="100%" height="100%" position="top" :time="600">
+  <div class="wm-dialog_body" :style="{visibility:cfg.show?'inherit':'hidden'}">
+    <wm-popup ref="Popup" v-model:show="cfg.show" width="100%" height="100%" position="top" :time="600">
       <div class="wm-dialog_bg" @click="close(isClose)"></div>
       <div class="wm-dialog" :style="{width:width, height:height, borderRadius:borderRadius}">
         <!-- Title -->
@@ -9,7 +9,7 @@
           <div class="wm-dialog_close" @click="close(true)"></div>
         </div>
         <!-- Content -->
-        <div class="wm-dialog_content scrollbar" :style="{maxHeight:'calc('+browser.height+'px - 46px - 40px - '+bottom+')'}">
+        <div class="wm-dialog_content scrollbar" :style="{maxHeight:'calc('+cfg.height+'px - 46px - 40px - '+bottom+')'}">
           <slot></slot>
         </div>
         <!-- Bottom -->
@@ -43,13 +43,13 @@ import wmPopup from '@/components/popup/index.vue'
 @Options({
   components: { wmPopup },
   props: {
-    show: Boolean,                                  // 是否显示
-    title: String,                                  // 标题
+    show: {type: Boolean, default: false},          // 是否显示
+    title: {type: String, default: ''},             // 标题
     width: {type: String, default: '360px'},        // 内容宽度
     height: {type: String, default: 'auto'},        // 内容高度
     borderRadius: {type: String, default: '4px'},   // 圆角
     bottom: {type: String, default: ''},            // 底部高度
-    isClose: {type: Boolean, default: false},       // 点击背景关闭
+    isClose: {type: Boolean, default: false},       // 点击关闭
   }
 })
 export default class Dialog extends Vue {
@@ -63,16 +63,15 @@ export default class Dialog extends Vue {
   bottom!: string;
   isClose!: boolean;
   // 变量
-  is_show: boolean = false;
-  browser: any = {width:0, height:0};
+  cfg: any = {show: false, width:0, height:0};
 
   /* 创建成功 */
   created(): void {
     // 监听
-    this.$watch('$props', (props:any)=>{
-      this.is_show = props.show;
-      this.browser.width =  window.innerWidth;
-      this.browser.height =  window.innerHeight;
+    this.$watch('show', (val:any)=>{
+      this.cfg.show = val;
+      this.cfg.width =  window.innerWidth;
+      this.cfg.height =  window.innerHeight;
     }, { deep: true });
   }
 
@@ -83,7 +82,7 @@ export default class Dialog extends Vue {
   /* 关闭 */
   close(isTrue: Boolean): void {
     if(isTrue) this.$emit('update:show', false);
-    this.$emit('bgClick', false);
+    this.$emit('close', true);
   }
 
 }

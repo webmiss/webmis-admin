@@ -14,25 +14,24 @@ import wmTableForm from '@/components/table/form.vue'
 @Options({
   components: { wmMain, wmDialog, wmInput, wmButton, wmTableForm },
   props: {
-    padding: {type: Number, default: 16},             //边距
-    bgColor: {type: String, default: 'transparent'},  //背景颜色
+    show: {type: Boolean, default: false},   // 是否显示
   }
 })
 export default class Passwd extends Vue {
   // 参数
-  padding!: number;
-  bgColor!: String;
+  show!: boolean;
   // 状态
   store: any = useStore();
   state: any = this.store.state;
   // 变量
   time: any;
-  form: any = {uname: '', passwd1: '', passwd2: '', is_vcode: false, vcode: '', text: '获取验证码', num: 60}
+  form: any = {show: false, uname: '', passwd1: '', passwd2: '', is_vcode: false, vcode: '', text: '获取验证码', num: 60}
 
   /* 创建成功 */
   created(): void {
     // 登录状态
-    this.$watch('state.isPasswd', (val:Boolean)=>{
+    this.$watch('show', (val:Boolean)=>{
+      this.form.show = val;
       if(val) {
         if(this.state.uinfo.tel) this.form.uname = this.state.uinfo.tel;
         else if(this.state.uinfo.email) this.form.uname = this.state.uinfo.email;
@@ -54,7 +53,7 @@ export default class Passwd extends Vue {
     else return Ui.Toast('无效帐号!');
     // 获取验证码
     const load: any = Ui.Loading();
-    Request.Post('user/get_code', {type: type, uname:this.form.uname}, (res:any)=>{
+    Request.Post('user/get_vcode', {type: type, uname:this.form.uname}, (res:any)=>{
       load.clear();
       const d: any = res.data;
       if(d.code==0) {
@@ -99,6 +98,11 @@ export default class Passwd extends Vue {
         return Ui.Toast(d.msg);
       }
     });
+  }
+
+  /* 关闭 */
+  Close(): void {
+    this.$emit('update:show', false);
   }
 
 }

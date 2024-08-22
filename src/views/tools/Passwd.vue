@@ -31,9 +31,9 @@
       </wm-table-form>
     </wm-main>
     <template #bottom>
-      <wm-button effect="plain" type="primary" v-if="!form.is_vcode" @click="changePwd()">下一步</wm-button>
+      <wm-button effect="plain" type="primary" v-if="!form.is_vcode" @click="submitPwd()">下一步</wm-button>
       <wm-button effect="plain" type="primary" v-if="form.is_vcode" @click="form.is_vcode=false">上一步</wm-button>
-      <wm-button effect="dark" type="primary"  v-if="form.is_vcode" @click="changePwd()">确 认</wm-button>
+      <wm-button effect="dark" type="primary"  v-if="form.is_vcode" @click="submitPwd()">确 认</wm-button>
     </template>
   </wm-dialog>
 </template>
@@ -123,15 +123,15 @@ export default class Passwd extends Vue {
     }, 1000);
   }
 
-  /* 修改密码 */
-  changePwd(): void {
+  /* 提交 */
+  submitPwd(): void {
     // 验证码
     if(this.form.vcode.length!=4) return Ui.Toast('请填写验证码');
     this.form.is_vcode = true;
     // 新密码
     if(!Safety.IsRight('passwd', this.form.passwd1)) return Ui.Toast('英文字母开头，6～16位字符!');
     if(this.form.passwd1!==this.form.passwd2) return Ui.Toast('两次密码不一致!');
-    // 提交
+    // 请求
     const load: any = Ui.Loading();
     Request.Post('user/change_passwd', {uname: this.form.uname, passwd: this.form.passwd1, vcode: this.form.vcode}, (res:any)=>{
       load.clear();

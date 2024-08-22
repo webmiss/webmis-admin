@@ -9,7 +9,7 @@
           <div class="wm-dialog_close" @click="close(true)"></div>
         </div>
         <!-- Content -->
-        <div class="wm-dialog_content scrollbar" :style="{maxHeight:'calc('+cfg.height+'px - 46px - 40px - '+bottom+')'}">
+        <div class="wm-dialog_content" :style="{maxHeight:'calc('+cfg.height+'px - 46px - 40px - '+bottom+')'}">
           <slot></slot>
         </div>
         <!-- Bottom -->
@@ -24,7 +24,7 @@
 <style lang="less" scoped>
 .wm-dialog_body{position: fixed; z-index: 999; width: calc(100% + 1px); height: calc(100% + 1px); left: 0; top: 0;}
 .wm-dialog_bg{position: absolute; width: 100%; height: 100%;}
-.wm-dialog{overflow: hidden; position: absolute; z-index: 1; max-width: calc(100% - 20px); max-height: calc(100% - 20px); left: 50%; top: 50%; transform: translate(-50%, -50%); background-color: #FFF;}
+.wm-dialog{position: absolute; z-index: 1; max-width: calc(100% - 20px); max-height: calc(100% - 20px); left: 50%; top: 50%; transform: translate(-50%, -50%); background-color: #FFF;}
 .wm-dialog_title{position: relative; padding: 4px 0; height: 32px; line-height: 32px; text-align: center; font-size: 14px; font-weight: bold;}
 .wm-dialog_title:hover i{color: @Primary;}
 .wm-dialog_close{position: absolute; cursor: pointer; top: 4px; right: 4px; width: 32px; height: 32px; line-height: 32px; text-align: center;}
@@ -32,7 +32,7 @@
 .wm-dialog_close::after,.wm-dialog_close::before{content: ''; position: absolute; width: 12px; height: 1.6px; background-color: #666; left: 50%; top: 50%; transform-origin: center;}
 .wm-dialog_close::after{transform: rotate(45deg); margin-left: -16%;}
 .wm-dialog_close::before{transform: rotate(-45deg); margin-left: -16%;}
-.wm-dialog_content{overflow: auto; width: 100%; height: 100%;}
+.wm-dialog_content{width: 100%; height: 100%;}
 .wm-dialog_bottom{padding: 5px 0 16px; text-align: center;}
 </style>
   

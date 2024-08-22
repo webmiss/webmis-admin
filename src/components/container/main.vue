@@ -27,8 +27,8 @@ import { Options, Vue } from 'vue-class-component';
     paddingX: {type: String, default: '16px'},        // x轴边距
     paddingY: {type: String, default: '16px'},        // y轴边距
     bgColor: {type: String, default: 'transparent'},  // 背景颜色
-    overflowX: {type: String, default: 'auto'},       // 背景颜色
-    overflowY: {type: String, default: 'auto'},       // 背景颜色
+    overflowX: {type: String, default: ''},       // 背景颜色
+    overflowY: {type: String, default: ''},       // 背景颜色
   }
 })
 export default class Main extends Vue {

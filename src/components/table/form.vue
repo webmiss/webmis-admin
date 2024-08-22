@@ -5,9 +5,10 @@
 </template>
 
 <style lang="less">
-.wm-table_form{overflow: hidden;}
-.wm-table_form .lable{max-width: 120px; text-align: right; color: @RegularText;}
+.wm-table_form{display: inline-table;}
+.wm-table_form tr{width: 100%; display: inline-table;}
 .wm-table_form td{white-space: nowrap; border-collapse: collapse; line-height: 40px; padding: 4px 8px;}
+.wm-table_form .lable{max-width: 120px; text-align: right; color: @RegularText;}
 </style>
 
 <script lang="ts">

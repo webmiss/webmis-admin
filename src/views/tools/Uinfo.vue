@@ -1,40 +1,50 @@
 <template>
-  <wm-dialog v-model:show="form.show" title="基本信息" width="480px" bottom="40px" @close="Close()">
+  <wm-dialog v-model:show="uinfoShow" title="基本信息" width="560px" bottom="40px" @close="Close()">
     <wm-main>
       <wm-table-form>
         <tr>
           <td class="lable">昵称</td>
-          <td>
-            <wm-input type="nickname" v-model:value="form.nickname" placeholder="用户昵称" maxlength="16"></wm-input>
+          <td colspan="2">
+            <wm-input v-model:value="form.nickname" placeholder="用户昵称" maxlength="16"></wm-input>
           </td>
         </tr>
         <tr>
           <td class="lable">姓名</td>
           <td>
-            <wm-input type="nickname" v-model:value="form.nickname" placeholder="真实姓名" maxlength="16" disabled></wm-input>
+            <wm-input v-model:value="form.name" placeholder="真实姓名" maxlength="16" disabled></wm-input>
+          </td>
+          <td>
+            <wm-radio v-model:value="form.gender" :data="genderData"></wm-radio>
+          </td>
+        </tr>
+        <tr>
+          <td class="lable">生日</td>
+          <td colspan="2">
+            <wm-date-picker v-model:value="form.birthday"></wm-date-picker>
           </td>
         </tr>
         <tr>
           <td class="lable">部门</td>
-          <td>
-            <wm-input type="nickname" v-model:value="form.department" placeholder="部门" maxlength="16"></wm-input>
+          <td colspan="2">
+            <wm-input v-model:value="form.department" placeholder="部门" maxlength="16"></wm-input>
           </td>
         </tr>
         <tr>
           <td class="lable">职位</td>
-          <td>
-            <wm-input type="nickname" v-model:value="form.position" placeholder="职位" maxlength="16"></wm-input>
+          <td colspan="2">
+            <wm-input v-model:value="form.position" placeholder="职位" maxlength="16"></wm-input>
           </td>
         </tr>
       </wm-table-form>
     </wm-main>
     <template #bottom>
-      <wm-button effect="dark" type="primary">确 认</wm-button>
+      <wm-button effect="dark" type="primary" @click="subUinfo()">确 认</wm-button>
     </template>
   </wm-dialog>
 </template>
 
 <style lang="less" scoped>
+.wm-table_form .lable{width: 60px;}
 </style>
 
 <script lang="ts">
@@ -42,17 +52,19 @@ import { Options, Vue } from 'vue-class-component';
 import { useStore } from 'vuex';
 /* UI组件 */
 import Ui from '@/library/ui'
-import Safety from '@/library/safety';
 import Request from '@/library/request'
+import Time from '@/library/time'
 /* 组件 */
 import wmMain from '@/components/container/main.vue'
 import wmDialog from '@/components/dialog/index.vue'
 import wmInput from '@/components/form/input/index.vue'
 import wmButton from '@/components/form/button/index.vue'
 import wmTableForm from '@/components/table/form.vue'
+import wmRadio from '@/components/form/radio/index.vue'
+import wmDatePicker from '@/components/datepicker/index.vue'
 
 @Options({
-  components: { wmMain, wmDialog, wmInput, wmButton, wmTableForm },
+  components: { wmMain, wmDialog, wmInput, wmButton, wmTableForm, wmRadio, wmDatePicker },
   props: {
     show: {type: Boolean, default: false},   // 是否显示
   }
@@ -64,14 +76,43 @@ export default class Passwd extends Vue {
   store: any = useStore();
   state: any = this.store.state;
   // 变量
-  form: any = {show: false, nickname: '', name: '', department:'', position:''}
+  uinfoShow: boolean = false;
+  form: any = {nickname: '', name: '', gender: '', birthday: '', department:'', position:''}
+  genderData: Array<any> = [];
 
   /* 创建成功 */
   created(): void {
-    // 登录状态
-    this.$watch('show', (val:Boolean)=>{
-      this.form.show = val;
+    this.$watch('show', (val:boolean)=>{
+      this.uinfoShow = val;
+      const uinfo: any = this.state.uinfo;
+      // 默认值
+      this.form.nickname = uinfo.nickname || '';
+      this.form.name = uinfo.name || '';
+      this.form.birthday = uinfo.birthday&&uinfo.birthday!='1970-01-01'?uinfo.birthday:Time.Date('Y/m/d');
+      this.form.department = uinfo.department || '';
+      this.form.position = uinfo.position || '';
+      // 性别
+      this.form.gender = uinfo.gender || '';
+      this.genderData = [
+        {label:'无',value:''},
+        {label:'男',value:'男'},
+        {label:'女',value:'女'},
+      ];
     }, { deep: true });
+  }
+
+  /* 提交 */
+  subUinfo(): void {
+    this.Close();
+    // 请求
+    const load: any = Ui.Loading();
+    Request.Post('user/change_uinfo', {token: this.state.token, uinfo: this.form}, (res:any)=>{
+      load.clear();
+      const d: any = res.data;
+      Ui.Toast(d.msg);
+      this.$emit('change', d.code==0);
+    });
+
   }
 
   /* 关闭 */

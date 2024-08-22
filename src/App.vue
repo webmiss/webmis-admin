@@ -3,7 +3,7 @@
   <!-- Login -->
   <login ref="Login" v-model:show="state.isLogin"></login>
   <!-- Uinfo -->
-  <uinfo v-model:show="state.isUinfo"></uinfo>
+  <uinfo v-model:show="state.isUinfo" @change="changeUinfo"></uinfo>
   <!-- Passwd -->
   <passwd v-model:show="state.isPasswd"></passwd>
 

@@ -102,7 +102,7 @@ export default class Passwd extends Vue {
       const d: any = res.data;
       if(d.code==0) {
         this.vcodeTime();
-        this.form.vcode = d.data;
+        this.form.vcode = d.data.toString();
       }else if(d.code==4001) {
         this.form.num = d.data;
         this.vcodeTime();

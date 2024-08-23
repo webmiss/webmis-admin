@@ -5,7 +5,7 @@ import Base from '../../service/Base'
 @Options({
   components: {},
 })
-export default class User extends Base {
+export default class SysUser extends Base {
 
   /* 创建成功 */
   public created(): void {
@@ -14,7 +14,6 @@ export default class User extends Base {
 
   /* 创建完成 */
   public mounted(): void {
-
   }
 
 }

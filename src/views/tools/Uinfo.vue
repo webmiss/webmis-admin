@@ -20,7 +20,7 @@
         <tr>
           <td class="lable">生日</td>
           <td colspan="2">
-            <wm-date-picker v-model:value="form.birthday"></wm-date-picker>
+            <wm-date-picker v-model:value="form.birthday" :maxDate="maxDate"></wm-date-picker>
           </td>
         </tr>
         <tr>
@@ -78,26 +78,29 @@ export default class Passwd extends Vue {
   // 变量
   uinfoShow: boolean = false;
   form: any = {nickname: '', name: '', gender: '', birthday: '', department:'', position:''}
+  maxDate: string = Time.Date('Y/m/d');
   genderData: Array<any> = [];
 
   /* 创建成功 */
   created(): void {
     this.$watch('show', (val:boolean)=>{
       this.uinfoShow = val;
-      const uinfo: any = this.state.uinfo;
-      // 默认值
-      this.form.nickname = uinfo.nickname || '';
-      this.form.name = uinfo.name || '';
-      this.form.birthday = uinfo.birthday&&uinfo.birthday!='1970-01-01'?uinfo.birthday:Time.Date('Y/m/d');
-      this.form.department = uinfo.department || '';
-      this.form.position = uinfo.position || '';
-      // 性别
-      this.form.gender = uinfo.gender || '';
-      this.genderData = [
-        {label:'无',value:''},
-        {label:'男',value:'男'},
-        {label:'女',value:'女'},
-      ];
+      if(val) {
+        // 默认值
+        const uinfo: any = this.state.uinfo;
+        this.form.nickname = uinfo.nickname || '';
+        this.form.name = uinfo.name || '';
+        this.form.birthday = uinfo.birthday&&uinfo.birthday!='1970-01-01'?uinfo.birthday:Time.Date('Y/m/d');
+        this.form.department = uinfo.department || '';
+        this.form.position = uinfo.position || '';
+        // 性别
+        this.form.gender = uinfo.gender || '';
+        this.genderData = [
+          {label:'无',value:''},
+          {label:'男',value:'男'},
+          {label:'女',value:'女'},
+        ];
+      }
     }, { deep: true });
   }
 
@@ -109,8 +112,15 @@ export default class Passwd extends Vue {
     Request.Post('user/change_uinfo', {token: this.state.token, uinfo: this.form}, (res:any)=>{
       load.clear();
       const d: any = res.data;
+      if(d.code==0) {
+        this.state.uinfo.nickname = this.form.nickname;
+        this.state.uinfo.name = this.form.name;
+        this.state.uinfo.gender = this.form.gender;
+        this.state.uinfo.birthday = this.form.birthday;
+        this.state.uinfo.department = this.form.department;
+        this.state.uinfo.position = this.form.position;
+      }
       Ui.Toast(d.msg);
-      this.$emit('change', d.code==0);
     });
 
   }

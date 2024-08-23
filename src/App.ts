@@ -232,18 +232,6 @@ export default class App extends Base {
     });
   }
 
-  /* 修改用户信息 */
-  changeUinfo(res: any): void {
-    if(res) {
-      // console.log(res);
-      // 更新用户信息
-      setTimeout(()=>{
-        (this.$refs.Login as any).verifyToken(true);
-        console.log('time', res);
-      }, 3000);
-    }
-  }
-
   /* 退出登录 */
   logout(): void {
     // 隐藏

@@ -39,6 +39,7 @@
 </template>
 
 <style lang="less" scoped>
+.wm-table_form .lable{width: 70px;}
 </style>
 
 <script lang="ts">

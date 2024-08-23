@@ -269,7 +269,7 @@ export default class Login extends Vue {
       const d: any = res.data;
       if(d.code==0 && d.data.token_time>0) {
         this.state.isLogin = true;
-        this.state.isPasswd = d.data.isPasswd;
+        if(!this.state.isPasswd) this.state.isPasswd = d.data.isPasswd;
         if(Object.keys(d.data.uinfo).length!=0) {
           this.state.uinfo = d.data.uinfo;
           Storage.setItem('uname', d.data.uinfo.uname);

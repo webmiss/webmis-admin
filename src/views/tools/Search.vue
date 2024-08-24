@@ -28,8 +28,8 @@
 <style lang="less" scoped>
 .wm-search{position: absolute; top: 50px; right: 0; width: 100%; height: calc(100% - 50px);}
 .wm-search_title{padding: 8px 16px; height: 32px; line-height: 32px;}
-.wm-search_title h2{font-size: 16px;}
-.wm-search_title i{cursor: pointer; width: 32px; height: 32px; text-align: center; border-radius: 50%;}
+.wm-search_title h2{font-size: 16px; font-weight: bold;}
+.wm-search_title i{cursor: pointer; width: 32px; height: 32px; font-size: 12px; text-align: center; border-radius: 50%;}
 .wm-search_title i:hover{color: @Primary; background-color: @Minor8;}
 .wm-search_ct{height: calc(100% - 96px); border: @LighterBorder 1px solid;}
 .wm-search_bottom{padding: 8px 16px; height: 32px; line-height: 32px; text-align: center;}

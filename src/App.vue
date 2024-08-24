@@ -124,7 +124,7 @@
     <div class="app_right" :style="{width: is_menus?'calc(100% - 240px)':'calc(100% - 56px)'}">
       <!-- UserInfo -->
       <div class="app_user_info_body" :style="{visibility:uinfo.show&&state.isLogin?'inherit':'hidden'}">
-        <wm-popup height="100%" width="280px" v-model:show="uinfo.show" position="right" bgColor="#FFF">
+        <wm-popup height="100%" width="320px" v-model:show="uinfo.show" position="right" bgColor="#FFF">
           <div class="app_user_info scrollbar">
             <div class="img" :style="{backgroundImage: state.uinfo.img?'url('+state.uinfo.img+')':'none'}" @click="userUpImg()">
               <div class="img_load">更新头像</div>
@@ -162,7 +162,7 @@
         </ul>
       </div>
       <!-- Content -->
-      <div class="app_content">
+      <div class="app_body">
         <router-view v-slot="{ Component }">
           <keep-alive>
             <component :is="Component" :key="$route.name" />

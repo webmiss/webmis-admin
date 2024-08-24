@@ -1,5 +1,5 @@
 <template>
-  <div class="wm-input_body">
+  <div class="wm-input_body" :style="{width: width, height: height, margin: margin}">
     <!-- Clear -->
     <div class="wm-input_clear_body" v-if="value&&clearable" :style="{width: lineHeight, height: lineHeight}" @click.stop="Clear()">
       <div class="wm-input_clear" :style="{width: 'calc('+lineHeight+' / 2)', height: 'calc('+lineHeight+' / 2)'}"></div>
@@ -102,6 +102,7 @@ import { Options, Vue } from 'vue-class-component';
     placeholder: {type: String, default: '请输入'},     // 提示
     maxlength: {type: String, default: ''},             // 最大长度
     padding: {type: String, default: '0 10px'},         // 内部间距
+    margin: {type: String, default: '0'},               // 外部间距
     disabled: {type: Boolean, default: false},          // 是否禁用
     readonly: {type: Boolean, default: false},          // 是否读写
     clearable: {type: Boolean, default: false},         // 一键清空
@@ -131,6 +132,7 @@ export default class Input extends Vue {
   placeholder!: string;
   maxlength!: string;
   padding!: string;
+  margin!: string;
   disabled!: boolean;
   readonly!: boolean;
   clearable!: boolean;

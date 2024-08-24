@@ -6,7 +6,7 @@
 .app_left{position: relative; height: 100%; color: #FFF; background-color: @Minor2; transition: @Transition;}
 .app_right{height: 100%; transition: @Transition;}
 .app_top{height: 40px; line-height: 40px; padding: 8px 16px; background-color: #FFF;}
-.app_content{height: calc(100% - 50px); box-shadow: 0 0 1px rgba(0, 0, 0, 0.1);}
+.app_body{height: calc(100% - 50px); box-shadow: 0 0 1px rgba(0, 0, 0, 0.1);}
 .app_copy{line-height: 50px; font-size: 12px; text-align: center; border-top: @Minor1 1px solid; color: @Minor4;}
 .app_on{display: none; cursor: pointer; zoom: 0.8; width: 18px; line-height: 64px; position: absolute; z-index: 1; top: 50%; right: -8px; transform: translateY(-50%); font-size: 12px; text-align: center; border: @Minor2 2px solid; background-color: @Minor; color: #FFF; border-radius: 10px;}
 .app_left:hover .app_on{display: block;}
@@ -90,7 +90,7 @@
 .app_user_close:hover{color: @Danger;}
 /* 导航 */
 .app_tabs_body{overflow: hidden; padding: 10px 10px 0 10px; width: calc(100% - 20px); height: 40px; line-height: 40px;}
-.app_tabs{user-select: none; width: calc(100% - 100px); height: 40px; white-space: nowrap;}
+.app_tabs{user-select: none; width: calc(100% - 100px); height: 32px; line-height: 32px; margin-top: 8px; white-space: nowrap;}
 .app_tabs li{display: inline-block; position: relative; overflow: hidden; cursor: pointer; margin: 0 5px; padding: 0 24px 0 16px; background-color: @Minor7; border-radius: 8px 8px 0 0;}
 .app_tabs li:hover{color: @Primary;}
 .app_tabs .home{padding: 0 16px;}
@@ -105,7 +105,16 @@
 .app_tabs_time .refresh{cursor: pointer; width: 40px; text-align: center; border-radius: 50%;}
 .app_tabs_time .refresh:hover{color: @Primary;  background-color: @Minor7;}
 /* 统计 */
-.app_total{padding: 0 10px; line-height: 40px; background-color: #FFF; border-radius: 4px;}
+.app_total{padding: 8px 16px; height: 32px; line-height: 32px; background-color: #FFF; border-radius: 4px;}
+.app_total .total{overflow: hidden; width: calc(100% - 200px);}
+.app_total .refresh .time{padding: 0 8px; color: @SecondaryText;}
+.app_total .refresh i{cursor: pointer; width: 32px; height: 32px; text-align: center; border-radius: 50%;}
+.app_total .refresh i:hover{color: @Primary; background-color: @Minor8;}
+/* 内容 */
+.app_ct{height: calc(100% - 96px); margin: 0px 0;  border: @LighterBorder 1px solid; background-color: #FFF;}
+.app_action{padding: 10px; height: 32px; line-height: 32px;}
+/* 分页 */
+.app_page{height: 48px; line-height: 48px; background-color: #FFF; text-align: center;}
 
 /* 响应式布局 */
 @media screen and ( max-width: 1400px ){

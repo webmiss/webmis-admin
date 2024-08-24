@@ -10,7 +10,7 @@
           </tr>
           <tr>
             <td>
-              <wm-input v-model:value="form.vcode" placeholder="输入验证码" maxlength="4"  icon="ui ui_safety" padding="0 10px 0 40px" :text="form.text" @textClick="getVcode()"></wm-input>
+              <wm-input v-model:value="form.vcode" placeholder="输入验证码" maxlength="4" icon="ui ui_safety" padding="0 10px 0 40px" :text="form.text" @textClick="getVcode()"></wm-input>
             </td>
           </tr>
         </template>

@@ -5,9 +5,8 @@
 </template>
 
 <style lang="less">
-.wm-table_form{display: inline-table;}
-.wm-table_form tr{width: 100%; display: inline-table;}
-.wm-table_form td{white-space: nowrap; border-collapse: collapse; line-height: 40px; padding: 4px 8px;}
+.wm-table_form{width: 100%; border-collapse: collapse;}
+.wm-table_form td{padding: 4px 8px; height: 32px; line-height: 20px; white-space: nowrap; border: #FFF 1px solid;}
 .wm-table_form .lable{max-width: 120px; text-align: right; color: @RegularText;}
 </style>
 
@@ -17,10 +16,10 @@ import { Options, Vue } from 'vue-class-component';
   components: {},
   props: {
     width: {type: String, default: '100%'},     // 宽
-    height: {type: String, default: '100%'},    // 高
+    height: {type: String, default: 'auto'},    // 高
   }
 })
-export default class Main extends Vue {
+export default class TableForm extends Vue {
 
   // 参数
   width!: string;

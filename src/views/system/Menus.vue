@@ -52,6 +52,11 @@
       </div>
     </div>
     <!-- Action End -->
+    <!-- List -->
+    <wm-table height="calc(100% - 52px)" :columns="list.columns" :listData="list.data">
+
+    </wm-table>
+    <!-- List End -->
   </div>
   <!-- Page -->
    <div class="app_page"></div>

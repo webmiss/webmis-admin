@@ -14,7 +14,7 @@
             <wm-input v-model:value="form.name" placeholder="真实姓名" maxlength="16" disabled></wm-input>
           </td>
           <td>
-            <wm-radio v-model:value="form.gender" :data="genderData"></wm-radio>
+            <wm-radio v-model:value="form.gender" :options="genderData"></wm-radio>
           </td>
         </tr>
         <tr>

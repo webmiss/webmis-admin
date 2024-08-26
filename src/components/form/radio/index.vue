@@ -24,20 +24,9 @@
 .wm-radio .active::after{content: ""; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -60%); width: 6px; height: 6px; background-color: #FFF; border-radius: 50%;}
 /* 禁用 */
 .wm-radio .disabled{cursor: not-allowed;}
-.wm-radio .disabled .checked{background-color: #F2F2F2;}
-.wm-radio .disabled .active{border-color: @BorderColor;}
-
-// .wm-radio .enabled:hover{background-color: #FFF;}
-// .wm-radio .enabled:hover .checked{border-color: @Brand;}
-// .wm-radio .enabled:hover .label{color: @Brand;}
-// .wm-radio .enabled i{display: inline-block; height: 15px; line-height: 15px; padding-left: 6px;font-size: 22px;}
-// .wm-radio .active{border-color: @Brand; background-color: @Brand;}
-// .wm-radio .active::after{content: ""; position: absolute; left: 50%; top: 50%; transform: translate(-50%,-56%); width: 6px; height: 6px; background-color: #FFF; border-radius: 50%;}
-// .wm-radio .disabled{cursor: not-allowed;}
-// .wm-radio .disabled .checked{background-color: #F2F2F2;}
-// .wm-radio .disabled .label{color: @PlaceholderText;}
-// .wm-radio .disabled .active{border-color: @BorderColor;}
-// .wm-radio .disabled .active::after{background-color: @PlaceholderText;}
+.wm-radio .disabled .checked{border-color: @BaseBorder; background-color: #DADCDF;}
+.wm-radio .disabled:hover .checked{border-color: rgba(0,0,0,0.2);}
+.wm-radio .disabled .active{border-color: rgba(0,0,0,0.2);}
 </style>
 
 <script lang="ts">
@@ -46,23 +35,27 @@ import { Options, Vue } from 'vue-class-component';
   components: { },
   props: {
     value: {type: String, default: ''},   // 默认值
-    data: {type: Array, default: []},     // 数据: [{label:'男',value:'男', disabled: true},{label:'女',value:'女'}]
+    options: {type: Array, default: []},  // 数据: [{label:'男', value:'男', disabled: true},{label:'女', value:'女'}]
   }
 })
 export default class Radio extends Vue {
 
   // 参数
   value!: any;
-  data!: any;
+  options!: any;
   // 变量
   list: Array<any>=[];
 
   /* 创建成功 */
   created(): void {
     // 监听
-    this.$watch('data', (val:any)=>{
+    this.$watch('options', (val:any)=>{
       this.list = val;
     }, { deep: true });
+  }
+  /* 创建完成 */
+  public mounted(): void {
+    this.list = this.options;
   }
 
   /* 点击选择 */
@@ -71,7 +64,7 @@ export default class Radio extends Vue {
       this.list[k].checked = k.toString()==i;
     }
     this.$emit('update:value', this.list[k].value);
-    this.$emit('update:data', this.list);
+    this.$emit('update:options', this.list);
   }
 
 }

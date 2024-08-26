@@ -15,8 +15,8 @@
     <div class="app_action flex">
       <div class="botton">
         <wm-button effect="dark" type="primary" icon="ui ui_add" padding="0 16px 0 8px">添加</wm-button>
-        <wm-button effect="plain" type="primary" icon="ui ui_edit" padding="0 16px 0 8px" :disabled="true">编辑</wm-button>
-        <wm-button effect="plain" type="danger" icon="ui ui_del" padding="0 16px 0 8px" :disabled="true">删除</wm-button>
+        <wm-button effect="plain" type="primary" icon="ui ui_edit" padding="0 16px 0 8px" :disabled="list.num!=1" @click="edit()">编辑</wm-button>
+        <wm-button effect="plain" type="danger" icon="ui ui_del" padding="0 16px 0 8px" :disabled="list.num==0">删除({{ list.num }})</wm-button>
       </div>
       <div class="search flex">
         <wm-search v-model:show="sea.show" @search="sea.show=false" @reset="sea.show=false">
@@ -53,8 +53,13 @@
     </div>
     <!-- Action End -->
     <!-- List -->
-    <wm-table height="calc(100% - 52px)" :columns="list.columns" :listData="list.data">
-
+    <wm-table ref="tableList" :columns="list.columns" :options="list.data" @partially="selectState" height="calc(100% - 52px)">
+      <template #id="d">
+        <div class="tCenter">{{ d.id }}</div>
+      </template>
+      <template #title="d">
+        {{ d.title }}
+      </template>
     </wm-table>
     <!-- List End -->
   </div>

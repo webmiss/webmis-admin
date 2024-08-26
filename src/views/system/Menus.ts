@@ -19,7 +19,7 @@ export default class SysMenus extends Base {
   /* 搜索 */
   sea: any = {show: false, form:{title:''}}
   /* 列表 */
-  list: any = {columns:[], data: []};
+  list: any = {columns:[], data: [], num: 0, total: 0};
 
   /* 创建成功 */
   public created(): void {
@@ -32,9 +32,9 @@ export default class SysMenus extends Base {
   activated(): void {
     // 字段
     this.list.columns = [
-      {title: 'ID', width: '30px', index: 'id', slot: 'id'},
+      {title: 'ID', width: '30px', index: 'id', slot: 'id', textAlign: 'center'},
       {title: '名称', width: '120px', index: 'title', slot: 'title', textAlign: 'right'},
-      {title: '备注', index: 'remark', slot: 'remark'},
+      {title: '备注', index: 'remark'},
     ];
     // 数据
     this.list.data = [
@@ -43,5 +43,19 @@ export default class SysMenus extends Base {
     ];
     console.log('menus');
   }
+
+  /* 选中状态 */
+  selectState(n:number, t:number): void {
+    this.list.num = n;
+    this.list.total = t;
+  }
+
+  /* 编辑 */
+  edit(): void {
+    const obj:any = this.$refs.tableList;
+    const list: any = obj.getData();
+    console.log(list);
+  }
+  
 
 }

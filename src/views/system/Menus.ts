@@ -5,6 +5,7 @@ import wmMain from '@/components/container/main.vue'
 import wmInput from '@/components/form/input/index.vue'
 import wmButton from '@/components/form/button/index.vue'
 import wmTable from '@/components/table/index.vue'
+import wmPage from '@/components/page/index.vue'
 import wmTableForm from '@/components/table/form.vue'
 import wmDatePicker from '@/components/datepicker/index.vue'
 /* 搜索 */
@@ -12,14 +13,15 @@ import wmSearch from '../tools/Search.vue'
 
 /* 系统菜单 */
 @Options({
-  components: { wmMain, wmSearch, wmInput, wmButton, wmTable, wmTableForm, wmDatePicker },
+  components: { wmMain, wmSearch, wmInput, wmButton, wmTable, wmPage, wmTableForm, wmDatePicker },
 })
 export default class SysMenus extends Base {
 
   /* 搜索 */
   sea: any = {show: false, form:{title:''}}
   /* 列表 */
-  list: any = {columns:[], data: [], num: 0, total: 0};
+  list: any = {columns: [], data: [], num: 0, total: 0};
+  total: any = {total: 0};
 
   /* 创建成功 */
   public created(): void {
@@ -41,6 +43,8 @@ export default class SysMenus extends Base {
       {id: 1, title: '系统', remark: ''},
       {id: 2, title: '其它', remark: ''},
     ];
+    // 统计
+    this.total.total = 253;
     console.log('menus');
   }
 

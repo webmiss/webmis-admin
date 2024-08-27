@@ -1,0 +1,52 @@
+/* 格式化 */
+export default class Format {
+
+  /* 不四舍五入 */
+  public static Fixed(price: number, fixed: number=2): number {
+    let tmp: string = '';
+    for(let i=0; i<fixed; i++) tmp+='0';
+    let m: number = parseInt('1'+tmp);
+    return Math.floor(price*m)/m;
+  }
+
+  /* 金额 */
+  public static priceEncode(price: string, fixed: number=2): string {
+    return (parseFloat(price).toFixed(fixed).toString()).replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g,'$&,');
+  }
+  public static priceDecode(price: string, fixed: number=2): string {
+    return parseFloat(price.replace(/,/g,'')).toFixed(fixed);
+  }
+
+  /* 手机号码 */
+  public static telEncode(tel: string, delimiter: string=' '): string {
+    // 验证
+    const reg: RegExp = /^[1]\d{10}$/;
+    if(!reg.test(tel)) return tel;
+    // 拼接
+    let res: string = '';
+    for(let i=0; i<tel.length; i++){
+      if(i==3 || i==7) res += delimiter;
+      res += tel.substring(i,i+1);
+    }
+    return res;
+  }
+  public static telDecode(tel: string, delimiter: string=' '): string {
+    const reg: RegExp = new RegExp('/'+delimiter+'/g');
+    return tel.replace(reg, '');
+  }
+
+  /* 银行卡号 */
+  public static cardNumber(num: string, delimiter: string=' '): string {
+    // 验证
+    const reg: RegExp = /^\d+$/;
+    if(!reg.test(num)) return num;
+    // 拼接
+    let res: string = '';
+    for(let i=0; i<num.length; i++){
+      if(i==4 || i==8 || i==12 || i==16) res += delimiter;
+      res += num.substring(i,i+1);
+    }
+    return res;
+  }
+
+}

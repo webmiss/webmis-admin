@@ -60,7 +60,9 @@
     <!-- List End -->
   </div>
   <!-- Page -->
-   <div class="app_page"></div>
+   <div class="app_page">
+    <wm-page v-model:total="total.total"></wm-page>
+   </div>
 </template>
 
 <style lang="less" scoped>

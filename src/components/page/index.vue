@@ -32,7 +32,7 @@
 .wm-page_info{margin: 0 4px;}
 .wm-page_num{user-select: none; margin: 0 8px; text-align: center;}
 .wm-page_num i{font-size: 12px;}
-.wm-page_num span{cursor: pointer; margin: 0 4px; padding: 0 8px; min-width: 14px; height: 28px; color: @Minor2; font-size: 14px;}
+.wm-page_num span{cursor: pointer; margin: 0 4px; padding: 0 8px; min-width: 12px; height: 28px; color: @Minor2; font-size: 14px;}
 .wm-page_num span:hover{color: @Primary; background-color: @BaseFill;}
 .wm-page_num .active{color: #FFF; background-color: @Primary;}
 .wm-page_num .active:hover{color: #FFF; background: linear-gradient(@Primary, @Primary1);}

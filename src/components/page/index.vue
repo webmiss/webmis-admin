@@ -4,16 +4,18 @@
       <div class="">共 <b>{{ total }}</b> 条, 第 <b>{{ pageNum }}</b>/<b>{{ num }}</b> 页</div>
       <div class="wm-page_num flex">
         <!-- Prev -->
-        <span class="disabled" v-if="pageNum<=1"><i class="ui ui_arrow_left"></i></span>
-        <span v-else @click="toPage(pageNum-1)"><i class="ui ui_arrow_left"></i></span>
+        <span class="disabled" v-if="pageNum<=1" :style="{borderRadius: radius}"><i class="ui ui_arrow_left"></i></span>
+        <span v-else @click="toPage(1)" :style="{borderRadius: radius}"><i class="ui ui_arrow_left"></i></span>
         <!-- Page -->
          <template v-if="total>0">
-          <span v-for="(v, k) in list" :key="k" :class="v==pageNum?'active':''" @click="toPage(v)">{{ v }}</span>
+          <span v-for="(v, k) in list" :key="k" :class="v==pageNum?'active':''" @click="toPage(v)" :style="{borderRadius: radius}">
+            <b>{{ v }}</b>
+          </span>
         </template>
         <span v-else class="disabled">{{ total }}</span>
         <!-- Next -->
-        <span class="disabled" v-if="pageNum>=num"><i class="ui ui_arrow_right"></i></span>
-        <span v-else @click="toPage(pageNum+1)"><i class="ui ui_arrow_right"></i></span>
+        <span class="disabled" v-if="pageNum>=num" :style="{borderRadius: radius}"><i class="ui ui_arrow_right"></i></span>
+        <span v-else @click="toPage(num)" :style="{borderRadius: radius}"><i class="ui ui_arrow_right"></i></span>
       </div>
       <div class="wm-page_tools flex">
         <span>每页</span>
@@ -28,9 +30,9 @@
 .wm-page_body{position: relative; width: 100%; height: 100%;}
 .wm-page{position: absolute; width: 100%; left: 50%; top: 50%; transform: translate(-50%, -50%); height: 28px; line-height: 28px;}
 .wm-page_info{margin: 0 4px;}
-.wm-page_num{margin: 0 8px; text-align: center;}
+.wm-page_num{user-select: none; margin: 0 8px; text-align: center;}
 .wm-page_num i{font-size: 12px;}
-.wm-page_num span{cursor: pointer; margin: 0 4px; width: 28px; height: 28px; color: @RegularText; font-size: 16px; border-radius: 4px;}
+.wm-page_num span{cursor: pointer; margin: 0 4px; padding: 0 8px; min-width: 14px; height: 28px; color: @Minor2; font-size: 14px;}
 .wm-page_num span:hover{color: @Primary; background-color: @BaseFill;}
 .wm-page_num .active{color: #FFF; background-color: @Primary;}
 .wm-page_num .active:hover{color: #FFF; background: linear-gradient(@Primary, @Primary1);}
@@ -46,10 +48,11 @@ import Format from '@/library/format'
 @Options({
   components: { },
   props: {
-    total: {type: Number, default: 0},     // 总条数
-    page: {type: Number, default: 1},      // 当前页码
-    limit: {type: Number, default: 100},   // 每页条数
-    maxPage: {type: Number, default: 11},  // 显示页数
+    total: {type: Number, default: 0},        // 总条数
+    page: {type: Number, default: 1},         // 当前页码
+    limit: {type: Number, default: 100},      // 每页条数
+    maxPage: {type: Number, default: 11},     // 显示页数
+    radius: {type: String, default: '14px'},  // 显示页数
   }
 })
 export default class Page extends Vue {
@@ -59,6 +62,7 @@ export default class Page extends Vue {
   limit!: number;
   total!: number;
   maxPage!: number;
+  radius!: string;
   // 变量
   num: number = 0;
   pageNum: number = 0;

@@ -15,9 +15,12 @@
         <div class="wm-search_ct">
           <slot></slot>
         </div>
-        <div class="wm-search_bottom">
-          <wm-button effect="text" @click="reset()">重 置</wm-button>
-          <wm-button effect="dark" type="primary" icon="ui ui_search" padding="0 16px 0 8px" @click="search()">搜 索</wm-button>
+        <div class="wm-search_bottom flex">
+          <div class="reset" @click="reset()">重 置</div>
+          <div class="search flex_center" @click="search()">
+            <i class="ui ui_search"></i>
+            <span>搜 索</span>
+          </div>
         </div>
       </wm-popup>
     </div>
@@ -32,7 +35,13 @@
 .wm-search_title i{cursor: pointer; width: 32px; height: 32px; font-size: 12px; text-align: center; border-radius: 50%;}
 .wm-search_title i:hover{color: @Primary; background-color: @Minor8;}
 .wm-search_ct{height: calc(100% - 96px); border: @LighterBorder 1px solid;}
-.wm-search_bottom{padding: 8px 16px; height: 32px; line-height: 32px; text-align: center;}
+.wm-search_bottom{height: 48px; line-height: 48px; text-align: center;}
+.wm-search_bottom div{cursor: pointer; width: 50%;}
+.wm-search_bottom .reset{color: @RegularText; background-color: #FFF;}
+.wm-search_bottom .reset:hover{background: linear-gradient(@BaseFill, @DarkerFill);}
+.wm-search_bottom .search{color: #FFF; background-color: @Primary;}
+.wm-search_bottom .search:hover{background: linear-gradient(@Primary, @Primary1);}
+.wm-search_bottom .search i{width: 28px;}
 </style>
 
 <script lang="ts">

@@ -32,8 +32,8 @@ export default class SysMenus extends Base {
   activated(): void {
     // 字段
     this.list.columns = [
-      {title: 'ID', width: '30px', index: 'id', slot: 'id', textAlign: 'center'},
-      {title: '名称', width: '120px', index: 'title', slot: 'title', textAlign: 'right'},
+      {title: 'ID', width: '40px', index: 'id', slot: 'id', textAlign: 'center'},
+      {title: '名称', width: '120px', index: 'title', slot: 'title', textAlign: 'center', order: ''},
       {title: '备注', index: 'remark'},
     ];
     // 数据

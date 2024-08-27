@@ -23,25 +23,21 @@
           <wm-main overflowY="auto">
             <wm-table-form>
               <tr>
-                <td class="lable">名称</td>
                 <td colspan="2">
                   <wm-input v-model:value="sea.form.title" placeholder="菜单名称" maxlength="16"></wm-input>
                 </td>
               </tr>
               <tr>
-                <td class="lable">英文</td>
                 <td colspan="2">
                   <wm-input v-model:value="sea.form.en" placeholder="英文名称" maxlength="16"></wm-input>
                 </td>
               </tr>
               <tr>
-                <td class="lable">地址</td>
                 <td colspan="2">
-                  <wm-input v-model:value="sea.form.url" placeholder="路由地址" maxlength="32"></wm-input>
+                  <wm-input v-model:value="sea.form.url" placeholder="前端路由" maxlength="32"></wm-input>
                 </td>
               </tr>
               <tr>
-                <td class="lable">接口</td>
                 <td colspan="2">
                   <wm-input v-model:value="sea.form.controller" placeholder="接口地址" maxlength="32"></wm-input>
                 </td>
@@ -68,7 +64,6 @@
 </template>
 
 <style lang="less" scoped>
-.wm-table_form .lable{width: 60px;}
 </style>
 
 <script lang="ts" src="./Menus.ts"></script>

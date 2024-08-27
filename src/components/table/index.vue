@@ -10,10 +10,15 @@
           <td class="checkbox" v-if="isCheckbox">
             <wm-checkBox v-model:value="checkbox.value" :partially="checkbox.partially" :options="checkbox.data" margin="0" @checkbox="checkboxAll()"></wm-checkBox>
           </td>
-          <td v-for="(v, k) in columns" :key="k" :style="{
-            width: v.width,
-            textAlign: v.textAlign,
-          }">{{ v.title }}</td>
+          <td v-for="(v, k) in columns" :key="k" :style="{width: v.width, textAlign: v.textAlign}">
+            {{ v.title }}
+            <div class="order_body" v-if="['', 'asc', 'desc'].includes(v.order)" @click="OrderBy(k, v.index, v.order)">
+              <div class="order">
+                <i class="ui ui_arrow_up" :class="v.order=='desc'?'active':''"></i>
+                <i class="ui ui_arrow_down" :class="v.order=='asc'?'active':''"></i>
+              </div>
+            </div>
+          </td>
         </tr>
       </thead>
       <tbody class="wm-table_list">
@@ -36,12 +41,17 @@
 .wm-table{width: 100%; border-collapse: collapse;}
 .wm-table .checkbox{width: 24px; text-align: center; position: sticky; z-index: 10; left: 0;}
 .wm-table .checkbox::after,.wm-table .checkbox::before{content: ''; position: absolute; width: 1px; height: 100%;}
-.wm-table .checkbox::after{left: -1px; top: 0; background-color: #ECECEC;}
-.wm-table .checkbox::before{right: -1px; top: 0; background-color: #ECECEC;}
+.wm-table .checkbox::after{left: -1px; top: 0; border-left: #F2F4F8 1px solid;}
+.wm-table .checkbox::before{right: -1px; top: 0; border-right: @Primary5 1px solid;}
 .wm-table td{padding: 4px 8px; height: 32px; line-height: 20px; white-space: nowrap; border: #FFF 1px solid;}
-.wm-table_title td{background-color: #F2F4F8; color: @Minor4; font-weight: bold;}
+.wm-table_title td{position: relative; background-color: #F2F4F8; color: @Minor4; font-weight: bold;}
+.wm-table_title .order_body{cursor: pointer; position: absolute; right: 0; top: 0; width: 16px; height: 100%; background-color: #F2F4F8;}
+.wm-table_title .order_body:hover{background-color: #FFF; color: @Primary;}
+.wm-table_title .order{position: absolute; width: 100%; height: 20px; left: 50%; top: 50%; transform: translate(-50%, -50%);}
+.wm-table_title .order i{float: left; width: 100%; height: 50%; line-height: 10px; font-size: 12px; zoom: 0.8; text-align: center;}
+.wm-table_title .order .active{color: @Primary;}
 .wm-table_list tr:nth-child(odd) td{background-color: #FFF;}
-.wm-table_list tr:nth-child(even) td{background-color: #F2F6FA;}
+.wm-table_list tr:nth-child(even) td{background-color: #F2F4F8;}
 .wm-table_list tr:hover td{background-color: #EAF0F4;}
 .wm-table_list tr:last-child td{border-bottom-color: #F2F2F2;}
 .wm-table_list tr td.active{background: #D7E3EE;}
@@ -138,6 +148,15 @@ export default class Table extends Vue {
       if(this.options[i].checked) data.push(this.options[i]);
     }
     return data;
+  }
+
+  /* 排序 */
+  OrderBy(k:number, index: string, order: string): void {
+    if(order=='asc') order = 'desc';
+    else if(order=='desc') order = '';
+    else order = 'asc';
+    this.columns[k].order = order;
+    this.$emit('orderBy', index, order);
   }
 
 }

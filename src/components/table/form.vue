@@ -7,7 +7,7 @@
 <style lang="less">
 .wm-table_form{width: 100%; border-collapse: collapse;}
 .wm-table_form td{padding: 4px 8px; height: 32px; line-height: 20px; white-space: nowrap; border: #FFF 1px solid;}
-.wm-table_form .lable{max-width: 120px; text-align: right; color: @RegularText;}
+.wm-table_form .label{max-width: 120px; text-align: right; color: @RegularText;}
 </style>
 
 <script lang="ts">

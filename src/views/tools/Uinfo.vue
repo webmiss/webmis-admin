@@ -3,13 +3,13 @@
     <wm-main>
       <wm-table-form>
         <tr>
-          <td class="lable">昵称</td>
+          <td class="label">昵称</td>
           <td colspan="2">
             <wm-input v-model:value="form.nickname" placeholder="用户昵称" maxlength="16"></wm-input>
           </td>
         </tr>
         <tr>
-          <td class="lable">姓名</td>
+          <td class="label">姓名</td>
           <td>
             <wm-input v-model:value="form.name" placeholder="真实姓名" maxlength="16" disabled></wm-input>
           </td>
@@ -18,19 +18,19 @@
           </td>
         </tr>
         <tr>
-          <td class="lable">生日</td>
+          <td class="label">生日</td>
           <td colspan="2">
             <wm-date-picker v-model:value="form.birthday" :maxDate="maxDate"></wm-date-picker>
           </td>
         </tr>
         <tr>
-          <td class="lable">部门</td>
+          <td class="label">部门</td>
           <td colspan="2">
             <wm-input v-model:value="form.department" placeholder="部门" maxlength="16"></wm-input>
           </td>
         </tr>
         <tr>
-          <td class="lable">职位</td>
+          <td class="label">职位</td>
           <td colspan="2">
             <wm-input v-model:value="form.position" placeholder="职位" maxlength="16"></wm-input>
           </td>
@@ -44,7 +44,7 @@
 </template>
 
 <style lang="less" scoped>
-.wm-table_form .lable{width: 60px;}
+.wm-table_form .label{width: 60px;}
 </style>
 
 <script lang="ts">

@@ -5,14 +5,14 @@
           <i class="partially" v-if="partially"></i>
           <i class="all" v-else></i>
         </span>
-        <span class="lable" v-if="options.label">{{ options.label }}</span>
+        <span class="label" v-if="options.label">{{ options.label }}</span>
       </li>
       <li v-else :style="{margin:margin, padding:padding}" @click="clickCheckbox()">
         <span class="checkbox" :class="options.checked||value==options.value?'active':''">
           <i class="partially" v-if="partially"></i>
           <i class="all" v-else></i>
         </span>
-        <span class="lable" v-if="options.label">{{ options.label }}</span>
+        <span class="label" v-if="options.label">{{ options.label }}</span>
       </li>
   </ul>
 </template>
@@ -21,10 +21,10 @@
 .wm-checkbox{white-space: nowrap; height: 26px; line-height: 26px; font-weight: normal; color: rgba(0,0,0,0.7);}
 .wm-checkbox li{display: inline-block; cursor: pointer; padding: 5px; margin: 0 4px; line-height: 16px;}
 .wm-checkbox li:hover .checkbox{border-color: @Primary;}
-.wm-checkbox li:hover .lable{color: #000;}
+.wm-checkbox li:hover .label{color: #000;}
 .wm-checkbox span{float: left;}
 .wm-checkbox .checkbox{position: relative; display: inline-flex; width: 16px; height: 16px; border: @BorderColor 1px solid; border-radius: 2px; box-sizing: border-box; background-color: #FFF; transition: @Transition;}
-.wm-checkbox .lable{padding-left: 8px;}
+.wm-checkbox .label{padding-left: 8px;}
 .wm-checkbox .active{border-color: @Primary; background-color: @Primary;}
 .wm-checkbox .active .all{content: ''; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -70%) rotate(45deg); width: 4px; height: 8px; border: #FFF 2px solid; border-left: none; border-top: none;}
 .wm-checkbox .active .partially{content: ''; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -70%); width: 8px; height: 2px; background-color: #FFF;}

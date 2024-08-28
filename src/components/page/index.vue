@@ -19,7 +19,9 @@
       </div>
       <div class="wm-page_tools flex">
         <span>每页</span>
-        <span>{{ limit }}</span>
+        <span>
+          <wm-select width="80px" height="28px" position="top" bodyWidth="240px" :options="limitList"></wm-select>
+        </span>
         <span>条</span>
       </div>
     </div>
@@ -44,14 +46,22 @@
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
+import wmSelect from '@/components/form/select/index.vue'
 import Format from '@/library/format'
 @Options({
-  components: { },
+  components: { wmSelect },
   props: {
     total: {type: Number, default: 0},        // 总条数
     page: {type: Number, default: 1},         // 当前页码
-    limit: {type: Number, default: 100},      // 每页条数
     maxPage: {type: Number, default: 11},     // 显示页数
+    limit: {type: Number, default: 100},      // 每页条数
+    limitList: {type: Array, default: [       // 条数选择
+      {label: '100', value: 100, display: true},
+      {label: '200', value: 200, display: true},
+      {label: '300', value: 300, display: true},
+      {label: '400', value: 400, display: false},
+      {label: '500', value: 500, display: true},
+    ]},
     radius: {type: String, default: '14px'},  // 显示页数
   }
 })
@@ -60,13 +70,14 @@ export default class Page extends Vue {
   // 参数
   page!: number;
   limit!: number;
+  limitList!: Array<any>;
   total!: number;
   maxPage!: number;
   radius!: string;
   // 变量
   num: number = 0;
   pageNum: number = 0;
-  list: any = [];
+  list: Array<any> = [];
 
   /* 创建成功 */
   created(): void {

@@ -16,13 +16,13 @@
         </template>
         <template v-else>
           <tr>
-            <td class="lable">新密码</td>
+            <td class="label">新密码</td>
             <td>
               <wm-input type="password" v-model:value="form.passwd1" placeholder="请输入新密码" maxlength="16"></wm-input>
             </td>
           </tr>
           <tr>
-            <td class="lable">重复密码</td>
+            <td class="label">重复密码</td>
             <td>
               <wm-input type="password" v-model:value="form.passwd2" placeholder="请确认新密码" maxlength="16"></wm-input>
             </td>
@@ -39,7 +39,7 @@
 </template>
 
 <style lang="less" scoped>
-.wm-table_form .lable{width: 70px;}
+.wm-table_form .label{width: 70px;}
 </style>
 
 <script lang="ts">

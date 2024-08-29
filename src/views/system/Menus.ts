@@ -1,4 +1,5 @@
 import { Options } from 'vue-class-component';
+import { useStore } from 'vuex';
 import Base from '../../service/Base'
 /* 组件 */
 import wmMain from '@/components/container/main.vue'
@@ -18,19 +19,19 @@ import wmSearch from '../tools/Search.vue'
 export default class SysMenus extends Base {
 
   /* 搜索 */
-  sea: any = {show: false, form:{title:''}}
+  sea: any = {show: false, keys:'', form:{title:'', en:'', url:'', controller:''}}
+  // 状态
+  private store: any = useStore();
+  private state: any = this.store.state;
   /* 列表 */
   list: any = {columns: [], data: [], num: 0, total: 0};
   page: any = {total: 0, num:1, limit: 100};
 
   /* 创建成功 */
   public created(): void {
-    
   }
 
   /* 创建完成 */
-  public mounted(): void {
-  }
   activated(): void {
     // 字段
     this.list.columns = [
@@ -38,14 +39,14 @@ export default class SysMenus extends Base {
       {title: '名称', width: '120px', index: 'title', slot: 'title', textAlign: 'center', order: ''},
       {title: '备注', index: 'remark'},
     ];
-    // 数据
-    this.list.data = [
-      {id: 1, title: '系统', remark: ''},
-      {id: 2, title: '其它', remark: ''},
-    ];
-    // 统计
-    this.page.total = 253;
-    console.log('menus');
+    // // 数据
+    // this.list.data = [
+    //   {id: 1, title: '系统', remark: ''},
+    //   {id: 2, title: '其它', remark: ''},
+    // ];
+    // // 统计
+    // this.page.total = 253;
+    if(this.state.token) this.loadData();
   }
 
   /* 选中状态 */
@@ -54,8 +55,21 @@ export default class SysMenus extends Base {
     this.list.total = t;
   }
 
+  /* 重置条件 */
+  resetData(): void {
+    this.sea.keys = '';
+    this.sea.form.title = '';
+    this.sea.form.en = '';
+    this.sea.form.url = '';
+    this.sea.form.controller = '';
+    this.page.num = 1;
+    this.loadData();
+  }
+
   /* 加载数据 */
   loadData(): void {
+    this.sea.show = false;
+    console.log('sea', this.sea.keys);
     console.log('loadData', this.page.total, this.page.num, this.page.limit);
   }
 

@@ -85,6 +85,9 @@ export default class Page extends Vue {
     this.$watch('total', (val:number)=>{
       this.init();
     }, { deep: true });
+    this.$watch('page', (val:number)=>{
+      this.init();
+    }, { deep: true });
   }
 
   /* 创建完成 */

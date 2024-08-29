@@ -1,8 +1,8 @@
 <template>
   <div class=".wm-search_body">
     <div class="flex">
-      <wm-input placeholder="输入关键字" width="210px" height="32px" lineHeight="32px" maxlength="32" icon="ui ui_search" iconAlign="right" padding="0 40px 0 10px" margin="0 5px 0 0"></wm-input>
-      <wm-button effect="plain">重置</wm-button>
+      <wm-input v-model:value="seaKey" @update:value="serachVal($event)" @iconClick="search()" placeholder="输入关键字" width="210px" height="32px" lineHeight="32px" maxlength="32" icon="ui ui_search" iconAlign="right" padding="0 40px 0 10px" margin="0 5px 0 0"></wm-input>
+      <wm-button effect="plain" @click="reset()">重置</wm-button>
       <wm-button effect="plain" icon="ui ui_arrow_right" padding="0 4px" @click="seaShow=true"></wm-button>
     </div>
     <!-- Content -->
@@ -56,6 +56,7 @@ import wmButton from '@/components/form/button/index.vue'
   components: { wmMain, wmPopup, wmInput, wmButton },
   props: {
     show: {type: Boolean, default: false},    // 是否显示
+    keys: {type: String, default: ''},        // 关键字
     title: {type: String, default: '搜索'},   // 标题
     width: {type: String, default: '360px'},  // 宽
   }
@@ -63,19 +64,33 @@ import wmButton from '@/components/form/button/index.vue'
 export default class Search extends Vue {
   // 参数
   show!: boolean;
+  keys!: string;
   title!: string;
   width!: string;
   // 变量
   seaShow: boolean = false;
+  seaKey: string = '';
 
   /* 创建成功 */
   created(): void {
     this.$watch('show', (val:boolean)=>{
       this.seaShow = val;
     }, { deep: true });
-    this.$watch('seaShow', (val:boolean)=>{
-      this.$emit('update:show', val);
+    this.$watch('keys', (val:string)=>{
+      this.seaKey = val;
     }, { deep: true });
+    this.$watch('seaShow', (val:boolean)=>{
+     this.$emit('update:show', val);
+    }, { deep:  true });
+  }
+  /* 创建完成 */
+  public mounted(): void {
+    this.seaKey = this.keys;
+  }
+
+  /* 搜索内容 */
+  serachVal(val: string): void {
+    this.$emit('update:keys', val);
   }
 
   /* 搜索 */

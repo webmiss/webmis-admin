@@ -56,7 +56,7 @@
 .wm-select_body .bottom_arrow{position: absolute; top: -5px; left: calc(50% - 5px); transform: translateX(-50%);}
 .wm-select_body .bottom_arrow::before{content: ''; position: absolute; width: 10px; height: 10px; border: @BorderColor 1px solid; border-right-color: transparent; border-bottom-color: transparent; background-color: #FFF; transform: rotate(45deg); box-sizing: border-box;}
 .wm-select_search{padding: 8px 8px 0 8px; background-color: #FFF;}
-.wm-select_list{user-select: none; overflow: hidden; overflow-y: auto; padding: 8px 0;}
+.wm-select_list{user-select: none; overflow: hidden; overflow-y: auto; padding: 4px 0;}
 .wm-select_list li{position: relative; white-space: nowrap; padding: 0 8px; height: 40px; line-height: 40px;}
 .wm-select_list li:hover{background-color: #F4F6F8;}
 .wm-select_list li:hover .label{color: @Primary;}

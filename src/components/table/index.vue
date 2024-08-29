@@ -22,14 +22,19 @@
         </tr>
       </thead>
       <tbody class="wm-table_list">
-        <tr v-for="(data, k) in options" :key="k">
-          <td class="checkbox" v-if="isCheckbox" :class="data.checked?'active':''">
-            <wm-checkBox :options="{label:'', value:data.id, checked:data.checked, disabled:data.disabled}" margin="0" @checkbox="Checkbox"></wm-checkBox>
-          </td>
-          <td v-for="(v, n) in columns" :key="n" :title="data[v.index]" :class="data.checked?'active':''">
-            <slot v-if="v.slot" v-bind="data" :name="v.slot" :index="k">{{ data[v.index] || '-' }}</slot>
-            <span v-else>{{ data[v.index] || '-' }}</span>
-          </td>
+        <template v-if="options.length>0">
+          <tr v-for="(data, k) in options" :key="k">
+            <td class="checkbox" v-if="isCheckbox" :class="data.checked?'active':''">
+              <wm-checkBox :options="{label:'', value:data.id, checked:data.checked, disabled:data.disabled}" margin="0" @checkbox="Checkbox"></wm-checkBox>
+            </td>
+            <td v-for="(v, n) in columns" :key="n" :title="data[v.index]" :class="data.checked?'active':''">
+              <slot v-if="v.slot" v-bind="data" :name="v.slot" :index="k">{{ data[v.index] || '-' }}</slot>
+              <span v-else>{{ data[v.index] || '-' }}</span>
+            </td>
+          </tr>
+        </template>
+        <tr>
+          <td class="null" :colspan="columns.length+(isCheckbox?1:0)"></td>
         </tr>
       </tbody>
     </table>
@@ -55,11 +60,13 @@
 .wm-table_list tr:hover td{background-color: #EAF0F4;}
 .wm-table_list tr:last-child td{border-bottom-color: #F2F2F2;}
 .wm-table_list tr td.active{background: #D7E3EE;}
+.wm-table_list .null{height: 160px;}
 </style>
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
 /* 组件 */
+import Ui from '@/library/ui'
 import wmCheckBox from '@/components/form/checkbox/index.vue'
 
 @Options({
@@ -96,7 +103,7 @@ export default class Table extends Vue {
 
   /* 全选、全不选 */
   checkboxAll(status: boolean | string = ''): void {
-    console.log(typeof status);
+    if(this.options.length==0) return Ui.Toast('暂无数据');
     this.checkbox.checked = typeof status=='boolean'?status:!this.checkbox.checked;
     for(let i in this.options) {
       if(!this.options[i].disabled) this.options[i].checked = this.checkbox.checked;

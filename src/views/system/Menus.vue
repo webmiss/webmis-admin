@@ -19,7 +19,7 @@
         <wm-button effect="plain" type="danger" icon="ui ui_del" padding="0 16px 0 8px" :disabled="list.num==0">删除({{ list.num }})</wm-button>
       </div>
       <div class="search flex">
-        <wm-search v-model:show="sea.show" @search="sea.show=false" @reset="sea.show=false">
+        <wm-search v-model:show="sea.show" v-model:keys="sea.keys" @keyup.enter="loadData()" @search="loadData()" @reset="resetData()">
           <wm-main overflowY="auto">
             <wm-table-form>
               <tr>

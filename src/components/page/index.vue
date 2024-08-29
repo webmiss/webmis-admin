@@ -20,7 +20,7 @@
       <div class="wm-page_tools flex">
         <span>每页</span>
         <span>
-          <wm-select width="80px" height="28px" position="top" bodyWidth="240px" :options="limitList"></wm-select>
+          <wm-select :value="selectVal" @update:value="selectChange($event)" width="80px" height="28px" position="top" :options="limitList"></wm-select>
         </span>
         <span>条</span>
       </div>
@@ -56,11 +56,10 @@ import Format from '@/library/format'
     maxPage: {type: Number, default: 11},     // 显示页数
     limit: {type: Number, default: 100},      // 每页条数
     limitList: {type: Array, default: [       // 条数选择
-      {label: '100', value: 100, display: true},
-      {label: '200', value: 200, display: true},
-      {label: '300', value: 300, display: true},
-      {label: '400', value: 400, display: false},
-      {label: '500', value: 500, display: true},
+      {label: '100', value: 100},
+      {label: '200', value: 200},
+      {label: '300', value: 300},
+      {label: '500', value: 500},
     ]},
     radius: {type: String, default: '14px'},  // 显示页数
   }
@@ -78,6 +77,7 @@ export default class Page extends Vue {
   num: number = 0;
   pageNum: number = 0;
   list: Array<any> = [];
+  selectVal: Array<any> = [];
 
   /* 创建成功 */
   created(): void {
@@ -94,12 +94,16 @@ export default class Page extends Vue {
 
   /* 初始化 */
   init(): void {
+    // 默认值
+    this.pageNum = this.page;
+    this.selectVal = [this.limit];
+    // 分页
     this.num = Math.ceil(this.total/this.limit);
-    this.toPage(this.page);
+    this.toPage(this.page, false);
   }
 
   /* 翻页 */
-  toPage(n: number): void {
+  toPage(n: number, isStatus: boolean=true): void {
     // 边界
     let page: number = n;
     if(n<1) page = 1;
@@ -118,7 +122,19 @@ export default class Page extends Vue {
     }
     this.list = list;
     this.pageNum = page;
-    this.$emit('pageInfo', {total: this.total, page: page, num: this.num, limit: this.limit});
+    if(isStatus){
+      this.$emit('update:page', page);
+      this.$emit('pageData', {total: this.total, page: page, num: this.num, limit: this.limit});
+    }
+    
+  }
+
+  /* 选择页码 */
+  selectChange(val: any): void {
+    this.$emit('update:limit', val[0]);
+    this.$nextTick(()=>{
+      this.init();
+    });
   }
 
 }

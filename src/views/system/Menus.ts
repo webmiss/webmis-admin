@@ -21,7 +21,7 @@ export default class SysMenus extends Base {
   sea: any = {show: false, form:{title:''}}
   /* 列表 */
   list: any = {columns: [], data: [], num: 0, total: 0};
-  total: any = {total: 0};
+  page: any = {total: 0, num:1, limit: 100};
 
   /* 创建成功 */
   public created(): void {
@@ -44,7 +44,7 @@ export default class SysMenus extends Base {
       {id: 2, title: '其它', remark: ''},
     ];
     // 统计
-    this.total.total = 253;
+    this.page.total = 253;
     console.log('menus');
   }
 
@@ -54,11 +54,17 @@ export default class SysMenus extends Base {
     this.list.total = t;
   }
 
+  /* 加载数据 */
+  loadData(): void {
+    console.log('loadData', this.page.total, this.page.num, this.page.limit);
+  }
+
   /* 编辑 */
   edit(): void {
     const obj:any = this.$refs.tableList;
     const list: any = obj.getData();
-    console.log(list);
+    obj.checkboxAll(false);
+    console.log('edit', list);
   }
   
 

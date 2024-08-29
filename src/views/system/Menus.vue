@@ -61,7 +61,7 @@
   </div>
   <!-- Page -->
    <div class="app_page">
-    <wm-page v-model:total="total.total"></wm-page>
+    <wm-page v-model:total="page.total" v-model:page="page.num" @update:page="loadData()" v-model:limit="page.limit" @update:limit="page.num=1;loadData()"></wm-page>
    </div>
 </template>
 

@@ -19,32 +19,13 @@
         <wm-button effect="plain" type="danger" icon="ui ui_del" padding="0 16px 0 8px" :disabled="list.num==0">删除({{ list.num }})</wm-button>
       </div>
       <div class="search flex">
-        <wm-search v-model:show="sea.show" v-model:keys="sea.keys" @keyup.enter="loadData()" @search="loadData()" @reset="resetData()">
-          <wm-main overflowY="auto">
-            <wm-table-form>
-              <tr>
-                <td colspan="2">
-                  <wm-input v-model:value="sea.form.title" placeholder="菜单名称" maxlength="16"></wm-input>
-                </td>
-              </tr>
-              <tr>
-                <td colspan="2">
-                  <wm-input v-model:value="sea.form.en" placeholder="英文名称" maxlength="16"></wm-input>
-                </td>
-              </tr>
-              <tr>
-                <td colspan="2">
-                  <wm-input v-model:value="sea.form.url" placeholder="前端路由" maxlength="32"></wm-input>
-                </td>
-              </tr>
-              <tr>
-                <td colspan="2">
-                  <wm-input v-model:value="sea.form.controller" placeholder="接口地址" maxlength="32"></wm-input>
-                </td>
-              </tr>
-            </wm-table-form>
-          </wm-main>
+        <!-- Search -->
+        <wm-search v-model:show="sea.show" v-model:keys="sea.keys" :columns="sea.columns" @keyup.enter="loadData()" @search="loadData()" @reset="resetData()">
+          <template #time="d">
+            <wm-date-picker v-model:value="sea.time" range :maxDate="sea.maxDate" :placeholder="d.label"></wm-date-picker>
+          </template>
         </wm-search>
+        <!-- Search End -->
       </div>
     </div>
     <!-- Action End -->
@@ -63,6 +44,7 @@
    <div class="app_page">
     <wm-page v-model:total="page.total" v-model:page="page.num" @update:page="loadData()" v-model:limit="page.limit" @update:limit="page.num=1;loadData()"></wm-page>
    </div>
+   <!-- Page End -->
 </template>
 
 <style lang="less" scoped>

@@ -28,12 +28,12 @@
               <wm-checkBox :options="{label:'', value:data.id, checked:data.checked, disabled:data.disabled}" margin="0" @checkbox="Checkbox"></wm-checkBox>
             </td>
             <td v-for="(v, n) in columns" :key="n" :title="data[v.index]" :class="data.checked?'active':''">
-              <slot v-if="v.slot" v-bind="data" :name="v.slot" :index="k">{{ data[v.index] || '-' }}</slot>
+              <slot v-if="v.slot" v-bind="data" :name="v.slot" :index="k"></slot>
               <span v-else>{{ data[v.index] || '-' }}</span>
             </td>
           </tr>
         </template>
-        <tr>
+        <tr v-else>
           <td class="null" :colspan="columns.length+(isCheckbox?1:0)"></td>
         </tr>
       </tbody>
@@ -98,7 +98,7 @@ export default class Table extends Vue {
   created(): void {
     this.$watch('columns', (val: Array<any>)=>{
       this.partially();
-    }, { deep: true }); 
+    }, { deep: true });
   }
 
   /* 全选、全不选 */

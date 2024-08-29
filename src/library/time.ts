@@ -10,9 +10,12 @@ export default class Time {
   }
 
   /* 日期格式 */
-  public static Date(format: string='Y-m-d H:i:s', timestamp: number=0): string {
+  public static Date(format: string='Y-m-d H:i:s', timestamp: number | Date=0): string {
     // 获取时间
-    const time: Date = timestamp>0?new Date(timestamp*1000):new Date();
+    let time: Date;
+    if(typeof timestamp == 'number') time = timestamp>0?new Date(timestamp*1000):new Date();
+    else time = timestamp;
+    // 获取时间
     const y: string = ''+time.getFullYear();
     const m: string = time.getMonth()+1<10?'0'+(time.getMonth()+1):''+(time.getMonth()+1);
     const d: string = time.getDate()<10?'0'+time.getDate():''+time.getDate();

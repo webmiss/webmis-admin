@@ -13,7 +13,16 @@
           <i class="ui ui_close" @click="close"></i>
         </div>
         <div class="wm-search_ct">
-          <slot></slot>
+          <wm-main overflowY="auto">
+            <wm-table-form>
+              <tr v-for="(v, k) in columns" :key="k">
+                <td>
+                  <slot v-if="v.slot" v-bind="v" :name="v.slot" :index="k"></slot>
+                  <wm-input v-else v-model:value="columns[k].value" :placeholder="v.label" :maxlength="v.maxlength?v.maxlength:''"></wm-input>
+                </td>
+              </tr>
+            </wm-table-form>
+          </wm-main>
         </div>
         <div class="wm-search_bottom flex">
           <div class="reset" @click="reset()">重 置</div>
@@ -49,14 +58,16 @@ import { Options, Vue } from 'vue-class-component';
 /* 组件 */
 import wmMain from '@/components/container/main.vue'
 import wmPopup from '@/components/popup/index.vue'
+import wmTableForm from '@/components/table/form.vue'
 import wmInput from '@/components/form/input/index.vue'
 import wmButton from '@/components/form/button/index.vue'
 
 @Options({
-  components: { wmMain, wmPopup, wmInput, wmButton },
+  components: { wmMain, wmPopup, wmTableForm, wmInput, wmButton },
   props: {
     show: {type: Boolean, default: false},    // 是否显示
     keys: {type: String, default: ''},        // 关键字
+    columns: {type: Array, default: []},      // 字段: [{label: '名称', value: '', slot: 'name'}]
     title: {type: String, default: '搜索'},   // 标题
     width: {type: String, default: '360px'},  // 宽
   }
@@ -65,6 +76,7 @@ export default class Search extends Vue {
   // 参数
   show!: boolean;
   keys!: string;
+  columns!: Array<any>;
   title!: string;
   width!: string;
   // 变量

@@ -2,6 +2,7 @@
   <div :style="{width: width, height: height}">
     <VueDatePicker
       v-model="date"
+      mode="range"
       :format="format"
       :range="range"
       :placeholder="placeholder"
@@ -25,10 +26,11 @@
 import { Options, Vue } from 'vue-class-component';
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
+import Time from '@/library/time'
 @Options({
   components: { VueDatePicker },
   props: {
-    value: {default: ''},                                     // 日期: 2024-01-01、[2024-01-01,2024-01-31]
+    value: {default: ''},                                     // 日期: '2024-01-01'、['2024-01-01', '2024-01-31']
     range: {type: Boolean, default: false},                   // 范围选择
     format: {type: String, default: 'yyyy/MM/dd'},            // 格式: yyyy-MM-dd HH:mm:ss
     isTime: {type: Boolean, default: false},                  // 时间选择
@@ -67,7 +69,15 @@ export default class DatePicker extends Vue {
     // 监听
     this.$watch('value', (val:any)=>{
       this.date = val;
+      this.$emit('update:value', val);
     }, { deep: true });
+    this.$watch('date', (val:any)=>{
+      this.$emit('update:value', val);
+    }, { deep: true });
+  }
+  /* 创建完成 */
+  public mounted(): void {
+    this.date = this.value;
   }
 
 }

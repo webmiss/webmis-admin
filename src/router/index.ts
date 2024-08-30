@@ -7,7 +7,7 @@ const routes: Array<RouteRecordRaw> = [
   {path: '/refresh', name: 'Refresh', component: ()=>import('../views/tools/Refresh.vue') },
   // 系统管理
   {path: '/SysFileManage', name: 'SysFileManage', component: ()=>import('../views/system/FileManage.vue') },
-  {path: '/SysMenus', name: 'SysMenus', component: ()=>import('../views/system/Menus.vue') },
+  {path: '/SysMenus', name: 'SysMenus', component: ()=>import('../views/system/menus/index.vue') },
   {path: '/SysUser', name: 'SysUser', component: ()=>import('../views/system/User.vue') },
   {path: '/SysRole', name: 'SysRole', component: ()=>import('../views/system/Role.vue') },
   // 基础数据

@@ -10,7 +10,12 @@
           <td class="checkbox" v-if="isCheckbox">
             <wm-checkBox v-model:value="checkbox.value" :partially="checkbox.partially" :options="checkbox.data" margin="0" @checkbox="checkboxAll()"></wm-checkBox>
           </td>
-          <td v-for="(v, k) in columns" :key="k" :style="{width: v.width, textAlign: v.textAlign}">
+          <td v-for="(v, k) in columns" :key="k" :style="{
+            width: v.width,
+            minWidth: v.minWidth,
+            maxWidth: v.maxWidth?v.maxWidth+' !important':'',
+            textAlign: v.textAlign
+          }">
             {{ v.title }}
             <div class="order_body" v-if="['', 'asc', 'desc'].includes(v.order)" @click="OrderBy(k, v.index, v.order)">
               <div class="order">
@@ -48,7 +53,7 @@
 .wm-table .checkbox::after,.wm-table .checkbox::before{content: ''; position: absolute; width: 1px; height: 100%;}
 .wm-table .checkbox::after{left: -1px; top: 0; border-left: #F4F6F8 1px solid;}
 .wm-table .checkbox::before{right: -1px; top: 0; border-right: @Primary5 1px solid;}
-.wm-table td{padding: 4px 8px; height: 32px; line-height: 20px; white-space: nowrap; border: #FFF 1px solid;}
+.wm-table td{padding: 4px 8px; height: 32px; line-height: 1; white-space: nowrap; border: #FFF 1px solid; box-sizing: border-box;}
 .wm-table_title td{position: relative; background-color: #F4F6F8; color: @Minor4; font-weight: bold;}
 .wm-table_title .order_body{cursor: pointer; position: absolute; right: 0; top: 0; width: 16px; height: 100%; background-color: #F4F6F8;}
 .wm-table_title .order_body:hover{background-color: #FFF; color: @Primary;}
@@ -72,7 +77,7 @@ import wmCheckBox from '@/components/form/checkbox/index.vue'
 @Options({
   components: { wmCheckBox },
   props: {
-    columns: {type: Array, default: []},          // 字段: [{title: '名称', width: '30px', index: 'title', slot: 'title', textAlign: 'right'}]
+    columns: {type: Array, default: []},          // 字段: [{title: '名称', index: 'title', slot: 'title', width: '40px', minWidth: '30px', maxWidth: '120px', textAlign: 'right'}]
     options: {type: Array, default: []},          // 数据: [{id: 1, title: '系统', remark: '', checked:true, }]
     width: {type: String, default: '100%'},       // 宽
     height: {type: String, default: '100%'},      // 高
@@ -164,7 +169,7 @@ export default class Table extends Vue {
     else if(order=='desc') order = '';
     else order = 'asc';
     this.columns[k].order = order;
-    this.$emit('orderBy', index, order);
+    this.$emit('orderBy', order?index+' '+order:'');
   }
 
 }

@@ -1,7 +1,7 @@
 <template>
   <div class=".wm-search_body">
     <div class="flex">
-      <wm-input v-model:value="seaKey" @update:value="serachVal($event)" @iconClick="search()" placeholder="输入关键字" width="210px" height="32px" lineHeight="32px" maxlength="32" icon="ui ui_search" iconAlign="right" padding="0 40px 0 10px" margin="0 5px 0 0"></wm-input>
+      <wm-input v-model:value="seaKey" @update:value="serachVal($event)" @iconClick="search()" :placeholder="placeholder" width="210px" height="32px" lineHeight="32px" maxlength="32" icon="ui ui_search" iconAlign="right" padding="0 40px 0 10px" margin="0 5px 0 0"></wm-input>
       <wm-button effect="plain" @click="reset()">重置</wm-button>
       <wm-button effect="plain" icon="ui ui_arrow_right" padding="0 4px" @click="seaShow=true"></wm-button>
     </div>
@@ -26,10 +26,7 @@
         </div>
         <div class="wm-search_bottom flex">
           <div class="reset" @click="reset()">重 置</div>
-          <div class="search flex_center" @click="search()">
-            <i class="ui ui_search"></i>
-            <span>搜 索</span>
-          </div>
+          <div class="search flex_center" @click="search()">搜 索</div>
         </div>
       </wm-popup>
     </div>
@@ -48,9 +45,8 @@
 .wm-search_bottom div{cursor: pointer; width: 50%;}
 .wm-search_bottom .reset{color: @RegularText; background-color: #FFF;}
 .wm-search_bottom .reset:hover{background: linear-gradient(@BaseFill, @DarkerFill);}
-.wm-search_bottom .search{color: #FFF; background-color: @Primary;}
+.wm-search_bottom .search{color: #FFF; background-color: @Primary; font-weight: bold;}
 .wm-search_bottom .search:hover{background: linear-gradient(@Primary, @Primary1);}
-.wm-search_bottom .search i{width: 28px;}
 </style>
 
 <script lang="ts">
@@ -65,11 +61,12 @@ import wmButton from '@/components/form/button/index.vue'
 @Options({
   components: { wmMain, wmPopup, wmTableForm, wmInput, wmButton },
   props: {
-    show: {type: Boolean, default: false},    // 是否显示
-    keys: {type: String, default: ''},        // 关键字
-    columns: {type: Array, default: []},      // 字段: [{label: '名称', value: '', slot: 'name'}]
-    title: {type: String, default: '搜索'},   // 标题
-    width: {type: String, default: '360px'},  // 宽
+    show: {type: Boolean, default: false},              // 是否显示
+    keys: {type: String, default: ''},                  // 关键字
+    columns: {type: Array, default: []},                // 字段: [{label: '名称', value: '', slot: 'name'}]
+    title: {type: String, default: '搜索'},             // 标题
+    width: {type: String, default: '360px'},            // 宽
+    placeholder: {type: String, default: '输入关键字'}, // 提示
   }
 })
 export default class Search extends Vue {
@@ -79,6 +76,7 @@ export default class Search extends Vue {
   columns!: Array<any>;
   title!: string;
   width!: string;
+  placeholder!: string;
   // 变量
   seaShow: boolean = false;
   seaKey: string = '';

@@ -7,6 +7,7 @@ export default createStore({
     isPasswd: false,     // 修改密码
     token: '',           // 用户Token
     uinfo: {},           // 用户信息
+    menusAction: [],     // 动作菜单
   },
   getters: {
   },

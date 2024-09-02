@@ -13,12 +13,13 @@ import wmTable from '@/components/table/index.vue'
 import wmTableForm from '@/components/table/form.vue'
 import wmPage from '@/components/page/index.vue'
 import wmDatePicker from '@/components/datepicker/index.vue'
-/* 搜索 */
+/* 动作、搜索 */
+import wmAction from '../../tools/Action.vue'
 import wmSearch from '../../tools/Search.vue'
 
 /* 系统菜单 */
 @Options({
-  components: { wmMain, wmSearch, wmInput, wmButton, wmTable, wmPage, wmTableForm, wmDatePicker },
+  components: { wmMain, wmAction, wmSearch, wmInput, wmButton, wmTable, wmPage, wmTableForm, wmDatePicker },
 })
 export default class SysMenus extends Base {
 

@@ -14,9 +14,21 @@
     <!-- Action -->
     <div class="app_action flex">
       <div class="botton">
-        <wm-button effect="dark" type="primary" icon="ui ui_add" padding="0 16px 0 8px">添加</wm-button>
-        <wm-button effect="plain" type="primary" icon="ui ui_edit" padding="0 16px 0 8px" :disabled="list.num!=1" @click="edit()">编辑</wm-button>
-        <wm-button effect="plain" type="danger" icon="ui ui_del" padding="0 16px 0 8px" :disabled="list.num==0">删除({{ list.num }})</wm-button>
+        <wm-action :columns="[
+          {action: 'add', slot: 'add', is_action: true},
+          {action: 'edit', slot: 'edit', is_action: true},
+          {action: 'del', slot: 'del', is_action: true},
+        ]">
+          <template #add>
+            <wm-button effect="dark" type="primary" icon="ui ui_add" padding="0 16px 0 8px">添加</wm-button>
+          </template>
+          <template #edit>
+            <wm-button effect="plain" type="primary" icon="ui ui_edit" padding="0 16px 0 8px" :disabled="list.num!=1" @click="edit()">编辑</wm-button>
+          </template>
+          <template #del>
+            <wm-button effect="plain" type="danger" icon="ui ui_del" padding="0 16px 0 8px" :disabled="list.num==0">删除({{ list.num }})</wm-button>
+          </template>
+        </wm-action>
       </div>
       <div class="search flex">
         <!-- Search -->

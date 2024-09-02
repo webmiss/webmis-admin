@@ -60,6 +60,8 @@ export default class App extends Base {
     // 最近访问
     let menus: any = Storage.getItem('MenusTmp');
     this.menus.tmpList = menus?JSON.parse(menus):[];
+    // 调转首页
+    if(this.$route.path=='/') this.MenusClick('首页', '/');
   }
 
   /* 获取菜单 */
@@ -158,11 +160,9 @@ export default class App extends Base {
       if(!inArr) this.tabs.list.push({name: name, url: url});
       Storage.setItem('MenusTabs', JSON.stringify(this.tabs.list));
     }
-    // 最近访问
+    // 数据
     const list: any = this.menus.list;
-    let menus: any = Storage.getItem('MenusTmp');
-    menus = menus?JSON.parse(menus):[];
-    let tmp: any={}, data: any;
+    let tmp: any={}, data: any, action: Array<any> = [];
     for(const k1 in list) {
       if(!list[k1].children) continue;
       for(const k2 in list[k1].children) {
@@ -171,18 +171,26 @@ export default class App extends Base {
           tmp = list[k1].children[k2].children[k3];
           if(tmp.label==name&&tmp.value.url==url){
             data = {label:tmp.label, icon:tmp.icon, url:tmp.value.url};
+            action = tmp.value.action;
             break;
           }
         }
       }
     }
-    for(let i in menus) {
-      if(menus[i].url==url || parseInt(i)>=9) menus.splice(i, 1);
-    }
+    // 最近访问
     if(data) {
+      let menus: any = Storage.getItem('MenusTmp');
+      menus = menus?JSON.parse(menus):[];
+      for(let i in menus) {
+        if(menus[i].url==url || parseInt(i)>=9) menus.splice(i, 1);
+      }
       menus.unshift(data);
       this.menus.tmpList = menus;
       Storage.setItem('MenusTmp', JSON.stringify(menus));
+    }
+    // 动作菜单
+    if(action) {
+      this.state.menusAction = action;
     }
     // 跳转
     this.$router.push({path: url});

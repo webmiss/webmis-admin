@@ -13,13 +13,17 @@ import wmTable from '@/components/table/index.vue'
 import wmTableForm from '@/components/table/form.vue'
 import wmPage from '@/components/page/index.vue'
 import wmDatePicker from '@/components/datepicker/index.vue'
-/* 动作、搜索 */
+/* 动作、搜索、添加 */
 import wmAction from '../../tools/Action.vue'
 import wmSearch from '../../tools/Search.vue'
+import MenusAdd from './add.vue'
 
 /* 系统菜单 */
 @Options({
-  components: { wmMain, wmAction, wmSearch, wmInput, wmButton, wmTable, wmPage, wmTableForm, wmDatePicker },
+  components: {
+    wmMain, wmAction, wmSearch, wmInput, wmButton, wmTable, wmPage, wmTableForm, wmDatePicker,
+    MenusAdd,
+  },
 })
 export default class SysMenus extends Base {
 
@@ -36,6 +40,8 @@ export default class SysMenus extends Base {
   total: any = {time: '', list:{}};
   list: any = {columns: [], data: [], num: 0, total: 0, order:''};
   page: any = {total: 0, num:1, limit: 100};
+  // 添加
+  add: any = {show: false};
 
   /* 创建成功 */
   public created(): void {

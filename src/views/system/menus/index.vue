@@ -20,7 +20,7 @@
           {action: 'del', slot: 'del', is_action: true},
         ]">
           <template #add>
-            <wm-button effect="dark" type="primary" icon="ui ui_add" padding="0 16px 0 8px">添加</wm-button>
+            <wm-button effect="dark" type="primary" icon="ui ui_add" padding="0 16px 0 8px" @click="add.show=true">添加</wm-button>
           </template>
           <template #edit>
             <wm-button effect="plain" type="primary" icon="ui ui_edit" padding="0 16px 0 8px" :disabled="list.num!=1" @click="edit()">编辑</wm-button>
@@ -65,10 +65,14 @@
     <!-- List End -->
   </div>
   <!-- Page -->
-   <div class="app_page">
+  <div class="app_page">
     <wm-page v-model:total="page.total" v-model:page="page.num" @update:page="loadData()" v-model:limit="page.limit" @update:limit="page.num=1;loadData()"></wm-page>
-   </div>
-   <!-- Page End -->
+  </div>
+  <!-- Page End -->
+
+  <!-- Add -->
+  <MenusAdd v-model:show="add.show"></MenusAdd>
+  
 </template>
 
 <style lang="less" scoped>

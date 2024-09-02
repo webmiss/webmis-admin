@@ -54,7 +54,7 @@
 .wm-table .checkbox::after{left: -1px; top: 0; border-left: #F4F6F8 1px solid;}
 .wm-table .checkbox::before{right: -1px; top: 0; border-right: @Primary5 1px solid;}
 .wm-table td{padding: 4px 8px; height: 32px; line-height: 1; white-space: nowrap; border: #FFF 1px solid; box-sizing: border-box;}
-.wm-table_title td{position: relative; background-color: #F4F6F8; color: @Minor4; font-weight: bold;}
+.wm-table_title td{position: relative; background-color: #F4F6F8; color: @Minor4; font-weight: bold; font-size: 12px;}
 .wm-table_title .order_body{cursor: pointer; position: absolute; right: 0; top: 0; width: 16px; height: 100%; background-color: #F4F6F8;}
 .wm-table_title .order_body:hover{background-color: #FFF; color: @Primary;}
 .wm-table_title .order{position: absolute; width: 100%; height: 20px; left: 50%; top: 50%; transform: translate(-50%, -50%);}

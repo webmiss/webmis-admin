@@ -1,5 +1,5 @@
 <template>
-  <wm-dialog v-model:show="infoShow" :title="title" width="640px" bottom="32px" @close="close()">
+  <wm-dialog v-model:show="infoShow" :title="title" width="641px" bottom="32px" @close="close()">
     <wm-main>
       <wm-tabs :columns="tabs">
         <!-- 基本信息 -->
@@ -8,7 +8,7 @@
             <tr>
               <td class="label">所属</td>
               <td colspan="3">
-                <wm-input v-model:value="form.fid" placeholder="Fid" maxlength="16"></wm-input>
+                <wm-cascader v-model:value="form.fid" :options="menusAll" bodyMinWidth="168px" clearable></wm-cascader>
               </td>
             </tr>
             <tr>
@@ -105,11 +105,12 @@ import wmMain from '@/components/container/main.vue'
 import wmDialog from '@/components/dialog/index.vue'
 import wmInput from '@/components/form/input/index.vue'
 import wmButton from '@/components/form/button/index.vue'
+import wmCascader from '@/components/form/cascader/index.vue'
 import wmTableForm from '@/components/table/form.vue'
 import wmTabs from '@/components/tabs/index.vue'
 
 @Options({
-  components: { wmMain, wmDialog, wmInput, wmButton, wmTableForm, wmTabs },
+  components: { wmMain, wmDialog, wmInput, wmButton, wmCascader, wmTableForm, wmTabs },
   props: {
     show: {type: Boolean, default: false},        // 是否显示
     title: {type: String, default: '添加菜单'},   // 标题
@@ -128,13 +129,30 @@ export default class MenusAdd extends Vue {
     {label: '基本信息', value: 'base', slot: 'base', checked: true},
     {label: '动作菜单', value: 'action', slot: 'action'},
   ];
-  form: any = {fid: 0, title: '', en: '', ico: '', sort: 0, url: '', controller: '', action:[], remark:''}
+  form: any = {fid: [], title: '', en: '', ico: '', sort: 0, url: '', controller: '', action:[], remark:''}
+  menusAll: any = [
+  {label:'一级菜单', value:'m1', checked: false, children: [
+    {label:'二级菜单 1-1', value:'m1_1', checked: false},
+    {label:'二级菜单 1-2', value:'m1_2', checked: false, children:[
+      {label:'三级菜单 1-2-1', value:'m1_2_1', checked: false},
+      {label:'三级菜单 1-2-2', value:'m1_2_2', checked: false},
+    ]},
+  ]},
+  {label:'一级菜单', value:'m2', checked: false, children:[
+    {label:'二级菜单 2-1', value:'m2_1', checked: false},
+    {label:'二级菜单 2-2', value:'m2_2', checked: false},
+  ]},
+  ];
 
   /* 创建成功 */
   created(): void {
     this.$watch('show', (val:boolean)=>{
       this.infoShow = val;
     }, { deep: true });
+  }
+  /* 创建完成 */
+  public mounted(): void {
+    this.form.fid = ['m2', 'm2_2'];
   }
 
   /* 动作菜单-添加 */

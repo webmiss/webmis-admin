@@ -7,7 +7,7 @@
       lineHeight: height,
   }">
     <!-- Clear -->
-    <div class="wm-cascader_clear_body" v-if="value&&clearable" :style="{width: height, height: height}" @click.stop="clear()">
+    <div class="wm-cascader_clear_body" v-if="labelName&&clearable" :style="{width: height, height: height}" @click.stop="clear()">
       <div class="wm-cascader_clear" :style="{width: 'calc('+height+' / 2)', height: 'calc('+height+' / 2)'}"></div>
     </div>
     <!-- Icon -->
@@ -15,31 +15,31 @@
     <!-- Value -->
     <div class="wm-cascader_value" :class="labelName?'':'none'">{{ labelName || placeholder }}</div>
     <!-- List -->
-    <div class="wm-cascader_body flex" :style="{visibility: show?'inherit':'hidden', opacity: show?'1':'0'}">
+    <div class="wm-cascader_body flex_left" :style="{visibility: show?'inherit':'hidden', opacity: show?'1':'0'}">
       <div class="arrow" :style="{left: 'calc('+bodyMinWidth+' - 5px)', transform: 'translateX(calc(-'+bodyMinWidth+' / 2))'}"></div>
       <!-- One Menus -->
-      <ul class="wm-cascader_list" :style="{minWidth: bodyMinWidth}">
+      <ul class="wm-cascader_list" :style="{width: 'calc(100% / '+level+')', minWidth: bodyMinWidth}">
         <li v-for="(v,k) in listData" :key="k" :class="v.checked?'active':''" @click.stop="selectClick('1', [k, -1, -1, -1])">
           <span>{{ v.label }}</span>
           <i class="ui ui_arrow_right" v-if="v.children&&v.children.length>0"></i>
         </li>
       </ul>
       <!-- Two Menus -->
-      <ul v-if="k1>=0 && listData[k1].children" class="wm-cascader_list" :style="{minWidth: bodyMinWidth}">
+      <ul v-if="k1>=0 && listData[k1].children" class="wm-cascader_list" :style="{width: 'calc(100% / '+level+')', minWidth: bodyMinWidth}">
         <li v-for="(v,k) in listData[k1].children" :key="k" :class="v.checked?'active':''" @click.stop="selectClick('2', [k1, k, -1, -1])">
           <span>{{ v.label }}</span>
           <i class="ui ui_arrow_right" v-if="v.children&&v.children.length>0"></i>
         </li>
       </ul>
       <!-- Three Menus -->
-      <ul v-if="k2>=0 && listData[k1].children[k2].children" class="wm-cascader_list" :style="{minWidth: bodyMinWidth}">
+      <ul v-if="k2>=0 && listData[k1].children[k2].children" class="wm-cascader_list" :style="{width: 'calc(100% / '+level+')', minWidth: bodyMinWidth}">
         <li v-for="(v,k) in listData[k1].children[k2].children" :key="k" :class="v.checked?'active':''" @click.stop="selectClick('3', [k1, k2, k, -1])">
           <span>{{ v.label }}</span>
           <i class="ui ui_arrow_right" v-if="v.children&&v.children.length>0"></i>
         </li>
       </ul>
       <!-- Four Menus -->
-      <ul v-if="k3>=0 && listData[k1].children[k2].children[k3].children" class="wm-cascader_list" :style="{minWidth: bodyMinWidth}">
+      <ul v-if="k3>=0 && listData[k1].children[k2].children[k3].children" class="wm-cascader_list" :style="{width: 'calc(100% / '+level+')', minWidth: bodyMinWidth}">
         <li v-for="(v,k) in listData[k1].children[k2].children[k3].children" :key="k" :class="v.checked?'active':''" @click.stop="selectClick('4', [k1, k2, k3, k])">
           <span>{{ v.label }}</span>
           <i class="ui ui_arrow_right" v-if="v.children&&v.children.length>0"></i>
@@ -59,15 +59,15 @@
 .wm-cascader_value::after{content: ''; position: absolute; z-index: 1; top: 0; right: 0; width: 32px; height: 100%; background-color: #FFF;}
 .wm-cascader_value:hover{border-color: @Primary;}
 .wm-cascader_value.none{color: @SecondaryText;}
-.wm-cascader_body{position: absolute; z-index: 999; margin-top: 8px; background-color: #FFF; box-shadow: 0 0 12px rgba(0,0,0,0.2); border-radius: 4px; transition: @Transition;}
+.wm-cascader_body{position: absolute; z-index: 999; width: 100%; margin-top: 8px; border-radius: 4px; transition: @Transition;}
 .wm-cascader_body .arrow{position: absolute; top: -5px;}
 .wm-cascader_body .arrow::before{content: ''; position: absolute; width: 10px; height: 10px; border: @BorderColor 1px solid; border-right-color: transparent; border-bottom-color: transparent; background-color: #FFF; transform: rotate(45deg); box-sizing: border-box;}
-.wm-cascader_list{user-select: none; padding: 8px 0; border-right: @BaseBorder 1px solid; box-sizing: border-box;}
+.wm-cascader_list{user-select: none; padding: 8px 0; box-sizing: border-box; background-color: #FFF; box-shadow: 0 0 4px rgba(0,0,0,0.2);}
 .wm-cascader_list li{position: relative; cursor: pointer; white-space: nowrap; line-height: 40px;}
-.wm-cascader_list li:hover{color: @Primary; background-color: #F4F6F8;}
+.wm-cascader_list li:hover{color: @Primary;}
 .wm-cascader_list span{display: block; padding-left: 16px;}
 .wm-cascader_list i{position: absolute; width: 32px; height: 32px; line-height: 32px; right: 0; top: 50%; transform: translateY(-50%); font-size: 12px; text-align: center; border-radius: 2px;}
-.wm-cascader_list .active{color: @Primary; background-color: #F4F6F8;}
+.wm-cascader_list .active{color: @Primary;}
 .wm-cascader_clear_body{cursor: pointer; position: absolute; z-index: 10; top: 0; right: 0;}
 .wm-cascader_clear{user-select: none; position: absolute; right: 8px; top: 50%; transform: translateY(-50%); background-color: @Danger; border-radius: 50%;}
 .wm-cascader_clear::after,.wm-cascader_clear::before{content: ''; position: absolute; width: 50%; height: 0.1rem; background-color: #FFF; left: 50%; top: 50%; transform-origin: center;}
@@ -87,6 +87,7 @@ import wmInput from '@/components/form/input/index.vue'
     width: {type: String, default: '100%'},                 // 宽
     height: {type: String, default: '40px'},                // 高
     placeholder: {type: String, default: '请选择'},         // 提示
+    level: {type: Number, default: 3},                      // 菜单级数
     bodyMinWidth: {type: String, default: '160px'},         // 内容最小高度
     listHeight: {type: String, default: '40px'},            // 列表高
     seaMinLength: {type: Number, default: 5},               // 搜索最小值
@@ -103,6 +104,7 @@ export default class Cascader extends Vue {
   width!: string;
   height!: string;
   placeholder!: string;
+  level!: number;
   bodyMinWidth!: string;
   listHeight!: string;
   seaMinLength!: number;
@@ -150,6 +152,10 @@ export default class Cascader extends Vue {
         }
       });
       if(level) this.selectClick(level, [k1, k2, k3, k4], false);
+      else this.clear();
+    }, { deep: true });
+    this.$watch('options', (val:Array<any>)=>{
+      this.listData = val;
     }, { deep: true });
   }
 
@@ -165,8 +171,6 @@ export default class Cascader extends Vue {
     this.selectObj.addEventListener('focusout', ()=>{
       this.show = false;
     });
-    // 列表数据
-    this.listData = this.options;
   }
 
   /* 选择 */

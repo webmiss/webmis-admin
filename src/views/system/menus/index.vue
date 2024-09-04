@@ -20,13 +20,13 @@
           {action: 'del', slot: 'del', is_action: true},
         ]">
           <template #add>
-            <wm-button effect="dark" type="primary" icon="ui ui_add" padding="0 16px 0 8px" @click="add.show=true">添加</wm-button>
+            <wm-button effect="dark" type="primary" icon="ui ui_add" padding="0 16px 0 8px" @click="addData()">添加</wm-button>
           </template>
           <template #edit>
-            <wm-button effect="plain" type="primary" icon="ui ui_edit" padding="0 16px 0 8px" :disabled="list.num!=1" @click="edit()">编辑</wm-button>
+            <wm-button effect="plain" type="primary" icon="ui ui_edit" padding="0 16px 0 8px" :disabled="list.num!=1" @click="editData()">编辑</wm-button>
           </template>
           <template #del>
-            <wm-button effect="plain" type="danger" icon="ui ui_del" padding="0 16px 0 8px" :disabled="list.num==0">删除({{ list.num }})</wm-button>
+            <wm-button effect="plain" type="danger" icon="ui ui_del" padding="0 16px 0 8px" :disabled="list.num==0" @click="delData()">删除({{ list.num }})</wm-button>
           </template>
         </wm-action>
       </div>
@@ -55,12 +55,6 @@
           <span v-else>-</span>
         </div>
       </template>
-      <template #action="d">
-        <div class="tCenter">
-          <wm-button v-if="d.controller" effect="text" type="primary" padding="0 8px" @click="edit(d.action)">编辑</wm-button>
-          <span v-else>-</span>
-        </div>
-      </template>
     </wm-table>
     <!-- List End -->
   </div>
@@ -68,11 +62,10 @@
   <div class="app_page">
     <wm-page v-model:total="page.total" v-model:page="page.num" @update:page="loadData()" v-model:limit="page.limit" @update:limit="page.num=1;loadData()"></wm-page>
   </div>
-  <!-- Page End -->
-
-  <!-- Add -->
-  <MenusAdd v-model:show="add.show"></MenusAdd>
-  
+  <!-- Save -->
+  <menus-save v-model:show="save.show" :type="save.type" :data="save.form" @submit="saveSubmit($event)"></menus-save>
+  <!-- Del -->
+  <menus-del v-model:show="del.show" :data="del.form" @submit="delSubmit($event)"></menus-del>
 </template>
 
 <style lang="less" scoped>

@@ -4,6 +4,7 @@
     :style="{
       width:'calc('+width+' - '+paddingX+' * 2)',
       height:'calc('+height+' - '+paddingY+' * 2)',
+      lineHeight: lineHeight,
       backgroundColor: bgColor,
     }"
   >
@@ -31,6 +32,7 @@ import { Options, Vue } from 'vue-class-component';
   props: {
     width: {type: String, default: '100%'},           // 宽
     height: {type: String, default: '100%'},          // 高
+    lineHeight: {type: String, default: ''},          // 行高
     paddingX: {type: String, default: '16px'},        // x轴边距
     paddingY: {type: String, default: '16px'},        // y轴边距
     bgColor: {type: String, default: 'transparent'},  // 背景颜色
@@ -43,6 +45,7 @@ export default class Main extends Vue {
   // 参数
   width!: string;
   height!: string;
+  lineHeight!: string;
   paddingX!: string;
   paddingY!: string;
   bgColor!: string;

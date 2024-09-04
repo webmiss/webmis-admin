@@ -1,14 +1,14 @@
 <template>
-  <wm-dialog v-model:show="infoShow" :title="title" width="641px" bottom="32px" @close="close()">
+  <wm-dialog v-model:show="infoShow" :title="title" width="720px" bottom="40px" @close="close()">
     <wm-main>
       <wm-tabs :columns="tabs">
         <!-- 基本信息 -->
         <template #base>
           <wm-table-form>
             <tr>
-              <td class="label">所属</td>
+              <td class="label">归属</td>
               <td colspan="3">
-                <wm-cascader v-model:value="form.fid" :options="menusAll" bodyMinWidth="168px" clearable></wm-cascader>
+                <wm-cascader v-model:value="form.fid" :options="menusAll" clearable></wm-cascader>
               </td>
             </tr>
             <tr>
@@ -83,7 +83,7 @@
       </wm-tabs>
     </wm-main>
     <template #bottom>
-      <wm-button effect="dark" type="primary" @click="submit()">确 认</wm-button>
+      <wm-button effect="dark" type="primary" height="40px" @click="submit()">确 认</wm-button>
     </template>
   </wm-dialog>
 </template>
@@ -99,7 +99,6 @@ import { useStore } from 'vuex';
 /* UI组件 */
 import Ui from '@/library/ui'
 import Request from '@/library/request'
-import Time from '@/library/time'
 /* 组件 */
 import wmMain from '@/components/container/main.vue'
 import wmDialog from '@/components/dialog/index.vue'
@@ -113,46 +112,82 @@ import wmTabs from '@/components/tabs/index.vue'
   components: { wmMain, wmDialog, wmInput, wmButton, wmCascader, wmTableForm, wmTabs },
   props: {
     show: {type: Boolean, default: false},        // 是否显示
-    title: {type: String, default: '添加菜单'},   // 标题
+    type: {type: String, default: ''},            // 类型: add, edit
+    data: {default: []},                          // 数据
   }
 })
 export default class MenusAdd extends Vue {
   // 参数
   show!: boolean;
-  title!: string;
+  type!: string;
+  data!: any;
   // 状态
   store: any = useStore();
   state: any = this.store.state;
   // 变量
   infoShow: boolean = false;
+  title: string = '';
+  // Tabs
   tabs: Array<any> = [
     {label: '基本信息', value: 'base', slot: 'base', checked: true},
     {label: '动作菜单', value: 'action', slot: 'action'},
   ];
-  form: any = {fid: [], title: '', en: '', ico: '', sort: 0, url: '', controller: '', action:[], remark:''}
-  menusAll: any = [
-  {label:'一级菜单', value:'m1', checked: false, children: [
-    {label:'二级菜单 1-1', value:'m1_1', checked: false},
-    {label:'二级菜单 1-2', value:'m1_2', checked: false, children:[
-      {label:'三级菜单 1-2-1', value:'m1_2_1', checked: false},
-      {label:'三级菜单 1-2-2', value:'m1_2_2', checked: false},
-    ]},
-  ]},
-  {label:'一级菜单', value:'m2', checked: false, children:[
-    {label:'二级菜单 2-1', value:'m2_1', checked: false},
-    {label:'二级菜单 2-2', value:'m2_2', checked: false},
-  ]},
-  ];
+  // 数据
+  form: any = {id:0, fid: [], title: '', en: '', ico: '', sort: 0, url: '', controller: '', remark:'', action:[]}
+  // 全部分类
+  fid: Array<any> = [];
+  menusAll: any = [];
 
   /* 创建成功 */
   created(): void {
     this.$watch('show', (val:boolean)=>{
       this.infoShow = val;
     }, { deep: true });
+    this.$watch('data', (v:any)=>{
+      this.title = this.type=='add'?'新增':'编辑';
+      // 默认值
+      this.form.id = v.id || 0;
+      this.form.title = v.title || '';
+      this.form.en = v.en || '';
+      this.form.ico = v.ico || '';
+      this.form.sort = v.sort || 0;
+      this.form.url = v.url || '';
+      this.form.controller = v.controller || '';
+      this.form.remark = v.remark || '';
+      this.form.action = v.action || [];
+      // Fid
+      if(typeof v.fid != 'undefined') this.getFid(v.fid);
+      else this.form.fid = [];
+    }, { deep: true });
   }
   /* 创建完成 */
   public mounted(): void {
-    this.form.fid = ['m2', 'm2_2'];
+    if(this.state.token){
+      this.getMenus();
+    }
+  }
+
+  /* 获取Fid */
+  private getFid(fid: number): void {
+    // 一级
+    for(let v1 of this.menusAll) {
+          if(v1.value==fid) { this.form.fid = [v1.value]; break; }
+          if(!v1.children) continue;
+          // 二级
+          for(let v2 of v1.children) {
+            if(v2.value==fid) { this.form.fid = [v1.value, v2.value]; break; }
+            if(!v2.children) continue;
+            // 三级
+            for(let v3 of v2.children) {
+              if(v3.value==fid) { this.form.fid = [v1.value, v2.value, v3.value]; break; }
+              if(!v3.children) continue;
+              // 四级
+              for(let v4 of v3.children) {
+                if(v4.value==fid) { this.form.fid = [v1.value, v2.value, v3.value, v4.value]; break; }
+              }
+            }
+          }
+        }
   }
 
   /* 动作菜单-添加 */
@@ -167,11 +202,6 @@ export default class MenusAdd extends Vue {
       action.splice(k, 1);
   }
 
-  /* 关闭 */
-  close(): void {
-    this.$emit('update:show', false);
-  }
-
   /* 验证 */
   verify(form: any): any {
     if(!form.title || form.title.length<2) return Ui.Toast('名称大于2个字符');
@@ -183,7 +213,34 @@ export default class MenusAdd extends Vue {
     // 验证
     const form = this.verify(this.form);
     if(!form) return;
-    console.log(form);
+    // 请求
+    const load: any = Ui.Loading();
+    Request.Post('sys_menus/save', {
+      token: this.state.token,
+      data: form,
+    }, (res:any)=>{
+      load.clear();
+      const d: any = res.data;
+      Ui.Toast(d.msg);
+      if(d.code==0) this.getMenus();
+      this.$emit('submit', d.code==0);
+    });
+  }
+
+  /* 全部菜单 */
+  getMenus(): void {
+    Request.Post('sys_menus/get_menus_all', {
+      token: this.state.token,
+    }, (res:any)=>{
+      const d: any = res.data;
+      if(d.code==0) this.menusAll = d.data;
+      else Ui.Toast(d.msg);
+    });
+  }
+
+  /* 关闭 */
+  close(): void {
+    this.$emit('update:show', false);
   }
 
 }

@@ -13,16 +13,17 @@ import wmTable from '@/components/table/index.vue'
 import wmTableForm from '@/components/table/form.vue'
 import wmPage from '@/components/page/index.vue'
 import wmDatePicker from '@/components/datepicker/index.vue'
-/* 动作、搜索、添加 */
+/* 动作、搜索、更新、删除 */
 import wmAction from '../../tools/Action.vue'
 import wmSearch from '../../tools/Search.vue'
-import MenusAdd from './add.vue'
+import menusSave from './save.vue'
+import menusDel from './del.vue'
 
 /* 系统菜单 */
 @Options({
   components: {
     wmMain, wmAction, wmSearch, wmInput, wmButton, wmTable, wmPage, wmTableForm, wmDatePicker,
-    MenusAdd,
+    menusSave, menusDel
   },
 })
 export default class SysMenus extends Base {
@@ -40,15 +41,13 @@ export default class SysMenus extends Base {
   total: any = {time: '', list:{}};
   list: any = {columns: [], data: [], num: 0, total: 0, order:''};
   page: any = {total: 0, num:1, limit: 100};
-  // 添加
-  add: any = {show: false};
+  // 添加、编辑
+  save: any = {show: false, type:'', form:{}};
+  // 删除
+  del: any = {show: false, form:[]};
 
   /* 创建成功 */
   public created(): void {
-  }
-
-  /* 创建完成 */
-  activated(): void {
     // 搜索
     this.sea.columns = [
       {label: '选择日期范围', value: '', slot: 'time'},
@@ -64,11 +63,14 @@ export default class SysMenus extends Base {
       {title: '图标', index: 'ico', slot: 'ico', width: '40px'},
       {title: '名称', index: 'title', order: '', width: '160px'},
       {title: '英文', index: 'en', order: '', width: '160px'},
-      {title: '权限', index: 'action', slot: 'action', width: '90px', textAlign: 'center'},
       {title: '前端路由', index: 'en', order: '', width: '200px', minWidth: '160px'},
       {title: '接口地址', index: 'controller', order: '', width: '200px', minWidth: '160px'},
       {title: '备注', index: 'remark'},
     ];
+  }
+
+  /* 创建完成 */
+  activated(): void {
     // 加载
     if(this.state.token) this.loadData();
   }
@@ -95,6 +97,9 @@ export default class SysMenus extends Base {
     // 其它
     this.list.order = '';
     this.page.num = 1;
+    // 清除勾选
+    const obj:any = this.$refs.tableList;
+    obj.checkboxAll(false);
     // 加载
     this.loadData();
   }
@@ -134,13 +139,46 @@ export default class SysMenus extends Base {
     });
   }
 
-  /* 编辑 */
-  edit(action: any=''): void {
-    const obj:any = this.$refs.tableList;
-    const list: any = obj.getData();
-    obj.checkboxAll(false);
-    console.log('edit', list);
+  /* 添加 */
+  addData(): void {
+    this.save.show = true;
+    this.save.type = 'add';
+    this.save.form = {};
   }
-  
+  /* 编辑 */
+  editData(): void {
+    this.save.show = true;
+    this.save.type = 'edit';
+    const obj:any = this.$refs.tableList;
+    const data: Array<any> = obj.getData();
+    this.save.form = data[0];
+  }
+  /* 结果 */
+  saveSubmit(val: boolean): void {
+    if(!val) return;
+    this.save.show = false;
+    const obj:any = this.$refs.tableList;
+    obj.checkboxAll(false);
+    this.loadData();
+  }
+
+  /* 删除 */
+  delData(): void {
+    this.del.show = true;
+    const obj:any = this.$refs.tableList;
+    const data: Array<any> = obj.getData();
+    let ids: Array<number> = [];
+    for(let v of data) ids.push(v.id);
+    this.del.form = ids;
+  }
+  /* 结果 */
+  delSubmit(val: boolean): void {
+    if(!val) return;
+    this.del.show = false;
+    const obj:any = this.$refs.tableList;
+    obj.checkboxAll(false);
+    this.loadData();
+  }
+
 
 }

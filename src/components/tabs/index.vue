@@ -3,7 +3,7 @@
     <li v-for="(v, k) in columns" :key="k" :class="v.checked?'active':''" :style="{padding: padding, margin: margin}" @click="tabClick(k)">{{ v.label }}</li>
   </ul>
   <template v-for="(v, k) in columns" :key="k">
-    <div class="wm-tabs_body" v-if="v.checked" :style="{padding: bodyPadding}">
+    <div class="wm-tabs_body" v-show="v.checked" :style="{padding: bodyPadding}">
       <slot v-bind="v" :name="v.slot" :index="k"></slot>
     </div>
   </template>

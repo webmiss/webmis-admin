@@ -30,7 +30,7 @@
             <wm-button effect="plain" type="danger" icon="ui ui_del" padding="0 16px 0 8px" :disabled="list.num==0" @click="delData()">删除({{ list.num }})</wm-button>
           </template>
           <template #export>
-            <wm-button effect="plain" icon="ui ui_export" padding="0 16px 0 8px" :disabled="!total.list.total" @click="exportData(total.list.total)">导出({{ total.list.total }})</wm-button>
+            <wm-button effect="plain" icon="ui ui_export" padding="0 16px 0 8px" :disabled="!total.list.total" @click="exportData()">导出({{ total.list.total }})</wm-button>
           </template>
         </wm-action>
       </div>
@@ -50,14 +50,26 @@
       <template #id="d">
         <div class="tCenter">{{ d.id }}</div>
       </template>
-      <template #fid="d">
-        <div class="tCenter">{{ d.fid }}</div>
+      <template #img="d">
+        <div class="tCenter">{{ d.img }}</div>
       </template>
-      <template #ico="d">
-        <div class="tCenter icon">
-          <i v-if="d.ico" :class="d.ico"></i>
-          <span v-else>-</span>
+      <template #uname="d">
+        {{ d.uname || d.tel || d.email }}
+      </template>
+      <template #state="d">
+        <div class="tCenter">
+          <span :class="d.state?'c_success':'c_danger'">{{ d.state?'正常':'禁用' }}</span>
         </div>
+      </template>
+      <template #perm="d">
+        <div class="tCenter">
+          <wm-button v-if="d.perm" effect="text" type="danger">私有</wm-button>
+          <wm-button v-else-if="d.role" effect="text" type="primary">{{ d.role_name }}</wm-button>
+          <wm-button v-else effect="text" type="info">设置</wm-button>
+        </div>
+      </template>
+      <template #type="d">
+        <div class="tCenter">{{ d.type || '-' }}</div>
       </template>
     </wm-table>
     <!-- List End -->
@@ -70,8 +82,6 @@
   <menus-save v-model:show="save.show" :type="save.type" :data="save.form" @submit="saveSubmit($event)"></menus-save>
   <!-- Del -->
   <menus-del v-model:show="del.show" :data="del.form" @submit="delSubmit($event)"></menus-del>
-  <!-- Export -->
-  <menus-export v-model:show="exp.show" :where="getWhere()" :order="list.order" :num="exp.num" @submit="exportSubmit($event)"></menus-export>
 </template>
 
 <style lang="less" scoped>

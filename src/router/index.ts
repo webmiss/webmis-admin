@@ -8,7 +8,7 @@ const routes: Array<RouteRecordRaw> = [
   // 系统管理
   {path: '/SysFileManage', name: 'SysFileManage', component: ()=>import('../views/system/FileManage.vue') },
   {path: '/SysMenus', name: 'SysMenus', component: ()=>import('../views/system/menus/index.vue') },
-  {path: '/SysUser', name: 'SysUser', component: ()=>import('../views/system/User.vue') },
+  {path: '/SysUser', name: 'SysUser', component: ()=>import('../views/system/user/index.vue') },
   {path: '/SysRole', name: 'SysRole', component: ()=>import('../views/system/Role.vue') },
   // 基础数据
   {path: '/MHtml', name: 'MHtml', component: ()=>import('../views/base/MHtml.vue') },

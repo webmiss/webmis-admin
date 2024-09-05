@@ -20,9 +20,7 @@ export default class Files {
       let files: Array<any> = [];
       // 过滤
       for(let i=0; i<fileObj.files.length; i++){
-        if(param.mimeType.length>0 && !param.mimeType.includes(fileObj.files[i].type)){
-          continue;
-        }
+        if(param.mimeType.length>0 && !param.mimeType.includes(fileObj.files[i].type)) continue;
         files.push(fileObj.files[i]);
       }
       // 返回
@@ -44,7 +42,7 @@ export default class Files {
 
   /* Base64 to 文件对象 */
   public static Base64ToFile(base64: string, fileName: string, success: Function=()=>{}, error: Function=()=>{}): void {
-    const arr:any = base64.split(',')
+    const arr:any = base64.split(',');
     const type:string = arr[0].match(/:(.*?);/)[1];
     const bstr:any = atob(arr[1]);
     let n:number = bstr.length;
@@ -130,6 +128,19 @@ export default class Files {
       let data = canvas.toDataURL(param.mimeType[param.ext], param.quality);
       return success(data);
     }
+  }
+
+  /* 下载 */
+  public static Down(url: string, filename: string='down.txt'): void {
+    // 创建对象
+    let a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    // 点击
+    a.click();
+    // 移除
+    document.body.removeChild(a);
   }
 
 }

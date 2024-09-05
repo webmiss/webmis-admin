@@ -36,7 +36,7 @@ export default class Action extends Vue {
   created(): void {
   }
 
-  /* 是否 */
+  /* 是否有权限 */
   isAction(action: string): boolean {
     const list: Array<any> = this.state.menusAction;
     for(let v of list) {

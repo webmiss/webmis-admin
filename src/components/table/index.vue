@@ -108,7 +108,7 @@ export default class Table extends Vue {
 
   /* 全选、全不选 */
   checkboxAll(status: boolean | string = ''): void {
-    if(this.options.length==0) return Ui.Toast('暂无数据');
+    if(this.options.length==0) return ;
     this.checkbox.checked = typeof status=='boolean'?status:!this.checkbox.checked;
     for(let i in this.options) {
       if(!this.options[i].disabled) this.options[i].checked = this.checkbox.checked;

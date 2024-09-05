@@ -15,8 +15,8 @@
     <div class="app_action flex">
       <div class="botton">
         <wm-action :columns="[
-          {action: 'add', slot: 'add', is_action: true},
-          {action: 'edit', slot: 'edit', is_action: true},
+          {action: 'save', slot: 'add', is_action: true},
+          {action: 'save', slot: 'edit', is_action: true},
           {action: 'del', slot: 'del', is_action: true},
         ]">
           <template #add>

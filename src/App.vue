@@ -50,10 +50,10 @@
                 <template v-for="(v1,k1) in menus.list" :key="k1">
                   <template v-if="v1.children">
                     <template v-for="(v2,k2) in v1.children" :key="k2">
-                      <li v-if="v2.children&&v2.display">
+                      <li v-if="v2.children&&(v2.display||typeof v2.display=='undefined')">
                         <div class="title">{{ v2.label }}</div>
                         <template v-for="(v3,k3) in v2.children" :key="k3">
-                          <div v-if="v3.display" class="m flex_left" :class="tabs.active==v3.value.url?'active':''" @click="MenusClick(v3.label, v3.value.url, true)">
+                          <div v-if="v3.display||typeof v3.display=='undefined'" class="m flex_left" :class="tabs.active==v3.value.url?'active':''" @click="MenusClick(v3.label, v3.value.url, true)">
                             <i v-if="v3.icon" :class="v3.icon"></i>
                             <span :style="{paddingLeft: v3.icon?'':'10px'}">{{ v3.label }}</span>
                           </div>

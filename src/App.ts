@@ -67,7 +67,7 @@ export default class App extends Base {
   /* 获取菜单 */
   MenusList(): void {
     // 请求
-    Request.Post('sys_menus/getMenusPerm', {token: this.state.token}, (res:any)=>{
+    Request.Post('sys_menus/get_menus_perm', {token: this.state.token}, (res:any)=>{
       const d: any = res.data;
       if(d.code==0) {
         this.menus.list = d.data;

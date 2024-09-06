@@ -2,8 +2,8 @@
   <wm-dialog v-model:show="infoShow" :title="title" width="720px" bottom="40px" @close="close()">
     <wm-main>
       <wm-tabs :columns="tabs">
-        <!-- 基本信息 -->
-        <template #base>
+        <!-- 角色 -->
+        <template #sole>
           <wm-table-form>
             <tr>
               <td class="label">归属</td>
@@ -51,9 +51,9 @@
             </tr>
           </wm-table-form>
         </template>
-        <!-- 基本信息 End -->
-        <!-- 动作菜单 -->
-        <template #action>
+        <!-- 角色 End -->
+        <!-- 私有 -->
+        <template #perm>
           <wm-table-form>
             <tr class="title">
               <td>名称</td>
@@ -79,7 +79,7 @@
             </tr>
           </wm-table-form>
         </template>
-        <!-- 动作菜单 End -->
+        <!-- 私有 End -->
       </wm-tabs>
     </wm-main>
     <template #bottom>
@@ -113,13 +113,12 @@ import wmTabs from '@/components/tabs/index.vue'
   props: {
     show: {type: Boolean, default: false},        // 是否显示
     title: {type: String, default: ''},           // 标题
-    data: {default: []},                          // 数据
+    data: {default: {}},                          // 数据
   }
 })
-export default class ActionSave extends Vue {
+export default class ActionPerm extends Vue {
   // 参数
   show!: boolean;
-  type!: string;
   title!: string;
   data!: any;
   // 状态
@@ -129,8 +128,8 @@ export default class ActionSave extends Vue {
   infoShow: boolean = false;
   // Tabs
   tabs: Array<any> = [
-    {label: '基本信息', value: 'base', slot: 'base', checked: true},
-    {label: '动作菜单', value: 'action', slot: 'action'},
+    {label: '角色', value: 'sole', slot: 'sole', checked: true},
+    {label: '私有', value: 'perm', slot: 'perm'},
   ];
   // 数据
   form: any = {id:0, fid: [], title: '', en: '', ico: '', sort: 0, url: '', controller: '', remark:'', action:[]}
@@ -144,19 +143,7 @@ export default class ActionSave extends Vue {
       this.infoShow = val;
     }, { deep: true });
     this.$watch('data', (v:any)=>{
-      // 默认值
-      this.form.id = v.id || 0;
-      this.form.title = v.title || '';
-      this.form.en = v.en || '';
-      this.form.ico = v.ico || '';
-      this.form.sort = v.sort || 0;
-      this.form.url = v.url || '';
-      this.form.controller = v.controller || '';
-      this.form.remark = v.remark || '';
-      this.form.action = v.action || [];
-      // Fid
-      if(typeof v.fid != 'undefined') this.getFid(v.fid);
-      else this.form.fid = [];
+      
     }, { deep: true });
   }
   /* 创建完成 */

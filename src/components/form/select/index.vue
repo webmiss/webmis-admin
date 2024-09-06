@@ -130,11 +130,15 @@ export default class Select extends Vue {
   /* 创建成功 */
   created(): void {
     // 监听
-    this.$watch('value', (val:number)=>{
-      // 默认选中
+    this.$watch('value', (val:Array<any>)=>{
+      if(!val) return this.clear();
+      // 勾选默认值
       for(let i in this.seaList) {
-        if(this.value.includes(this.seaList[i].value)) this.selectClick(i, false);
+        if(val.includes(this.seaList[i].value)) this.selectClick(i, false);
       }
+    }, { deep: true });
+    this.$watch('options', (val:Array<any>)=>{
+      this.seaList = val;
     }, { deep: true });
   }
 

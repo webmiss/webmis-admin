@@ -68,11 +68,13 @@ export default class DatePicker extends Vue {
   created(): void {
     // 监听
     this.$watch('value', (val:any)=>{
-      this.date = val;
-      this.$emit('update:value', val);
+      if(val) {
+        this.date = val;
+        this.$emit('update:value', val);
+      }
     }, { deep: true });
     this.$watch('date', (val:any)=>{
-      this.$emit('update:value', val);
+      if(val) this.$emit('update:value', val);
     }, { deep: true });
   }
   /* 创建完成 */

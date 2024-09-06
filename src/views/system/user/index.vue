@@ -21,16 +21,16 @@
           {action: 'export', slot: 'export', is_action: true},
         ]">
           <template #add>
-            <wm-button effect="dark" type="primary" icon="ui ui_add" padding="0 16px 0 8px" @click="addData()">添加</wm-button>
+            <wm-button effect="dark" type="primary" icon="ui ui_add" padding="0 16px 0 8px" @click="saveData('add')">添加</wm-button>
           </template>
           <template #edit>
-            <wm-button effect="plain" type="primary" icon="ui ui_edit" padding="0 16px 0 8px" :disabled="list.num!=1" @click="editData()">编辑</wm-button>
+            <wm-button effect="plain" type="primary" icon="ui ui_edit" padding="0 16px 0 8px" :disabled="list.num!=1" @click="saveData('edit')">编辑</wm-button>
           </template>
           <template #del>
             <wm-button effect="plain" type="danger" icon="ui ui_del" padding="0 16px 0 8px" :disabled="list.num==0" @click="delData()">删除({{ list.num }})</wm-button>
           </template>
           <template #export>
-            <wm-button effect="plain" icon="ui ui_export" padding="0 16px 0 8px" :disabled="!total.list.total" @click="exportData()">导出({{ total.list.total }})</wm-button>
+            <wm-button effect="plain" icon="ui ui_export" padding="0 16px 0 8px" :disabled="!total.list.total" @click="exportData(total.list.total)">导出({{ total.list.total }})</wm-button>
           </template>
         </wm-action>
       </div>
@@ -63,13 +63,16 @@
       </template>
       <template #perm="d">
         <div class="tCenter">
-          <wm-button v-if="d.perm" effect="text" type="danger">私有</wm-button>
-          <wm-button v-else-if="d.role" effect="text" type="primary">{{ d.role_name }}</wm-button>
-          <wm-button v-else effect="text" type="info">设置</wm-button>
+          <wm-button v-if="d.perm" effect="text" type="danger" @click="saveData('edit', d)">私有</wm-button>
+          <wm-button v-else-if="d.role" effect="text" type="primary" @click="saveData('edit', d)">{{ d.role_name }}</wm-button>
+          <wm-button v-else effect="text" type="info" @click="saveData('edit', d)">设置</wm-button>
         </div>
       </template>
       <template #type="d">
-        <div class="tCenter">{{ d.type || '-' }}</div>
+        <div class="tCenter">{{ d.type_name || '-' }}</div>
+      </template>
+      <template #gender="d">
+        <div class="tCenter">{{ d.gender || '-' }}</div>
       </template>
     </wm-table>
     <!-- List End -->
@@ -79,9 +82,11 @@
     <wm-page v-model:total="page.total" v-model:page="page.num" @update:page="loadData()" v-model:limit="page.limit" @update:limit="page.num=1;loadData()"></wm-page>
   </div>
   <!-- Save -->
-  <menus-save v-model:show="save.show" :type="save.type" :data="save.form" @submit="saveSubmit($event)"></menus-save>
+  <action-save v-model:show="save.show" :title="save.title" :data="save.data" @submit="saveSubmit($event)"></action-save>
   <!-- Del -->
-  <menus-del v-model:show="del.show" :data="del.form" @submit="delSubmit($event)"></menus-del>
+  <action-del v-model:show="del.show" :data="del.data" @submit="delSubmit($event)"></action-del>
+  <!-- Export -->
+  <action-export v-model:show="exp.show" :data="getWhere()" :order="list.order" :num="exp.num" @submit="exportSubmit($event)"></action-export>
 </template>
 
 <style lang="less" scoped>

@@ -1,7 +1,7 @@
 /* 配置文件 */
 export default class Env {
 
-  public mode: string = '';                 // 模式: 开发(dev)
+  public mode: string = 'dev';                 // 模式: 开发(dev)
   public title: string = 'WebMIS';          // 项目名称
   public version: string = '3.0.0';         // 版本
   public baseUrl: string = '';              // 网址

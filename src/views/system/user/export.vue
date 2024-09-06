@@ -30,13 +30,13 @@ import wmTableForm from '@/components/table/form.vue'
   components: { wmMain, wmDialog, wmInput, wmButton, wmTableForm },
   props: {
     show: {type: Boolean, default: false},      // 是否显示
-    title: {type: String, default: ''},         // 标题
+    title: {type: String, default: '导出'},     // 标题
     num: {type: Number, default: 0},            // 数量
     data: {type: Object, default: {}},          // 数据
     order: {type: String, default: ''},         // 排序
   }
 })
-export default class ActionExport extends Vue {
+export default class UserExport extends Vue {
   // 参数
   show!: boolean;
   title!: string;
@@ -62,7 +62,7 @@ export default class ActionExport extends Vue {
     if(this.num<1) return Ui.Toast('无导出数量!');
     // 请求
     const load: any = Ui.Loading();
-    Request.Post('sys_menus/export', {
+    Request.Post('sys_user/export', {
       token: this.state.token,
       data: this.data,
       order: this.order,

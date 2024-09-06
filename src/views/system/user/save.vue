@@ -2,45 +2,46 @@
   <wm-dialog v-model:show="infoShow" :title="title" width="720px" bottom="40px" @close="close()">
     <wm-main>
       <wm-tabs :columns="tabs">
-        <!-- 基本信息 -->
+        <!-- 帐号信息 -->
         <template #base>
           <wm-table-form>
             <tr>
-              <td class="label">归属</td>
+              <td class="label">帐号</td>
+              <td>
+                <wm-input v-model:value="form.uname" placeholder="用户名\手机号码\邮箱" maxlength="16"></wm-input>
+              </td>
+              <td class="label">密码</td>
+              <td>
+                <wm-input v-model:value="form.passwd" placeholder="默认密码" maxlength="32"></wm-input>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="4" class="c_info"><b>基本信息</b></td>
+            </tr>
+            <tr>
+              <td class="label">类型</td>
               <td colspan="3">
-                <wm-cascader v-model:value="form.fid" :options="menusAll" clearable></wm-cascader>
+                <wm-select v-model:value="form.type" :options="selectAll.type"></wm-select>
               </td>
             </tr>
             <tr>
-              <td class="label">菜单名称</td>
+              <td class="label">昵称</td>
               <td>
-                <wm-input v-model:value="form.title" placeholder="菜单名称" maxlength="16"></wm-input>
+                <wm-input v-model:value="form.nickname" placeholder="用户昵称" maxlength="16"></wm-input>
               </td>
-              <td class="label">英文名</td>
+              <td class="label">姓名</td>
               <td>
-                <wm-input v-model:value="form.en" placeholder="英文名称" maxlength="16"></wm-input>
+                <wm-input v-model:value="form.name" placeholder="真实姓名" maxlength="16"></wm-input>
               </td>
             </tr>
             <tr>
-              <td class="label">前端路由</td>
-              <td colspan="3">
-                <wm-input v-model:value="form.url" placeholder="前端路由地址" maxlength="32"></wm-input>
-              </td>
-            </tr>
-            <tr>
-              <td class="label">接口地址</td>
-              <td colspan="3">
-                <wm-input v-model:value="form.controller" placeholder="接口地址" maxlength="32"></wm-input>
-              </td>
-            </tr>
-            <tr>
-              <td class="label">图标</td>
+              <td class="label">部门</td>
               <td>
-                <wm-input v-model:value="form.ico" placeholder="字体图标" maxlength="32"></wm-input>
+                <wm-input v-model:value="form.department" placeholder="所在部门" maxlength="16"></wm-input>
               </td>
-              <td class="label">排序</td>
+              <td class="label">职位</td>
               <td>
-                <wm-input v-model:value="form.sort" placeholder="排序, 如: 0, 1, 2" maxlength="32"></wm-input>
+                <wm-input v-model:value="form.position" placeholder="职务、职称" maxlength="16"></wm-input>
               </td>
             </tr>
             <tr>
@@ -51,35 +52,17 @@
             </tr>
           </wm-table-form>
         </template>
-        <!-- 基本信息 End -->
-        <!-- 动作菜单 -->
-        <template #action>
-          <wm-table-form>
-            <tr class="title">
-              <td>名称</td>
-              <td>动作</td>
-              <td>权限</td>
-              <td class="action">
-                <wm-button effect="text" type="primary" @click="actionAdd()">添加</wm-button>
-              </td>
-            </tr>
-            <tr v-for="(v,k) in form.action" :key="k">
-              <td>
-                <wm-input v-model:value="v.name" maxlength="32"></wm-input>
-              </td>
-              <td>
-                <wm-input v-model:value="v.action" maxlength="32"></wm-input>
-              </td>
-              <td>
-                <wm-input v-model:value="v.perm" maxlength="32"></wm-input>
-              </td>
-              <td class="action">
-                <wm-button effect="text" type="danger" @click="actionRemove(k)">移除</wm-button>
-              </td>
-            </tr>
-          </wm-table-form>
+        <!-- 帐号信息 End -->
+        <!-- 系统角色 -->
+        <template #sole>
+          <wm-radio v-model:value="form.role" :options="selectAll.role"></wm-radio>
         </template>
-        <!-- 动作菜单 End -->
+        <!-- 系统角色 End -->
+         <!-- 私有权限 -->
+        <template #perm>
+          私有权限
+        </template>
+        <!-- 私有权限 End -->
       </wm-tabs>
     </wm-main>
     <template #bottom>
@@ -104,39 +87,39 @@ import wmMain from '@/components/container/main.vue'
 import wmDialog from '@/components/dialog/index.vue'
 import wmInput from '@/components/form/input/index.vue'
 import wmButton from '@/components/form/button/index.vue'
-import wmCascader from '@/components/form/cascader/index.vue'
+import wmSelect from '@/components/form/select/index.vue'
+import wmRadio from '@/components/form/radio/index.vue'
 import wmTableForm from '@/components/table/form.vue'
 import wmTabs from '@/components/tabs/index.vue'
 
 @Options({
-  components: { wmMain, wmDialog, wmInput, wmButton, wmCascader, wmTableForm, wmTabs },
+  components: { wmMain, wmDialog, wmInput, wmButton, wmSelect, wmRadio, wmTableForm, wmTabs },
   props: {
     show: {type: Boolean, default: false},        // 是否显示
-    type: {type: String, default: ''},            // 类型: add, edit
+    title: {type: String, default: ''},           // 标题
     data: {default: []},                          // 数据
   }
 })
-export default class MenusAdd extends Vue {
+export default class ActionSave extends Vue {
   // 参数
   show!: boolean;
-  type!: string;
+  title!: string;
   data!: any;
   // 状态
   store: any = useStore();
   state: any = this.store.state;
   // 变量
   infoShow: boolean = false;
-  title: string = '';
   // Tabs
   tabs: Array<any> = [
-    {label: '基本信息', value: 'base', slot: 'base', checked: true},
-    {label: '动作菜单', value: 'action', slot: 'action'},
+    {label: '帐号信息', value: 'base', slot: 'base', checked: true},
+    {label: '角色', value: 'sole', slot: 'sole'},
+    {label: '私有', value: 'perm', slot: 'perm'},
   ];
   // 数据
-  form: any = {id:0, fid: [], title: '', en: '', ico: '', sort: 0, url: '', controller: '', remark:'', action:[]}
+  form: any = {id: 0, uname: '', passwd: '', type: '', nickname: '', name: '', department: '', position: '', remark: '', role: '', perm: ''}
   // 全部分类
-  fid: Array<any> = [];
-  menusAll: any = [];
+  selectAll: any = {type: [], role: []};
 
   /* 创建成功 */
   created(): void {
@@ -144,62 +127,25 @@ export default class MenusAdd extends Vue {
       this.infoShow = val;
     }, { deep: true });
     this.$watch('data', (v:any)=>{
-      this.title = this.type=='add'?'新增':'编辑';
       // 默认值
       this.form.id = v.id || 0;
-      this.form.title = v.title || '';
-      this.form.en = v.en || '';
-      this.form.ico = v.ico || '';
-      this.form.sort = v.sort || 0;
-      this.form.url = v.url || '';
-      this.form.controller = v.controller || '';
+      this.form.uname = v.uname || v.tel || v.email;
+      this.form.passwd = v.passwd || '';
+      this.form.nickname = v.nickname || '';
+      this.form.name = v.name || '';
+      this.form.department = v.department || '';
+      this.form.position = v.position || '';
       this.form.remark = v.remark || '';
-      this.form.action = v.action || [];
-      // Fid
-      if(typeof v.fid != 'undefined') this.getFid(v.fid);
-      else this.form.fid = [];
+      // 类型、角色
+      this.form.type = typeof v.type!='undefined'?[v.type]:'';
+      this.form.role = v.role || '';
     }, { deep: true });
   }
   /* 创建完成 */
   public mounted(): void {
     if(this.state.token){
-      this.getMenus();
+      this.getSelect();
     }
-  }
-
-  /* 获取Fid */
-  private getFid(fid: number): void {
-    // 一级
-    for(let v1 of this.menusAll) {
-          if(v1.value==fid) { this.form.fid = [v1.value]; break; }
-          if(!v1.children) continue;
-          // 二级
-          for(let v2 of v1.children) {
-            if(v2.value==fid) { this.form.fid = [v1.value, v2.value]; break; }
-            if(!v2.children) continue;
-            // 三级
-            for(let v3 of v2.children) {
-              if(v3.value==fid) { this.form.fid = [v1.value, v2.value, v3.value]; break; }
-              if(!v3.children) continue;
-              // 四级
-              for(let v4 of v3.children) {
-                if(v4.value==fid) { this.form.fid = [v1.value, v2.value, v3.value, v4.value]; break; }
-              }
-            }
-          }
-        }
-  }
-
-  /* 动作菜单-添加 */
-  actionAdd(): void {
-    const action: Array<any> = this.form.action;
-    if(action.length>0) action.push({name:'', action:'', perm:action[action.length-1].perm*2});
-    else this.form.action = [{name:'', action:'', perm:1}];
-  }
-  /* 动作菜单-移除 */
-  actionRemove(k: number): void {
-    const action: Array<any> = this.form.action;
-      action.splice(k, 1);
   }
 
   /* 验证 */
@@ -215,25 +161,27 @@ export default class MenusAdd extends Vue {
     if(!form) return;
     // 请求
     const load: any = Ui.Loading();
-    Request.Post('sys_menus/save', {
+    Request.Post('sys_user/save', {
       token: this.state.token,
       data: form,
     }, (res:any)=>{
       load.clear();
       const d: any = res.data;
       Ui.Toast(d.msg);
-      if(d.code==0) this.getMenus();
       this.$emit('submit', d.code==0);
     });
   }
 
-  /* 全部菜单 */
-  getMenus(): void {
-    Request.Post('sys_menus/get_menus_all', {
+  /* 选项 */
+  getSelect(): void {
+    Request.Post('sys_user/get_select', {
       token: this.state.token,
     }, (res:any)=>{
       const d: any = res.data;
-      if(d.code==0) this.menusAll = d.data;
+      if(d.code==0) {
+        this.selectAll.type = d.data.type;
+        this.selectAll.role = d.data.role;
+      }
       else Ui.Toast(d.msg);
     });
   }

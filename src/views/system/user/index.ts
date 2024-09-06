@@ -16,14 +16,16 @@ import wmDatePicker from '@/components/datepicker/index.vue'
 /* 动作、搜索、更新、删除 */
 import wmAction from '../../tools/Action.vue'
 import wmSearch from '../../tools/Search.vue'
-import menusSave from './save.vue'
-import menusDel from './del.vue'
+import actionSave from './save.vue'
+import actionDel from './del.vue'
+import actionExport from './export.vue'
+import actionPerm from './perm.vue'
 
 /* 系统菜单 */
 @Options({
   components: {
     wmMain, wmAction, wmSearch, wmInput, wmButton, wmTable, wmPage, wmTableForm, wmDatePicker,
-    menusSave, menusDel
+    actionSave, actionDel, actionExport, actionPerm
   },
 })
 export default class SysMenus extends Base {
@@ -38,13 +40,13 @@ export default class SysMenus extends Base {
     columns:[],
   }
   // 列表
-  total: any = {time: '', list:{}};
-  list: any = {columns: [], data: [], num: 0, total: 0, order:''};
+  total: any = {time: '', list: {}};
+  list: any = {columns: [], data: [], num: 0, total: 0, order: ''};
   page: any = {total: 0, num:1, limit: 100};
-  // 添加、编辑
-  save: any = {show: false, type:'', form:{}};
-  // 删除
-  del: any = {show: false, form:[]};
+  // 添加&编辑、删除、导出
+  save: any = {show: false, title: '添加/编辑', type: '', data: {}};
+  del: any = {show: false, title: '删除', data: []};
+  exp: any = {show: false, title: '导出', num: 0};
 
   /* 创建成功 */
   public created(): void {
@@ -65,12 +67,12 @@ export default class SysMenus extends Base {
       {title: '帐号', index: 'uname', slot: 'uname', order: '', width: '120px'},
       {title: '状态', index: 'state', slot: 'state', width: '60px', textAlign: 'center'},
       {title: '系统权限', index: 'perm', slot: 'perm', width: '120px', textAlign: 'center'},
-      {title: '角色', index: 'type', slot: 'type', order: '', width: '80px', textAlign: 'center'},
+      {title: '角色', index: 'type', slot: 'type', order: '', width: '100px', textAlign: 'center'},
       {title: '昵称', index: 'nickname'},
       {title: '部门', index: 'department'},
       {title: '职位', index: 'position'},
       {title: '姓名', index: 'name'},
-      {title: '性别', index: 'gender'},
+      {title: '性别', index: 'gender', slot: 'gender', textAlign: 'center'},
       {title: '生日', index: 'birthday'},
       {title: '备注', index: 'remark'},
     ];
@@ -104,31 +106,24 @@ export default class SysMenus extends Base {
     // 其它
     this.list.order = '';
     this.page.num = 1;
-    // 清除勾选
-    const obj:any = this.$refs.tableList;
-    obj.checkboxAll(false);
     // 加载
     this.loadData();
+  }
+
+  /* 清除勾选 */
+  clearSelect(): void {
+    const obj:any = this.$refs.tableList;
+    obj.checkboxAll(false);
   }
 
   /* 加载数据 */
   loadData(): void {
     this.sea.show = false;
-    // 数据
-    const data: any = {
-      key: this.sea.key,
-      stime: typeof this.sea.time[0]=='string'?this.sea.time[0]:Time.Date('Y/m/d', this.sea.time[0]),
-      etime: typeof this.sea.time[1]=='string'?this.sea.time[1]:Time.Date('Y/m/d', this.sea.time[1]),
-    };
-    // 搜索条件
-    for(let v of this.sea.columns) {
-      if(v.name) data[v.name] = v.value;
-    }
     // 请求
     const load: any = Ui.Loading();
     Request.Post('sys_user/list', {
       token: this.state.token,
-      data: data,
+      data: this.getWhere(),
       page: this.page.num,
       limit: this.page.limit,
       order: this.list.order,
@@ -140,32 +135,49 @@ export default class SysMenus extends Base {
         this.total.list = d.data.total;
         this.page.total = d.data.total.total;
         this.list.data = d.data.list;
+        this.clearSelect();
       }else{
         Ui.Toast(d.msg);
       }
     });
   }
+  /* 数据 */
+  getWhere(): object {
+    const data: any = {
+      key: this.sea.key,
+      stime: typeof this.sea.time[0]=='string'?this.sea.time[0]:Time.Date('Y/m/d', this.sea.time[0]),
+      etime: typeof this.sea.time[1]=='string'?this.sea.time[1]:Time.Date('Y/m/d', this.sea.time[1]),
+    };
+    // 搜索条件
+    for(let v of this.sea.columns) {
+      if(v.name) data[v.name] = v.value;
+    }
+    return data;
+  }
 
-  /* 添加 */
-  addData(): void {
+  /* 添加&编辑 */
+  saveData(type: string, val?: any): void {
     this.save.show = true;
-    this.save.type = 'add';
-    this.save.form = {};
+    this.save.type = type;
+    if(type=='add') {
+      this.save.title = '新增';
+      this.save.data = {};
+    } else if(type=='edit') {
+      this.save.title = '编辑';
+      if(val) {
+        this.save.data = val;
+      } else {
+        const obj:any = this.$refs.tableList;
+        const data: Array<any> = obj.getData();
+        this.save.data = data[0];
+      }
+      
+    }
   }
-  /* 编辑 */
-  editData(): void {
-    this.save.show = true;
-    this.save.type = 'edit';
-    const obj:any = this.$refs.tableList;
-    const data: Array<any> = obj.getData();
-    this.save.form = data[0];
-  }
-  /* 结果 */
+  /* 添加&编辑回调 */
   saveSubmit(val: boolean): void {
     if(!val) return;
     this.save.show = false;
-    const obj:any = this.$refs.tableList;
-    obj.checkboxAll(false);
     this.loadData();
   }
 
@@ -176,16 +188,25 @@ export default class SysMenus extends Base {
     const data: Array<any> = obj.getData();
     let ids: Array<number> = [];
     for(let v of data) ids.push(v.id);
-    this.del.form = ids;
+    this.del.data = ids;
   }
-  /* 结果 */
+  /* 删除回调 */
   delSubmit(val: boolean): void {
     if(!val) return;
     this.del.show = false;
-    const obj:any = this.$refs.tableList;
-    obj.checkboxAll(false);
     this.loadData();
   }
 
+  /* 导出 */
+  exportData(num: number): void {
+    this.exp.show = true;
+    this.exp.num = num;
+  }
+  /* 导出回调 */
+  exportSubmit(val: boolean): void {
+    if(!val) return;
+    this.exp.show = false;
+    this.clearSelect();
+  }
 
 }

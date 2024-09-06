@@ -29,11 +29,11 @@ import wmTableForm from '@/components/table/form.vue'
   components: { wmMain, wmDialog, wmInput, wmButton, wmTableForm },
   props: {
     show: {type: Boolean, default: false},        // 是否显示
-    title: {type: String, default: '删除提示'},   // 标题
+    title: {type: String, default: ''},           // 标题
     data: {type: Array, default: []},             // 数据
   }
 })
-export default class MenusAdd extends Vue {
+export default class ActionDel extends Vue {
   // 参数
   show!: boolean;
   title!: string;

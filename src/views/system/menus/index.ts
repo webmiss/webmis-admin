@@ -16,15 +16,15 @@ import wmDatePicker from '@/components/datepicker/index.vue'
 /* 动作、搜索、更新、删除 */
 import wmAction from '../../tools/Action.vue'
 import wmSearch from '../../tools/Search.vue'
-import menusSave from './save.vue'
-import menusDel from './del.vue'
-import menusExport from './export.vue'
+import actionSave from './save.vue'
+import actionDel from './del.vue'
+import actionExport from './export.vue'
 
 /* 系统菜单 */
 @Options({
   components: {
     wmMain, wmAction, wmSearch, wmInput, wmButton, wmTable, wmPage, wmTableForm, wmDatePicker,
-    menusSave, menusDel, menusExport
+    actionSave, actionDel, actionExport
   },
 })
 export default class SysMenus extends Base {
@@ -39,15 +39,13 @@ export default class SysMenus extends Base {
     columns:[],
   }
   // 列表
-  total: any = {time: '', list:{}};
-  list: any = {columns: [], data: [], num: 0, total: 0, order:''};
-  page: any = {total: 0, num:1, limit: 100};
-  // 添加、编辑
-  save: any = {show: false, type: '', form: {}};
-  // 删除
-  del: any = {show: false, form: []};
-  // 导出
-  exp: any = {show: false, num: 0};
+  total: any = {time: '', list: {}};
+  list: any = {columns: [], data: [], num: 0, total: 0, order: ''};
+  page: any = {total: 0, num: 1, limit: 100};
+  // 添加&编辑、删除、导出
+  save: any = {show: false, title: '添加/编辑', data: {}};
+  del: any = {show: false, title: '删除', data: []};
+  exp: any = {show: false, title: '导出', num: 0};
 
   /* 创建成功 */
   public created(): void {
@@ -66,7 +64,7 @@ export default class SysMenus extends Base {
       {title: '图标', index: 'ico', slot: 'ico', width: '40px'},
       {title: '名称', index: 'title', order: '', width: '160px'},
       {title: '英文', index: 'en', order: '', width: '160px'},
-      {title: '前端路由', index: 'en', order: '', width: '200px', minWidth: '160px'},
+      {title: '前端路由', index: 'url', order: '', width: '200px', minWidth: '160px'},
       {title: '接口地址', index: 'controller', order: '', width: '200px', minWidth: '160px'},
       {title: '备注', index: 'remark'},
     ];
@@ -103,6 +101,7 @@ export default class SysMenus extends Base {
     // 加载
     this.loadData();
   }
+
   /* 清除勾选 */
   clearSelect(): void {
     const obj:any = this.$refs.tableList;
@@ -148,21 +147,21 @@ export default class SysMenus extends Base {
     return data;
   }
 
-  /* 添加 */
-  addData(): void {
+  /* 添加&编辑 */
+  saveData(type: string): void {
     this.save.show = true;
-    this.save.type = 'add';
-    this.save.form = {};
+    this.save.type = type;
+    if(type=='add') {
+      this.save.title = '新增';
+      this.save.data = {};
+    } else if(type=='edit') {
+      this.save.title = '编辑';
+      const obj:any = this.$refs.tableList;
+      const data: Array<any> = obj.getData();
+      this.save.data = data[0];
+    }
   }
-  /* 编辑 */
-  editData(): void {
-    this.save.show = true;
-    this.save.type = 'edit';
-    const obj:any = this.$refs.tableList;
-    const data: Array<any> = obj.getData();
-    this.save.form = data[0];
-  }
-  /* 结果 */
+  /* 添加&编辑回调 */
   saveSubmit(val: boolean): void {
     if(!val) return;
     this.save.show = false;
@@ -176,9 +175,9 @@ export default class SysMenus extends Base {
     const data: Array<any> = obj.getData();
     let ids: Array<number> = [];
     for(let v of data) ids.push(v.id);
-    this.del.form = ids;
+    this.del.data = ids;
   }
-  /* 结果 */
+  /* 删除回调 */
   delSubmit(val: boolean): void {
     if(!val) return;
     this.del.show = false;
@@ -190,7 +189,7 @@ export default class SysMenus extends Base {
     this.exp.show = true;
     this.exp.num = num;
   }
-  /* 结果 */
+  /* 导出回调 */
   exportSubmit(val: boolean): void {
     if(!val) return;
     this.exp.show = false;

@@ -1,7 +1,7 @@
 <template>
   <div class="wm-login_popup" :style="{visibility:login.show?'inherit':'hidden'}">
     <wm-popup v-model:show="login.show" width="100%" height="100%" position="top" :time="600">
-      <div class="wm-login_bg" :class="login.bg"></div>
+      <div class="wm-login_bg" :class="login.bg" v-show="login.show"></div>
       <div class="wm-login_mask"></div>
       <div class="wm-login_body">
         <div class="wm-login_ct">
@@ -27,7 +27,7 @@
             <span v-else>{{ copy }}</span>
           </div>
         </div>
-      </div> 
+      </div>
     </wm-popup>
   </div>
 </template>

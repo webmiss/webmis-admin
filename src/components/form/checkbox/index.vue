@@ -7,7 +7,7 @@
         </span>
         <span class="label" v-if="options.label">{{ options.label }}</span>
       </li>
-      <li v-else :style="{margin:margin, padding:padding}" @click="clickCheckbox()">
+      <li v-else :style="{margin:margin, padding:padding}" @click.stop="clickCheckbox()">
         <span class="checkbox" :class="options.checked||value==options.value?'active':''">
           <i class="partially" v-if="partially"></i>
           <i class="all" v-else></i>
@@ -18,7 +18,7 @@
 </template>
 
 <style lang="less" scoped>
-.wm-checkbox{white-space: nowrap; height: 26px; line-height: 26px; font-weight: normal; color: rgba(0,0,0,0.7);}
+.wm-checkbox{white-space: nowrap; height: 24px; line-height: 24px; font-weight: normal; color: rgba(0,0,0,0.7);}
 .wm-checkbox li{display: inline-block; cursor: pointer; padding: 5px; margin: 0 4px; line-height: 16px;}
 .wm-checkbox li:hover .checkbox{border-color: @Primary;}
 .wm-checkbox li:hover .label{color: #000;}
@@ -43,7 +43,7 @@ import { Options, Vue } from 'vue-class-component';
     options: {type: Object, default: {}},         // 数据: {label:'北京市', value:1, disabled: true}
     partially: {type: Boolean, default: false},   // 局部选中
     margin: {type: String, default: '0 4px'},     // 外部间距
-    padding: {type: String, default: '5px'},      // 内部间距
+    padding: {type: String, default: '4px'},      // 内部间距
   }
 })
 export default class CheckBox extends Vue {
@@ -75,7 +75,7 @@ export default class CheckBox extends Vue {
     // 勾选、取消
     data.checked = !data.checked;
     // 事件
-    this.$emit('update:value', data.value);
+    this.$emit('update:value', data.checked?data.value:'');
     this.$emit('checkbox', data.label, data.value);
   }
 

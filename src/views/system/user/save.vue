@@ -60,7 +60,7 @@
         <!-- 系统角色 End -->
          <!-- 私有权限 -->
         <template #perm>
-          私有权限
+          <wm-tree :options="selectAll.perm"></wm-tree>
         </template>
         <!-- 私有权限 End -->
       </wm-tabs>
@@ -91,9 +91,10 @@ import wmSelect from '@/components/form/select/index.vue'
 import wmRadio from '@/components/form/radio/index.vue'
 import wmTableForm from '@/components/table/form.vue'
 import wmTabs from '@/components/tabs/index.vue'
+import wmTree from '@/components/tree/index.vue'
 
 @Options({
-  components: { wmMain, wmDialog, wmInput, wmButton, wmSelect, wmRadio, wmTableForm, wmTabs },
+  components: { wmMain, wmDialog, wmInput, wmButton, wmSelect, wmRadio, wmTableForm, wmTabs, wmTree },
   props: {
     show: {type: Boolean, default: false},        // 是否显示
     title: {type: String, default: ''},           // 标题
@@ -119,7 +120,7 @@ export default class ActionSave extends Vue {
   // 数据
   form: any = {id: 0, uname: '', passwd: '', type: '', nickname: '', name: '', department: '', position: '', remark: '', role: '', perm: ''}
   // 全部分类
-  selectAll: any = {type: [], role: []};
+  selectAll: any = {type: [], role: [], perm: []};
 
   /* 创建成功 */
   created(): void {
@@ -181,6 +182,24 @@ export default class ActionSave extends Vue {
       if(d.code==0) {
         this.selectAll.type = d.data.type;
         this.selectAll.role = d.data.role;
+        this.selectAll.perm = [
+          {label:'首页', value:'1'},
+          {label:'系统', value:'2', children: [
+            {label:'系统管理', value:'2:3', children: [
+              {label:'菜单管理', value:'2:3:5', children: [
+                {label:'列表', value:'2:3:5:1'},
+                {label:'更新', value:'2:3:5:2'},
+                {label:'删除', value:'2:3:5:4'},
+              ]},
+              {label:'系统用户', value:'2:3:6', children: [
+                {label:'列表', value:'2:3:6:1'},
+                {label:'更新', value:'2:3:6:2'},
+              ]},
+            ]},
+            {label:'基础数据', value:'2:4'},
+          ]},
+          {label:'网站', value:'7'},
+        ];
       }
       else Ui.Toast(d.msg);
     });

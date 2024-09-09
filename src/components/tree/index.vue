@@ -126,6 +126,8 @@ export default class Tree extends Vue {
   selectClick(val: string, level: string, pos: Array<number>, isStatus: boolean=true): void {
     let labels: Array<any> = [];
     let values: Array<any> = [];
+    let d1: any, d2: any, d3: any, d4: any;
+    let n1: number=0, n2: number=0, n3: number=0, n4: number=0;
     // 位置
     this.k1= pos[0];
     this.k2= pos[1];
@@ -135,11 +137,6 @@ export default class Tree extends Vue {
     if(level=='1') {
       // 选中
       this.listData[this.k1].checked = val?true:false;
-      // this.selectClear(this.listData);
-      // this.listData[this.k1].checked = true;
-      // // 数据
-      // labels = [this.listData[this.k1].label];
-      // values = [this.listData[this.k1].value];
     } else if(level=='2') {
       // 选中、勾选上级
       this.listData[this.k1].children[this.k2].checked = val?true:false;
@@ -147,19 +144,19 @@ export default class Tree extends Vue {
         this.listData[this.k1].checked = true;
       }
       // 部分选择
-      this.listData[this.k1].partially = this.isPartially(this.listData[this.k1].children);
-      // this.selectClear(this.listData[this.k1].children);
-      // this.listData[this.k1].checked = true;
-      // this.listData[this.k1].children[this.k2].checked = true;
-      // // 数据
-      // labels = [
-      //   this.listData[this.k1].label,
-      //   this.listData[this.k1].children[this.k2].label,
-      // ];
-      // values = [
-      //   this.listData[this.k1].value,
-      //   this.listData[this.k1].children[this.k2].value,
-      // ];
+      d1 = this.listData[this.k1];
+      d2 = this.listData[this.k1].children[this.k2];
+      n2 = this.checkedNum(d1.children);
+      if(n2==0) {
+        d2.partially = false;
+        this.isPartially(d1);
+      } else if(n2==d1.children.length) {
+        d1.partially = false;
+        d2.partially = false;
+      } else {
+        d1.partially = true;
+        d2.partially = d2.checked?true:false;
+      }
     } else if(level=='3') {
       // 选中、勾选上级
       this.listData[this.k1].children[this.k2].children[this.k3].checked = val?true:false;
@@ -168,23 +165,23 @@ export default class Tree extends Vue {
         this.listData[this.k1].children[this.k2].checked = true;
       }
       // 部分选择
-      this.listData[this.k1].partially = this.isPartially(this.listData[this.k1].children);
-      this.listData[this.k1].children[this.k2].partially = this.isPartially(this.listData[this.k1].children[this.k2].children);
-      // this.selectClear(this.listData[this.k1].children[this.k2].children);
-      // this.listData[this.k1].checked = true;
-      // this.listData[this.k1].children[this.k2].checked = true;
-      // this.listData[this.k1].children[this.k2].children[this.k3].checked = true;
-      // // 数据
-      // labels = [
-      //   this.listData[this.k1].label,
-      //   this.listData[this.k1].children[this.k2].label,
-      //   this.listData[this.k1].children[this.k2].children[this.k3].label,
-      // ];
-      // values = [
-      //   this.listData[this.k1].value,
-      //   this.listData[this.k1].children[this.k2].value,
-      //   this.listData[this.k1].children[this.k2].children[this.k3].value,
-      // ];
+      d1 = this.listData[this.k1];
+      d2 = this.listData[this.k1].children[this.k2];
+      d3 = this.listData[this.k1].children[this.k2].children[this.k3];
+      n3 = this.checkedNum(d2.children);
+      if(n3==0) {
+        d3.partially = false;
+        this.isPartially(d2);
+        this.isPartially(d1);
+      } else if(n3==d2.children.length) {
+        d1.partially = false;
+        d2.partially = false;
+        d3.partially = false;
+      } else {
+        d1.partially = true;
+        d2.partially = true;
+        d3.partially = d3.checked?true:false;
+      }
     } else if(level=='4') {
       // 选中、勾选上级
       this.listData[this.k1].children[this.k2].children[this.k3].children[this.k4].checked = val?true:false;
@@ -194,28 +191,30 @@ export default class Tree extends Vue {
         this.listData[this.k1].children[this.k2].children[this.k3].checked = true;
       }
       // 部分选择
-      this.listData[this.k1].partially = this.isPartially(this.listData[this.k1].children);
-      this.listData[this.k1].children[this.k2].partially = this.isPartially(this.listData[this.k1].children[this.k2].children);
-      this.listData[this.k1].children[this.k2].children[this.k3].partially = this.isPartially(this.listData[this.k1].children[this.k2].children[this.k3].children);
-      // this.selectClear(this.listData[this.k1].children[this.k2].children[this.k3].children);
-      // this.listData[this.k1].checked = true;
-      // this.listData[this.k1].children[this.k2].checked = true;
-      // this.listData[this.k1].children[this.k2].children[this.k3].checked = true;
-      // this.listData[this.k1].children[this.k2].children[this.k3].children[this.k4].checked = true;
-      // // 数据
-      // labels = [
-      //   this.listData[this.k1].label,
-      //   this.listData[this.k1].children[this.k2].label,
-      //   this.listData[this.k1].children[this.k2].children[this.k3].label,
-      //   this.listData[this.k1].children[this.k2].children[this.k3].children[this.k4].label,
-      // ];
-      // values = [
-      //   this.listData[this.k1].value,
-      //   this.listData[this.k1].children[this.k2].value,
-      //   this.listData[this.k1].children[this.k2].children[this.k3].value,
-      //   this.listData[this.k1].children[this.k2].children[this.k3].children[this.k4].value,
-      // ];
+      d1 = this.listData[this.k1];
+      d2 = this.listData[this.k1].children[this.k2];
+      d3 = this.listData[this.k1].children[this.k2].children[this.k3];
+      d4 = this.listData[this.k1].children[this.k2].children[this.k3].children[this.k4];
+      n4 = this.checkedNum(d3.children);
+      if(n4==0) {
+        d4.partially = false;
+        this.isPartially(d3);
+        this.isPartially(d2);
+        this.isPartially(d1);
+      } else if(n4==d3.children.length) {
+        d1.partially = false;
+        d2.partially = false;
+        d3.partially = false;
+        d4.partially = false;
+      } else {
+        d1.partially = true;
+        d2.partially = true;
+        d3.partially = true;
+        d4.partially = false;
+      }
     }
+    // 部分选择
+    // this.isPartially(this.listData);
     // 事件
     // this.labelName = labels.join(' > ');
     // if(isStatus){
@@ -225,11 +224,82 @@ export default class Tree extends Vue {
   }
 
   /* 是否部分选择 */
-  private isPartially(data: any): boolean {
-    if(!data) return false;
+  private isPartially(d: any): void {
+    if(this.checkedNum(d.children)>0){
+      d.checked = true;
+      d.partially = true;
+    } else {
+      d.checked = false;
+      d.partially = false;
+    }
+    return ;
+    const data: any = this.listData;
+    let n1: number=0, n2: number=0, n3: number=0, n4: number=0;
+    // 一层
+    const d1: any = this.listData;
+    for(let k1 in d1) {
+      n1 = this.checkedNum(d1);
+      d1[k1].partially = n1!=d1.length?true:false;
+      // 二层
+      const d2: any = d1[k1].children;
+      if(!d2) continue;
+      for(let k2 in d2) {
+        n2 = this.checkedNum(d2);
+        if(n2==0) {
+          d1[k1].checked = false;
+          d1[k1].partially = true;
+          d2[k2].partially = false;
+        } else if(n2==d2.length) {
+          d1[k1].partially = false;
+          d2[k2].partially = false;
+        } else {
+          d1[k1].partially = true;
+          d2[k2].partially = true;
+        }
+        // 三层
+        const d3: any = data[k1].children[k2].children;
+        if(!d3) continue;
+        for(let k3 in d3) {
+          n3 = this.checkedNum(d3);
+          if(n3==0) {
+            d2[k2].checked = false;
+            d1[k1].partially = true;
+            d2[k2].partially = true;
+            d3[k3].partially = false;
+          } else if(n3==d3.length) {
+            d2[k2].partially = false;
+            d3[k3].partially = false;
+          } else {
+            d2[k2].partially = true;
+            d3[k3].partially = true;
+          }
+          // 四层
+          const d4: any = data[k1].children[k2].children[k3].children;
+          if(!d4) continue;
+          for(let k4 in d4) {
+            n4 = this.checkedNum(d4);
+            if(n4==0) {
+              d3[k3].checked = false;
+              d1[k1].partially = true;
+              d2[k2].partially = true;
+              d3[k3].partially = true;
+              d4[k4].partially = false;
+            } else if(n4==d4.length) {
+              d3[k3].partially = false;
+              d4[k4].partially = false;
+            } else {
+              d3[k3].partially = true;
+              d4[k4].partially = false;
+            }
+          }
+        }
+      }
+    }
+  }
+  private checkedNum(data: any): number {
     let n: number = 0;
     for(let v of data) if(v.checked) n++;
-    return n!=data.length;
+    return n; 
   }
 
   /* 清空下级 */

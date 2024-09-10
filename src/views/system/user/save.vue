@@ -60,13 +60,13 @@
         <!-- 系统角色 End -->
          <!-- 私有权限 -->
         <template #perm>
-          <wm-tree :options="selectAll.perm"></wm-tree>
+          <wm-tree @update:value="updatePerm" :options="selectAll.perm"></wm-tree>
         </template>
         <!-- 私有权限 End -->
       </wm-tabs>
     </wm-main>
     <template #bottom>
-      <wm-button effect="dark" type="primary" height="40px" @click="submit()">确 认</wm-button>
+      <wm-button effect="dark" type="primary" height="40px" padding="0 32px" @click="submit()">确 认</wm-button>
     </template>
   </wm-dialog>
 </template>
@@ -126,20 +126,24 @@ export default class ActionSave extends Vue {
   created(): void {
     this.$watch('show', (val:boolean)=>{
       this.infoShow = val;
-    }, { deep: true });
-    this.$watch('data', (v:any)=>{
-      // 默认值
-      this.form.id = v.id || 0;
-      this.form.uname = v.uname || v.tel || v.email;
-      this.form.passwd = v.passwd || '';
-      this.form.nickname = v.nickname || '';
-      this.form.name = v.name || '';
-      this.form.department = v.department || '';
-      this.form.position = v.position || '';
-      this.form.remark = v.remark || '';
-      // 类型、角色
-      this.form.type = typeof v.type!='undefined'?[v.type]:'';
-      this.form.role = v.role || '';
+      if(val){
+        // 默认值
+        this.form.id = this.data.id || 0;
+        this.form.uname = this.data.uname || this.data.tel || this.data.email;
+        this.form.passwd = this.data.passwd || '';
+        this.form.nickname = this.data.nickname || '';
+        this.form.name = this.data.name || '';
+        this.form.department = this.data.department || '';
+        this.form.position = this.data.position || '';
+        this.form.remark = this.data.remark || '';
+        // 类型、角色
+        this.form.type = typeof this.data.type!='undefined'?[this.data.type]:'';
+        this.form.role = this.data.role || '';
+        this.form.perm = this.data.perm || '';
+        // 获取权限
+        this.getPerm();
+        console.log(JSON.stringify(this.data))
+      }
     }, { deep: true });
   }
   /* 创建完成 */
@@ -147,6 +151,23 @@ export default class ActionSave extends Vue {
     if(this.state.token){
       this.getSelect();
     }
+  }
+
+  /* 获取权限 */
+  getPerm(): void {
+    Request.Post('sys_user/get_perm', {
+      token: this.state.token,
+      role: this.form.role,
+      perm: this.form.perm,
+    }, (res:any)=>{
+      const d: any = res.data;
+      // console.log(this.form.role, this.form.perm);
+    });
+    
+  }
+  /* 权限-合成 */
+  updatePerm(val: any): void {
+    console.log('perm', val);
   }
 
   /* 验证 */

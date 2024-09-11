@@ -10,7 +10,7 @@
 </template>
 
 <style lang="less" scoped>
-.wm-tabs{width: 100%; border-bottom: @LighterBorder 2px solid; box-sizing: border-box;}
+.wm-tabs{position: sticky; z-index: 10; top: 0; width: 100%; border-bottom: @LighterBorder 2px solid; background-color: #FFF; box-sizing: border-box;}
 .wm-tabs li{cursor: pointer; position: relative; float: left; white-space: nowrap;}
 .wm-tabs li:hover{color: @Primary;}
 .wm-tabs .active{color: @Primary;}

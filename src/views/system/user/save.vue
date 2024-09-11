@@ -1,6 +1,6 @@
 <template>
   <wm-dialog v-model:show="infoShow" :title="title" width="720px" bottom="40px" @close="close()">
-    <wm-main>
+    <wm-main paddingY="0">
       <wm-tabs :columns="tabs">
         <!-- 帐号信息 -->
         <template #base>
@@ -142,7 +142,6 @@ export default class ActionSave extends Vue {
         this.form.perm = this.data.perm || '';
         // 获取权限
         this.getPerm();
-        console.log(JSON.stringify(this.data))
       }
     }, { deep: true });
   }
@@ -157,22 +156,31 @@ export default class ActionSave extends Vue {
   getPerm(): void {
     Request.Post('sys_user/get_perm', {
       token: this.state.token,
-      role: this.form.role,
       perm: this.form.perm,
     }, (res:any)=>{
       const d: any = res.data;
-      // console.log(this.form.role, this.form.perm);
+      if(d.code==0) this.selectAll.perm = d.data;
     });
     
   }
   /* 权限-合成 */
   updatePerm(val: any): void {
-    console.log('perm', val);
+    let perm: any = {};
+    let arr: Array<string> = [];
+    for(let v of val) {
+      arr = v.split(':');
+      if(perm[arr[0]]) perm[arr[0]] += parseInt(arr[1]);
+      else perm[arr[0]] = parseInt(arr[1]);
+    }
+    // 字符串
+    let str: string = '';
+    for(let k in perm) str += k+':'+perm[k].toString()+' ';
+    this.form.perm = str.trim();
   }
 
   /* 验证 */
   verify(form: any): any {
-    if(!form.title || form.title.length<2) return Ui.Toast('名称大于2个字符');
+    // if(!form.title || form.title.length<2) return Ui.Toast('名称大于2个字符');
     return form;
   }
 
@@ -181,6 +189,8 @@ export default class ActionSave extends Vue {
     // 验证
     const form = this.verify(this.form);
     if(!form) return;
+    console.log(JSON.stringify(form));
+    return ;
     // 请求
     const load: any = Ui.Loading();
     Request.Post('sys_user/save', {
@@ -203,24 +213,24 @@ export default class ActionSave extends Vue {
       if(d.code==0) {
         this.selectAll.type = d.data.type;
         this.selectAll.role = d.data.role;
-        this.selectAll.perm = [
-          {label:'首页', value:'1'},
-          {label:'系统', value:'2', children: [
-            {label:'系统管理', value:'2:3', children: [
-              {label:'菜单管理', value:'2:3:5', children: [
-                {label:'列表', value:'2:3:5:1'},
-                {label:'更新', value:'2:3:5:2'},
-                {label:'删除', value:'2:3:5:4'},
-              ]},
-              {label:'系统用户', value:'2:3:6', children: [
-                {label:'列表', value:'2:3:6:1'},
-                {label:'更新', value:'2:3:6:2'},
-              ]},
-            ]},
-            {label:'基础数据', value:'2:4'},
-          ]},
-          {label:'网站', value:'7'},
-        ];
+        // this.selectAll.perm = [
+        //   {label:'首页', value:'1'},
+        //   {label:'系统', value:'2', children: [
+        //     {label:'系统管理', value:'2:3', children: [
+        //       {label:'菜单管理', value:'2:3:5', children: [
+        //         {label:'列表', value:'2:3:5:1'},
+        //         {label:'更新', value:'2:3:5:2'},
+        //         {label:'删除', value:'2:3:5:4'},
+        //       ]},
+        //       {label:'系统用户', value:'2:3:6', children: [
+        //         {label:'列表', value:'2:3:6:1'},
+        //         {label:'更新', value:'2:3:6:2'},
+        //       ]},
+        //     ]},
+        //     {label:'基础数据', value:'2:4'},
+        //   ]},
+        //   {label:'网站', value:'7'},
+        // ];
       }
       else Ui.Toast(d.msg);
     });

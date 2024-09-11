@@ -79,6 +79,7 @@ export default class Tree extends Vue {
   show: boolean = false;
   selectObj: any = null;
   listData: Array<any> = [];
+  partially: Array<any> = [];
 
   /* 创建成功 */
   created(): void {
@@ -89,7 +90,7 @@ export default class Tree extends Vue {
       let k2: number = -1;
       let k3: number = -1;
       let k4: number = -1;
-      console.log(val);
+      // console.log(val);
       // // 一级
       // this.listData.forEach((v1: any, i1: number)=>{
       //   if(val[0]==v1.value) { level='1'; k1=i1; }
@@ -117,6 +118,7 @@ export default class Tree extends Vue {
     }, { deep: true });
     this.$watch('options', (val:Array<any>)=>{
       this.listData = val;
+      this.setPartially();
     }, { deep: true });
   }
 
@@ -132,95 +134,109 @@ export default class Tree extends Vue {
       // 选中
       d1 = this.listData[pos[0]];
       d1.checked = val?true:false;
-      if(val) {
-        // 勾选下级
-        if(d1.children) this.selectChecked(d1.children, true);
-      } else {
-        if(d1.children) this.selectChecked(d1.children, false);
-      }
+      // 勾选下级
+      if(d1.children) this.nextChecked(d1.children, val?true:false);
     } else if(level=='2') {
       // 选中
       d2 = this.listData[pos[0]].children[pos[1]];
       d2.checked = val?true:false;
-      if(val) {
-        // 勾选上级
-        this.listData[pos[0]].checked = true;
-        // 勾选下级
-        if(d2.children) this.selectChecked(d2.children, true);
-      } else {
-        if(d2.children) this.selectChecked(d2.children, false);
-      }
-      // 部分选择
+      // 勾选下级
+      if(d2.children) this.nextChecked(d2.children, val?true:false);
+      // 勾选上级
       d1 = this.listData[pos[0]];
-      this.isPartially(d1);
+      this.prevChecked(d1);
     } else if(level=='3') {
       // 选中
       d3 = this.listData[pos[0]].children[pos[1]].children[pos[2]];
       d3.checked = val?true:false;
-      if(val) {
-        // 勾选上级
-        this.listData[pos[0]].checked = true;
-        this.listData[pos[0]].children[pos[1]].checked = true;
-        // 勾选下级
-        if(d3.children) this.selectChecked(d3.children, true);
-      } else {
-        if(d3.children) this.selectChecked(d3.children, false);
-      }
-      // 部分选择
+      // 勾选下级
+      if(d3.children) this.nextChecked(d3.children, val?true:false);
+      // 勾选上级
       d1 = this.listData[pos[0]];
       d2 = this.listData[pos[0]].children[pos[1]];
-      this.isPartially(d2);
-      this.isPartially(d1);
+      this.prevChecked(d2);
+      this.prevChecked(d1);
     } else if(level=='4') {
-      // 选中、勾选上级
+      // 选中、
       d4 = this.listData[pos[0]].children[pos[1]].children[pos[2]].children[pos[3]];
       d4.checked = val?true:false;
-      if(val) {
-        this.listData[pos[0]].checked = true;
-        this.listData[pos[0]].children[pos[1]].checked = true;
-        this.listData[pos[0]].children[pos[1]].children[pos[2]].checked = true;
-      }
-      // 部分选择
+      // 勾选上级
       d1 = this.listData[pos[0]];
       d2 = this.listData[pos[0]].children[pos[1]];
       d3 = this.listData[pos[0]].children[pos[1]].children[pos[2]];
-      this.isPartially(d3);
-      this.isPartially(d2);
-      this.isPartially(d1);
+      this.prevChecked(d3);
+      this.prevChecked(d2);
+      this.prevChecked(d1);
     }
+    // 部分选择
+    this.setPartially();
     // 事件
     if(isStatus) {
       this.$emit('update:value', this.getData());
       this.$emit('data', this.listData);
     }
   }
-  /* 是否选择 */
-  private isPartially(d: any): void {
+  /* 勾选上级 */
+  private prevChecked(d: any): void {
     let n: number = this.checkedNum(d.children);
     if(n==0){
       d.checked = false;
-      d.partially = false;
     } else if(n==d.children.length){
       d.checked = true;
-      d.partially = false;
     } else {
       d.checked = true;
-      d.partially = true;
     }
+  }
+
+  /* 勾选下级 */
+  private nextChecked(data: any, checked: boolean): void {
+    for(let i in data){
+      data[i].checked = checked;
+      if(data[i].children) this.nextChecked(data[i].children, checked);
+    }
+  }
+
+  /* 部分选择 */
+  setPartially(): void {
+    let n1:boolean=false, n2:boolean=false, n3:boolean=false, n4:boolean=false;
+    // 一级
+    for(let v1 of this.listData) {
+      n1 = v1['children']?this.isPartially(v1['children']):false;
+      v1['partially'] = v1['checked']&&n1?true:false;
+      if(!v1['children']) continue;
+      // 二级
+      for(let v2 of v1['children']) {
+        n2 = v2['children']?this.isPartially(v2['children']):false;
+        v2['partially'] = v2['checked']&&n2?true:false;
+        if(!v2['children']) continue;
+        // 三级
+        for(let v3 of v2['children']) {
+          n3 = v3['children']?this.isPartially(v3['children']):false;
+          v3['partially'] = v3['checked']&&n3?true:false;
+          if(!v3['children']) continue;
+        }
+      }
+    }
+  }
+  /* 是否选择 */
+  private isPartially(d: any): boolean {
+    let res: boolean=false;
+    for(let v of d) {
+      if(v['children']) {
+        res = this.isPartially(v['children']);
+        if(res) return res;
+      } else {
+        let n: number = this.checkedNum(d);
+        if(n!=d.length) return true;
+      }
+    }
+    return res;
   }
   /* 获取选中数量 */
   private checkedNum(data: any): number {
     let n: number = 0;
     for(let v of data) if(v.checked) n++;
     return n; 
-  }
-
-  /* 勾选下级 */
-  selectChecked(data: any, checked: boolean): void {
-    for(let i in data){
-      data[i].checked = checked;
-      if(data[i].children) this.selectChecked(data[i].children, checked);
-    }
   }
 
   /* 获取数据 */
@@ -247,7 +263,7 @@ export default class Tree extends Vue {
   /* 清空 */
   clear(): void {
     // this.$emit('update:value', '');
-    this.selectChecked(this.listData, false);
+    this.nextChecked(this.listData, false);
   }
 
 }

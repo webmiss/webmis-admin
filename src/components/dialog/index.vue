@@ -9,7 +9,7 @@
           <div class="wm-dialog_close" @click="close(true)"></div>
         </div>
         <!-- Content -->
-        <div class="wm-dialog_content" :style="{maxHeight:'calc('+cfg.height+'px - 46px - 40px - '+bottom+')'}">
+        <div class="wm-dialog_content scrollbar" :style="{overflow: overflow, maxHeight: 'calc('+cfg.height+'px - 46px - 40px - '+bottom+')'}">
           <slot></slot>
         </div>
         <!-- Bottom -->
@@ -47,6 +47,7 @@ import wmPopup from '@/components/popup/index.vue'
     title: {type: String, default: ''},             // 标题
     width: {type: String, default: '360px'},        // 内容宽度
     height: {type: String, default: 'auto'},        // 内容高度
+    overflow: {type: String, default: 'auto'},      // 内容滚动条
     borderRadius: {type: String, default: '4px'},   // 圆角
     bottom: {type: String, default: ''},            // 底部高度
     isClose: {type: Boolean, default: false},       // 点击关闭
@@ -59,6 +60,7 @@ export default class Dialog extends Vue {
   title!: string;
   width!: string;
   height!: string;
+  overflow!: string;
   borderRadius!: string;
   bottom!: string;
   isClose!: boolean;

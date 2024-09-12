@@ -50,8 +50,13 @@
       <template #id="d">
         <div class="tCenter">{{ d.id }}</div>
       </template>
+      <template #type="d">
+        <div class="tCenter">{{ d.type_name || '-' }}</div>
+      </template>
       <template #img="d">
-        <div class="tCenter">{{ d.img }}</div>
+        <div class="flex_center">
+          <wm-img v-model:img="d.img"></wm-img>
+        </div>
       </template>
       <template #uname="d">
         {{ d.uname || d.tel || d.email }}
@@ -61,15 +66,17 @@
           <span :class="d.state?'c_success':'c_danger'">{{ d.state?'正常':'禁用' }}</span>
         </div>
       </template>
+      <template #action="d">
+        <div class="tCenter">
+          <wm-button @click="saveData('copy', d)">复制</wm-button>
+        </div>
+      </template>
       <template #perm="d">
         <div class="tCenter">
           <wm-button v-if="d.perm" effect="text" type="danger" @click="saveData('edit', d)">私有</wm-button>
           <wm-button v-else-if="d.role" effect="text" type="primary" @click="saveData('edit', d)">{{ d.role_name }}</wm-button>
           <wm-button v-else effect="text" type="info" @click="saveData('edit', d)">设置</wm-button>
         </div>
-      </template>
-      <template #type="d">
-        <div class="tCenter">{{ d.type_name || '-' }}</div>
       </template>
       <template #gender="d">
         <div class="tCenter">{{ d.gender || '-' }}</div>

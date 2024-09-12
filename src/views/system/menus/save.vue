@@ -142,21 +142,21 @@ export default class ActionSave extends Vue {
   created(): void {
     this.$watch('show', (val:boolean)=>{
       this.infoShow = val;
-    }, { deep: true });
-    this.$watch('data', (v:any)=>{
-      // 默认值
-      this.form.id = v.id || 0;
-      this.form.title = v.title || '';
-      this.form.en = v.en || '';
-      this.form.ico = v.ico || '';
-      this.form.sort = v.sort || 0;
-      this.form.url = v.url || '';
-      this.form.controller = v.controller || '';
-      this.form.remark = v.remark || '';
-      this.form.action = v.action || [];
-      // Fid
-      if(typeof v.fid != 'undefined') this.getFid(v.fid);
-      else this.form.fid = [];
+      if(val) {
+        // 默认值
+        this.form.id = this.data.id || 0;
+        this.form.title = this.data.title || '';
+        this.form.en = this.data.en || '';
+        this.form.ico = this.data.ico || '';
+        this.form.sort = this.data.sort || 0;
+        this.form.url = this.data.url || '';
+        this.form.controller = this.data.controller || '';
+        this.form.remark = this.data.remark || '';
+        this.form.action = this.data.action || [];
+        // Fid
+        if(typeof this.data.fid != 'undefined') this.getFid(this.data.fid);
+        else this.form.fid = [];
+      }
     }, { deep: true });
   }
   /* 创建完成 */

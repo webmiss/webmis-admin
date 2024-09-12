@@ -57,7 +57,7 @@ export default class ActionDel extends Vue {
     if(this.data.length<1) return Ui.Toast('无删除数据!');
     // 请求
     const load: any = Ui.Loading();
-    Request.Post('sys_menus/del', {
+    Request.Post('sys_user/del', {
       token: this.state.token,
       data: this.data,
     }, (res:any)=>{

@@ -13,6 +13,7 @@ import wmTable from '@/components/table/index.vue'
 import wmTableForm from '@/components/table/form.vue'
 import wmPage from '@/components/page/index.vue'
 import wmDatePicker from '@/components/datepicker/index.vue'
+import wmImg from '@/components/image/index.vue'
 /* 动作、搜索、更新、删除 */
 import wmAction from '../../tools/Action.vue'
 import wmSearch from '../../tools/Search.vue'
@@ -24,7 +25,7 @@ import actionPerm from './perm.vue'
 /* 系统菜单 */
 @Options({
   components: {
-    wmMain, wmAction, wmSearch, wmInput, wmButton, wmTable, wmPage, wmTableForm, wmDatePicker,
+    wmMain, wmAction, wmSearch, wmInput, wmButton, wmTable, wmPage, wmTableForm, wmDatePicker, wmImg,
     actionSave, actionDel, actionExport, actionPerm
   },
 })
@@ -63,12 +64,13 @@ export default class SysMenus extends Base {
     // 字段
     this.list.columns = [
       {title: 'UID', index: 'id', slot: 'id', order: '', width: '80px', minWidth: '60px', textAlign: 'center'},
+      {title: '角色', index: 'type', slot: 'type', order: '', width: '100px', textAlign: 'center'},
       {title: '头像', index: 'img', slot: 'img', width: '60px', minWidth: '60px', textAlign: 'center'},
       {title: '帐号', index: 'uname', slot: 'uname', order: '', width: '120px'},
-      {title: '状态', index: 'state', slot: 'state', width: '60px', textAlign: 'center'},
-      {title: '系统权限', index: 'perm', slot: 'perm', width: '120px', textAlign: 'center'},
-      {title: '角色', index: 'type', slot: 'type', order: '', width: '100px', textAlign: 'center'},
       {title: '昵称', index: 'nickname'},
+      {title: '状态', index: 'state', slot: 'state', width: '60px', textAlign: 'center'},
+      {title: '操作', index: 'action', slot: 'action', width: '60px', textAlign: 'center'},
+      {title: '系统权限', index: 'perm', slot: 'perm', width: '120px', textAlign: 'center'},
       {title: '部门', index: 'department'},
       {title: '职位', index: 'position'},
       {title: '姓名', index: 'name'},
@@ -156,7 +158,7 @@ export default class SysMenus extends Base {
   }
 
   /* 添加&编辑 */
-  saveData(type: string, val?: any): void {
+  saveData(type: string, data?: any): void {
     this.save.show = true;
     this.save.type = type;
     if(type=='add') {
@@ -164,14 +166,20 @@ export default class SysMenus extends Base {
       this.save.data = {};
     } else if(type=='edit') {
       this.save.title = '编辑';
-      if(val) {
-        this.save.data = val;
+      if(data) {
+        this.save.data = data;
       } else {
         const obj:any = this.$refs.tableList;
         const data: Array<any> = obj.getData();
         this.save.data = data[0];
       }
-      
+    } else if(type=='copy') {
+      this.save.title = '复制用户';
+      data.id = '';
+      data.uname = '';
+      data.tel = '';
+      data.email = '';
+      this.save.data = data;
     }
   }
   /* 添加&编辑回调 */

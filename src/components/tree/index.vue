@@ -59,8 +59,7 @@ import wmCheckBox from '@/components/form/checkbox/index.vue'
 @Options({
   components: { wmCheckBox },
   props: {
-    value: {default: ''},                                   // 默认值: 
-    options: {type: Array, default: []},                    // 数据: [{label:'一级菜单', value:'m1', children: []}]
+    options: {type: Array, default: []},                    // 数据: [{label:'一级菜单', value:'m1', checked: true, children: []}]
     width: {type: String, default: '100%'},                 // 宽
     padding: {type: String, default: '2px 0'},              // 内部间距
     level: {type: Number, default: 3},                      // 菜单级数
@@ -84,38 +83,6 @@ export default class Tree extends Vue {
   /* 创建成功 */
   created(): void {
     // 监听
-    this.$watch('value', (val:Array<any>)=>{
-      let level: string = '';
-      let k1: number = -1;
-      let k2: number = -1;
-      let k3: number = -1;
-      let k4: number = -1;
-      // console.log(val);
-      // // 一级
-      // this.listData.forEach((v1: any, i1: number)=>{
-      //   if(val[0]==v1.value) { level='1'; k1=i1; }
-      //   // 二级
-      //   if(v1.children) {
-      //     v1.children.forEach((v2: any, i2: number)=>{
-      //       if(val[1]==v2.value) { level='2'; k2=i2; }
-      //       // 三级
-      //       if(v2.children) {
-      //         v2.children.forEach((v3: any, i3: number)=>{
-      //           if(val[2]==v3.value) { level='3'; k3=i3; }
-      //           // 四级
-      //           if(v3.children) {
-      //             v3.children.forEach((v4: any, i4: number)=>{
-      //               if(val[3]==v4.value) { level='4'; k4=i4; }
-      //             });
-      //           }
-      //         });
-      //       }
-      //     });
-      //   }
-      // });
-      // if(level) this.selectClick(level, [k1, k2, k3, k4], false);
-      // else this.clear();
-    }, { deep: true });
     this.$watch('options', (val:Array<any>)=>{
       this.listData = val;
       this.setPartially();

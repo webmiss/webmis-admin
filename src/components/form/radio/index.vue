@@ -34,7 +34,7 @@ import { Options, Vue } from 'vue-class-component';
 @Options({
   components: { },
   props: {
-    value: {type: String, default: ''},   // 默认值
+    value: {default: ''},                 // 默认值
     options: {type: Array, default: []},  // 数据: [{label:'男', value:'男', disabled: true},{label:'女', value:'女'}]
   }
 })

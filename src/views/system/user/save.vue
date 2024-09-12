@@ -6,6 +6,12 @@
         <template #base>
           <wm-table-form>
             <tr>
+              <td class="label">状态</td>
+              <td colspan="3">
+                <wm-switch v-model:value="form.state"></wm-switch>
+              </td>
+            </tr>
+            <tr>
               <td class="label">帐号</td>
               <td>
                 <wm-input v-model:value="form.uname" placeholder="用户名\手机号码\邮箱" maxlength="16"></wm-input>
@@ -82,6 +88,7 @@ import { useStore } from 'vuex';
 /* UI组件 */
 import Ui from '@/library/ui'
 import Request from '@/library/request'
+import Safety from '@/library/safety';
 /* 组件 */
 import wmMain from '@/components/container/main.vue'
 import wmDialog from '@/components/dialog/index.vue'
@@ -89,12 +96,13 @@ import wmInput from '@/components/form/input/index.vue'
 import wmButton from '@/components/form/button/index.vue'
 import wmSelect from '@/components/form/select/index.vue'
 import wmRadio from '@/components/form/radio/index.vue'
+import wmSwitch from '@/components/form/switch/index.vue'
 import wmTableForm from '@/components/table/form.vue'
 import wmTabs from '@/components/tabs/index.vue'
 import wmTree from '@/components/tree/index.vue'
 
 @Options({
-  components: { wmMain, wmDialog, wmInput, wmButton, wmSelect, wmRadio, wmTableForm, wmTabs, wmTree },
+  components: { wmMain, wmDialog, wmInput, wmButton, wmSelect, wmRadio, wmSwitch, wmTableForm, wmTabs, wmTree },
   props: {
     show: {type: Boolean, default: false},        // 是否显示
     title: {type: String, default: ''},           // 标题
@@ -118,7 +126,7 @@ export default class ActionSave extends Vue {
     {label: '私有', value: 'perm', slot: 'perm'},
   ];
   // 数据
-  form: any = {id: 0, uname: '', passwd: '', type: '', nickname: '', name: '', department: '', position: '', remark: '', role: '', perm: ''}
+  form: any = {id: 0, state: true, uname: '', passwd: '', type: '', nickname: '', name: '', department: '', position: '', remark: '', role: '', perm: ''}
   // 全部分类
   selectAll: any = {type: [], role: [], perm: []};
 
@@ -129,7 +137,8 @@ export default class ActionSave extends Vue {
       if(val){
         // 默认值
         this.form.id = this.data.id || 0;
-        this.form.uname = this.data.uname || this.data.tel || this.data.email;
+        this.form.state = this.data.state || true;
+        this.form.uname = this.data.uname || this.data.tel || this.data.email || '';
         this.form.passwd = this.data.passwd || '';
         this.form.nickname = this.data.nickname || '';
         this.form.name = this.data.name || '';
@@ -180,7 +189,13 @@ export default class ActionSave extends Vue {
 
   /* 验证 */
   verify(form: any): any {
-    // if(!form.title || form.title.length<2) return Ui.Toast('名称大于2个字符');
+    // 用户名
+    if(!Safety.IsRight('uname', form.uname) && !Safety.IsRight('tel', form.uname) && !Safety.IsRight('email', form.uname)) {
+      return Ui.Toast('请输入用户名、手机号码、邮箱');
+    }
+    if(!form.id || form.passwd) {
+      if(!Safety.IsRight('passwd', form.passwd)) return Ui.Toast('密码为英文字母开头6～16位');
+    }
     return form;
   }
 
@@ -189,8 +204,6 @@ export default class ActionSave extends Vue {
     // 验证
     const form = this.verify(this.form);
     if(!form) return;
-    console.log(JSON.stringify(form));
-    return ;
     // 请求
     const load: any = Ui.Loading();
     Request.Post('sys_user/save', {

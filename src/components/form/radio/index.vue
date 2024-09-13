@@ -14,7 +14,7 @@
 </template>
 
 <style lang="less" scoped>
-.wm-radio{white-space: nowrap; height: 26px; line-height: 26px;}
+.wm-radio{line-height: 26px;}
 .wm-radio li{display: inline-block; cursor: pointer; padding: 5px; margin: 0 4px; line-height: 16px;}
 .wm-radio li span{float: left;}
 .wm-radio .checked{position: relative; display: inline-flex; width: 16px; height: 16px; border: @BorderColor 1px solid; border-radius: 50%; box-sizing: border-box; background-color: #FFF; transition: @Transition;}

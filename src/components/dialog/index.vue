@@ -47,7 +47,7 @@ import wmPopup from '@/components/popup/index.vue'
     title: {type: String, default: ''},             // 标题
     width: {type: String, default: '360px'},        // 内容宽度
     height: {type: String, default: 'auto'},        // 内容高度
-    overflow: {type: String, default: 'auto'},      // 内容滚动条
+    overflow: {type: String, default: 'hidden'},    // 内容滚动条
     borderRadius: {type: String, default: '4px'},   // 圆角
     bottom: {type: String, default: ''},            // 底部高度
     isClose: {type: Boolean, default: false},       // 点击关闭

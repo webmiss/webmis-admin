@@ -64,7 +64,7 @@ export default class SysMenus extends Base {
     // 字段
     this.list.columns = [
       {title: 'UID', index: 'id', slot: 'id', order: '', width: '80px', minWidth: '60px', textAlign: 'center'},
-      {title: '角色', index: 'type', slot: 'type', order: '', width: '100px', textAlign: 'center'},
+      {title: '角色', index: 'type', slot: 'type', order: '', width: '80px', minWidth: '80px', textAlign: 'center'},
       {title: '头像', index: 'img', slot: 'img', width: '60px', minWidth: '60px', textAlign: 'center'},
       {title: '帐号', index: 'uname', slot: 'uname', order: '', width: '120px'},
       {title: '昵称', index: 'nickname'},

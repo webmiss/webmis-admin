@@ -20,13 +20,12 @@ import wmSearch from '../../tools/Search.vue'
 import actionSave from './save.vue'
 import actionDel from './del.vue'
 import actionExport from './export.vue'
-import actionPerm from './perm.vue'
 
 /* 系统菜单 */
 @Options({
   components: {
     wmMain, wmAction, wmSearch, wmInput, wmButton, wmTable, wmPage, wmTableForm, wmDatePicker, wmImg,
-    actionSave, actionDel, actionExport, actionPerm
+    actionSave, actionDel, actionExport
   },
 })
 export default class SysMenus extends Base {

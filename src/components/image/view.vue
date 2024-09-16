@@ -9,14 +9,18 @@
     <img v-else ref="wmImageView" :src="imgUrl" :style="{visibility:isLoad?'inherit':'hidden'}" />
     <img ref="wmImageLoading" class="loading_img" />
     <!-- Info -->
-     <div class="wm-image_view_info" v-if="title">名称: {{title}}&nbsp;&nbsp;页码: {{ index+1 }}/{{ options.length }}</div>
+     <div class="wm-image_view_info" v-if="title">
+      名称: {{title}}&nbsp;&nbsp;
+      大小: {{size}}&nbsp;&nbsp;
+      页码: {{ index+1 }}/{{ options.length }}
+    </div>
     <!-- Close -->
     <i class="ui ui_close tools close" @click="close()"></i>
     <!-- FullScreen -->
     <i class="ui tools full" :class="isFull?'ui_video_fullscreen_exit':'ui_video_fullscreen'" @click="Fullscreen()"></i>
     <!-- Prev -->
     <div class="prev">
-      <i class="ui ui_arrow_left" @click.stop="loadImg(this.index-1)" :style="{
+      <i class="ui ui_arrow_left" @click.stop="loadImg(this.imgIndex-1)" :style="{
         left: 'calc('+icoSize+' + 16px)',
         width: 'calc('+icoSize+' + 16px)',
         lineHeight: 'calc('+icoSize+' + 16px)',
@@ -25,7 +29,7 @@
     </div>
     <!-- Next -->
     <div class="next">
-      <i class="ui ui_arrow_right" @click.stop="loadImg(this.index+1)" :style="{
+      <i class="ui ui_arrow_right" @click.stop="loadImg(this.imgIndex+1)" :style="{
         right: 'calc('+icoSize+' + 16px)',
         width: 'calc('+icoSize+' + 16px)',
         lineHeight: 'calc('+icoSize+' + 16px)',
@@ -63,7 +67,7 @@ import Ui from '@/library/ui'
   props: {
     show: {type: Boolean, default: false},              // 是否显示
     index: {type: Number, default: 0},                  // 默认展示
-    options: {type: Array, default: []},                // 图片地址: [{label:'名称', value:''}]
+    options: {type: Array, default: []},                // 图片地址: [{label:'名称', value:'', size:''}]
     bgColor: {type: String, default: 'rgba(0,0,0,.8)'}, // 背景颜色
     icoSize: {type: String, default: '32px'},           // 图标大小
   }
@@ -78,44 +82,53 @@ export default class ImageView extends Vue {
   icoSize!: string;
   // 变量
   isLoad: boolean = false;
+  imgIndex: number = 0;
   imgUrl: string = '';
   isFull: boolean = false;
   title: string = '';
+  size: string = '';
 
   /* 创建成功 */
   created(): void {
     // 监听
     this.$watch('show', (val:any)=>{
       if(val) {
-        this.loadImg(this.index);
-        // 方向键
-        document.addEventListener('keydown', (event: any)=>{
-          const keyCode: any = event.keyCode || event.which;
-          switch (keyCode) {
-            case 37: this.loadImg(this.index-1); break;
-            case 39: this.loadImg(this.index+1); break;
-          }
-        });
+        this.imgIndex = this.index;
+        this.loadImg(this.imgIndex);
+        // 事件
+        window.addEventListener('resize', this.resizeFun);
+        document.addEventListener('keydown', this.keydownFun);
       }
     }, { deep: true });
   }
-  /* 创建完成 */
-  public mounted(): void {
-    // 窗口变化
-    window.addEventListener('resize', ()=>{
-      if(this.show) this.loadImg(this.index);
-    });
+
+  /* 窗口事件 */
+  resizeFun(): void {
+    if(this.show) this.loadImg(this.imgIndex);
+  }
+
+  /* 键盘事件 */
+  keydownFun(event: any): void {
+    const keyCode: any = event.keyCode || event.which;
+    switch (keyCode) {
+      case 37: this.loadImg(this.imgIndex-1); break;
+      case 39: this.loadImg(this.imgIndex+1); break;
+      case 27: this.close(); break;
+    }
   }
 
   /* 加载图片 */
   loadImg(k: number): void {
     // 上一页、下一页
-    if(k<0) return Ui.Toast('首页');
-    if(k>=this.options.length) return Ui.Toast('末页');
+    if(k<0) k=this.options.length-1;
+    if(k>=this.options.length) k=0;
+    // 更新索引
+    this.imgIndex = k;
     // 图片
     let imgUrl: string = this.options[k]?this.options[k].value:'';
     if(!imgUrl) return Ui.Toast('无图片地址');
     this.title = this.options[k].label;
+    this.size = this.options[k].size || '0';
     // 加载图片
     const imgLoad: any = this.$refs.wmImageLoading;
     imgLoad.src = imgUrl;
@@ -147,8 +160,6 @@ export default class ImageView extends Vue {
         }, 300);
       });
     }
-    // 更新索引
-    this.$emit('update:index', k);
   }
 
   /* 全屏 */
@@ -176,8 +187,13 @@ export default class ImageView extends Vue {
 
   /* 关闭 */
   close(): void {
+    // 隐藏
     this.$emit('update:show', false);
+    // 退出全屏
     if(this.isFull) this.Fullscreen();
+    // 移除事件
+    window.removeEventListener('resize', this.resizeFun);
+    document.removeEventListener('keydown', this.keydownFun);
   }
 
 }

@@ -64,6 +64,7 @@ export default class SysMenus extends Base {
       {title: '图标', index: 'ico', slot: 'ico', width: '40px'},
       {title: '名称', index: 'title', order: '', width: '160px'},
       {title: '英文', index: 'en', order: '', width: '160px'},
+      {title: '排序', index: 'sort', slot: 'sort', order: '', width: '60px', minWidth: '60px', textAlign: 'center'},
       {title: '前端路由', index: 'url', order: '', width: '200px', minWidth: '160px'},
       {title: '接口地址', index: 'controller', order: '', width: '200px', minWidth: '160px'},
       {title: '备注', index: 'remark'},

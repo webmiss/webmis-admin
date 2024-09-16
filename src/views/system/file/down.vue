@@ -1,10 +1,10 @@
 <template>
-  <wm-dialog v-model:show="infoShow" :title="title" width="360px" bottom="40px" @close="close()">
+  <wm-dialog v-model:show="infoShow" :title="title" width="420px" bottom="40px" @close="close()">
     <wm-main lineHeight="60px">
-      共导出 <b>{{ num }}</b> 条数据
+      <b>{{ data.filename }}</b>
     </wm-main>
     <template #bottom>
-      <wm-button effect="dark" type="primary" height="40px" @click="submit()">确认导出</wm-button>
+      <wm-button effect="dark" type="primary" height="40px" @click="submit()">确认下载</wm-button>
     </template>
   </wm-dialog>
 </template>
@@ -28,19 +28,16 @@ import wmButton from '@/components/form/button/index.vue'
   components: { wmMain, wmDialog, wmButton },
   props: {
     show: {type: Boolean, default: false},      // 是否显示
-    title: {type: String, default: ''},         // 标题
-    num: {type: Number, default: 0},            // 数量
+    title: {type: String, default: '文件下载'}, // 标题
     data: {type: Object, default: {}},          // 数据
-    order: {type: String, default: ''},         // 排序
   }
 })
-export default class ActionExport extends Vue {
+export default class ActionDown extends Vue {
   // 参数
   show!: boolean;
   title!: string;
   num!: number;
   data!: any;
-  order!: string;
   // 状态
   store: any = useStore();
   state: any = this.store.state;
@@ -60,20 +57,19 @@ export default class ActionExport extends Vue {
     if(this.num<1) return Ui.Toast('无导出数量!');
     // 请求
     const load: any = Ui.Loading();
-    Request.Post('sys_role/export', {
+    Request.Post('sys_file/down', {
       token: this.state.token,
-      data: this.data,
-      order: this.order,
+      path: this.data.path,
+      filename: this.data.filename,
     }, (res:any)=>{
       load.clear();
-      const d: any = res.data;
-      Ui.Toast(d.msg);
-      if(d.code==0){
-        Files.Down(d.data.path+d.data.filename, d.data.filename);
-        console.log(d);
-      }
+      Files.DownBlob(res.data, this.data.filename);
       // 事件
-      this.$emit('submit', d.code==0);
+      this.$emit('submit', true);
+    },()=>{
+      Ui.Toast('网络加载错误!');
+    },{
+      responseType:'blob',
     });
   }
 

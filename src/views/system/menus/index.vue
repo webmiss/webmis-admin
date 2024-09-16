@@ -59,6 +59,9 @@
           <span v-else>-</span>
         </div>
       </template>
+      <template #sort="d">
+        <div class="tCenter">{{ d.sort }}</div>
+      </template>
     </wm-table>
     <!-- List End -->
   </div>

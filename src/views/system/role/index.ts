@@ -4,7 +4,6 @@ import Base from '../../../service/Base'
 /* JS组件 */
 import Ui from '@/library/ui'
 import Request from '@/library/request'
-import Time from '@/library/time'
 /* 组件 */
 import wmMain from '@/components/container/main.vue'
 import wmInput from '@/components/form/input/index.vue'
@@ -19,7 +18,7 @@ import actionSave from './save.vue'
 import actionDel from './del.vue'
 import actionExport from './export.vue'
 
-/* 系统菜单 */
+/* 系统角色 */
 @Options({
   components: {
     wmMain, wmAction, wmSearch, wmInput, wmButton, wmTable, wmPage, wmTableForm,

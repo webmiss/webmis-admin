@@ -22,12 +22,10 @@ import Files from '@/library/files'
 /* 组件 */
 import wmMain from '@/components/container/main.vue'
 import wmDialog from '@/components/dialog/index.vue'
-import wmInput from '@/components/form/input/index.vue'
 import wmButton from '@/components/form/button/index.vue'
-import wmTableForm from '@/components/table/form.vue'
 
 @Options({
-  components: { wmMain, wmDialog, wmInput, wmButton, wmTableForm },
+  components: { wmMain, wmDialog, wmButton },
   props: {
     show: {type: Boolean, default: false},      // 是否显示
     title: {type: String, default: ''},         // 标题

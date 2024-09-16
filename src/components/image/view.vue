@@ -12,7 +12,7 @@
      <div class="wm-image_view_info" v-if="title">
       名称: {{title}}&nbsp;&nbsp;
       大小: {{size}}&nbsp;&nbsp;
-      页码: {{ index+1 }}/{{ options.length }}
+      页码: {{ imgIndex+1 }}/{{ options.length }}
     </div>
     <!-- Close -->
     <i class="ui ui_close tools close" @click="close()"></i>

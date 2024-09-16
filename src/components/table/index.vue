@@ -49,12 +49,12 @@
 <style lang="less" scoped>
 .wm-table_body{overflow: hidden;}
 .wm-table{width: 100%; border-collapse: collapse;}
-.wm-table .checkbox{width: 24px; text-align: center; position: sticky; z-index: 10; left: 0;}
+.wm-table .checkbox{width: 24px; text-align: center; position: sticky; z-index: 1; left: 0;}
 .wm-table .checkbox::after,.wm-table .checkbox::before{content: ''; position: absolute; width: 1px; height: 100%;}
 .wm-table .checkbox::after{left: -1px; top: 0; border-left: #F4F6F8 1px solid;}
 .wm-table .checkbox::before{right: -1px; top: 0; border-right: @Primary5 1px solid;}
-.wm-table td{padding: 4px 8px; height: 32px; line-height: 1; white-space: nowrap; border: #FFF 1px solid; box-sizing: border-box;}
-.wm-table_title{position: sticky; z-index: 99; top: 0;}
+.wm-table td{padding: 4px 8px; height: 40px; line-height: 1; white-space: nowrap; border: #FFF 1px solid; box-sizing: border-box;}
+.wm-table_title{position: sticky; z-index: 2; top: 0;}
 .wm-table_title::after{content: ''; position: absolute; top: -1px; width: 100%; height: 1px; background-color: #F4F6F8;}
 .wm-table_title td{position: relative; background-color: #F4F6F8; color: @Minor4; font-weight: bold; font-size: 12px;}
 .wm-table_title .order_body{cursor: pointer; position: absolute; right: 0; top: 0; width: 16px; height: 100%; background-color: #F4F6F8;}

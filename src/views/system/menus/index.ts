@@ -152,7 +152,7 @@ export default class SysMenus extends Base {
     this.save.show = true;
     this.save.type = type;
     if(type=='add') {
-      this.save.title = '新增';
+      this.save.title = '添加';
       this.save.data = {};
     } else if(type=='edit') {
       this.save.title = '编辑';
@@ -161,7 +161,7 @@ export default class SysMenus extends Base {
       this.save.data = data[0];
     }
   }
-  /* 添加&编辑回调 */
+  /* 添加&编辑-回调 */
   saveSubmit(val: boolean): void {
     if(!val) return;
     this.save.show = false;
@@ -177,7 +177,7 @@ export default class SysMenus extends Base {
     for(let v of data) ids.push(v.id);
     this.del.data = ids;
   }
-  /* 删除回调 */
+  /* 删除-回调 */
   delSubmit(val: boolean): void {
     if(!val) return;
     this.del.show = false;
@@ -189,7 +189,7 @@ export default class SysMenus extends Base {
     this.exp.show = true;
     this.exp.num = num;
   }
-  /* 导出回调 */
+  /* 导出-回调 */
   exportSubmit(val: boolean): void {
     if(!val) return;
     this.exp.show = false;

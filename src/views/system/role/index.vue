@@ -35,9 +35,6 @@
     <div class="search flex">
       <!-- Search -->
       <wm-search v-model:show="sea.show" v-model:keys="sea.key" :columns="sea.columns" :placeholder="sea.placeholder" @keyup.enter="loadData()" @search="loadData()" @reset="resetData()">
-        <template #time="d">
-          <wm-date-picker v-model:value="sea.time" range :maxDate="sea.maxDate" :placeholder="d.label"></wm-date-picker>
-        </template>
       </wm-search>
       <!-- Search End -->
     </div>
@@ -50,13 +47,9 @@
       <template #id="d">
         <div class="tCenter">{{ d.id }}</div>
       </template>
-      <template #fid="d">
-        <div class="tCenter">{{ d.fid }}</div>
-      </template>
-      <template #ico="d">
-        <div class="tCenter icon">
-          <i v-if="d.ico" :class="d.ico"></i>
-          <span v-else>-</span>
+      <template #perm="d">
+        <div class="tCenter">
+          <wm-button effect="text" type="primary" @click="saveData('edit', d)">编辑</wm-button>
         </div>
       </template>
     </wm-table>

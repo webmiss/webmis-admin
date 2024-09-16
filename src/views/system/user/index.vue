@@ -9,42 +9,42 @@
       <i class="ui ui_refresh" @click="loadData()"></i>
     </div>
   </div>
+  <!-- Action -->
+  <div class="app_action flex">
+    <div class="botton">
+      <wm-action :columns="[
+        {action: 'save', slot: 'add', is_action: true},
+        {action: 'save', slot: 'edit', is_action: true},
+        {action: 'del', slot: 'del', is_action: true},
+        {action: 'export', slot: 'export', is_action: true},
+      ]">
+        <template #add>
+          <wm-button effect="dark" type="primary" icon="ui ui_add" padding="0 16px 0 8px" @click="saveData('add')">添加</wm-button>
+        </template>
+        <template #edit>
+          <wm-button effect="plain" type="primary" icon="ui ui_edit" padding="0 16px 0 8px" :disabled="list.num!=1" @click="saveData('edit')">编辑</wm-button>
+        </template>
+        <template #del>
+          <wm-button effect="plain" type="danger" icon="ui ui_del" padding="0 16px 0 8px" :disabled="list.num==0" @click="delData()">删除({{ list.num }})</wm-button>
+        </template>
+        <template #export>
+          <wm-button effect="plain" icon="ui ui_export" padding="0 16px 0 8px" :disabled="!total.list.total" @click="exportData(total.list.total)">导出({{ total.list.total }})</wm-button>
+        </template>
+      </wm-action>
+    </div>
+    <div class="search flex">
+      <!-- Search -->
+      <wm-search v-model:show="sea.show" v-model:keys="sea.key" :columns="sea.columns" :placeholder="sea.placeholder" @keyup.enter="loadData()" @search="loadData()" @reset="resetData()">
+        <template #time="d">
+          <wm-date-picker v-model:value="sea.time" range :maxDate="sea.maxDate" :placeholder="d.label"></wm-date-picker>
+        </template>
+      </wm-search>
+      <!-- Search End -->
+    </div>
+  </div>
+  <!-- Action End -->
   <!-- Content -->
   <div class="app_ct">
-    <!-- Action -->
-    <div class="app_action flex">
-      <div class="botton">
-        <wm-action :columns="[
-          {action: 'save', slot: 'add', is_action: true},
-          {action: 'save', slot: 'edit', is_action: true},
-          {action: 'del', slot: 'del', is_action: true},
-          {action: 'export', slot: 'export', is_action: true},
-        ]">
-          <template #add>
-            <wm-button effect="dark" type="primary" icon="ui ui_add" padding="0 16px 0 8px" @click="saveData('add')">添加</wm-button>
-          </template>
-          <template #edit>
-            <wm-button effect="plain" type="primary" icon="ui ui_edit" padding="0 16px 0 8px" :disabled="list.num!=1" @click="saveData('edit')">编辑</wm-button>
-          </template>
-          <template #del>
-            <wm-button effect="plain" type="danger" icon="ui ui_del" padding="0 16px 0 8px" :disabled="list.num==0" @click="delData()">删除({{ list.num }})</wm-button>
-          </template>
-          <template #export>
-            <wm-button effect="plain" icon="ui ui_export" padding="0 16px 0 8px" :disabled="!total.list.total" @click="exportData(total.list.total)">导出({{ total.list.total }})</wm-button>
-          </template>
-        </wm-action>
-      </div>
-      <div class="search flex">
-        <!-- Search -->
-        <wm-search v-model:show="sea.show" v-model:keys="sea.key" :columns="sea.columns" :placeholder="sea.placeholder" @keyup.enter="loadData()" @search="loadData()" @reset="resetData()">
-          <template #time="d">
-            <wm-date-picker v-model:value="sea.time" range :maxDate="sea.maxDate" :placeholder="d.label"></wm-date-picker>
-          </template>
-        </wm-search>
-        <!-- Search End -->
-      </div>
-    </div>
-    <!-- Action End -->
     <!-- List -->
     <wm-table class="table" ref="tableList" :columns="list.columns" :options="list.data" @orderBy="orderBy" @partially="selectState" height="calc(100% - 58px)">
       <template #id="d">

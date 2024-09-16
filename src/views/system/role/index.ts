@@ -12,21 +12,18 @@ import wmButton from '@/components/form/button/index.vue'
 import wmTable from '@/components/table/index.vue'
 import wmTableForm from '@/components/table/form.vue'
 import wmPage from '@/components/page/index.vue'
-import wmDatePicker from '@/components/datepicker/index.vue'
-import wmImg from '@/components/image/index.vue'
 /* 动作、搜索、更新、删除 */
 import wmAction from '../../tools/Action.vue'
 import wmSearch from '../../tools/Search.vue'
 import actionSave from './save.vue'
 import actionDel from './del.vue'
 import actionExport from './export.vue'
-import actionPerm from './perm.vue'
 
 /* 系统菜单 */
 @Options({
   components: {
-    wmMain, wmAction, wmSearch, wmInput, wmButton, wmTable, wmPage, wmTableForm, wmDatePicker, wmImg,
-    actionSave, actionDel, actionExport, actionPerm
+    wmMain, wmAction, wmSearch, wmInput, wmButton, wmTable, wmPage, wmTableForm,
+    actionSave, actionDel, actionExport
   },
 })
 export default class SysMenus extends Base {
@@ -36,16 +33,15 @@ export default class SysMenus extends Base {
   private state: any = this.store.state;
   // 搜索
   sea: any = {
-    show: false, key: '', placeholder:'Fid、名称、接口等',
-    time: [Time.Date('Y/m/d', Time.StrToTime('-3 year')), Time.Date('Y/m/d')], maxDate: Time.Date('Y/m/d'),
+    show: false, key: '', placeholder:'名称、备注',
     columns:[],
   }
   // 列表
   total: any = {time: '', list: {}};
   list: any = {columns: [], data: [], num: 0, total: 0, order: ''};
-  page: any = {total: 0, num:1, limit: 100};
+  page: any = {total: 0, num: 1, limit: 100};
   // 添加&编辑、删除、导出
-  save: any = {show: false, title: '添加/编辑', type: '', data: {}};
+  save: any = {show: false, title: '添加/编辑', data: {}};
   del: any = {show: false, title: '删除', data: []};
   exp: any = {show: false, title: '导出', num: 0};
 
@@ -53,29 +49,14 @@ export default class SysMenus extends Base {
   public created(): void {
     // 搜索
     this.sea.columns = [
-      {label: '选择日期范围', value: '', slot: 'time'},
-      {label: '帐号', value: '', name: 'uname'},
-      {label: '昵称', value: '', name: 'nickname'},
-      {label: '部门', value: '', name: 'department'},
-      {label: '职位', value: '', name: 'position'},
-      {label: '姓名', value: '', name: 'name'},
+      {label: '名称', value: '', name: 'name'},
       {label: '备注', value: '', name: 'remark'},
     ];
     // 字段
     this.list.columns = [
-      {title: 'UID', index: 'id', slot: 'id', order: '', width: '80px', minWidth: '60px', textAlign: 'center'},
-      {title: '角色', index: 'type', slot: 'type', order: '', width: '80px', minWidth: '80px', textAlign: 'center'},
-      {title: '头像', index: 'img', slot: 'img', width: '60px', minWidth: '60px', textAlign: 'center'},
-      {title: '帐号', index: 'uname', slot: 'uname', order: '', width: '120px'},
-      {title: '昵称', index: 'nickname'},
-      {title: '状态', index: 'state', slot: 'state', width: '60px', textAlign: 'center'},
-      {title: '操作', index: 'action', slot: 'action', width: '60px', textAlign: 'center'},
-      {title: '系统权限', index: 'perm', slot: 'perm', width: '120px', textAlign: 'center'},
-      {title: '部门', index: 'department'},
-      {title: '职位', index: 'position'},
-      {title: '姓名', index: 'name'},
-      {title: '性别', index: 'gender', slot: 'gender', textAlign: 'center'},
-      {title: '生日', index: 'birthday'},
+      {title: 'ID', index: 'id', slot: 'id', order: '', width: '80px', minWidth: '60px', textAlign: 'center'},
+      {title: '名称', index: 'name', order: '', width: '120px', minWidth: '80px'},
+      {title: '权限', slot: 'perm', width: '90px', textAlign: 'center'},
       {title: '备注', index: 'remark'},
     ];
   }
@@ -100,8 +81,6 @@ export default class SysMenus extends Base {
 
   /* 重置条件 */
   resetData(): void {
-    // 时间
-    this.sea.time = [Time.Date('Y/m/d', Time.StrToTime('-3 year')), Time.Date('Y/m/d')];
     // 条件
     this.sea.key = '';
     for(let v of this.sea.columns) v.value='';
@@ -123,7 +102,7 @@ export default class SysMenus extends Base {
     this.sea.show = false;
     // 请求
     const load: any = Ui.Loading();
-    Request.Post('sys_user/list', {
+    Request.Post('sys_role/list', {
       token: this.state.token,
       data: this.getWhere(),
       page: this.page.num,
@@ -147,8 +126,6 @@ export default class SysMenus extends Base {
   getWhere(): object {
     const data: any = {
       key: this.sea.key,
-      stime: typeof this.sea.time[0]=='string'?this.sea.time[0]:Time.Date('Y/m/d', this.sea.time[0]),
-      etime: typeof this.sea.time[1]=='string'?this.sea.time[1]:Time.Date('Y/m/d', this.sea.time[1]),
     };
     // 搜索条件
     for(let v of this.sea.columns) {
@@ -173,13 +150,6 @@ export default class SysMenus extends Base {
         const data: Array<any> = obj.getData();
         this.save.data = data[0];
       }
-    } else if(type=='copy') {
-      this.save.title = '复制用户';
-      data.id = '';
-      data.uname = '';
-      data.tel = '';
-      data.email = '';
-      this.save.data = data;
     }
   }
   /* 添加&编辑-回调 */

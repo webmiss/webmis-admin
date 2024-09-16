@@ -53,7 +53,7 @@
             <tr>
               <td class="label">备注</td>
               <td colspan="3">
-                <wm-input v-model:value="form.controller" type="textarea" :height="'80px'" placeholder="备注信息" maxlength="32"></wm-input>
+                <wm-input v-model:value="form.remark" type="textarea" :height="'120px'" placeholder="备注信息" maxlength="32"></wm-input>
               </td>
             </tr>
           </wm-table-form>
@@ -148,8 +148,8 @@ export default class ActionSave extends Vue {
         // 类型、角色
         this.form.type = typeof this.data.type!='undefined'?[this.data.type]:'';
         this.form.role = this.data.role || '';
-        this.form.perm = this.data.perm || '';
         // 获取权限
+        this.form.perm = this.data.perm || '';
         this.getPerm();
       }
     }, { deep: true });
@@ -226,24 +226,6 @@ export default class ActionSave extends Vue {
       if(d.code==0) {
         this.selectAll.type = d.data.type;
         this.selectAll.role = d.data.role;
-        // this.selectAll.perm = [
-        //   {label:'首页', value:'1'},
-        //   {label:'系统', value:'2', children: [
-        //     {label:'系统管理', value:'2:3', children: [
-        //       {label:'菜单管理', value:'2:3:5', children: [
-        //         {label:'列表', value:'2:3:5:1'},
-        //         {label:'更新', value:'2:3:5:2'},
-        //         {label:'删除', value:'2:3:5:4'},
-        //       ]},
-        //       {label:'系统用户', value:'2:3:6', children: [
-        //         {label:'列表', value:'2:3:6:1'},
-        //         {label:'更新', value:'2:3:6:2'},
-        //       ]},
-        //     ]},
-        //     {label:'基础数据', value:'2:4'},
-        //   ]},
-        //   {label:'网站', value:'7'},
-        // ];
       }
       else Ui.Toast(d.msg);
     });

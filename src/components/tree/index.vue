@@ -47,10 +47,10 @@
 
 <style lang="less" scoped>
 .wm-tree_body{color: @BrandText;}
-.wm-tree{display: inline; transition: @Transition;}
+.wm-tree{display: inline;}
 .wm-tree_content{position: relative; cursor: pointer; height: 24px; line-height: 24px;}
 .wm-tree_content:hover{background-color: @PageBackground;}
-.wm-tree_content i{width: 16px; font-size: 10px; text-align: center;}
+.wm-tree_content i{width: 16px; font-size: 10px; text-align: center; transition: @Transition;}
 </style>
 
 <script lang="ts">
@@ -210,16 +210,16 @@ export default class Tree extends Vue {
   getData(): Array<string> {
     let values: Array<string> = [];
     for(let v1 of this.listData) {
-      if(v1.checked && !v1.children) values.push(v1.value);
+      if(v1.checked) values.push(v1.value);
       if(!v1.children) continue;
       for(let v2 of v1.children) {
-        if(v2.checked && !v2.children) values.push(v2.value);
+        if(v2.checked) values.push(v2.value);
         if(!v2.children) continue;
         for(let v3 of v2.children) {
-          if(v3.checked && !v3.children) values.push(v3.value);
+          if(v3.checked) values.push(v3.value);
           if(!v3.children) continue;
           for(let v4 of v3.children) {
-            if(v4.checked && !v4.children) values.push(v4.value);
+            if(v4.checked) values.push(v4.value);
           }
         }
       }

@@ -72,19 +72,30 @@ export default class Dialog extends Vue {
     // 监听
     this.$watch('show', (val:any)=>{
       this.cfg.show = val;
-      this.cfg.width =  window.innerWidth;
-      this.cfg.height =  window.innerHeight;
+      if(val) {
+        this.cfg.width =  window.innerWidth;
+        this.cfg.height =  window.innerHeight;
+        // 事件
+        document.addEventListener('keydown', this.keydownFun);
+      }
     }, { deep: true });
   }
 
-  /* 创建完成 */
-  mounted(): void {
+  /* 键盘事件 */
+  keydownFun(event: any): void {
+    const keyCode: any = event.keyCode || event.which;
+    switch (keyCode) {
+      case 27: this.close(true); break;
+    }
   }
 
   /* 关闭 */
   close(isTrue: Boolean): void {
+    // 事件
     if(isTrue) this.$emit('update:show', false);
-    this.$emit('close', true);
+    this.$emit('close');
+    // 移除
+    document.removeEventListener('keydown', this.keydownFun);
   }
 
 }

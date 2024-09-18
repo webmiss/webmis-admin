@@ -21,8 +21,12 @@
       <span class="line">|</span>
       <span class="text">{{ list.path }}</span>
     </div>
-    <div>
-
+    <div class="flex">
+      <wm-button icon="ui ui_add" padding="0 16px 0 8px" @click="mkdirData()">新建文件夹</wm-button>
+      <wm-button icon="ui ui_edit" padding="0 16px 0 8px" @click="renameData()">重命名</wm-button>
+      <wm-button effect="plain" type="danger" icon="ui ui_del" padding="0 16px 0 8px" @click="removeData()">删除</wm-button>
+      <span class="line">|</span>
+      <wm-button effect="dark" type="primary" icon="ui ui_upload" padding="0 16px 0 8px" @click="upData()">上传</wm-button>
     </div>
   </div>
   <!-- Action End -->
@@ -58,8 +62,16 @@
     <div v-else class="null"></div>
   </div>
 
-  <!-- 文件下载 -->
+  <!-- 新建文件夹 -->
+  <action-mkdir v-model:show="mkdir.show" :data="mkdir.data" @submit="mkdirSubmit($event)"></action-mkdir>
+  <!-- 重命名 -->
+  <action-rename v-model:show="rename.show" :data="rename.data" @submit="renameSubmit($event)"></action-rename>
+  <!-- 删除 -->
+  <action-remove v-model:show="remove.show" :data="remove.data" @submit="removeSubmit($event)"></action-remove>
+  <!-- 下载 -->
   <action-down v-model:show="down.show" :data="down.data" @submit="downSubmit($event)"></action-down>
+  <!-- 上传 -->
+  <action-up v-model:show="up.show" :data="up.data" @submit="upSubmit($event)"></action-up>
   <!-- 图片预览 -->
   <wm-img-view v-model:show="imgView.show" :index="imgView.index" :options="imgView.imgs"></wm-img-view>
 
@@ -75,9 +87,9 @@
 .file:hover{background-color: #F2F4F6;}
 .file .name{line-height: 24px; text-align: center; padding: 8px 5px;}
 /* 选择 */
-.check{position: absolute; width: 18px; height: 18px; margin: 10px 0 0 -10px; background-color: #24292E; border-radius: 50%;}
+.check{position: absolute; left: 6px; top: 6px; width: 18px; height: 18px; background-color: #24292E; border-radius: 50%;}
 .check:after{content: ""; position: absolute; width: 4px; height: 6px; border: 2px solid #fff; border-left: 0; border-top: 0; left: 6px; top: 4px; transform-origin: center; transform: rotate(45deg) scaleY(1);}
-.file_click{position: absolute; z-index: 10; opacity: 0; color: @Minor; width: 40px; height: 40px; line-height: 40px; font-size: 20px; text-align: center;}
+.file_click{position: absolute; z-index: 10; opacity: 0; color: @Minor; width: 32px; height: 32px; line-height: 32px; font-size: 20px; text-align: center;}
 .file_state:hover .file_click{opacity: 0.7;}
 .file_active .file_click{opacity: 1;}
 .file_active .file_click .check{background-color: @Minor;}

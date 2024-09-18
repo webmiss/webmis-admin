@@ -69,7 +69,7 @@ import wmDatePicker from '@/components/datepicker/index.vue'
     show: {type: Boolean, default: false},   // 是否显示
   }
 })
-export default class Passwd extends Vue {
+export default class Uinfo extends Vue {
   // 参数
   show!: boolean;
   // 状态

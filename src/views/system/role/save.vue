@@ -136,10 +136,7 @@ export default class ActionSave extends Vue {
 
   /* 验证 */
   verify(form: any): any {
-    // 用户名
-    if(form.name.length<2) {
-      return Ui.Toast('角色名称2～16字符');
-    }
+    if(form.name.length<2 || form.name.length>16) return Ui.Toast('角色名称2～16字符');
     return form;
   }
 

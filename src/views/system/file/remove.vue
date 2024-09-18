@@ -1,10 +1,10 @@
 <template>
-  <wm-dialog v-model:show="infoShow" :title="title" width="420px" bottom="40px" @close="close()">
+  <wm-dialog v-model:show="infoShow" :title="title" width="360px" bottom="40px" @close="close()">
     <wm-main lineHeight="60px">
-      <b>{{ data.filename }}</b>
+      是否确认删除
     </wm-main>
     <template #bottom>
-      <wm-button effect="dark" type="primary" height="40px" @click="submit()">确认下载</wm-button>
+      <wm-button effect="dark" type="danger" height="40px" @click="submit()">确认删除</wm-button>
     </template>
   </wm-dialog>
 </template>
@@ -18,7 +18,6 @@ import { useStore } from 'vuex';
 /* UI组件 */
 import Ui from '@/library/ui'
 import Request from '@/library/request'
-import Files from '@/library/files'
 /* 组件 */
 import wmMain from '@/components/container/main.vue'
 import wmDialog from '@/components/dialog/index.vue'
@@ -27,12 +26,12 @@ import wmButton from '@/components/form/button/index.vue'
 @Options({
   components: { wmMain, wmDialog, wmButton },
   props: {
-    show: {type: Boolean, default: false},      // 是否显示
-    title: {type: String, default: '文件下载'}, // 标题
-    data: {type: Object, default: {}},          // 数据
+    show: {type: Boolean, default: false},        // 是否显示
+    title: {type: String, default: '删除'},       // 标题
+    data: {type: Object, default: {}},            // 数据
   }
 })
-export default class ActionDown extends Vue {
+export default class ActionRemove extends Vue {
   // 参数
   show!: boolean;
   title!: string;
@@ -50,23 +49,28 @@ export default class ActionDown extends Vue {
     }, { deep: true });
   }
 
+  /* 验证 */
+  verify(form: any): any {
+    if(form.names.length<1) return Ui.Toast('无删除数据!');
+    return form;
+  }
+
   /* 提交 */
   submit(): void {
+    // 验证
+    const form = this.verify(this.data);
+    if(!form) return;
     // 请求
     const load: any = Ui.Loading();
-    Request.Post('sys_file/down', {
+    Request.Post('sys_file/remove', {
       token: this.state.token,
-      path: this.data.path,
-      filename: this.data.filename,
+      path: form.path,
+      data: form.names,
     }, (res:any)=>{
       load.clear();
-      Files.DownBlob(res.data, this.data.filename);
-      // 事件
-      this.$emit('submit', true);
-    },()=>{
-      Ui.Toast('网络加载错误!');
-    },{
-      responseType:'blob',
+      const d: any = res.data;
+      Ui.Toast(d.msg);
+      this.$emit('submit', d.code==0);
     });
   }
 

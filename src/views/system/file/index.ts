@@ -7,14 +7,18 @@ import Request from '@/library/request'
 /* 组件 */
 import wmButton from '@/components/form/button/index.vue'
 import wmImgView from '@/components/image/view.vue'
-/* 下载 */
+/* 动作 */
+import actionMkdir from './mkdir.vue'
+import actionRename from './rename.vue'
+import actionRemove from './remove.vue'
 import actionDown from './down.vue'
+import actionUp from './up.vue'
 
 /* 网站目录 */
 @Options({
   components: {
     wmButton, wmImgView,
-    actionDown
+    actionMkdir, actionRename, actionRemove, actionDown, actionUp
   },
 })
 export default class SysFileManage extends Base {
@@ -25,8 +29,12 @@ export default class SysFileManage extends Base {
   // 列表
   total: any = {time: '', list: {}};
   list: any = {url: '', path: '/', check: false, data: {dirNum: 0, fileNum: 0, size: 0, folder: [], files: []}};
-  // 下载
+  // 新建文件夹、重命名、删除、下载
+  mkdir: any = {show: false, data:{path: '', name: ''}};
+  rename: any = {show: false, data:{path: '', name: '', rename: ''}};
+  remove: any = {show: false, data:{path: '', names: []}};
   down: any = {show: false, data:{path: '', filename: ''}};
+  up: any = {show: false, data:{url: '', path: '', files: []}};
   // 图片预览
   imgView: any = {show: false, imgs: [], index: 0};
 
@@ -127,10 +135,70 @@ export default class SysFileManage extends Base {
     }
   }
 
+  /* 新建文件夹 */
+  mkdirData(): void {
+    this.mkdir.show = true;
+    this.mkdir.data.path = this.list.path;
+  }
+  /* 新建文件夹-回调 */
+  mkdirSubmit(val: boolean): void {
+    if(!val) return;
+    this.mkdir.show = false;
+    this.loadData();
+  }
+
+  /* 重命名 */
+  renameData(): void {
+    // 文件名
+    const names: any = this.getCheckName();
+    if(!names) return Ui.Toast('请选择');
+    // 数据
+    this.rename.show = true;
+    this.rename.data.path = this.list.path;
+    this.rename.data.name = names[0];
+    this.rename.data.rename = names[0];
+  }
+  /* 重命名-回调 */
+  renameSubmit(val: boolean): void {
+    if(!val) return;
+    this.rename.show = false;
+    this.loadData();
+  }
+
+  /* 删除 */
+  removeData(): void {
+    // 文件名
+    const names: any = this.getCheckName();
+    if(!names) return Ui.Toast('请选择');
+    // 数据
+    this.remove.show = true;
+    this.remove.data.path = this.list.path;
+    this.remove.data.names = names;
+  }
   /* 删除-回调 */
+  removeSubmit(val: boolean): void {
+    if(!val) return;
+    this.remove.show = false;
+    this.loadData();
+  }
+
+  /* 下载-回调 */
   downSubmit(val: boolean): void {
     if(!val) return;
     this.down.show = false;
+    this.loadData();
+  }
+
+  /* 上传 */
+  upData(): void {
+    // 数据
+    this.up.show = true;
+    this.up.data.url = this.list.url;
+    this.up.data.path = this.list.path;
+  }
+  /* 上传-回调 */
+  upSubmit(val: boolean): void {
+    if(!val) return;
     this.loadData();
   }
 
@@ -141,11 +209,35 @@ export default class SysFileManage extends Base {
     return filename.substring(index1,index2);
   }
 
+  /* 获取选中 */
+  getCheckName(): Array<any> | boolean {
+    let name = [];
+    // 文件夹
+    for(let v of this.list.data.folder) if(v.check) name.push(v.name);
+    // 文件
+    for(let v of this.list.data.files) if(v.check) name.push(v.name);
+    // 返回
+    return name.length>0?name:false;
+  }
+
   /* 是否图片 */
   isImg(ext: string): boolean {
     const arr = ['png','jpg','jpeg','gif','svg'];
     const index = arr.indexOf(ext);
     return index>=0?true:false;
+  }
+
+  /* 是否存在 */
+  isExist(name: string): boolean {
+    // 文件夹
+    for(let v of this.list.data.folder){
+      if(v.name==name) return true;
+    }
+    // 文件
+    for(let v of this.list.data.files){
+      if(v.name==name) return true;
+    }
+    return false;
   }
 
 }

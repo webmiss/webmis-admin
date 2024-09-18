@@ -151,12 +151,13 @@ export default class Popup extends Vue {
 
   /* 点击背景 */
   _clickBG(): void {
-    if(this.bgClose) this._animation(false);
+    if(this.bgClose) this.close();
   }
 
   /* 关闭 */
   public close(): void {
     this._animation(false);
+    this.$emit('close');
   }
 
 }

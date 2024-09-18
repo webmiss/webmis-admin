@@ -21,7 +21,6 @@
     <!-- Prev -->
     <div class="prev">
       <i class="ui ui_arrow_left" @click.stop="loadImg(this.imgIndex-1)" :style="{
-        left: 'calc('+icoSize+' + 16px)',
         width: 'calc('+icoSize+' + 16px)',
         lineHeight: 'calc('+icoSize+' + 16px)',
         fontSize: 'calc('+icoSize+' - 12px)'
@@ -30,7 +29,6 @@
     <!-- Next -->
     <div class="next">
       <i class="ui ui_arrow_right" @click.stop="loadImg(this.imgIndex+1)" :style="{
-        right: 'calc('+icoSize+' + 16px)',
         width: 'calc('+icoSize+' + 16px)',
         lineHeight: 'calc('+icoSize+' + 16px)',
         fontSize: 'calc('+icoSize+' - 12px)'
@@ -51,12 +49,14 @@
 .wm-image_view .tools:hover{background-color: #00000050; color: @Minor;}
 .wm-image_view .close{right: 16px; top: 16px; font-size: 20px;}
 .wm-image_view .full{right: 16px; bottom: 16px; font-size: 20px;}
-.wm-image_view .prev,.wm-image_view .next{position: absolute; z-index: 9; top: 0; width: 50%; height: 100%;}
+.wm-image_view .prev,.wm-image_view .next{position: absolute; z-index: 9; top: 0; width: 80px; height: 100%;}
 .wm-image_view .prev i,.wm-image_view .next i{cursor: pointer; position: absolute; top: 50%; transform: translateY(-50%); opacity: 0.3; color: #FFF; background-color: #00000050; text-align: center; border-radius: 50%;}
 .wm-image_view .prev{left: 0;}
+.wm-image_view .prev i{left: 16px;}
 .wm-image_view .prev:hover i,.wm-image_view .next:hover i{opacity: 1;}
 .wm-image_view .prev i:hover,.wm-image_view .next i:hover{color: @Minor;}
 .wm-image_view .next{right: 0;}
+.wm-image_view .next i{right: 16px;}
 </style>
 
 <script lang="ts">

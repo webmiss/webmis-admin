@@ -111,6 +111,7 @@ export default class SysFileManage extends Base {
     if(!this.isImg(ext)) {
       this.down.show = true;
       this.down.data = {path: this.list.path, filename: filename};
+      return ;
     }
     // 图片
     let index: number = 0;

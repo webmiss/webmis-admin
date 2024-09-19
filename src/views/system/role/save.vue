@@ -34,7 +34,7 @@
       </wm-tabs>
     </wm-main>
     <template #bottom>
-      <wm-button effect="dark" type="primary" height="40px" padding="0 32px" @click="submit()">确 认</wm-button>
+      <wm-button height="40px" padding="0 32px" @click="submit()">确 认</wm-button>
     </template>
   </wm-dialog>
 </template>

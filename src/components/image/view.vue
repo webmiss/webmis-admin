@@ -43,7 +43,7 @@
 .wm-image_view .loading{color: @Minor; animation: loading 2s linear 0s infinite;}
 .wm-image_view img{transition: @Transition;}
 .wm-image_view .loading_img{display: none;}
-.wm-image_view_info{position: absolute; z-index: 10; max-width: calc(100% - 120px); left: 50%; bottom: 16px; transform: translateX(-50%); padding: 0 24px; line-height: 48px; background-color: #00000050; color: #FFF; border-radius: 24px;}
+.wm-image_view_info{position: absolute; z-index: 10; max-width: calc(100% - 120px); left: 50%; bottom: 16px; transform: translateX(-50%); padding: 0 24px; line-height: 40px; background-color: #00000050; color: #FFF; border-radius: 20px;}
 /* Tools */
 .wm-image_view .tools{cursor: pointer; position: absolute; z-index: 10; width: 48px; line-height: 48px; color: #FFF; background-color: #00000005; text-align: center; border-radius: 50%;}
 .wm-image_view .tools:hover{background-color: #00000050; color: @Minor;}

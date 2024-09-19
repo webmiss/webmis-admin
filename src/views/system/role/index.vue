@@ -16,6 +16,7 @@
         {action: 'save', slot: 'add', is_action: true},
         {action: 'save', slot: 'edit', is_action: true},
         {action: 'del', slot: 'del', is_action: true},
+        {action: 'line', slot: 'line'},
         {action: 'export', slot: 'export', is_action: true},
       ]">
         <template #add>
@@ -26,6 +27,9 @@
         </template>
         <template #del>
           <wm-button effect="plain" type="danger" icon="ui ui_del" padding="0 16px 0 8px" :disabled="list.num==0" @click="delData()">删除({{ list.num }})</wm-button>
+        </template>
+        <template #line>
+          <span class="line">|</span>
         </template>
         <template #export>
           <wm-button effect="plain" icon="ui ui_export" padding="0 16px 0 8px" :disabled="!total.list.total" @click="exportData(total.list.total)">导出({{ total.list.total }})</wm-button>

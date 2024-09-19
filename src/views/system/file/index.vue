@@ -81,7 +81,7 @@
 /* 列表 */
 .file_body{overflow-y: auto;}
 .file_body ul{overflow: hidden; width: 100%;}
-.file_body li{box-sizing: border-box; padding: 5px 16px;}
+.file_body li{width: calc(100% / 12); box-sizing: border-box; padding: 5px 16px;}
 .file_center{position: relative; width: 128px; margin: 0 auto;}
 .file{width: 128px; height: 128px; border: #FFF 1px solid; border-radius: 5px;}
 .file:hover{background-color: #F2F4F6;}
@@ -104,6 +104,28 @@
 /* 图片 */
 .file_img{width: 100%; height: 100%; background-color: #F2F4F6;}
 .file_img.bgImg{background-size: contain;}
+/* 响应式布局 */
+@media screen and ( max-width: 1920px ){
+  .file_body li{width: calc(100% / 9);}
+}
+@media screen and ( max-width: 1600px ){
+  .file_body li{width: calc(100% / 8);}
+}
+@media screen and ( max-width: 1366px ){
+  .file_body li{width: calc(100% / 7);}
+}
+@media screen and ( max-width: 1280px ){
+  .file_body li{width: calc(100% / 6);}
+}
+@media screen and ( max-width: 1024px ){
+  .file_body li{width: calc(100% / 5);}
+}
+@media screen and ( max-width: 640px ){
+  .file_body li{width: calc(100% / 4);}
+}
+@media screen and ( max-width: 320px ){
+  .file_body li{width: calc(100% / 3);}
+}
 </style>
 
 <script lang="ts" src="./index.ts"></script>

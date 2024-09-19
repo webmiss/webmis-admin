@@ -1,7 +1,9 @@
 <template>
   <div class="file_up" :style="{visibility:infoShow?'inherit':'hidden'}">
     <wm-popup height="100%" width="320px" v-model:show="infoShow" position="right" bgColor="#F2F4F8" @close="close()">
-      <div class="file_up_title" @click="selectFile()">{{ title }}</div>
+      <div class="file_up_top">
+        <span @click="selectFile()">{{ title }}</span>|<span @click="removeAll()">清空</span>
+      </div>
       <div class="file_up_body scrollbar">
         <ul class="file_up_list" v-if="listData.length>0">
           <li class="flex" v-for="(v,k) in listData" :key="k">
@@ -22,8 +24,9 @@
 
 <style lang="less" scoped>
 .file_up{position: absolute; top: 0; right: 0; width: 100%; height: calc(100% - 0px);}
-.file_up_title{cursor: pointer; line-height: 50px; text-align: center; color: @Primary; background-color: #FFF;}
-.file_up_title:hover{font-weight: bold;}
+.file_up_top{line-height: 50px; text-align: center; color: @Minor5; background-color: #FFF;}
+.file_up_top span{cursor: pointer; padding: 0 10px; color: @Minor3;}
+.file_up_top span:hover{color: @Primary;}
 .file_up_body{overflow: hidden; overflow-y: auto; height: calc(100% - 50px);}
 .file_up_list{overflow: hidden; padding: 0 8px;}
 .file_up_list li{overflow: hidden; position: relative; margin: 8px 0; height: 40px; line-height: 40px; background-color: #FFF; border-radius: 4px;}
@@ -55,7 +58,7 @@ import wmPopup from '@/components/popup/index.vue'
     data: {type: Object, default: {}},            // 数据
   }
 })
-export default class ActionUp extends Vue {
+export default class ActionUpload extends Vue {
   // 参数
   show!: boolean;
   title!: string;
@@ -130,6 +133,11 @@ export default class ActionUp extends Vue {
   /* 移除 */
   remove(k: number): void {
     this.listData.splice(k, 1);
+  }
+  /* 移除全部 */
+  removeAll(): void {
+    if(this.listData.length==0) return;
+    this.listData.splice(0, this.listData.length);
   }
 
   /* 关闭 */

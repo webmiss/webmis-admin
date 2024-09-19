@@ -12,13 +12,13 @@ import actionMkdir from './mkdir.vue'
 import actionRename from './rename.vue'
 import actionRemove from './remove.vue'
 import actionDown from './down.vue'
-import actionUp from './up.vue'
+import actionUpload from './upload.vue'
 
 /* 网站目录 */
 @Options({
   components: {
     wmButton, wmImgView,
-    actionMkdir, actionRename, actionRemove, actionDown, actionUp
+    actionMkdir, actionRename, actionRemove, actionDown, actionUpload
   },
 })
 export default class SysFileManage extends Base {
@@ -29,12 +29,12 @@ export default class SysFileManage extends Base {
   // 列表
   total: any = {time: '', list: {}};
   list: any = {url: '', path: '/', check: false, data: {dirNum: 0, fileNum: 0, size: 0, folder: [], files: []}};
-  // 新建文件夹、重命名、删除、下载
+  // 新建文件夹、重命名、删除、下载、上传
   mkdir: any = {show: false, data:{path: '', name: ''}};
   rename: any = {show: false, data:{path: '', name: '', rename: ''}};
   remove: any = {show: false, data:{path: '', names: []}};
   down: any = {show: false, data:{path: '', filename: ''}};
-  up: any = {show: false, data:{url: '', path: '', files: []}};
+  upload: any = {show: false, data:{url: '', path: '', files: []}};
   // 图片预览
   imgView: any = {show: false, imgs: [], index: 0};
 
@@ -190,14 +190,14 @@ export default class SysFileManage extends Base {
   }
 
   /* 上传 */
-  upData(): void {
+  uploadData(): void {
     // 数据
-    this.up.show = true;
-    this.up.data.url = this.list.url;
-    this.up.data.path = this.list.path;
+    this.upload.show = true;
+    this.upload.data.url = this.list.url;
+    this.upload.data.path = this.list.path;
   }
   /* 上传-回调 */
-  upSubmit(val: boolean): void {
+  uploadSubmit(val: boolean): void {
     if(!val) return;
     this.loadData();
   }

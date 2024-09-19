@@ -26,7 +26,7 @@
       <wm-button icon="ui ui_edit" padding="0 16px 0 8px" @click="renameData()">重命名</wm-button>
       <wm-button effect="plain" type="danger" icon="ui ui_del" padding="0 16px 0 8px" @click="removeData()">删除</wm-button>
       <span class="line">|</span>
-      <wm-button effect="dark" type="primary" icon="ui ui_upload" padding="0 16px 0 8px" @click="upData()">上传</wm-button>
+      <wm-button effect="dark" type="primary" icon="ui ui_upload" padding="0 16px 0 8px" @click="uploadData()">上传</wm-button>
     </div>
   </div>
   <!-- Action End -->
@@ -71,7 +71,7 @@
   <!-- 下载 -->
   <action-down v-model:show="down.show" :data="down.data" @submit="downSubmit($event)"></action-down>
   <!-- 上传 -->
-  <action-up v-model:show="up.show" :data="up.data" @submit="upSubmit($event)"></action-up>
+  <action-upload v-model:show="upload.show" :data="upload.data" @submit="uploadSubmit($event)"></action-upload>
   <!-- 图片预览 -->
   <wm-img-view v-model:show="imgView.show" :index="imgView.index" :options="imgView.imgs"></wm-img-view>
 

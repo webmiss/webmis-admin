@@ -1,7 +1,7 @@
 <template>
-  <wm-dialog v-model:show="infoShow" :title="title" width="720px" bottom="40px" @close="close()">
+  <wm-dialog v-model:show="infoShow" :title="title" width="720px" bottom="40px" :overflow="tabIndex=='perm'?'hidden auto':'hidden'" @close="close()">
     <wm-main paddingY="0">
-      <wm-tabs :columns="tabs">
+      <wm-tabs v-model:value="tabIndex" :columns="tabs">
         <!-- 帐号信息 -->
         <template #base>
           <wm-table-form>
@@ -120,8 +120,9 @@ export default class ActionSave extends Vue {
   // 变量
   infoShow: boolean = false;
   // Tabs
+  tabIndex: string = 'base';
   tabs: Array<any> = [
-    {label: '帐号信息', value: 'base', slot: 'base', checked: true},
+    {label: '帐号信息', value: 'base', slot: 'base'},
     {label: '角色', value: 'sole', slot: 'sole'},
     {label: '私有', value: 'perm', slot: 'perm'},
   ];

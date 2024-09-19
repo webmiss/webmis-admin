@@ -1,9 +1,9 @@
 <template>
   <ul class="wm-tabs" :style="{height: height, lineHeight: height}">
-    <li v-for="(v, k) in columns" :key="k" :class="v.checked?'active':''" :style="{padding: padding, margin: margin}" @click="tabClick(k)">{{ v.label }}</li>
+    <li v-for="(v, k) in columns" :key="k" :class="v.value==value?'active':''" :style="{padding: padding, margin: margin}" @click="tabClick(v)">{{ v.label }}</li>
   </ul>
   <template v-for="(v, k) in columns" :key="k">
-    <div class="wm-tabs_body" v-show="v.checked" :style="{padding: bodyPadding}">
+    <div class="wm-tabs_body" v-show="v.value==value" :style="{padding: bodyPadding}">
       <slot v-bind="v" :name="v.slot" :index="k"></slot>
     </div>
   </template>
@@ -20,14 +20,12 @@
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
-import { useStore } from 'vuex';
-/* 组件 */
-import Ui from '@/library/ui'
 
 @Options({
   components: {},
   props: {
-    columns: {type: Array, default: []},              // 字段: [{label: '基本信息', value: 'base', slot: 'base', checked: true}]
+    value: {default: ''},                             // 默认值
+    columns: {type: Array, default: []},              // 字段: [{label: '基本信息', value: 'base', slot: 'base'}]
     height: {type: String, default: '40px'},          // 高度
     padding: {type: String, default: '0 8px'},        // 内部间距
     margin: {type: String, default: '0 8px 0 0'},     // 外部间距
@@ -37,28 +35,18 @@ import Ui from '@/library/ui'
 export default class Tabs extends Vue {
 
   // 参数
+  value!: any;
   columns!: Array<any>;
   height!: string;
   padding!: string;
   margin!: string;
   bodyPadding!: string;
-  // 状态
-  private store: any = useStore();
-  private state: any = this.store.state;
-  // 变量
-  checkbox: any = {checked: false, partially: false, value:'', data:{label:'', value:'all'}};
-
-  /* 创建成功 */
-  created(): void {
-  }
 
   /* 切换 */
-  tabClick(k: any): void {
-    const list: Array<any> = this.state.menusAction;
-    for(let v of this.columns) {
-      v.checked = false;
-    }
-    this.columns[k].checked = true;
+  tabClick(d: any): void {
+    // 事件
+    this.$emit('update:value', d.value);
+    this.$emit('change', d);
   }
 
 }

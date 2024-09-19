@@ -130,6 +130,7 @@ export default class ImageView extends Vue {
     this.title = this.options[k].label;
     this.size = this.options[k].size || '0';
     // 加载图片
+    this.isLoad = false;
     const imgLoad: any = this.$refs.wmImageLoading;
     imgLoad.src = imgUrl;
     imgLoad.onload = ()=>{

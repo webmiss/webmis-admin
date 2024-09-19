@@ -2,7 +2,7 @@
 .app_login{position: absolute; z-index: 1; width: 100%; height: 100%;}
 
 /* 主框架 */
-.app_main{min-width: 980px; height: 100%; overflow: hidden; background-color: @Minor8;}
+.app_main{min-width: 980px; height: 100%; overflow: hidden; background-color: #FFF;}
 .app_left{position: relative; height: 100%; color: #FFF; background-color: @Minor2; transition: @Transition;}
 .app_right{height: 100%; transition: @Transition;}
 .app_top{height: 40px; line-height: 40px; padding: 8px 16px; background-color: #FFF;}
@@ -89,12 +89,13 @@
 .app_user_close{cursor: pointer; line-height: 50px; text-align: center; color: @Primary; border-top: @Minor7 1px solid;}
 .app_user_close:hover{color: @Danger;}
 /* 导航 */
-.app_tabs_body{overflow: hidden; padding: 10px 10px 0 10px; width: calc(100% - 20px); height: 40px; line-height: 40px;}
+.app_tabs_body{position: relative; overflow: hidden; padding: 10px 10px 0 10px; width: calc(100% - 20px); height: 40px; line-height: 40px;}
+.app_tabs_body::before{content: ''; position: absolute; left: 0; bottom: 0; width: 100%; height: 1px; background-color: @Minor7;}
 .app_tabs{user-select: none; width: calc(100% - 100px); height: 32px; line-height: 32px; margin-top: 8px; white-space: nowrap;}
-.app_tabs li{display: inline-block; position: relative; overflow: hidden; cursor: pointer; margin: 0 5px; padding: 0 24px 0 16px; background-color: @Minor7; border-radius: 8px 8px 0 0;}
+.app_tabs li{display: inline-block; position: relative; overflow: hidden; cursor: pointer; margin: 0 5px; padding: 0 24px 0 16px; border: @Minor7 1px solid; background-color: @Minor7; border-radius: 8px 8px 0 0;}
 .app_tabs li:hover{color: @Primary;}
 .app_tabs .home{padding: 0 16px;}
-.app_tabs .active{color: @Primary; background-color: #FFF; box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);}
+.app_tabs .active{color: @Primary; background-color: #FFF;}
 .app_tabs .close{position: absolute; width: 20px; height: 20px; line-height: 20px; text-align: center; border-radius: 50%; top: 50%; right: 4px; transform: translateY(-50%);}
 .app_tabs .close i{font-size: 12px; zoom: 0.8; color: @Minor4;}
 .app_tabs .close:hover{background-color: @Minor6;}
@@ -107,7 +108,7 @@
 /* 统计 */
 .app_total{padding: 8px 16px; height: 32px; line-height: 32px; color: @RegularText; background-color: #FFF; border-radius: 4px;}
 .app_total b{color: @BrandText;}
-.app_total .total{overflow: hidden; padding: 0 16px; width: calc(100% - 232px); background-color: @Primary6; border-radius: 4px;}
+.app_total .total{overflow: hidden; padding: 0 16px; width: calc(100% - 232px); background-color: @Primary6; border-radius: 16px;}
 .app_total .refresh .time{padding: 0 8px;}
 .app_total .refresh i{cursor: pointer; width: 32px; height: 32px; text-align: center; border-radius: 50%;}
 .app_total .refresh i:hover{color: @Primary; background-color: @Minor8;}
@@ -121,15 +122,17 @@
 .app_page{height: 48px; line-height: 48px; background-color: #FFF; text-align: center;}
 
 /* 响应式布局 */
-@media screen and ( max-width: 1400px ){
-}
-@media screen and ( max-width: 1280px ){
-}
-@media screen and ( max-width: 1024px ){
-}
-@media screen and ( max-width: 780px ){
-}
-@media screen and ( max-width: 540px ){
-}
-@media screen and ( max-width: 420px ){
-}
+// @media screen and ( max-width: 1920px ){
+// }
+// @media screen and ( max-width: 1600px ){
+// }
+// @media screen and ( max-width: 1366px ){
+// }
+// @media screen and ( max-width: 1280px ){
+// }
+// @media screen and ( max-width: 1024px ){
+// }
+// @media screen and ( max-width: 640px ){
+// }
+// @media screen and ( max-width: 320px ){
+// }

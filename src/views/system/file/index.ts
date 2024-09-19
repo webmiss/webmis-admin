@@ -124,8 +124,8 @@ export default class SysFileManage extends Base {
           value: this.list.url+this.list.path+v.name,
           size: v.size,
         });
+        i++;
       }
-      i++;
     }
     // 预览
     if(imgs.length>0) {

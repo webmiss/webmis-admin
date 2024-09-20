@@ -46,7 +46,7 @@
             <tr>
               <td class="label">备注</td>
               <td colspan="3">
-                <wm-input v-model:value="form.controller" type="textarea" :height="'80px'" placeholder="备注信息" maxlength="32"></wm-input>
+                <wm-input v-model:value="form.remark" type="textarea" :height="'80px'" placeholder="备注信息" maxlength="32"></wm-input>
               </td>
             </tr>
           </wm-table-form>

@@ -39,9 +39,6 @@
     <div class="search flex">
       <!-- Search -->
       <wm-search v-model:show="sea.show" v-model:keys="sea.key" :columns="sea.columns" :placeholder="sea.placeholder" @keyup.enter="loadData()" @search="loadData()" @reset="resetData()">
-        <template #time="d">
-          <wm-date-picker v-model:value="sea.time" range :maxDate="sea.maxDate" :placeholder="d.label"></wm-date-picker>
-        </template>
       </wm-search>
       <!-- Search End -->
     </div>
@@ -50,40 +47,17 @@
   <!-- Content -->
   <div class="app_ct">
     <!-- List -->
-    <wm-table class="table" ref="tableList" :columns="list.columns" :options="list.data" @orderBy="orderBy" @partially="selectState">
+    <wm-table class="table" ref="tableList" :columns="list.columns" :options="list.data" @orderBy="orderBy" @partially="selectState" height="calc(100% - 58px)">
       <template #id="d">
         <div class="tCenter">{{ d.id }}</div>
       </template>
       <template #type="d">
-        <div class="tCenter">{{ d.type_name || '-' }}</div>
-      </template>
-      <template #img="d">
-        <div class="flex_center">
-          <wm-img v-model:img="d.img"></wm-img>
-        </div>
-      </template>
-      <template #uname="d">
-        {{ d.uname || d.tel || d.email }}
-      </template>
-      <template #status="d">
-        <div class="tCenter">
-          <span :class="d.status?'c_success':'c_danger'">{{ d.status?'正常':'禁用' }}</span>
-        </div>
-      </template>
-      <template #action="d">
-        <div class="tCenter">
-          <wm-button @click="saveData('copy', d)">复制</wm-button>
-        </div>
+        <div class="tCenter">{{ d.type_name }}</div>
       </template>
       <template #perm="d">
         <div class="tCenter">
-          <wm-button v-if="d.perm" effect="text" type="danger" @click="saveData('edit', d)">私有</wm-button>
-          <wm-button v-else-if="d.role" effect="text" type="primary" @click="saveData('edit', d)">{{ d.role_name }}</wm-button>
-          <wm-button v-else effect="text" type="info" @click="saveData('edit', d)">设置</wm-button>
+          <wm-button effect="text" type="primary" @click="saveData('edit', d)">编辑</wm-button>
         </div>
-      </template>
-      <template #gender="d">
-        <div class="tCenter">{{ d.gender || '-' }}</div>
       </template>
     </wm-table>
     <!-- List End -->
@@ -95,9 +69,9 @@
   <!-- Save -->
   <action-save v-model:show="save.show" :title="save.title" :data="save.data" @submit="saveSubmit($event)"></action-save>
   <!-- Del -->
-  <action-del v-model:show="del.show" :data="del.data" @submit="delSubmit($event)"></action-del>
+  <action-del v-model:show="del.show" :title="save.title" :data="del.data" @submit="delSubmit($event)"></action-del>
   <!-- Export -->
-  <action-export v-model:show="exp.show" :data="getWhere()" :order="list.order" :num="exp.num" @submit="exportSubmit($event)"></action-export>
+  <action-export v-model:show="exp.show" :title="save.title" :data="getWhere()" :order="list.order" :num="exp.num" @submit="exportSubmit($event)"></action-export>
 </template>
 
 <style lang="less" scoped>

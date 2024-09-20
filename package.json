@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@antv/g2": "^5.2.2",
+    "@tinymce/tinymce-vue": "^6.0.1",
     "@vuepic/vue-datepicker": "^9.0.2",
     "axios": "^1.7.2",
     "core-js": "^3.37.1",

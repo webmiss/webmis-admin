@@ -1,10 +1,10 @@
 <template>
   <wm-dialog v-model:show="infoShow" :title="title" width="360px" bottom="40px" @close="close()">
     <wm-main lineHeight="60px">
-      共导出 <b>{{ num }}</b> 条数据
+      是否确认删除
     </wm-main>
     <template #bottom>
-      <wm-button height="40px" padding="0 32px" @click="submit()">确认导出</wm-button>
+      <wm-button effect="dark" type="danger" height="40px" @click="submit()">确认删除</wm-button>
     </template>
   </wm-dialog>
 </template>
@@ -18,7 +18,6 @@ import { useStore } from 'vuex';
 /* UI组件 */
 import Ui from '@/library/ui'
 import Request from '@/library/request'
-import Files from '@/library/files'
 /* 组件 */
 import wmMain from '@/components/container/main.vue'
 import wmDialog from '@/components/dialog/index.vue'
@@ -27,20 +26,16 @@ import wmButton from '@/components/form/button/index.vue'
 @Options({
   components: { wmMain, wmDialog, wmButton },
   props: {
-    show: {type: Boolean, default: false},      // 是否显示
-    title: {type: String, default: ''},         // 标题
-    num: {type: Number, default: 0},            // 数量
-    data: {type: Object, default: {}},          // 数据
-    order: {type: String, default: ''},         // 排序
+    show: {type: Boolean, default: false},        // 是否显示
+    title: {type: String, default: ''},           // 标题
+    data: {type: Array, default: []},             // 数据
   }
 })
-export default class ActionExport extends Vue {
+export default class ActionDel extends Vue {
   // 参数
   show!: boolean;
   title!: string;
-  num!: number;
   data!: any;
-  order!: string;
   // 状态
   store: any = useStore();
   state: any = this.store.state;
@@ -57,21 +52,16 @@ export default class ActionExport extends Vue {
   /* 提交 */
   submit(): void {
     // 验证
-    if(this.num<1) return Ui.Toast('无导出数量!');
+    if(this.data.length<1) return Ui.Toast('无删除数据!');
     // 请求
     const load: any = Ui.Loading();
-    Request.Post('sys_role/export', {
+    Request.Post('web_html/del', {
       token: this.state.token,
       data: this.data,
-      order: this.order,
     }, (res:any)=>{
       load.clear();
       const d: any = res.data;
       Ui.Toast(d.msg);
-      if(d.code==0){
-        Files.Down(d.data.path+d.data.filename, d.data.filename);
-      }
-      // 事件
       this.$emit('submit', d.code==0);
     });
   }

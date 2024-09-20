@@ -26,4 +26,11 @@ export default class Env {
     }
   }
 
+  /* TinyMce */
+  public static tinymce(): object {
+    return {
+      key: 'dm9pn8sfmiyaalv1r49hvf8ww9x8denshvuhp1tf7z51k6jj',
+    }
+  }
+
 }

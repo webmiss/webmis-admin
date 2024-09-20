@@ -8,7 +8,7 @@
             <tr>
               <td class="label">状态</td>
               <td colspan="3">
-                <wm-switch v-model:value="form.state"></wm-switch>
+                <wm-switch v-model:value="form.status"></wm-switch>
               </td>
             </tr>
             <tr>
@@ -127,7 +127,7 @@ export default class ActionSave extends Vue {
     {label: '私有', value: 'perm', slot: 'perm'},
   ];
   // 数据
-  form: any = {id: 0, state: true, uname: '', passwd: '', type: '', nickname: '', name: '', department: '', position: '', remark: '', role: '', perm: ''}
+  form: any = {id: 0, status: true, uname: '', passwd: '', type: '', nickname: '', name: '', department: '', position: '', remark: '', role: '', perm: ''}
   // 全部分类
   selectAll: any = {type: [], role: [], perm: []};
 
@@ -138,7 +138,7 @@ export default class ActionSave extends Vue {
       if(val){
         // 默认值
         this.form.id = this.data.id || 0;
-        this.form.state = this.data.state || true;
+        this.form.status = typeof this.data.status!='undefined'?this.data.status:true;
         this.form.uname = this.data.uname || this.data.tel || this.data.email || '';
         this.form.passwd = this.data.passwd || '';
         this.form.nickname = this.data.nickname || '';
@@ -147,7 +147,7 @@ export default class ActionSave extends Vue {
         this.form.position = this.data.position || '';
         this.form.remark = this.data.remark || '';
         // 类型、角色
-        this.form.type = typeof this.data.type!='undefined'?[this.data.type]:'';
+        this.form.type = typeof this.data.type!='undefined'?[this.data.type]:[];
         this.form.role = this.data.role || '';
         // 获取权限
         this.form.perm = this.data.perm || '';

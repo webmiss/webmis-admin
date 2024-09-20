@@ -11,7 +11,7 @@ const routes: Array<RouteRecordRaw> = [
   {path: '/SysUser', name: 'SysUser', component: ()=>import('../views/system/user/index.vue') },
   {path: '/SysRole', name: 'SysRole', component: ()=>import('../views/system/role/index.vue') },
   // 基础数据
-  {path: '/MHtml', name: 'MHtml', component: ()=>import('../views/base/MHtml.vue') },
+  {path: '/WebHtml', name: 'WebHtml', component: ()=>import('../views/base/html/index.vue') },
   // 网站
   {path: '/MBanner', name: 'MBanner', component: ()=>import('../views/web/MBanner.vue') },
   {path: '/MSuggest', name: 'MSuggest', component: ()=>import('../views/web/MSuggest.vue') },

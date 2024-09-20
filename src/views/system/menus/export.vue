@@ -70,7 +70,6 @@ export default class ActionExport extends Vue {
       Ui.Toast(d.msg);
       if(d.code==0){
         Files.Down(d.data.path+d.data.filename, d.data.filename);
-        console.log(d);
       }
       // 事件
       this.$emit('submit', d.code==0);

@@ -7,14 +7,11 @@
 </template>
 
 <style lang="less" scoped>
-
 </style>
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
 import { useStore } from 'vuex';
-/* 组件 */
-import Ui from '@/library/ui'
 
 @Options({
   components: {},
@@ -31,10 +28,6 @@ export default class Action extends Vue {
   private state: any = this.store.state;
   // 变量
   checkbox: any = {checked: false, partially: false, value:'', data:{label:'', value:'all'}};
-
-  /* 创建成功 */
-  created(): void {
-  }
 
   /* 是否有权限 */
   isAction(action: string): boolean {

@@ -223,7 +223,7 @@ export default class App extends Base {
         // 压缩图片
         Files.ImageCompress(base64, {width:200, height:200, type:fileObj.type}, (imgBase64: any)=>{
           // 请求
-          Request.Post('user_info/upimg', {token: this.state.token, base64:imgBase64}, (res:any)=>{
+          Request.Post('user/upimg', {token: this.state.token, base64:imgBase64}, (res:any)=>{
             const d = res.data;
             if(d.code==0){
               // 更新用户信息

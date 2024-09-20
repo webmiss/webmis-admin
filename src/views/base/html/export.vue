@@ -60,7 +60,7 @@ export default class ActionExport extends Vue {
     if(this.num<1) return Ui.Toast('无导出数量!');
     // 请求
     const load: any = Ui.Loading();
-    Request.Post('sys_role/export', {
+    Request.Post('web_html/export', {
       token: this.state.token,
       data: this.data,
       order: this.order,

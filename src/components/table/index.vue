@@ -73,7 +73,6 @@
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
 /* 组件 */
-import Ui from '@/library/ui'
 import wmCheckBox from '@/components/form/checkbox/index.vue'
 
 @Options({

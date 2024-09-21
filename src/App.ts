@@ -141,6 +141,11 @@ export default class App extends Base {
   }
   /* 菜单-切换 */
   MenusClick(name: string, url: string, isShow: boolean=false): void {
+    // 加载菜单
+    if(this.menus.list.length==0) {
+      setTimeout(()=>{ this.MenusClick(name, url, isShow); }, 1000);
+      return ;
+    }
     // 隐藏菜单
     if(isShow) {
       this.menus.show=false;

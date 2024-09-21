@@ -1,6 +1,15 @@
 <template>
   <div class="wm-login_popup" :style="{visibility:login.show?'inherit':'hidden'}">
     <wm-popup v-model:show="login.show" width="100%" height="100%" position="top" :time="600">
+      <div class="wm-langs">
+        <div>{{ state.langs.label }}</div>
+        <div class="wm-langs_body">
+          <span class="arrow"></span>
+          <ul class="wm-langs_list">
+            <li v-for="(v,k) in langsList" :key="k" :class="v.value==state.langs.value?'active':''" @click="changeLangs(v)">{{ v.label }}</li>
+          </ul>
+        </div>
+      </div>
       <div class="wm-login_bg" :class="login.bg" v-show="login.show"></div>
       <div class="wm-login_mask"></div>
       <div class="wm-login_body">
@@ -8,16 +17,16 @@
           <div class="wm-login_logo" :style="{backgroundImage:'url('+(login.uname&&login.uname==login.local_uname&&login.img?login.img:require('@/assets/logo.svg'))+')', backgroundSize:login.uname&&login.uname==login.local_uname&&login.img?'100%':'60%'}"></div>
           <div class="wm-login_form" v-if="!login.is_passwd">
             <i class="ui ui_user ico"></i>
-            <input ref="loginUname" type="text" class="input" v-model="login.uname" @keyup.enter="clickLogin()" maxlength="32" placeholder="用户名 / 手机号码 / 邮箱">
+            <input ref="loginUname" type="text" class="input" v-model="login.uname" @keyup.enter="clickLogin()" maxlength="32" :placeholder="langs.login_uname">
           </div>
           <div class="wm-login_form" v-else-if="login.is_passwd&&!login.is_safety">
             <i class="ui ui_safety ico"></i>
-            <input ref="loginPasswd" type="password" class="input" v-model="login.passwd" @keyup.enter="clickLogin()" maxlength="32" placeholder="请输入密码">
+            <input ref="loginPasswd" type="password" class="input" v-model="login.passwd" @keyup.enter="clickLogin()" maxlength="32" :placeholder="langs.login_passwd">
           </div>
           <div class="wm-login_form" v-else-if="login.is_safety">
             <i class="ui ui_safety ico"></i>
-            <img class="vcode" :src="login.vcode_url" alt="点击刷新" @click="changeVcode()" />
-            <input ref="loginVcode" type="text" class="input" v-model="login.vcode" @keyup.enter="clickLogin()" maxlength="4" placeholder="验证码">
+            <img class="vcode" :src="login.vcode_url" :alt="langs.login_refresh" @click="changeVcode()" />
+            <input ref="loginVcode" type="text" class="input" v-model="login.vcode" @keyup.enter="clickLogin()" maxlength="4" :placeholder="langs.login_vcode">
           </div>
           <div class="wm-login_bottom">
             <span v-if="login.uname" class="flex">
@@ -33,6 +42,17 @@
 </template>
 
 <style lang="less" scoped>
+/* Language */
+.wm-langs{position: absolute; z-index: 9; padding: 0 32px; top: 32px; right: 32px; height: 40px; line-height: 40px; border-radius: 20px; color: #FFF; background-color: #00000050; text-align: center;}
+.wm-langs:hover .wm-langs_body{display: block;}
+.wm-langs_body{display: none; position: absolute; left: 50%; transform: translateX(-50%);}
+.wm-langs_body .arrow{position: absolute; top: 0; left: calc(50% - 5px); transform: translateX(-50%);}
+.wm-langs_body .arrow::before{content: ''; position: absolute; width: 0px; height: 0px; border: 5px solid; border-color:transparent transparent #00000050 transparent;}
+.wm-langs_list{padding: 8px 0; margin-top: 10px; background-color: #00000050; border-radius: 8px;}
+.wm-langs_list li{cursor: pointer; margin: 1px 0; padding: 0 32px; line-height: 32px; white-space: nowrap;}
+.wm-langs_list li:hover{background-color: @Minor;}
+.wm-langs_list .active{background-color: @Minor;}
+/* Login */
 .wm-login_popup{position: fixed; z-index: 9999; width: calc(100% + 1px); height: calc(100% + 1px); left: 0; top: 0;}
 .wm-login_bg{position: absolute; z-index: 1; width: 100%; height: 100%; background-color: #323438; background-position: center; background-size: cover; background-repeat: no-repeat; transition: All 3s ease-in-out;}
 .wm-login_bg.bg0{background-image: url('../../assets/bg/0.jpg');}
@@ -89,6 +109,12 @@ export default class Login extends Vue {
   private store: any = useStore();
   private state: any = this.store.state;
   copy: string = Env.copy;
+  // 语言
+  langs: any = {};
+  langsList: Array<any> = [
+    {label: 'English', value: 'en_US'},
+    {label: '简体中文', value: 'zh_CN'},
+  ];
   // 登录
   login: any = {show: false, is_passwd: false, is_safety: false, uname: '', local_uname:'', passwd: '', vcode: '', vcode_url: '', img:'', bg:''};
   bg_class: Array<string> = ['bg0', 'bg1', 'bg2', 'bg3', 'bg4', 'bg5', 'bg6', 'bg7', 'bg8', 'bg9'];
@@ -131,6 +157,11 @@ export default class Login extends Vue {
 
   /* 创建完成 */
   mounted(): void {
+    // 默认语言
+    const langs: string | null = Storage.getItem('langs');
+    this.state.langs = langs?JSON.parse(langs):{label: '简体中文', value: 'zh_CN'};
+    // 语言包
+    this.getLangs();
     // 显示登录
     if(!this.state.isLogin) {
       this.login.show = true;
@@ -140,6 +171,20 @@ export default class Login extends Vue {
     const token: string | null = Storage.getItem('token');
     this.state.token = token?token:'';
     if(token) this.verifyToken(true);
+  }
+
+  /* 语言包 */
+  getLangs(): void {
+    import('@/config/langs/'+this.state.langs.value).then(m=>{
+      this.langs = m.langs();
+    });
+  }
+
+  /* 切换语言 */
+  changeLangs(v: any): void {
+    this.state.langs = v;
+    Storage.setItem('langs', JSON.stringify(v));
+    this.getLangs();
   }
 
   /* 背景动画 */

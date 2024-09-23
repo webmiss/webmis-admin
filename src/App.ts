@@ -44,13 +44,14 @@ export default class App extends Base {
     // 监听
     this.$watch('$route', (to: any, from: any)=>{
       this.tabs.active = to.path;
-    });
+    }, { deep: true });
     // 登录
     this.$watch('state.isLogin', (val: boolean)=>{
       if(val) this.MenusList();
-    });
+    }, { deep: true });
     // 菜单
     this.$watch('menus.list', (val: Array<any>)=>{
+      console.log('menus', val);
       let title: string = '';
       const url: string = (this.$route as any).path;
       for(let v1 of val) {
@@ -65,14 +66,8 @@ export default class App extends Base {
         }
       }
       // 点击当前页
-      if(title && url) {
-        setTimeout(()=>{
-          this.MenusClick(title, url);
-          console.log(title, url);
-        }, 1000);
-        
-      }
-    });
+      if(title && url) this.MenusClick(title, url);
+    }, { deep: true });
   }
 
   /* 创建完成 */

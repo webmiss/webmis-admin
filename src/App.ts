@@ -44,11 +44,11 @@ export default class App extends Base {
     // 监听
     this.$watch('$route', (to: any, from: any)=>{
       this.tabs.active = to.path;
-    }, { deep: true });
+    });
     // 登录
     this.$watch('state.isLogin', (val: boolean)=>{
       if(val) this.MenusList();
-    }, { deep: true });
+    });
     // 菜单
     this.$watch('menus.list', (val: Array<any>)=>{
       let title: string = '';
@@ -70,8 +70,9 @@ export default class App extends Base {
           this.MenusClick(title, url);
           console.log(title, url);
         }, 1000);
+        
       }
-    }, { deep: true });
+    });
   }
 
   /* 创建完成 */

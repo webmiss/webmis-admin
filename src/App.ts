@@ -66,8 +66,7 @@ export default class App extends Base {
       }
       // 点击当前页
       if(title && url) {
-        this.$nextTick(()=>{ this.MenusClick(title, url); });
-        // setTimeout(()=>{ this.MenusClick(title, url); }, 500);
+        setTimeout(()=>{ this.MenusClick(title, url); }, 500);
       }
     }, { deep: true });
   }

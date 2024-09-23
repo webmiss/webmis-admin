@@ -24,7 +24,7 @@ export default class App extends Base {
   // private route: any = useRoute();       // 路由信息
   // private router: any = useRouter();     // 路由
   // 状态
-  store: any = useStore();
+  private store: any = useStore();
   state: any = this.store.state;
   copy: string = Env.copy;
   // 用户
@@ -51,7 +51,6 @@ export default class App extends Base {
     }, { deep: true });
     // 菜单
     this.$watch('menus.list', (val: Array<any>)=>{
-      console.log('menus', val);
       let title: string = '';
       const url: string = (this.$route as any).path;
       for(let v1 of val) {
@@ -223,7 +222,7 @@ export default class App extends Base {
         // 跳转
         if(this.tabs.active==url){
           let i: number = parseInt(k)-1;
-          if(i<0) this.MenusClick('首页', '/');
+          if(i<0) this.MenusClick(this.state.langs.home, '/');
           else this.MenusClick(tabs[i.toString()].name, tabs[i.toString()].url);
         }
         break;
@@ -265,6 +264,8 @@ export default class App extends Base {
     this.uinfo.show = false;
     this.menus.show = false;
     // 清除
+    this.MenusClick(this.state.langs.home, '/');
+    this.tabs.list = [];
     (this.$refs.Login as any).logout();
   }
 

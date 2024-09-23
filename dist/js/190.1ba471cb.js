@@ -1,2 +1,0 @@
-"use strict";(self["webpackChunkdemo"]=self["webpackChunkdemo"]||[]).push([[190],{8190:function(e,n,o){function s(){return{base:{add:"Add"},login_uname:"Uname / Phone / Email",login_passwd:"Please input a password",login_vcode:"Code",login_refresh:"Click to refresh"}}o.r(n),o.d(n,{langs:function(){return s}})}}]);
-//# sourceMappingURL=190.1ba471cb.js.map

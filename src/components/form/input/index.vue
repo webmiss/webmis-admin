@@ -36,7 +36,7 @@
     <!-- TextArea -->
     <textarea ref="wmTextarea" class="wm-input" v-if="type=='textarea'"
       :value="value"
-      :placeholder="placeholder"
+      :placeholder="placeholder || state.langs.placeholder"
       :maxlength="maxlength"
       :disabled="disabled"
       :readonly="readonly"
@@ -54,7 +54,7 @@
     <input ref="wmInput" class="wm-input" v-else
       :value="value"
       :type="type"
-      :placeholder="placeholder"
+      :placeholder="placeholder || state.langs.placeholder"
       :maxlength="maxlength"
       :disabled="disabled"
       :readonly="readonly"
@@ -91,6 +91,7 @@
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
+import { useStore } from 'vuex';
 @Options({
   components: {},
   props: {
@@ -99,7 +100,7 @@ import { Options, Vue } from 'vue-class-component';
     width: {type: String, default: '100%'},             // 宽
     height: {type: String, default: '40px'},            // 高
     lineHeight: {type: String, default: '40px'},        // 行高
-    placeholder: {type: String, default: '请输入'},     // 提示
+    placeholder: {type: String, default: ''},           // 提示
     maxlength: {type: String, default: ''},             // 最大长度
     padding: {type: String, default: '0 10px'},         // 内部间距
     margin: {type: String, default: '0'},               // 外部间距
@@ -149,6 +150,9 @@ export default class Input extends Vue {
   textBgcolor!: string;
   textRadius!: string;
   textLen!: boolean;
+  // 状态
+  private store: any = useStore();
+  state: any = this.store.state;
   // 变量
   val_len: any = 0;
 

@@ -9,7 +9,7 @@
     <div class="wm-search" :style="{visibility:seaShow?'inherit':'hidden'}">
       <wm-popup height="100%" :width="width" v-model:show="seaShow" position="right" bgColor="#FFF">
         <div class="wm-search_title flex">
-          <h2>{{ title }}</h2>
+          <h2>{{ title || state.langs.search }}</h2>
           <i class="ui ui_close" @click="close"></i>
         </div>
         <div class="wm-search_ct">
@@ -25,8 +25,8 @@
           </wm-main>
         </div>
         <div class="wm-search_bottom flex">
-          <div class="reset" @click="reset()">重 置</div>
-          <div class="search flex_center" @click="search()">搜 索</div>
+          <div class="reset" @click="reset()">{{ state.langs.reset }}</div>
+          <div class="search flex_center" @click="search()">{{ state.langs.confirm }}</div>
         </div>
       </wm-popup>
     </div>
@@ -51,6 +51,7 @@
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
+import { useStore } from 'vuex';
 /* 组件 */
 import wmMain from '@/components/container/main.vue'
 import wmPopup from '@/components/popup/index.vue'
@@ -64,7 +65,7 @@ import wmButton from '@/components/form/button/index.vue'
     show: {type: Boolean, default: false},              // 是否显示
     keys: {type: String, default: ''},                  // 关键字
     columns: {type: Array, default: []},                // 字段: [{label: '名称', value: '', slot: 'name'}]
-    title: {type: String, default: '搜索'},             // 标题
+    title: {type: String, default: ''},                 // 标题
     width: {type: String, default: '360px'},            // 宽
     placeholder: {type: String, default: '输入关键字'}, // 提示
   }
@@ -77,6 +78,9 @@ export default class Search extends Vue {
   title!: string;
   width!: string;
   placeholder!: string;
+  // 状态
+  private store: any = useStore();
+  state: any = this.store.state;
   // 变量
   seaShow: boolean = false;
   seaKey: string = '';

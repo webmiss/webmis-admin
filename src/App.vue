@@ -15,7 +15,7 @@
         <div class="menus_body flex">
           <!-- MenusLeft -->
           <div class="menus_left">
-            <div class="m1">最近访问</div>
+            <div class="m1">{{ state.langs.menus_recent }}</div>
             <ul class="m2" v-if="menus.tmpList.length>0">
               <li class="flex_left" v-for="(v,k) in menus.tmpList" :key="k" @click="MenusClick(v.label, v.url, true)">
                 <i v-if="v.icon" :class="v.icon"></i>
@@ -23,15 +23,15 @@
               </li>
             </ul>
             <div class="null" v-else></div>
-            <div class="m1">推荐功能</div>
+            <div class="m1">{{ state.langs.menus_recommend }}</div>
             <ul class="m2">
               <li class="flex_left" @click="state.isUinfo=true">
                 <i class="ui ui_user"></i>
-                <span :style="{paddingLeft:''}">基础信息</span>
+                <span :style="{paddingLeft:''}">{{ state.langs.uinfo_title }}</span>
               </li>
               <li class="flex_left" @click="state.isPasswd=true">
                 <i class="ui ui_safety"></i>
-                <span :style="{paddingLeft:''}">修改密码</span>
+                <span :style="{paddingLeft:''}">{{ state.langs.passwd_title }}</span>
               </li>
             </ul>
           </div>
@@ -40,7 +40,7 @@
             <div class="m_top flex">
               <div class="search">
                 <i class="ui ui_search"></i>
-                <input type="text" class="input" v-model="menus.key" @input="MenusSearch()" placeholder="请输入菜单功能">
+                <input type="text" class="input" v-model="menus.key" @input="MenusSearch()" :placeholder="state.langs.menus_placeholder">
               </div>
               <i class="ui ui_close" @click="menus.show=false"></i>
             </div>
@@ -80,7 +80,7 @@
       <!-- Search -->
       <div class="app_search" v-if="is_menus">
         <i class="ui ui_search"></i>
-        <input type="text" class="input" v-model="menus.key" @input="MenusSearch()" placeholder="请输入菜单功能">
+        <input type="text" class="input" v-model="menus.key" @input="MenusSearch()" :placeholder="state.langs.menus_placeholder">
       </div>
       <!-- Menus -->
       <div class="app_menus scrollbar" :style="{height: 'calc(100% - '+(is_menus?'152px':'98px')+')',}">
@@ -127,28 +127,28 @@
         <wm-popup height="100%" width="320px" v-model:show="uinfo.show" position="right" bgColor="#FFF">
           <div class="app_user_info scrollbar">
             <div class="img" :style="{backgroundImage: state.uinfo.img?'url('+state.uinfo.img+')':'none'}" @click="userUpImg()">
-              <div class="img_load">更新头像</div>
+              <div class="img_load">{{ state.langs.uinfo_img }}</div>
               <i class="ui ui_image" v-if="!state.uinfo.img"></i>
             </div>
-            <div class="user"><h2>{{ state.uinfo.uname || '-' }}</h2><p>账号ID: {{ state.uinfo.uid || '-' }}</p></div>
+            <div class="user"><h2>{{ state.uinfo.uname || '-' }}</h2><p>ID: {{ state.uinfo.uid || '-' }}</p></div>
             <ul class="info">
-              <li class="flex"><span class="name">昵称</span><span class="value">{{ state.uinfo.nickname || '-' }}</span></li>
-              <li class="flex"><span class="name">部门</span><span class="value">{{ state.uinfo.department || '-' }}</span></li>
-              <li class="flex"><span class="name">职务</span><span class="value">{{ state.uinfo.position || '-' }}</span></li>
-              <li class="flex"><span class="name">姓名</span><span class="value">{{ state.uinfo.name || '-' }}</span></li>
+              <li class="flex"><span class="name">{{ state.langs.uinfo_nickname }}</span><span class="value">{{ state.uinfo.nickname || '-' }}</span></li>
+              <li class="flex"><span class="name">{{ state.langs.uinfo_department }}</span><span class="value">{{ state.uinfo.department || '-' }}</span></li>
+              <li class="flex"><span class="name">{{ state.langs.uinfo_position }}</span><span class="value">{{ state.uinfo.position || '-' }}</span></li>
+              <li class="flex"><span class="name">{{ state.langs.uinfo_name }}</span><span class="value">{{ state.uinfo.name || '-' }}</span></li>
             </ul>
             <ul class="tools">
-              <li @click="state.isUinfo=true">基本信息</li>
-              <li @click="state.isPasswd=true">修改密码</li>
+              <li @click="state.isUinfo=true">{{ state.langs.uinfo_title }}</li>
+              <li @click="state.isPasswd=true">{{ state.langs.passwd_title }}</li>
             </ul>
           </div>
-          <div class="app_user_close" @click="logout()">退出登录</div>
+          <div class="app_user_close" @click="logout()">{{ state.langs.logout }}</div>
         </wm-popup>
       </div>
       <!-- Tabs -->
       <div class="app_tabs_body flex">
         <ul class="app_tabs flex_left">
-          <li class="home" :class="tabs.active=='/'?'active':''" @click="MenusClick('首页', '/')">首页</li>
+          <li class="home" :class="tabs.active=='/'?'active':''" @click="MenusClick(state.langs.home, '/')">{{ state.langs.home }}</li>
           <li v-for="(v,k) in tabs.list" :key="k" @click="MenusClick(v.name, v.url)" :class="tabs.active==v.url?'active':''">
             {{ v.name }}<span class="close" @click.stop="MenusClose(v.url)"><i class="ui ui_close"></i></span>
           </li>

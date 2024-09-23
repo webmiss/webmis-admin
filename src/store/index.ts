@@ -2,6 +2,7 @@ import { createStore } from 'vuex'
 
 export default createStore({
   state: {
+    lang: '',            // 语言
     langs: {},           // 语言包
     isLogin: false,      // 登录状态
     isUinfo: false,      // 修改信息

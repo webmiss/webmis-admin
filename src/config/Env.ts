@@ -7,6 +7,7 @@ export default class Env {
   public baseUrl: string = '';              // 网址
   public apiUrl: string = 'admin/';         // 接口地址
   public static copy: string = '©'+(new Date()).getFullYear()+' webmis.vip';
+  public static lang: string = 'zh_CN'      // 语言
 
   /* 构造函数 */
   constructor() {
@@ -31,6 +32,14 @@ export default class Env {
     return {
       key: 'dm9pn8sfmiyaalv1r49hvf8ww9x8denshvuhp1tf7z51k6jj',
     }
+  }
+
+  /* Language */
+  public static LangList(): Array<any> {
+    return [
+      {label: 'English', value: 'en_US'},
+      {label: '简体中文', value: 'zh_CN'},
+    ]
   }
 
 }

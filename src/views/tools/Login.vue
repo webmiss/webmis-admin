@@ -2,11 +2,11 @@
   <div class="wm-login_popup" :style="{visibility:login.show?'inherit':'hidden'}">
     <wm-popup v-model:show="login.show" width="100%" height="100%" position="top" :time="600">
       <div class="wm-langs">
-        <div>{{ state.langs.label }}</div>
+        <div>{{ langs.label }}</div>
         <div class="wm-langs_body">
           <span class="arrow"></span>
           <ul class="wm-langs_list">
-            <li v-for="(v,k) in langsList" :key="k" :class="v.value==state.langs.value?'active':''" @click="changeLangs(v)">{{ v.label }}</li>
+            <li v-for="(v,k) in langsList" :key="k" :class="v.value==langs.value?'active':''" @click="changeLangs(v)">{{ v.label }}</li>
           </ul>
         </div>
       </div>
@@ -17,16 +17,16 @@
           <div class="wm-login_logo" :style="{backgroundImage:'url('+(login.uname&&login.uname==login.local_uname&&login.img?login.img:require('@/assets/logo.svg'))+')', backgroundSize:login.uname&&login.uname==login.local_uname&&login.img?'100%':'60%'}"></div>
           <div class="wm-login_form" v-if="!login.is_passwd">
             <i class="ui ui_user ico"></i>
-            <input ref="loginUname" type="text" class="input" v-model="login.uname" @keyup.enter="clickLogin()" maxlength="32" :placeholder="langs.login_uname">
+            <input ref="loginUname" type="text" class="input" v-model="login.uname" @keyup.enter="clickLogin()" maxlength="32" :placeholder="state.langs.login_uname">
           </div>
           <div class="wm-login_form" v-else-if="login.is_passwd&&!login.is_safety">
             <i class="ui ui_safety ico"></i>
-            <input ref="loginPasswd" type="password" class="input" v-model="login.passwd" @keyup.enter="clickLogin()" maxlength="32" :placeholder="langs.login_passwd">
+            <input ref="loginPasswd" type="password" class="input" v-model="login.passwd" @keyup.enter="clickLogin()" maxlength="32" :placeholder="state.langs.login_passwd">
           </div>
           <div class="wm-login_form" v-else-if="login.is_safety">
             <i class="ui ui_safety ico"></i>
             <img class="vcode" :src="login.vcode_url" :alt="langs.login_refresh" @click="changeVcode()" />
-            <input ref="loginVcode" type="text" class="input" v-model="login.vcode" @keyup.enter="clickLogin()" maxlength="4" :placeholder="langs.login_vcode">
+            <input ref="loginVcode" type="text" class="input" v-model="login.vcode" @keyup.enter="clickLogin()" maxlength="4" :placeholder="state.langs.login_vcode">
           </div>
           <div class="wm-login_bottom">
             <span v-if="login.uname" class="flex">
@@ -111,10 +111,7 @@ export default class Login extends Vue {
   copy: string = Env.copy;
   // 语言
   langs: any = {};
-  langsList: Array<any> = [
-    {label: 'English', value: 'en_US'},
-    {label: '简体中文', value: 'zh_CN'},
-  ];
+  langsList: Array<any> = Env.LangList();
   // 登录
   login: any = {show: false, is_passwd: false, is_safety: false, uname: '', local_uname:'', passwd: '', vcode: '', vcode_url: '', img:'', bg:''};
   bg_class: Array<string> = ['bg0', 'bg1', 'bg2', 'bg3', 'bg4', 'bg5', 'bg6', 'bg7', 'bg8', 'bg9'];
@@ -159,9 +156,16 @@ export default class Login extends Vue {
   mounted(): void {
     // 默认语言
     const langs: string | null = Storage.getItem('langs');
-    this.state.langs = langs?JSON.parse(langs):{label: '简体中文', value: 'zh_CN'};
-    // 语言包
-    this.getLangs();
+    if(langs) this.langs = JSON.parse(langs);
+    else {
+      for(let v of this.langsList){
+        if(Env.lang==v.value) {
+          this.langs = v;
+          break;
+        }
+      }
+    }
+    this.getLangs(this.langs);
     // 显示登录
     if(!this.state.isLogin) {
       this.login.show = true;
@@ -174,17 +178,21 @@ export default class Login extends Vue {
   }
 
   /* 语言包 */
-  getLangs(): void {
-    import('@/config/langs/'+this.state.langs.value).then(m=>{
-      this.langs = m.langs();
+  getLangs(langs: any): void {
+    import('@/config/langs/'+langs.value).then(m=>{
+      this.state.lang = langs.value;
+      this.state.langs = m.langs();
+      // 清理菜单
+      Storage.removeItem('MenusTabs');
+      Storage.removeItem('MenusTmp');
     });
   }
 
   /* 切换语言 */
   changeLangs(v: any): void {
-    this.state.langs = v;
+    this.langs = v;
     Storage.setItem('langs', JSON.stringify(v));
-    this.getLangs();
+    this.getLangs(v);
   }
 
   /* 背景动画 */
@@ -336,9 +344,10 @@ export default class Login extends Vue {
     // 缓存信息
     this.state.isLogin = false;
     this.state.token = '';
-    Storage.setItem('token', '');
-    Storage.setItem('uinfo', '');
-    Storage.setItem('MenusTabs', '');
+    Storage.removeItem('token');
+    Storage.removeItem('uinfo');
+    Storage.removeItem('MenusTabs');
+    Storage.removeItem('MenusTmp');
     // 激活密码框
     setTimeout(()=>{
       (this.$refs.loginPasswd as any).focus();

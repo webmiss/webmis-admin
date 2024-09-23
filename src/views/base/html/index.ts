@@ -29,7 +29,7 @@ export default class SysMenus extends Base {
 
   // 状态
   private store: any = useStore();
-  private state: any = this.store.state;
+  state: any = this.store.state;
   // 搜索
   sea: any = {
     show: false, key: '', placeholder:'名称、备注',
@@ -48,8 +48,8 @@ export default class SysMenus extends Base {
   public created(): void {
     // 搜索
     this.sea.columns = [
-      {label: '标题', value: '', name: 'title'},
-      {label: '名称', value: '', name: 'name'},
+      {label: this.state.langs.web_html_title, value: '', name: 'title'},
+      {label: this.state.langs.web_html_name, value: '', name: 'name'},
     ];
     // 字段
     this.list.columns = [
@@ -142,10 +142,10 @@ export default class SysMenus extends Base {
     this.save.show = true;
     this.save.type = type;
     if(type=='add') {
-      this.save.title = '添加';
+      this.save.title = this.state.langs.add;
       this.save.data = {};
     } else if(type=='edit') {
-      this.save.title = '编辑';
+      this.save.title = this.state.langs.edit;
       if(data) {
         this.save.data = data;
       } else {
@@ -165,6 +165,7 @@ export default class SysMenus extends Base {
   /* 删除 */
   delData(): void {
     this.del.show = true;
+    this.del.title = this.state.langs.del;
     const obj:any = this.$refs.tableList;
     const data: Array<any> = obj.getData();
     let ids: Array<number> = [];
@@ -182,6 +183,7 @@ export default class SysMenus extends Base {
   exportData(num: number): void {
     this.exp.show = true;
     this.exp.num = num;
+    this.exp.title = this.state.langs.export;
   }
   /* 导出-回调 */
   exportSubmit(val: boolean): void {

@@ -1,44 +1,44 @@
 <template>
-  <wm-dialog v-model:show="uinfoShow" title="基本信息" width="560px" bottom="40px" @close="Close()">
+  <wm-dialog v-model:show="uinfoShow" :title="state.langs.uinfo_title" width="560px" bottom="40px" @close="Close()">
     <wm-main>
       <wm-table-form>
         <tr>
-          <td class="label">昵称</td>
+          <td class="label">{{ state.langs.uinfo_nickname }}</td>
           <td colspan="2">
-            <wm-input v-model:value="form.nickname" placeholder="用户昵称" maxlength="16"></wm-input>
+            <wm-input v-model:value="form.nickname" :placeholder="state.langs.uinfo_nickname_placeholder" maxlength="16"></wm-input>
           </td>
         </tr>
         <tr>
-          <td class="label">姓名</td>
+          <td class="label">{{ state.langs.uinfo_name }}</td>
           <td>
-            <wm-input v-model:value="form.name" placeholder="真实姓名" maxlength="16" disabled></wm-input>
+            <wm-input v-model:value="form.name" maxlength="16" disabled></wm-input>
           </td>
           <td>
             <wm-radio v-model:value="form.gender" :options="genderData"></wm-radio>
           </td>
         </tr>
         <tr>
-          <td class="label">生日</td>
+          <td class="label">{{ state.langs.uinfo_birthday }}</td>
           <td colspan="2">
             <wm-date-picker v-model:value="form.birthday" :maxDate="maxDate"></wm-date-picker>
           </td>
         </tr>
         <tr>
-          <td class="label">部门</td>
+          <td class="label">{{ state.langs.uinfo_department }}</td>
           <td colspan="2">
-            <wm-input v-model:value="form.department" placeholder="部门" maxlength="16"></wm-input>
+            <wm-input v-model:value="form.department" maxlength="16"></wm-input>
           </td>
         </tr>
         <tr>
-          <td class="label">职位</td>
+          <td class="label">{{ state.langs.uinfo_position }}</td>
           <td colspan="2">
-            <wm-input v-model:value="form.position" placeholder="职位" maxlength="16"></wm-input>
+            <wm-input v-model:value="form.position" maxlength="16"></wm-input>
           </td>
         </tr>
       </wm-table-form>
     </wm-main>
     <template #bottom>
-      <wm-button effect="dark" type="primary" @click="subUinfo()">确 认</wm-button>
+      <wm-button effect="dark" type="primary" @click="subUinfo()">{{ state.langs.confirm }}</wm-button>
     </template>
   </wm-dialog>
 </template>
@@ -73,7 +73,7 @@ export default class Uinfo extends Vue {
   // 参数
   show!: boolean;
   // 状态
-  store: any = useStore();
+  private store: any = useStore();
   state: any = this.store.state;
   // 变量
   uinfoShow: boolean = false;
@@ -96,9 +96,9 @@ export default class Uinfo extends Vue {
         // 性别
         this.form.gender = uinfo.gender || '';
         this.genderData = [
-          {label:'无',value:''},
-          {label:'男',value:'男'},
-          {label:'女',value:'女'},
+          {label: this.state.langs.null, value: ''},
+          {label: this.state.langs.uinfo_gender_boy, value: '男'},
+          {label: this.state.langs.uinfo_gender_girl, value: '女'},
         ];
       }
     }, { deep: true });

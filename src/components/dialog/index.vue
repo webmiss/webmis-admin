@@ -25,7 +25,7 @@
 .wm-dialog_body{position: fixed; z-index: 999; width: calc(100% + 1px); height: calc(100% + 1px); left: 0; top: 0;}
 .wm-dialog_bg{position: absolute; width: 100%; height: 100%;}
 .wm-dialog{position: absolute; z-index: 1; max-width: calc(100% - 20px); max-height: calc(100% - 20px); left: 50%; top: 50%; transform: translate(-50%, -50%); background-color: #FFF;}
-.wm-dialog_title{position: relative; padding: 4px 0; height: 32px; line-height: 32px; text-align: center; font-size: 14px; font-weight: bold;}
+.wm-dialog_title{position: relative; padding: 4px 0; height: 32px; line-height: 32px; text-align: center; font-size: 15px; font-weight: bold;}
 .wm-dialog_title:hover i{color: @Primary;}
 .wm-dialog_close{position: absolute; cursor: pointer; top: 4px; right: 4px; width: 32px; height: 32px; line-height: 32px; text-align: center;}
 .wm-dialog_close:hover::after,.wm-dialog_close:hover::before{background-color: @Primary;}

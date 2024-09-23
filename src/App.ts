@@ -65,7 +65,12 @@ export default class App extends Base {
         }
       }
       // 点击当前页
-      if(title && url) this.MenusClick(title, url);
+      if(title && url) {
+        setTimeout(()=>{
+          this.MenusClick(title, url);
+          console.log(title, url);
+        }, 1000);
+      }
     }, { deep: true });
   }
 

@@ -51,7 +51,7 @@ import Format from '@/library/format'
 @Options({
   components: { wmSelect },
   props: {
-    total: {type: Number, default: 0},        // 总条数
+    total: {default: 0},                      // 总条数
     page: {type: Number, default: 1},         // 当前页码
     maxPage: {type: Number, default: 11},     // 显示页数
     limit: {type: Number, default: 100},      // 每页条数
@@ -67,10 +67,10 @@ import Format from '@/library/format'
 export default class Page extends Vue {
 
   // 参数
+  total!: any;
   page!: number;
   limit!: number;
   limitList!: Array<any>;
-  total!: number;
   maxPage!: number;
   radius!: string;
   // 变量

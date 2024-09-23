@@ -23,7 +23,6 @@ export default class Home extends Base {
   mounted(): void {
   }
   activated(): void {
-    console.log('Home');
     this.chickChart('c2');
     this.loadData();
   }

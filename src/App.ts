@@ -49,6 +49,24 @@ export default class App extends Base {
     this.$watch('state.isLogin', (val: boolean)=>{
       if(val) this.MenusList();
     });
+    // 菜单
+    this.$watch('menus.list', (val: Array<any>)=>{
+      let title: string = '';
+      const url: string = (this.$route as any).path;
+      for(let v1 of val) {
+        if(!v1.children) continue;
+        for(let v2 of v1.children) {
+          if(!v2.children) continue;
+          for(let v3 of v2.children) {
+            if(v3.value.url==url) {
+              title=v3.label; break;
+            }
+          }
+        }
+      }
+      // 点击当前页
+      if(title && url) this.MenusClick(title, url);
+    });
   }
 
   /* 创建完成 */
@@ -60,8 +78,6 @@ export default class App extends Base {
     // 最近访问
     let menus: any = Storage.getItem('MenusTmp');
     this.menus.tmpList = menus?JSON.parse(menus):[];
-    // 调转首页
-    if(this.$route.path=='/') this.MenusClick('首页', '/');
   }
 
   /* 获取菜单 */
@@ -141,11 +157,8 @@ export default class App extends Base {
   }
   /* 菜单-切换 */
   MenusClick(name: string, url: string, isShow: boolean=false): void {
-    // 加载菜单
-    if(this.menus.list.length==0) {
-      setTimeout(()=>{ this.MenusClick(name, url, isShow); }, 1000);
-      return ;
-    }
+    // 是加载菜单
+    if(this.menus.list.length==0) return;
     // 隐藏菜单
     if(isShow) {
       this.menus.show=false;

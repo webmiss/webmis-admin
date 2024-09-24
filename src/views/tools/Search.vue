@@ -1,8 +1,8 @@
 <template>
   <div class=".wm-search_body">
     <div class="flex">
-      <wm-input v-model:value="seaKey" @update:value="serachVal($event)" @iconClick="search()" :placeholder="placeholder" width="210px" height="32px" lineHeight="32px" maxlength="32" icon="ui ui_search" iconAlign="right" padding="0 40px 0 10px" margin="0 5px 0 0"></wm-input>
-      <wm-button effect="plain" @click="reset()">重置</wm-button>
+      <wm-input v-model:value="seaKey" @update:value="serachVal($event)" @iconClick="search()" :placeholder="placeholder || state.langs.keyword" width="210px" height="32px" lineHeight="32px" maxlength="32" icon="ui ui_search" iconAlign="right" padding="0 40px 0 10px" margin="0 5px 0 0"></wm-input>
+      <wm-button effect="plain" @click="reset()">{{ state.langs.reset }}</wm-button>
       <wm-button effect="plain" icon="ui ui_arrow_right" padding="0 4px" @click="seaShow=true"></wm-button>
     </div>
     <!-- Content -->
@@ -67,7 +67,7 @@ import wmButton from '@/components/form/button/index.vue'
     columns: {type: Array, default: []},                // 字段: [{label: '名称', value: '', slot: 'name'}]
     title: {type: String, default: ''},                 // 标题
     width: {type: String, default: '360px'},            // 宽
-    placeholder: {type: String, default: '输入关键字'}, // 提示
+    placeholder: {type: String, default: ''},           // 提示
   }
 })
 export default class Search extends Vue {

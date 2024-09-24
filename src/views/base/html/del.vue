@@ -1,10 +1,10 @@
 <template>
   <wm-dialog v-model:show="infoShow" :title="title" width="360px" bottom="40px" @close="close()">
     <wm-main lineHeight="60px">
-      是否确认删除
+      <span v-html="state.langs.export_warn(data.length)"></span>
     </wm-main>
     <template #bottom>
-      <wm-button effect="dark" type="danger" height="40px" @click="submit()">确认删除</wm-button>
+      <wm-button effect="dark" type="danger" height="40px" @click="submit()">{{ state.langs.confirm }}</wm-button>
     </template>
   </wm-dialog>
 </template>
@@ -37,7 +37,7 @@ export default class ActionDel extends Vue {
   title!: string;
   data!: any;
   // 状态
-  store: any = useStore();
+  private store: any = useStore();
   state: any = this.store.state;
   // 变量
   infoShow: boolean = false;

@@ -1,10 +1,10 @@
 <template>
   <wm-dialog v-model:show="infoShow" :title="title" width="360px" bottom="40px" @close="close()">
     <wm-main lineHeight="60px">
-      共导出 <b>{{ num }}</b> 条数据
+      <span v-html="state.langs.export_warn(num)"></span>
     </wm-main>
     <template #bottom>
-      <wm-button height="40px" padding="0 32px" @click="submit()">确认导出</wm-button>
+      <wm-button height="40px" padding="0 32px" @click="submit()">{{ state.langs.confirm }}</wm-button>
     </template>
   </wm-dialog>
 </template>
@@ -42,7 +42,7 @@ export default class ActionExport extends Vue {
   data!: any;
   order!: string;
   // 状态
-  store: any = useStore();
+  private store: any = useStore();
   state: any = this.store.state;
   // 变量
   infoShow: boolean = false;

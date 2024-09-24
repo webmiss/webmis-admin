@@ -51,11 +51,11 @@
                   <template v-if="v1.children">
                     <template v-for="(v2,k2) in v1.children" :key="k2">
                       <li v-if="v2.children&&(v2.display||typeof v2.display=='undefined')">
-                        <div class="title">{{ v2.label }}</div>
+                        <div class="title">{{ v2.langs[state.lang] }}</div>
                         <template v-for="(v3,k3) in v2.children" :key="k3">
-                          <div v-if="v3.display||typeof v3.display=='undefined'" class="m flex_left" :class="tabs.active==v3.value.url?'active':''" @click="MenusClick(v3.label, v3.value.url, true)">
+                          <div v-if="v3.display||typeof v3.display=='undefined'" class="m flex_left" :class="tabs.active==v3.value.url?'active':''" @click="MenusClick(v3.langs[state.lang], v3.value.url, true)">
                             <i v-if="v3.icon" :class="v3.icon"></i>
-                            <span :style="{paddingLeft: v3.icon?'':'10px'}">{{ v3.label }}</span>
+                            <span :style="{paddingLeft: v3.icon?'':'10px'}">{{ v3.langs[state.lang] }}</span>
                           </div>
                         </template>
                       </li>
@@ -96,18 +96,18 @@
           <!-- LeftMenus -->
           <template v-for="(v1,k1) in menus.list" :key="k1">
             <div class="m" v-if="!is_menus">
-              <i :class="v1.icon" :title="v1.label" @click="MenusShow()"></i>
+              <i :class="v1.icon" :title="v1.langs[state.lang]" @click="MenusShow()"></i>
             </div>
             <template v-if="v1.children&&is_menus">
               <template v-for="(v2,k2) in v1.children" :key="k2">
                 <div class="m1 flex" @click="v2.show=!v2.show">
-                  <span>{{ v2.label }}</span>
+                  <span>{{ v2.langs[state.lang] }}</span>
                   <i class="ui ui_arrow_up" :style="{transform: v2.show?'rotate(0deg)':'rotate(180deg)'}"></i>
                 </div>
                 <ul class="m2" v-if="v2.children&&v2.show">
-                  <li class="flex_left" v-for="(v3,k3) in v2.children" :key="k3" :class="tabs.active==v3.value.url?'active':''" @click="MenusClick(v3.label, v3.value.url)">
+                  <li class="flex_left" v-for="(v3,k3) in v2.children" :key="k3" :class="tabs.active==v3.value.url?'active':''" @click="MenusClick(v3.langs[state.lang], v3.value.url)">
                     <i v-if="v3.icon" :class="v3.icon"></i>
-                    <span :style="{paddingLeft: v3.icon?'':'16px'}">{{ v3.label }}</span>
+                    <span :style="{paddingLeft: v3.icon?'':'16px'}">{{ v3.langs[state.lang] }}</span>
                   </li>
                 </ul>
               </template>

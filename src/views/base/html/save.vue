@@ -6,33 +6,33 @@
         <template #base>
           <wm-table-form>
             <tr>
-              <td class="label">状态</td>
+              <td class="label">{{ state.langs.status }}</td>
               <td>
                 <wm-switch v-model:value="form.status"></wm-switch>
               </td>
             </tr>
             <tr>
-              <td class="label">类型</td>
+              <td class="label">{{ state.langs.web_html_type }}</td>
               <td>
                 <wm-select v-model:value="form.type" :options="selectType"></wm-select>
               </td>
             </tr>
             <tr>
-              <td class="label">标题</td>
+              <td class="label">{{ state.langs.web_html_title }}</td>
               <td>
-                <wm-input v-model:value="form.title" placeholder="请输入标题" maxlength="32"></wm-input>
+                <wm-input v-model:value="form.title" maxlength="32"></wm-input>
               </td>
             </tr>
             <tr>
-              <td class="label">名称</td>
+              <td class="label">{{ state.langs.web_html_name }}</td>
               <td>
-                <wm-input v-model:value="form.name" placeholder="请输入名称" maxlength="16"></wm-input>
+                <wm-input v-model:value="form.name" maxlength="16"></wm-input>
               </td>
             </tr>
             <tr>
-              <td class="label">备注</td>
+              <td class="label">{{ state.langs.remark }}</td>
               <td>
-                <wm-input v-model:value="form.remark" type="textarea" height="120px" placeholder="备注信息" maxlength="32"></wm-input>
+                <wm-input v-model:value="form.remark" type="textarea" height="120px" maxlength="32"></wm-input>
               </td>
             </tr>
           </wm-table-form>
@@ -40,13 +40,13 @@
         <!-- 基本信息 End -->
          <!-- 内容 -->
         <template #content>
-          <wm-tinymce v-model:value="form.content" :upload="upload" :height="480"></wm-tinymce>
+          <wm-tinymce v-model:value="form.content" :language="state.lang=='zh_CN'?state.lang:''" :upload="upload" :height="480"></wm-tinymce>
         </template>
         <!-- 内容 End -->
       </wm-tabs>
     </wm-main>
     <template #bottom>
-      <wm-button height="40px" padding="0 32px" @click="submit()">确 认</wm-button>
+      <wm-button height="40px" padding="0 32px" @click="submit()">{{ state.langs.confirm }}</wm-button>
     </template>
   </wm-dialog>
 </template>
@@ -94,8 +94,8 @@ export default class ActionSave extends Vue {
   // Tabs
   tabIndex: string = 'base';
   tabs: Array<any> = [
-    {label: '基本信息', value: 'base', slot: 'base'},
-    {label: '内容', value: 'content', slot: 'content'},
+    {label: this.state.langs.web_html_tabs_info, value: 'base', slot: 'base'},
+    {label: this.state.langs.web_html_tabs_content, value: 'content', slot: 'content'},
   ];
   // 数据
   form: any = {id: 0, status: true, type: [], title: '', name: '', remark: '', content: ''}
@@ -124,8 +124,8 @@ export default class ActionSave extends Vue {
 
   /* 验证 */
   verify(form: any): any {
-    if(form.title.length<2 || form.title.length>32) return Ui.Toast('标题2～32字符');
-    if(form.name.length<2 || form.name.length>16) return Ui.Toast('名称2～16字符');
+    if(form.title.length<2 || form.title.length>32) return Ui.Toast(this.state.langs.web_html_verify_title);
+    if(form.name.length<2 || form.name.length>16) return Ui.Toast(this.state.langs.web_html_verify_name);
     return form;
   }
 

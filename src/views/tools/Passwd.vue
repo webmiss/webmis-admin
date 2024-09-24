@@ -15,18 +15,18 @@
           </tr>
         </template>
         <template v-else>
-          <tr>
-            <td class="label">{{ state.langs.passwd_new }}</td>
-            <td>
-              <wm-input type="password" v-model:value="form.passwd1" maxlength="16"></wm-input>
-            </td>
-          </tr>
-          <tr>
-            <td class="label">{{ state.langs.passwd_confirm }}</td>
-            <td>
-              <wm-input type="password" v-model:value="form.passwd2" maxlength="16"></wm-input>
-            </td>
-          </tr>
+            <tr>
+              <td class="label">{{ state.langs.passwd_new }}</td>
+              <td>
+                <wm-input type="password" v-model:value="form.passwd1" maxlength="16"></wm-input>
+              </td>
+            </tr>
+            <tr>
+              <td class="label">{{ state.langs.passwd_confirm }}</td>
+              <td>
+                <wm-input type="password" v-model:value="form.passwd2" maxlength="16"></wm-input>
+              </td>
+            </tr>
         </template>
       </wm-table-form>
     </wm-main>

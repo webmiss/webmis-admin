@@ -34,7 +34,6 @@ export default class TableForm extends Vue {
   width!: string;
   height!: number;
   language!: string;
-  languageUrl!: string;
   menubar!: boolean;
   toolbarSize!: string;
   plugins!: string;
@@ -57,11 +56,11 @@ export default class TableForm extends Vue {
   }
   /* 创建完成 */
   mounted(): void {
-    // 配置
+    // 加载组件
     this.show = true;
     this.content = this.value;
+    // 配置
     this.defInit = {
-      language: this.language,
       width: this.width,
       height: this.height,
       menubar: this.menubar,
@@ -73,6 +72,8 @@ export default class TableForm extends Vue {
       toolbar1: this.toolbar1,
       images_upload_handler: this.upload,
     }
+    // 语言
+    if(this.language) this.defInit.language = this.language;
   }
   
 }

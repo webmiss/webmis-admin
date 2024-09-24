@@ -42,7 +42,7 @@
     <!-- Icon -->
     <i class="wm-select_arrow ui ui_arrow_down" :style="{transform: show?'rotate(180deg)':'rotate(0deg)'}"></i>
     <!-- Value -->
-    <div class="wm-select_value" :class="labelName?'':'none'">{{ labelName || placeholder }}</div>
+    <div class="wm-select_value" :class="labelName?'':'none'">{{ labelName || placeholder || state.langs.select }}</div>
   </div>
 </template>
 
@@ -82,6 +82,7 @@
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
+import { useStore } from 'vuex';
 import wmInput from '@/components/form/input/index.vue'
 @Options({
   components: { wmInput },
@@ -92,7 +93,7 @@ import wmInput from '@/components/form/input/index.vue'
     width: {type: String, default: '100%'},                 // 宽
     height: {type: String, default: '40px'},                // 高
     position: {type: String, default: 'bottom'},            // 位置: top、bottom
-    placeholder: {type: String, default: '请选择'},         // 提示
+    placeholder: {type: String, default: ''},               // 提示
     bodyWidth: {type: String, default: '100%'},             // 内容宽
     bodyHeight: {type: String, default: 'auto'},            // 内容高
     bodyMaxHeight: {type: String, default: '320px'},        // 内容最大高度限制
@@ -119,6 +120,9 @@ export default class Select extends Vue {
   seaMinLength!: number;
   seaPlaceholder!: string;
   clearable!: boolean;
+  // 状态
+  store: any = useStore();
+  state: any = this.store.state;
   // 变量
   show: boolean = false;
   selectObj: any = null;

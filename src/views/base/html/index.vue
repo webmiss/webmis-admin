@@ -38,7 +38,7 @@
     </div>
     <div class="search flex">
       <!-- Search -->
-      <wm-search v-model:show="sea.show" v-model:keys="sea.key" :columns="sea.columns" :placeholder="sea.placeholder" @keyup.enter="loadData()" @search="loadData()" @reset="resetData()">
+      <wm-search v-model:show="sea.show" v-model:keys="sea.key" :columns="sea.columns" @keyup.enter="loadData()" @search="loadData()" @reset="resetData()">
       </wm-search>
       <!-- Search End -->
     </div>
@@ -54,9 +54,9 @@
       <template #type="d">
         <div class="tCenter">{{ d.type_name }}</div>
       </template>
-      <template #perm="d">
+      <template #status="d">
         <div class="tCenter">
-          <wm-button effect="text" type="primary" @click="saveData('edit', d)">编辑</wm-button>
+          <span :class="d.status?'c_success':'c_danger'">{{ d.status?state.langs.enable:state.langs.disable }}</span>
         </div>
       </template>
     </wm-table>

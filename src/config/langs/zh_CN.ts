@@ -14,19 +14,31 @@ export function langs(): any {
     reset: '重置',
     remark: '备注',
     placeholder: '请输入',
+    select: '请选择',
+    keyword: '搜索关键字',
     null: '空',
     logout: '退出登录',
+    status: '状态',
+    enable: '正常',
+    disable: '禁用',
+    ctime: '创建时间',
+    utime: '更新时间',
+    del_warn: (num: number)=>{ return '删除 <b>'+num+'</b> 条数据' },
+    export_warn: (num: number)=>{ return '导出 <b>'+num+'</b> 条数据' },
+    /* Page */
+    page_total: (total: number, page: number, num: number)=>{ return '共 <b>'+total+'</b> 条, 第 <b>'+page+'</b>/<b>'+num+'</b> 页' },
+    page_limit: '每页',
     /* Login */
     login_uname: '用户名 / 手机号码 / 邮箱',
     login_passwd: '请输入密码',
     login_vcode: '验证码',
     login_refresh: '点击刷新',
     /* Menus */
-    menus_placeholder: '搜索菜单名称',
+    menus_placeholder: '搜索菜单',
     menus_recent: '最近访问',
     menus_recommend: '推荐功能',
     /* Uinfo */
-    uinfo_title: '基本信息',
+    uinfo_title: '用户信息',
     uinfo_img: '更新头像',
     uinfo_type: '类型',
     uinfo_nickname: '昵称',
@@ -52,7 +64,12 @@ export function langs(): any {
     passwd_verify_passwd1: '英文字母开头，6～16位字符',
     passwd_verify_passwd2: '两次密码不一致',
     /* WebHtml */
+    web_html_type: '类型',
     web_html_title: '标题',
     web_html_name: '名称',
+    web_html_tabs_info: '基本信息',
+    web_html_tabs_content: '内容',
+    web_html_verify_title: '标题必须2～32字符',
+    web_html_verify_name: '名称必须2～16字符',
   }
 }

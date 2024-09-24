@@ -13,20 +13,32 @@ export function langs(): any {
     confirm: 'Confirm',
     reset: 'Reset',
     remark: 'Remark',
+    keyword: 'Search keywords',
+    select: 'Please select',
     placeholder: 'Please enter',
     null: 'Null',
     logout: 'Log out',
+    status: 'Status',
+    enable: 'Enable',
+    disable: 'Disable',
+    ctime: 'Create Time',
+    utime: 'Modify Time',
+    del_warn: (num: number)=>{ return 'Delete <b>'+num+'</b> pieces of data' },
+    export_warn: (num: number)=>{ return 'Export <b>'+num+'</b> pieces of data' },
+    /* Page */
+    page_total: (total: number, page: number, num: number)=>{ return 'Total '+total+', Page '+page+' of '+num },
+    page_limit: 'Limit',
     /* Login */
     login_uname: 'Uname / Phone / Email',
     login_passwd: 'Please input a password',
     login_vcode: 'Code',
     login_refresh: 'Click to refresh',
     /* Menus */
-    menus_placeholder: 'Search menu name',
+    menus_placeholder: 'Search menu',
     menus_recent: 'Recently visited',
     menus_recommend: 'Recommended tools',
     /* Uinfo */
-    uinfo_title: 'Basic information',
+    uinfo_title: 'User Information',
     uinfo_img: 'Change image',
     uinfo_type: 'Type',
     uinfo_nickname: 'Nickname',
@@ -40,7 +52,7 @@ export function langs(): any {
     uinfo_birthday: 'Birthday',
     uinfo_signature: 'Signature',
     /* Passwd */
-    passwd_title: 'Change password',
+    passwd_title: 'Change Password',
     passwd_code_placeholder: 'Verification code',
     passwd_code_get: 'Send code',
     passwd_code_resend: 'Resend code',
@@ -52,7 +64,12 @@ export function langs(): any {
     passwd_verify_passwd1: 'Starting with an English letter, 6-16 characters',
     passwd_verify_passwd2: 'Two passwords are inconsistent',
     /* WebHtml */
+    web_html_type: 'Type',
     web_html_title: 'Title',
     web_html_name: 'Name',
+    web_html_tabs_info: 'Base Information',
+    web_html_tabs_content: 'Content',
+    web_html_verify_title: 'The title must be 2-32 characters long',
+    web_html_verify_name: 'The name must be 2-16 characters long',
   }
 }

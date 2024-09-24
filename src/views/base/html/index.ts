@@ -54,13 +54,13 @@ export default class SysMenus extends Base {
     // 字段
     this.list.columns = [
       {title: 'ID', index: 'id', slot: 'id', order: '', width: '80px', minWidth: '60px', textAlign: 'center'},
-      {title: '类型', index: 'type', slot: 'type', order: '', width: '80px', minWidth: '80px', textAlign: 'center'},
-      {title: '标题', index: 'title', order: '', width: '200px', minWidth: '160px'},
-      {title: '名称', index: 'name', order: '', width: '120px', minWidth: '120px'},
-      {title: '状态', slot: 'status', width: '90px', textAlign: 'center'},
-      {title: '创建时间', index: 'ctime', order: '', width: '160px', minWidth: '160px'},
-      {title: '更新时间', index: 'utime', order: '', width: '160px', minWidth: '160px'},
-      {title: '备注', index: 'remark'},
+      {title: this.state.langs.web_html_type, index: 'type', slot: 'type', order: '', width: '80px', minWidth: '80px', textAlign: 'center'},
+      {title: this.state.langs.web_html_title, index: 'title', order: '', width: '200px', minWidth: '160px'},
+      {title: this.state.langs.web_html_name, index: 'name', order: '', width: '120px', minWidth: '120px'},
+      {title: this.state.langs.status, index: 'status', slot: 'status', width: '60px', textAlign: 'center'},
+      {title: this.state.langs.ctime, index: 'ctime', order: '', width: '160px', minWidth: '160px'},
+      {title: this.state.langs.utime, index: 'utime', order: '', width: '160px', minWidth: '160px'},
+      {title: this.state.langs.remark, index: 'remark'},
     ];
   }
 

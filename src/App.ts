@@ -122,13 +122,13 @@ export default class App extends Base {
           // 是否显示
           if(key.length>0) {
             tmp = list[k1].children[k2].children[k3];
-            label = tmp.label.toLowerCase();
+            label = tmp.langs[this.state.lang].toLowerCase();
             en = tmp.en.toLowerCase();
             display = reg.test(label) || reg.test(en);
             // 结果
             if(display) {
               keys.push([k1, k2]);
-              this.menus.seaList.push({label:tmp.label, icon:tmp.icon, url:tmp.value.url});
+              this.menus.seaList.push({label:tmp.langs[this.state.lang], icon:tmp.icon, url:tmp.value.url});
             }
           } else {
             display = true;
@@ -187,8 +187,8 @@ export default class App extends Base {
         if(!list[k1].children[k2].children) continue;
         for(const k3 in list[k1].children[k2].children) {
           tmp = list[k1].children[k2].children[k3];
-          if(tmp.label==name&&tmp.value.url==url){
-            data = {label:tmp.label, icon:tmp.icon, url:tmp.value.url};
+          if(tmp.value.url==url){
+            data = {label:tmp.langs[this.state.lang], icon:tmp.icon, url:tmp.value.url};
             action = tmp.value.action;
             break;
           }

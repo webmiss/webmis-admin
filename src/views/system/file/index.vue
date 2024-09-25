@@ -1,32 +1,25 @@
 <template>
-  <div class="app_total flex">
-    <div class="total scrollbar">
-      文件夹: <b>{{ list.data.dirNum || 0 }}</b>&nbsp;&nbsp;
-      文件: <b>{{ list.data.fileNum || 0 }}</b>&nbsp;&nbsp;
-      大小: <b>{{ list.data.size || 0 }}</b>&nbsp;&nbsp;
-    </div>
-    <div class="refresh flex">
-      <span class="time">{{ total.time }}</span>
-      <i class="ui ui_refresh" @click="loadData()"></i>
-    </div>
-  </div>
+  <!-- Total -->
+  <wm-total :time="total.time" @refresh="loadData()">
+    <span v-html="state.langs.sys_file_total(list.data.dirNum, list.data.fileNum, list.data.size)"></span>
+  </wm-total>
   <!-- Action -->
   <div class="app_action flex">
     <div class="flex">
-      <wm-button effect="text" type="primary" padding="0 8px" v-if="list.path=='/'">根目录</wm-button>
-      <wm-button effect="text" type="primary" padding="0 8px" v-else @click="backDir()">返回上级</wm-button>
+      <wm-button effect="text" type="primary" padding="0 8px" v-if="list.path=='/'" disabled>{{ state.langs.sys_file_rootdir }}</wm-button>
+      <wm-button effect="text" type="primary" padding="0 8px" v-else @click="backDir()">{{ state.langs.sys_file_back }}</wm-button>
       <span class="line">|</span>
-      <wm-button effect="text" type="primary" padding="0 8px" v-if="!list.check" @click="selectAll(true)">全选</wm-button>
-      <wm-button effect="text" type="primary" padding="0 8px" v-else @click="selectAll(false)">全不选</wm-button>
+      <wm-button effect="text" type="primary" padding="0 8px" v-if="!list.check" @click="selectAll(true)">{{ state.langs.select_all }}</wm-button>
+      <wm-button effect="text" type="primary" padding="0 8px" v-else @click="selectAll(false)">{{ state.langs.select_not }}</wm-button>
       <span class="line">|</span>
       <span class="text">{{ list.path }}</span>
     </div>
     <div class="flex">
-      <wm-button icon="ui ui_add" padding="0 16px 0 8px" @click="mkdirData()">新建文件夹</wm-button>
-      <wm-button icon="ui ui_edit" padding="0 16px 0 8px" @click="renameData()">重命名</wm-button>
-      <wm-button effect="plain" type="danger" icon="ui ui_del" padding="0 16px 0 8px" @click="removeData()">删除</wm-button>
+      <wm-button icon="ui ui_add" padding="0 16px 0 8px" @click="mkdirData()">{{ state.langs.mkdir }}</wm-button>
+      <wm-button icon="ui ui_edit" padding="0 16px 0 8px" @click="renameData()">{{ state.langs.rename }}</wm-button>
+      <wm-button effect="plain" type="danger" icon="ui ui_del" padding="0 16px 0 8px" @click="removeData()">{{ state.langs.del }}</wm-button>
       <span class="line">|</span>
-      <wm-button effect="dark" type="primary" icon="ui ui_upload" padding="0 16px 0 8px" @click="uploadData()">上传</wm-button>
+      <wm-button effect="dark" type="primary" icon="ui ui_upload" padding="0 16px 0 8px" @click="uploadData()">{{ state.langs.upload }}</wm-button>
     </div>
   </div>
   <!-- Action End -->

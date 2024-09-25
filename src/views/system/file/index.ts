@@ -8,6 +8,7 @@ import Request from '@/library/request'
 import wmButton from '@/components/form/button/index.vue'
 import wmImgView from '@/components/image/view.vue'
 /* 动作 */
+import wmTotal from '../../tools/Total.vue'
 import actionMkdir from './mkdir.vue'
 import actionRename from './rename.vue'
 import actionRemove from './remove.vue'
@@ -18,14 +19,14 @@ import actionUpload from './upload.vue'
 @Options({
   components: {
     wmButton, wmImgView,
-    actionMkdir, actionRename, actionRemove, actionDown, actionUpload
+    wmTotal, actionMkdir, actionRename, actionRemove, actionDown, actionUpload
   },
 })
 export default class SysFileManage extends Base {
 
   // 状态
   private store: any = useStore();
-  private state: any = this.store.state;
+  state: any = this.store.state;
   // 列表
   total: any = {time: '', list: {}};
   list: any = {url: '', path: '/', check: false, data: {dirNum: 0, fileNum: 0, size: 0, folder: [], files: []}};
@@ -152,7 +153,7 @@ export default class SysFileManage extends Base {
   renameData(): void {
     // 文件名
     const names: any = this.getCheckName();
-    if(!names) return Ui.Toast('请选择');
+    if(!names) return Ui.Toast(this.state.langs.select);
     // 数据
     this.rename.show = true;
     this.rename.data.path = this.list.path;
@@ -170,7 +171,7 @@ export default class SysFileManage extends Base {
   removeData(): void {
     // 文件名
     const names: any = this.getCheckName();
-    if(!names) return Ui.Toast('请选择');
+    if(!names) return Ui.Toast(this.state.langs.select);
     // 数据
     this.remove.show = true;
     this.remove.data.path = this.list.path;

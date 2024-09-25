@@ -1,17 +1,17 @@
 <template>
-  <wm-dialog v-model:show="infoShow" :title="title" width="420px" bottom="40px" @close="close()">
+  <wm-dialog v-model:show="infoShow" :title="title || state.langs.mkdir" width="420px" bottom="40px" @close="close()">
     <wm-main lineHeight="60px">
       <wm-table-form>
         <tr>
-          <td class="label">名称</td>
+          <td class="label">{{ state.langs.folder }}</td>
           <td>
-            <wm-input v-model:value="data.name" placeholder="文件夹名称" maxlength="32"></wm-input>
+            <wm-input v-model:value="data.name" maxlength="32"></wm-input>
           </td>
         </tr>
       </wm-table-form>
     </wm-main>
     <template #bottom>
-      <wm-button height="40px" padding="0 32px" @click="submit()">确 认</wm-button>
+      <wm-button height="40px" padding="0 32px" @click="submit()">{{ state.langs.confirm }}</wm-button>
     </template>
   </wm-dialog>
 </template>
@@ -36,7 +36,7 @@ import wmInput from '@/components/form/input/index.vue'
   components: { wmMain, wmDialog, wmButton, wmTableForm, wmInput },
   props: {
     show: {type: Boolean, default: false},          // 是否显示
-    title: {type: String, default: '新建文件夹'},   // 标题
+    title: {type: String, default: ''},             // 标题
     data: {type: Object, default: {}},              // 数据
   }
 })
@@ -46,7 +46,7 @@ export default class ActionMkdir extends Vue {
   title!: string;
   data!: any;
   // 状态
-  store: any = useStore();
+  private store: any = useStore();
   state: any = this.store.state;
   // 变量
   infoShow: boolean = false;
@@ -62,8 +62,8 @@ export default class ActionMkdir extends Vue {
 
   /* 验证 */
   verify(form: any): any {
-    if(form.name.length<2 || form.name.length>32) return Ui.Toast('文件夹名称2～32字符');
-    if((this.$parent as any).isExist(form.name)) return Ui.Toast('文件夹已存在');
+    if(form.name.length<2 || form.name.length>32) return Ui.Toast(this.state.langs.sys_file_verify_name);
+    if((this.$parent as any).isExist(form.name)) return Ui.Toast(this.state.langs.sys_file_verify_name_exist);
     return form;
   }
 

@@ -1,10 +1,10 @@
 <template>
-  <wm-dialog v-model:show="infoShow" :title="title" width="360px" bottom="40px" @close="close()">
+  <wm-dialog v-model:show="infoShow" :title="title || state.langs.del" width="360px" bottom="40px" @close="close()">
     <wm-main lineHeight="60px">
-      是否确认删除
+      <span v-html="state.langs.del_warn(data.names.length)"></span>
     </wm-main>
     <template #bottom>
-      <wm-button effect="dark" type="danger" height="40px" @click="submit()">确认删除</wm-button>
+      <wm-button effect="dark" type="danger" height="40px" @click="submit()">{{ state.langs.confirm }}</wm-button>
     </template>
   </wm-dialog>
 </template>
@@ -27,7 +27,7 @@ import wmButton from '@/components/form/button/index.vue'
   components: { wmMain, wmDialog, wmButton },
   props: {
     show: {type: Boolean, default: false},        // 是否显示
-    title: {type: String, default: '删除'},       // 标题
+    title: {type: String, default: ''},           // 标题
     data: {type: Object, default: {}},            // 数据
   }
 })
@@ -37,7 +37,7 @@ export default class ActionRemove extends Vue {
   title!: string;
   data!: any;
   // 状态
-  store: any = useStore();
+  private store: any = useStore();
   state: any = this.store.state;
   // 变量
   infoShow: boolean = false;
@@ -51,7 +51,7 @@ export default class ActionRemove extends Vue {
 
   /* 验证 */
   verify(form: any): any {
-    if(form.names.length<1) return Ui.Toast('无删除数据!');
+    if(form.names.length<1) return Ui.Toast(this.state.langs.select);
     return form;
   }
 

@@ -21,7 +21,9 @@
           </div>
           <div class="wm-login_form" v-else-if="login.is_passwd&&!login.is_safety">
             <i class="ui ui_safety ico"></i>
-            <input ref="loginPasswd" type="password" class="input" v-model="login.passwd" @keyup.enter="clickLogin()" maxlength="32" :placeholder="state.langs.login_passwd">
+            <form onsubmit="return false">
+              <input ref="loginPasswd" type="password" class="input" v-model="login.passwd" @keyup.enter="clickLogin()" maxlength="32" :placeholder="state.langs.login_passwd" autocomplete="off">
+            </form>
           </div>
           <div class="wm-login_form" v-else-if="login.is_safety">
             <i class="ui ui_safety ico"></i>

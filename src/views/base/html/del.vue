@@ -1,7 +1,7 @@
 <template>
   <wm-dialog v-model:show="infoShow" :title="title" width="360px" bottom="40px" @close="close()">
     <wm-main lineHeight="60px">
-      <span v-html="state.langs.export_warn(data.length)"></span>
+      <span v-html="state.langs.del_warn(data.length)"></span>
     </wm-main>
     <template #bottom>
       <wm-button effect="dark" type="danger" height="40px" @click="submit()">{{ state.langs.confirm }}</wm-button>

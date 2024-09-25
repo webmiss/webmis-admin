@@ -10,9 +10,9 @@
     <img ref="wmImageLoading" class="loading_img" />
     <!-- Info -->
      <div class="wm-image_view_info" v-if="title">
-      名称: {{title}}&nbsp;&nbsp;
-      大小: {{size}}&nbsp;&nbsp;
-      页码: {{ imgIndex+1 }}/{{ options.length }}
+      {{ state.langs.name }}: {{title}}&nbsp;&nbsp;
+      {{ state.langs.size }}: {{size}}&nbsp;&nbsp;
+      {{ state.langs.page }}: {{ imgIndex+1 }}/{{ options.length }}
     </div>
     <!-- Close -->
     <i class="ui ui_close tools close" @click="close()"></i>
@@ -61,6 +61,7 @@
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
+import { useStore } from 'vuex';
 import Ui from '@/library/ui'
 @Options({
   components: { },
@@ -80,6 +81,9 @@ export default class ImageView extends Vue {
   options!: Array<any>;
   bgColor!: string;
   icoSize!: string;
+  // 状态
+  private store: any = useStore();
+  state: any = this.store.state;
   // 变量
   isLoad: boolean = false;
   imgIndex: number = 0;

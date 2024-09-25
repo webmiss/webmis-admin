@@ -1,8 +1,10 @@
 <template>
   <div class="file_up" :style="{visibility:infoShow?'inherit':'hidden'}">
     <wm-popup height="100%" width="320px" v-model:show="infoShow" position="right" bgColor="#F2F4F8" @close="close()">
-      <div class="file_up_top">
-        <span @click="selectFile()">{{ title }}</span>|<span @click="removeAll()">清空</span>
+      <div class="file_up_top flex_center">
+        <wm-button effect="text" type="primary" padding="0 8px" @click="selectFile()">{{ state.langs.sys_file_select_file }}</wm-button>
+        <span>|</span>
+        <wm-button effect="text" type="danger" padding="0 8px" @click="removeAll()" :disabled="this.listData.length==0">{{ state.langs.clear }}</wm-button>
       </div>
       <div class="file_up_body scrollbar">
         <ul class="file_up_list" v-if="listData.length>0">
@@ -24,9 +26,8 @@
 
 <style lang="less" scoped>
 .file_up{position: absolute; top: 0; right: 0; width: 100%; height: calc(100% - 0px);}
-.file_up_top{line-height: 50px; text-align: center; color: @Minor5; background-color: #FFF;}
-.file_up_top span{cursor: pointer; padding: 0 10px; color: @Minor3;}
-.file_up_top span:hover{color: @Primary;}
+.file_up_top{height: 50px; line-height: 50px; text-align: center; color: @Minor5; background-color: #FFF;}
+.file_up_top span{padding: 0 10px; color: @Minor5;}
 .file_up_body{overflow: hidden; overflow-y: auto; height: calc(100% - 50px);}
 .file_up_list{overflow: hidden; padding: 0 8px;}
 .file_up_list li{overflow: hidden; position: relative; margin: 8px 0; height: 40px; line-height: 40px; background-color: #FFF; border-radius: 4px;}
@@ -49,12 +50,13 @@ import Request from '@/library/request'
 import Files from '@/library/files'
 /* 组件 */
 import wmPopup from '@/components/popup/index.vue'
+import wmButton from '@/components/form/button/index.vue'
 
 @Options({
-  components: { wmPopup },
+  components: { wmPopup, wmButton },
   props: {
     show: {type: Boolean, default: false},        // 是否显示
-    title: {type: String, default: '选择文件'},   // 标题
+    title: {type: String, default: ''},           // 标题
     data: {type: Object, default: {}},            // 数据
   }
 })
@@ -64,7 +66,7 @@ export default class ActionUpload extends Vue {
   title!: string;
   data!: any;
   // 状态
-  store: any = useStore();
+  private store: any = useStore();
   state: any = this.store.state;
   // 变量
   infoShow: boolean = false;

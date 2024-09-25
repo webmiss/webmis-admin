@@ -59,7 +59,7 @@ export default class App extends Base {
           if(!v2.children) continue;
           for(let v3 of v2.children) {
             if(v3.value.url==url) {
-              title=v3.label; break;
+              title=v3.langs[this.state.lang]; break;
             }
           }
         }

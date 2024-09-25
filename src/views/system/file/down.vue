@@ -1,10 +1,10 @@
 <template>
-  <wm-dialog v-model:show="infoShow" :title="title" width="420px" bottom="40px" @close="close()">
+  <wm-dialog v-model:show="infoShow" :title="title || state.langs.download" width="420px" bottom="40px" @close="close()">
     <wm-main lineHeight="60px">
       <b>{{ data.filename }}</b>
     </wm-main>
     <template #bottom>
-      <wm-button height="40px" padding="0 32px" @click="submit()">确认下载</wm-button>
+      <wm-button height="40px" padding="0 32px" @click="submit()">{{ state.langs.confirm }}</wm-button>
     </template>
   </wm-dialog>
 </template>
@@ -28,7 +28,7 @@ import wmButton from '@/components/form/button/index.vue'
   components: { wmMain, wmDialog, wmButton },
   props: {
     show: {type: Boolean, default: false},      // 是否显示
-    title: {type: String, default: '文件下载'}, // 标题
+    title: {type: String, default: ''},         // 标题
     data: {type: Object, default: {}},          // 数据
   }
 })

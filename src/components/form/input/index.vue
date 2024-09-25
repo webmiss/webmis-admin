@@ -51,7 +51,7 @@
     ></textarea>
     <!-- TextArea End -->
     <!-- Input -->
-    <input ref="wmInput" class="wm-input" v-else
+    <input ref="wmInput" class="wm-input" autocomplete="off" v-else
       :value="value"
       :type="type"
       :placeholder="placeholder || state.langs.placeholder"

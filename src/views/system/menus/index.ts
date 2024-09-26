@@ -13,7 +13,8 @@ import wmTable from '@/components/table/index.vue'
 import wmTableForm from '@/components/table/form.vue'
 import wmPage from '@/components/page/index.vue'
 import wmDatePicker from '@/components/datepicker/index.vue'
-/* 动作、搜索、更新、删除 */
+/* 统计、动作、搜索、更新、删除、导出 */
+import wmTotal from '../../tools/Total.vue'
 import wmAction from '../../tools/Action.vue'
 import wmSearch from '../../tools/Search.vue'
 import actionSave from './save.vue'
@@ -23,15 +24,17 @@ import actionExport from './export.vue'
 /* 系统菜单 */
 @Options({
   components: {
-    wmMain, wmAction, wmSearch, wmInput, wmButton, wmTable, wmPage, wmTableForm, wmDatePicker,
-    actionSave, actionDel, actionExport
+    wmMain, wmSearch, wmInput, wmButton, wmTable, wmPage, wmTableForm, wmDatePicker,
+    wmTotal, wmAction, actionSave, actionDel, actionExport
   },
 })
 export default class SysMenus extends Base {
 
   // 状态
   private store: any = useStore();
-  private state: any = this.store.state;
+  state: any = this.store.state;
+  // 语言
+  langs: any = this.state.langs;
   // 搜索
   sea: any = {
     show: false, key: '', placeholder:'Fid、名称、接口等',
@@ -51,23 +54,23 @@ export default class SysMenus extends Base {
   public created(): void {
     // 搜索
     this.sea.columns = [
-      {label: '选择日期范围', value: '', slot: 'time'},
-      {label: '菜单名称', value: '', name: 'title'},
-      {label: '英文名称', value: '', name: 'en'},
-      {label: '前端路由', value: '', name: 'url'},
-      {label: '接口地址', value: '', name: 'controller'},
+      {label: this.langs.select, value: '', slot: 'time'},
+      {label: this.langs.sys_menus_title, value: '', name: 'title'},
+      {label: this.langs.sys_menus_en, value: '', name: 'en'},
+      {label: this.langs.sys_menus_url, value: '', name: 'url'},
+      {label: this.langs.sys_menus_controller, value: '', name: 'controller'},
     ];
     // 字段
     this.list.columns = [
       {title: 'ID', index: 'id', slot: 'id', order: '', width: '80px', minWidth: '60px', textAlign: 'center'},
       {title: 'FID', index: 'id', slot: 'fid', order: '', width: '80px', minWidth: '60px', textAlign: 'center'},
-      {title: '图标', index: 'ico', slot: 'ico', width: '40px'},
-      {title: '名称', index: 'title', order: '', width: '160px'},
-      {title: '英文', index: 'en', order: '', width: '160px'},
-      {title: '排序', index: 'sort', slot: 'sort', order: '', width: '60px', minWidth: '60px', textAlign: 'center'},
-      {title: '前端路由', index: 'url', order: '', width: '200px', minWidth: '160px'},
-      {title: '接口地址', index: 'controller', order: '', width: '200px', minWidth: '160px'},
-      {title: '备注', index: 'remark'},
+      {title: this.langs.sys_menus_ico, index: 'ico', slot: 'ico', width: '40px'},
+      {title: this.langs.sys_menus_title, index: 'title', order: '', width: '160px'},
+      {title: this.langs.sys_menus_en, index: 'en', order: '', width: '160px'},
+      {title: this.langs.sys_menus_sort, index: 'sort', slot: 'sort', order: '', width: '60px', minWidth: '60px', textAlign: 'center'},
+      {title: this.langs.sys_menus_url, index: 'url', order: '', width: '200px', minWidth: '160px'},
+      {title: this.langs.sys_menus_controller, index: 'controller', order: '', width: '200px', minWidth: '160px'},
+      {title: this.langs.remark, index: 'remark'},
     ];
   }
 
@@ -153,10 +156,10 @@ export default class SysMenus extends Base {
     this.save.show = true;
     this.save.type = type;
     if(type=='add') {
-      this.save.title = '添加';
+      this.save.title = this.langs.add;
       this.save.data = {};
     } else if(type=='edit') {
-      this.save.title = '编辑';
+      this.save.title = this.langs.edit;
       const obj:any = this.$refs.tableList;
       const data: Array<any> = obj.getData();
       this.save.data = data[0];

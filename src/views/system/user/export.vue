@@ -1,10 +1,10 @@
 <template>
-  <wm-dialog v-model:show="infoShow" :title="title" width="360px" bottom="40px" @close="close()">
+  <wm-dialog v-model:show="infoShow" :title="title || langs.export" width="360px" bottom="40px" @close="close()">
     <wm-main lineHeight="60px">
-      共导出 <b>{{ num }}</b> 条数据
+      <span v-html="langs.export_warn(num)"></span>
     </wm-main>
     <template #bottom>
-      <wm-button height="40px" padding="0 32px" @click="submit()">确认导出</wm-button>
+      <wm-button height="40px" padding="0 32px" @click="submit()">{{ langs.confirm }}</wm-button>
     </template>
   </wm-dialog>
 </template>
@@ -28,7 +28,7 @@ import wmButton from '@/components/form/button/index.vue'
   components: { wmMain, wmDialog, wmButton },
   props: {
     show: {type: Boolean, default: false},      // 是否显示
-    title: {type: String, default: '导出'},     // 标题
+    title: {type: String, default: ''},         // 标题
     num: {type: Number, default: 0},            // 数量
     data: {type: Object, default: {}},          // 数据
     order: {type: String, default: ''},         // 排序
@@ -44,6 +44,8 @@ export default class ActionExport extends Vue {
   // 状态
   store: any = useStore();
   state: any = this.store.state;
+  // 语言
+  langs: any = this.state.langs;
   // 变量
   infoShow: boolean = false;
 
@@ -56,8 +58,6 @@ export default class ActionExport extends Vue {
 
   /* 提交 */
   submit(): void {
-    // 验证
-    if(this.num<1) return Ui.Toast('无导出数量!');
     // 请求
     const load: any = Ui.Loading();
     Request.Post('sys_user/export', {

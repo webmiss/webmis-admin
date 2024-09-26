@@ -13,7 +13,7 @@
     <!-- Icon -->
     <i class="wm-cascader_arrow ui ui_arrow_down" :style="{transform: show?'rotate(180deg)':'rotate(0deg)'}"></i>
     <!-- Value -->
-    <div class="wm-cascader_value" :class="labelName?'':'none'">{{ labelName || placeholder }}</div>
+    <div class="wm-cascader_value" :class="labelName?'':'none'">{{ labelName || placeholder || langs.select }}</div>
     <!-- List -->
     <div class="wm-cascader_body flex_left" :style="{visibility: show?'inherit':'hidden', opacity: show?'1':'0'}">
       <div class="arrow" :style="{left: 'calc('+bodyMinWidth+' - 5px)', transform: 'translateX(calc(-'+bodyMinWidth+' / 2))'}"></div>
@@ -77,6 +77,7 @@
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
+import { useStore } from 'vuex';
 import wmInput from '@/components/form/input/index.vue'
 @Options({
   components: { wmInput },
@@ -86,12 +87,9 @@ import wmInput from '@/components/form/input/index.vue'
     multiple: {type: Boolean, default: false},              // 是否多选
     width: {type: String, default: '100%'},                 // 宽
     height: {type: String, default: '40px'},                // 高
-    placeholder: {type: String, default: '请选择'},         // 提示
+    placeholder: {type: String, default: ''},               // 提示
     level: {type: Number, default: 3},                      // 菜单级数
     bodyMinWidth: {type: String, default: '160px'},         // 内容最小高度
-    listHeight: {type: String, default: '40px'},            // 列表高
-    seaMinLength: {type: Number, default: 5},               // 搜索最小值
-    seaPlaceholder: {type: String, default: '输入关键字'},  // 搜索提示
     clearable: {type: Boolean, default: false},             // 一键清空
   }
 })
@@ -106,10 +104,12 @@ export default class Cascader extends Vue {
   placeholder!: string;
   level!: number;
   bodyMinWidth!: string;
-  listHeight!: string;
-  seaMinLength!: number;
-  seaPlaceholder!: string;
   clearable!: boolean;
+  // 状态
+  store: any = useStore();
+  state: any = this.store.state;
+  // 语言
+  langs: any = this.state.langs;
   // 变量
   show: boolean = false;
   selectObj: any = null;

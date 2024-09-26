@@ -6,47 +6,47 @@
         <template #base>
           <wm-table-form>
             <tr>
-              <td class="label">归属</td>
+              <td class="label">{{ langs.sys_menus_fid }}</td>
               <td colspan="3">
                 <wm-cascader v-model:value="form.fid" :options="menusAll" clearable></wm-cascader>
               </td>
             </tr>
             <tr>
-              <td class="label">菜单名称</td>
+              <td class="label">{{ langs.sys_menus_title }}</td>
               <td>
-                <wm-input v-model:value="form.title" placeholder="菜单名称" maxlength="16"></wm-input>
+                <wm-input v-model:value="form.title" maxlength="16"></wm-input>
               </td>
-              <td class="label">英文名</td>
+              <td class="label">{{ langs.sys_menus_en }}</td>
               <td>
-                <wm-input v-model:value="form.en" placeholder="英文名称" maxlength="16"></wm-input>
+                <wm-input v-model:value="form.en" maxlength="16"></wm-input>
               </td>
             </tr>
             <tr>
-              <td class="label">前端路由</td>
+              <td class="label">{{ langs.sys_menus_url }}</td>
               <td colspan="3">
-                <wm-input v-model:value="form.url" placeholder="前端路由地址" maxlength="32"></wm-input>
+                <wm-input v-model:value="form.url" maxlength="32"></wm-input>
               </td>
             </tr>
             <tr>
-              <td class="label">接口地址</td>
+              <td class="label">{{ langs.sys_menus_controller }}</td>
               <td colspan="3">
-                <wm-input v-model:value="form.controller" placeholder="接口地址" maxlength="32"></wm-input>
+                <wm-input v-model:value="form.controller" maxlength="32"></wm-input>
               </td>
             </tr>
             <tr>
-              <td class="label">图标</td>
+              <td class="label">{{ langs.sys_menus_ico }}</td>
               <td>
-                <wm-input v-model:value="form.ico" placeholder="字体图标" maxlength="32"></wm-input>
+                <wm-input v-model:value="form.ico" maxlength="32"></wm-input>
               </td>
-              <td class="label">排序</td>
+              <td class="label">{{ langs.sys_menus_sort }}</td>
               <td>
-                <wm-input v-model:value="form.sort" placeholder="排序, 如: 0, 1, 2" maxlength="32"></wm-input>
+                <wm-input v-model:value="form.sort" :placeholder="langs.sys_menus_sort_placeholder" maxlength="32"></wm-input>
               </td>
             </tr>
             <tr>
-              <td class="label">备注</td>
+              <td class="label">{{ langs.remark }}</td>
               <td colspan="3">
-                <wm-input v-model:value="form.remark" type="textarea" :height="'80px'" placeholder="备注信息" maxlength="32"></wm-input>
+                <wm-input v-model:value="form.remark" type="textarea" :height="'80px'" maxlength="32"></wm-input>
               </td>
             </tr>
           </wm-table-form>
@@ -56,11 +56,11 @@
         <template #action>
           <wm-table-form>
             <tr class="title">
-              <td>名称</td>
-              <td>动作</td>
-              <td>权限</td>
+              <td>{{ langs.name }}</td>
+              <td>{{ langs.action }}</td>
+              <td>{{ langs.sys_menus_perm }}</td>
               <td class="action">
-                <wm-button effect="text" type="primary" @click="actionAdd()">添加</wm-button>
+                <wm-button effect="text" type="primary" @click="actionAdd()">{{ langs.add }}</wm-button>
               </td>
             </tr>
             <tr v-for="(v,k) in form.action" :key="k">
@@ -74,7 +74,7 @@
                 <wm-input v-model:value="v.perm" maxlength="32"></wm-input>
               </td>
               <td class="action">
-                <wm-button effect="text" type="danger" @click="actionRemove(k)">移除</wm-button>
+                <wm-button effect="text" type="danger" @click="actionRemove(k)">{{ langs.remove }}</wm-button>
               </td>
             </tr>
           </wm-table-form>
@@ -83,7 +83,7 @@
       </wm-tabs>
     </wm-main>
     <template #bottom>
-      <wm-button height="40px" padding="0 32px" @click="submit()">确 认</wm-button>
+      <wm-button height="40px" padding="0 32px" @click="submit()">{{ langs.confirm }}</wm-button>
     </template>
   </wm-dialog>
 </template>
@@ -123,15 +123,17 @@ export default class ActionSave extends Vue {
   title!: string;
   data!: any;
   // 状态
-  store: any = useStore();
+  private store: any = useStore();
   state: any = this.store.state;
+  // 语言
+  langs: any = this.state.langs;
   // 变量
   infoShow: boolean = false;
   // Tabs
   tabIndex: string = 'base';
   tabs: Array<any> = [
-    {label: '基本信息', value: 'base', slot: 'base'},
-    {label: '动作菜单', value: 'action', slot: 'action'},
+    {label: this.langs.info, value: 'base', slot: 'base'},
+    {label: this.langs.action, value: 'action', slot: 'action'},
   ];
   // 数据
   form: any = {id:0, fid: [], title: '', en: '', ico: '', sort: 0, url: '', controller: '', remark:'', action:[]}
@@ -204,7 +206,7 @@ export default class ActionSave extends Vue {
 
   /* 验证 */
   verify(form: any): any {
-    if(!form.title || form.title.length<2) return Ui.Toast('名称大于2个字符');
+    if(form.title.length<2 || form.title.length>32) return Ui.Toast(this.langs.sys_menus_verify_title);
     return form;
   }
 

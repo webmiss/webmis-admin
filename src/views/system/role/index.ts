@@ -11,7 +11,8 @@ import wmButton from '@/components/form/button/index.vue'
 import wmTable from '@/components/table/index.vue'
 import wmTableForm from '@/components/table/form.vue'
 import wmPage from '@/components/page/index.vue'
-/* 动作、搜索、更新、删除 */
+/* 统计、动作、搜索、更新、删除、导出 */
+import wmTotal from '../../tools/Total.vue'
 import wmAction from '../../tools/Action.vue'
 import wmSearch from '../../tools/Search.vue'
 import actionSave from './save.vue'
@@ -21,15 +22,17 @@ import actionExport from './export.vue'
 /* 系统角色 */
 @Options({
   components: {
-    wmMain, wmAction, wmSearch, wmInput, wmButton, wmTable, wmPage, wmTableForm,
-    actionSave, actionDel, actionExport
+    wmMain, wmSearch, wmInput, wmButton, wmTable, wmPage, wmTableForm,
+    wmTotal, wmAction, actionSave, actionDel, actionExport
   },
 })
 export default class SysMenus extends Base {
 
   // 状态
   private store: any = useStore();
-  private state: any = this.store.state;
+  state: any = this.store.state;
+  // 语言
+  langs: any = this.state.langs;
   // 搜索
   sea: any = {
     show: false, key: '', placeholder:'名称、备注',
@@ -48,15 +51,15 @@ export default class SysMenus extends Base {
   public created(): void {
     // 搜索
     this.sea.columns = [
-      {label: '名称', value: '', name: 'name'},
-      {label: '备注', value: '', name: 'remark'},
+      {label: this.langs.name, value: '', name: 'name'},
+      {label: this.langs.remark, value: '', name: 'remark'},
     ];
     // 字段
     this.list.columns = [
       {title: 'ID', index: 'id', slot: 'id', order: '', width: '80px', minWidth: '60px', textAlign: 'center'},
-      {title: '名称', index: 'name', order: '', width: '120px', minWidth: '80px'},
-      {title: '权限', slot: 'perm', width: '90px', textAlign: 'center'},
-      {title: '备注', index: 'remark'},
+      {title: this.langs.name, index: 'name', order: '', width: '120px', minWidth: '80px'},
+      {title: this.langs.sys_role_perm, slot: 'perm', width: '90px', textAlign: 'center'},
+      {title: this.langs.remark, index: 'remark'},
     ];
   }
 
@@ -138,10 +141,10 @@ export default class SysMenus extends Base {
     this.save.show = true;
     this.save.type = type;
     if(type=='add') {
-      this.save.title = '添加';
+      this.save.title = this.langs.add;
       this.save.data = {};
     } else if(type=='edit') {
-      this.save.title = '编辑';
+      this.save.title = this.langs.edit;
       if(data) {
         this.save.data = data;
       } else {

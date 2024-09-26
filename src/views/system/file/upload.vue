@@ -2,9 +2,9 @@
   <div class="file_up" :style="{visibility:infoShow?'inherit':'hidden'}">
     <wm-popup height="100%" width="320px" v-model:show="infoShow" position="right" bgColor="#F2F4F8" @close="close()">
       <div class="file_up_top flex_center">
-        <wm-button effect="text" type="primary" padding="0 8px" @click="selectFile()">{{ state.langs.sys_file_select_file }}</wm-button>
+        <wm-button effect="text" type="primary" padding="0 8px" @click="selectFile()">{{ langs.sys_file_select_file }}</wm-button>
         <span>|</span>
-        <wm-button effect="text" type="danger" padding="0 8px" @click="removeAll()" :disabled="this.listData.length==0">{{ state.langs.clear }}</wm-button>
+        <wm-button effect="text" type="danger" padding="0 8px" @click="removeAll()" :disabled="this.listData.length==0">{{ langs.clear }}</wm-button>
       </div>
       <div class="file_up_body scrollbar">
         <ul class="file_up_list" v-if="listData.length>0">
@@ -68,6 +68,8 @@ export default class ActionUpload extends Vue {
   // 状态
   private store: any = useStore();
   state: any = this.store.state;
+  // 语言
+  langs: any = this.state.langs;
   // 变量
   infoShow: boolean = false;
   listData: Array<any> = [];

@@ -6,54 +6,54 @@
         <template #base>
           <wm-table-form>
             <tr>
-              <td class="label">状态</td>
+              <td class="label">{{ langs.status }}</td>
               <td colspan="3">
                 <wm-switch v-model:value="form.status"></wm-switch>
               </td>
             </tr>
             <tr>
-              <td class="label">帐号</td>
+              <td class="label">{{ langs.sys_user_uname }}</td>
               <td>
-                <wm-input v-model:value="form.uname" placeholder="用户名\手机号码\邮箱" maxlength="16"></wm-input>
+                <wm-input v-model:value="form.uname" :placeholder="langs.sys_user_uname_placeholder" maxlength="16"></wm-input>
               </td>
-              <td class="label">密码</td>
+              <td class="label">{{ langs.sys_user_passwd }}</td>
               <td>
-                <wm-input v-model:value="form.passwd" placeholder="默认密码" maxlength="32"></wm-input>
+                <wm-input v-model:value="form.passwd" :placeholder="langs.sys_user_passwd_placeholder" maxlength="32"></wm-input>
               </td>
             </tr>
             <tr>
-              <td colspan="4" class="c_info"><b>基本信息</b></td>
+              <td colspan="4" class="c_info"><b>{{ langs.sys_user_base }}</b></td>
             </tr>
             <tr>
-              <td class="label">类型</td>
+              <td class="label">{{ langs.sys_user_type }}</td>
               <td colspan="3">
                 <wm-select v-model:value="form.type" :options="selectAll.type"></wm-select>
               </td>
             </tr>
             <tr>
-              <td class="label">昵称</td>
+              <td class="label">{{ langs.sys_user_nickname }}</td>
               <td>
-                <wm-input v-model:value="form.nickname" placeholder="用户昵称" maxlength="16"></wm-input>
+                <wm-input v-model:value="form.nickname" maxlength="16"></wm-input>
               </td>
-              <td class="label">姓名</td>
+              <td class="label">{{ langs.sys_user_name }}</td>
               <td>
-                <wm-input v-model:value="form.name" placeholder="真实姓名" maxlength="16"></wm-input>
-              </td>
-            </tr>
-            <tr>
-              <td class="label">部门</td>
-              <td>
-                <wm-input v-model:value="form.department" placeholder="所在部门" maxlength="16"></wm-input>
-              </td>
-              <td class="label">职位</td>
-              <td>
-                <wm-input v-model:value="form.position" placeholder="职务、职称" maxlength="16"></wm-input>
+                <wm-input v-model:value="form.name" maxlength="16"></wm-input>
               </td>
             </tr>
             <tr>
-              <td class="label">备注</td>
+              <td class="label">{{ langs.sys_user_department }}</td>
+              <td>
+                <wm-input v-model:value="form.department" maxlength="16"></wm-input>
+              </td>
+              <td class="label">{{ langs.sys_user_position }}</td>
+              <td>
+                <wm-input v-model:value="form.position" maxlength="16"></wm-input>
+              </td>
+            </tr>
+            <tr>
+              <td class="label">{{ langs.remark }}</td>
               <td colspan="3">
-                <wm-input v-model:value="form.remark" type="textarea" :height="'120px'" placeholder="备注信息" maxlength="32"></wm-input>
+                <wm-input v-model:value="form.remark" type="textarea" :height="'120px'" maxlength="32"></wm-input>
               </td>
             </tr>
           </wm-table-form>
@@ -72,7 +72,7 @@
       </wm-tabs>
     </wm-main>
     <template #bottom>
-      <wm-button height="40px" padding="0 32px" @click="submit()">确 认</wm-button>
+      <wm-button height="40px" padding="0 32px" @click="submit()">{{ langs.confirm }}</wm-button>
     </template>
   </wm-dialog>
 </template>
@@ -115,16 +115,18 @@ export default class ActionSave extends Vue {
   title!: string;
   data!: any;
   // 状态
-  store: any = useStore();
+  private store: any = useStore();
   state: any = this.store.state;
+  // 语言
+  langs: any = this.state.langs;
   // 变量
   infoShow: boolean = false;
   // Tabs
   tabIndex: string = 'base';
   tabs: Array<any> = [
-    {label: '帐号信息', value: 'base', slot: 'base'},
-    {label: '角色', value: 'sole', slot: 'sole'},
-    {label: '私有', value: 'perm', slot: 'perm'},
+    {label: this.langs.info, value: 'base', slot: 'base'},
+    {label: this.langs.sys_user_role, value: 'sole', slot: 'sole'},
+    {label: this.langs.sys_user_perm, value: 'perm', slot: 'perm'},
   ];
   // 数据
   form: any = {id: 0, status: true, uname: '', passwd: '', type: '', nickname: '', name: '', department: '', position: '', remark: '', role: '', perm: ''}
@@ -164,7 +166,7 @@ export default class ActionSave extends Vue {
 
   /* 获取权限 */
   getPerm(): void {
-    Request.Post('sys_user/get_perm', {
+    Request.Post('sys_user/get_perm?lang='+this.state.lang, {
       token: this.state.token,
       perm: this.form.perm,
     }, (res:any)=>{
@@ -192,10 +194,10 @@ export default class ActionSave extends Vue {
   verify(form: any): any {
     // 用户名
     if(!Safety.IsRight('uname', form.uname) && !Safety.IsRight('tel', form.uname) && !Safety.IsRight('email', form.uname)) {
-      return Ui.Toast('请输入用户名、手机号码、邮箱');
+      return Ui.Toast(this.langs.sys_user_verify_uname);
     }
     if(!form.id || form.passwd) {
-      if(!Safety.IsRight('passwd', form.passwd)) return Ui.Toast('密码为英文字母开头6～16位');
+      if(!Safety.IsRight('passwd', form.passwd)) return Ui.Toast(this.langs.sys_user_verify_passwd);
     }
     return form;
   }

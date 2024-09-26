@@ -1,6 +1,6 @@
 <template>
   <ul class="wm-tabs" :style="{height: height, lineHeight: height}">
-    <li v-for="(v, k) in columns" :key="k" :class="v.value==value?'active':''" :style="{padding: padding, margin: margin}" @click="tabClick(v)">{{ v.label }}</li>
+    <li v-for="(v, k) in columns" :key="k" :class="v.value==value?'active':''" :style="{padding: padding, margin: margin, fontSize: fontSize}" @click="tabClick(v)">{{ v.label }}</li>
   </ul>
   <template v-for="(v, k) in columns" :key="k">
     <div class="wm-tabs_body" v-show="v.value==value" :style="{padding: bodyPadding}">
@@ -30,6 +30,7 @@ import { Options, Vue } from 'vue-class-component';
     padding: {type: String, default: '0 8px'},        // 内部间距
     margin: {type: String, default: '0 8px 0 0'},     // 外部间距
     bodyPadding: {type: String, default: '16px 0'},   // 内容间距
+    fontSize: {type: String, default: '15px'},        // 文字大小
   }
 })
 export default class Tabs extends Vue {
@@ -41,6 +42,7 @@ export default class Tabs extends Vue {
   padding!: string;
   margin!: string;
   bodyPadding!: string;
+  fontSize!: string;
 
   /* 切换 */
   tabClick(d: any): void {

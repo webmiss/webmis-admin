@@ -16,7 +16,7 @@
     }">
       <span :class="position+'_arrow'"></span>
       <div class="wm-select_search" v-if="seaList.length>=seaMinLength">
-        <wm-input :value="seaVal" @update:value="seaKey($event)" :placeholder="seaPlaceholder"></wm-input>
+        <wm-input :value="seaVal" @update:value="seaKey($event)" :placeholder="seaPlaceholder || langs.keyword"></wm-input>
       </div>
       <!-- List -->
       <ul class="wm-select_list scrollbar" :style="{height: bodyHeight, maxHeight: bodyMaxHeight}">
@@ -42,7 +42,7 @@
     <!-- Icon -->
     <i class="wm-select_arrow ui ui_arrow_down" :style="{transform: show?'rotate(180deg)':'rotate(0deg)'}"></i>
     <!-- Value -->
-    <div class="wm-select_value" :class="labelName?'':'none'">{{ labelName || placeholder || state.langs.select }}</div>
+    <div class="wm-select_value" :class="labelName?'':'none'">{{ labelName || placeholder || langs.select }}</div>
   </div>
 </template>
 
@@ -99,7 +99,7 @@ import wmInput from '@/components/form/input/index.vue'
     bodyMaxHeight: {type: String, default: '320px'},        // 内容最大高度限制
     listHeight: {type: String, default: '40px'},            // 列表高
     seaMinLength: {type: Number, default: 5},               // 搜索最小值
-    seaPlaceholder: {type: String, default: '输入关键字'},  // 搜索提示
+    seaPlaceholder: {type: String, default: ''},            // 搜索提示
     clearable: {type: Boolean, default: false},             // 一键清空
   }
 })
@@ -123,6 +123,8 @@ export default class Select extends Vue {
   // 状态
   store: any = useStore();
   state: any = this.store.state;
+  // 语言
+  langs: any = this.state.langs;
   // 变量
   show: boolean = false;
   selectObj: any = null;

@@ -11,7 +11,8 @@ import wmButton from '@/components/form/button/index.vue'
 import wmTable from '@/components/table/index.vue'
 import wmTableForm from '@/components/table/form.vue'
 import wmPage from '@/components/page/index.vue'
-/* 动作、搜索、更新、删除 */
+/* 统计、动作、搜索、更新、删除、导出 */
+import wmTotal from '../../tools/Total.vue'
 import wmAction from '../../tools/Action.vue'
 import wmSearch from '../../tools/Search.vue'
 import actionSave from './save.vue'
@@ -21,8 +22,8 @@ import actionExport from './export.vue'
 /* 系统角色 */
 @Options({
   components: {
-    wmMain, wmAction, wmSearch, wmInput, wmButton, wmTable, wmPage, wmTableForm,
-    actionSave, actionDel, actionExport
+    wmMain, wmSearch, wmInput, wmButton, wmTable, wmPage, wmTableForm,
+    wmTotal, wmAction, actionSave, actionDel, actionExport
   },
 })
 export default class SysMenus extends Base {
@@ -30,6 +31,8 @@ export default class SysMenus extends Base {
   // 状态
   private store: any = useStore();
   state: any = this.store.state;
+  // 语言
+  langs: any = this.state.langs;
   // 搜索
   sea: any = {
     show: false, key: '', placeholder:'名称、备注',
@@ -48,19 +51,19 @@ export default class SysMenus extends Base {
   public created(): void {
     // 搜索
     this.sea.columns = [
-      {label: this.state.langs.web_html_title, value: '', name: 'title'},
-      {label: this.state.langs.web_html_name, value: '', name: 'name'},
+      {label: this.langs.web_html_title, value: '', name: 'title'},
+      {label: this.langs.web_html_name, value: '', name: 'name'},
     ];
     // 字段
     this.list.columns = [
       {title: 'ID', index: 'id', slot: 'id', order: '', width: '80px', minWidth: '60px', textAlign: 'center'},
-      {title: this.state.langs.web_html_type, index: 'type', slot: 'type', order: '', width: '80px', minWidth: '80px', textAlign: 'center'},
-      {title: this.state.langs.web_html_title, index: 'title', order: '', width: '200px', minWidth: '160px'},
-      {title: this.state.langs.web_html_name, index: 'name', order: '', width: '120px', minWidth: '120px'},
-      {title: this.state.langs.status, index: 'status', slot: 'status', width: '60px', textAlign: 'center'},
-      {title: this.state.langs.ctime, index: 'ctime', order: '', width: '160px', minWidth: '160px'},
-      {title: this.state.langs.utime, index: 'utime', order: '', width: '160px', minWidth: '160px'},
-      {title: this.state.langs.remark, index: 'remark'},
+      {title: this.langs.web_html_type, index: 'type', slot: 'type', order: '', width: '80px', minWidth: '80px', textAlign: 'center'},
+      {title: this.langs.web_html_title, index: 'title', order: '', width: '200px', minWidth: '160px'},
+      {title: this.langs.web_html_name, index: 'name', order: '', width: '120px', minWidth: '120px'},
+      {title: this.langs.status, index: 'status', slot: 'status', width: '60px', textAlign: 'center'},
+      {title: this.langs.ctime, index: 'ctime', order: '', width: '160px', minWidth: '160px'},
+      {title: this.langs.utime, index: 'utime', order: '', width: '160px', minWidth: '160px'},
+      {title: this.langs.remark, index: 'remark'},
     ];
   }
 
@@ -142,10 +145,10 @@ export default class SysMenus extends Base {
     this.save.show = true;
     this.save.type = type;
     if(type=='add') {
-      this.save.title = this.state.langs.add;
+      this.save.title = this.langs.add;
       this.save.data = {};
     } else if(type=='edit') {
-      this.save.title = this.state.langs.edit;
+      this.save.title = this.langs.edit;
       if(data) {
         this.save.data = data;
       } else {
@@ -165,7 +168,6 @@ export default class SysMenus extends Base {
   /* 删除 */
   delData(): void {
     this.del.show = true;
-    this.del.title = this.state.langs.del;
     const obj:any = this.$refs.tableList;
     const data: Array<any> = obj.getData();
     let ids: Array<number> = [];
@@ -183,7 +185,6 @@ export default class SysMenus extends Base {
   exportData(num: number): void {
     this.exp.show = true;
     this.exp.num = num;
-    this.exp.title = this.state.langs.export;
   }
   /* 导出-回调 */
   exportSubmit(val: boolean): void {

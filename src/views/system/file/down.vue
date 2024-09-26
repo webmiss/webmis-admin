@@ -1,10 +1,10 @@
 <template>
-  <wm-dialog v-model:show="infoShow" :title="title || state.langs.download" width="420px" bottom="40px" @close="close()">
+  <wm-dialog v-model:show="infoShow" :title="title || langs.download" width="420px" bottom="40px" @close="close()">
     <wm-main lineHeight="60px">
       <b>{{ data.filename }}</b>
     </wm-main>
     <template #bottom>
-      <wm-button height="40px" padding="0 32px" @click="submit()">{{ state.langs.confirm }}</wm-button>
+      <wm-button height="40px" padding="0 32px" @click="submit()">{{ langs.confirm }}</wm-button>
     </template>
   </wm-dialog>
 </template>
@@ -40,6 +40,8 @@ export default class ActionDown extends Vue {
   // 状态
   store: any = useStore();
   state: any = this.store.state;
+  // 语言
+  langs: any = this.state.langs;
   // 变量
   infoShow: boolean = false;
 

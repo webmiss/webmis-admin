@@ -1,25 +1,25 @@
 <template>
   <!-- Total -->
   <wm-total :time="total.time" @refresh="loadData()">
-    <span v-html="state.langs.sys_file_total(list.data.dirNum, list.data.fileNum, list.data.size)"></span>
+    <span v-html="langs.sys_file_total(list.data.dirNum, list.data.fileNum, list.data.size)"></span>
   </wm-total>
   <!-- Action -->
   <div class="app_action flex">
     <div class="flex">
-      <wm-button effect="text" type="primary" padding="0 8px" v-if="list.path=='/'" disabled>{{ state.langs.sys_file_rootdir }}</wm-button>
-      <wm-button effect="text" type="primary" padding="0 8px" v-else @click="backDir()">{{ state.langs.sys_file_back }}</wm-button>
+      <wm-button effect="text" type="primary" padding="0 8px" v-if="list.path=='/'" disabled>{{ langs.sys_file_rootdir }}</wm-button>
+      <wm-button effect="text" type="primary" padding="0 8px" v-else @click="backDir()">{{ langs.sys_file_back }}</wm-button>
       <span class="line">|</span>
-      <wm-button effect="text" type="primary" padding="0 8px" v-if="!list.check" @click="selectAll(true)">{{ state.langs.select_all }}</wm-button>
-      <wm-button effect="text" type="primary" padding="0 8px" v-else @click="selectAll(false)">{{ state.langs.select_not }}</wm-button>
+      <wm-button effect="text" type="primary" padding="0 8px" v-if="!list.check" @click="selectAll(true)">{{ langs.select_all }}</wm-button>
+      <wm-button effect="text" type="primary" padding="0 8px" v-else @click="selectAll(false)">{{ langs.select_not }}</wm-button>
       <span class="line">|</span>
       <span class="text">{{ list.path }}</span>
     </div>
     <div class="flex">
-      <wm-button icon="ui ui_add" padding="0 16px 0 8px" @click="mkdirData()">{{ state.langs.mkdir }}</wm-button>
-      <wm-button icon="ui ui_edit" padding="0 16px 0 8px" @click="renameData()">{{ state.langs.rename }}</wm-button>
-      <wm-button effect="plain" type="danger" icon="ui ui_del" padding="0 16px 0 8px" @click="removeData()">{{ state.langs.del }}</wm-button>
+      <wm-button icon="ui ui_add" padding="0 16px 0 8px" @click="mkdirData()">{{ langs.mkdir }}</wm-button>
+      <wm-button icon="ui ui_edit" padding="0 16px 0 8px" @click="renameData()">{{ langs.rename }}</wm-button>
+      <wm-button effect="plain" type="danger" icon="ui ui_del" padding="0 16px 0 8px" @click="removeData()">{{ langs.del }}</wm-button>
       <span class="line">|</span>
-      <wm-button effect="dark" type="primary" icon="ui ui_upload" padding="0 16px 0 8px" @click="uploadData()">{{ state.langs.upload }}</wm-button>
+      <wm-button effect="dark" type="primary" icon="ui ui_upload" padding="0 16px 0 8px" @click="uploadData()">{{ langs.upload }}</wm-button>
     </div>
   </div>
   <!-- Action End -->

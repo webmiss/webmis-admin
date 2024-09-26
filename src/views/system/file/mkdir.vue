@@ -1,9 +1,9 @@
 <template>
-  <wm-dialog v-model:show="infoShow" :title="title || state.langs.mkdir" width="420px" bottom="40px" @close="close()">
+  <wm-dialog v-model:show="infoShow" :title="title || langs.mkdir" width="420px" bottom="40px" @close="close()">
     <wm-main lineHeight="60px">
       <wm-table-form>
         <tr>
-          <td class="label">{{ state.langs.folder }}</td>
+          <td class="label">{{ langs.folder }}</td>
           <td>
             <wm-input v-model:value="data.name" maxlength="32"></wm-input>
           </td>
@@ -11,7 +11,7 @@
       </wm-table-form>
     </wm-main>
     <template #bottom>
-      <wm-button height="40px" padding="0 32px" @click="submit()">{{ state.langs.confirm }}</wm-button>
+      <wm-button height="40px" padding="0 32px" @click="submit()">{{ langs.confirm }}</wm-button>
     </template>
   </wm-dialog>
 </template>
@@ -48,6 +48,8 @@ export default class ActionMkdir extends Vue {
   // 状态
   private store: any = useStore();
   state: any = this.store.state;
+  // 语言
+  langs: any = this.state.langs;
   // 变量
   infoShow: boolean = false;
   // 数据
@@ -62,8 +64,8 @@ export default class ActionMkdir extends Vue {
 
   /* 验证 */
   verify(form: any): any {
-    if(form.name.length<2 || form.name.length>32) return Ui.Toast(this.state.langs.sys_file_verify_name);
-    if((this.$parent as any).isExist(form.name)) return Ui.Toast(this.state.langs.sys_file_verify_name_exist);
+    if(form.name.length<2 || form.name.length>32) return Ui.Toast(this.langs.sys_file_verify_name);
+    if((this.$parent as any).isExist(form.name)) return Ui.Toast(this.langs.sys_file_verify_name_exist);
     return form;
   }
 

@@ -2,6 +2,7 @@
 export function langs(): any {
   return {
     home: '首页',
+    action: '操作',
     search: '搜索',
     add: '添加',
     edit: '编辑',
@@ -9,6 +10,7 @@ export function langs(): any {
     remove: '移除',
     clear: '清空',
     export: '导出',
+    copy: '复制',
     mkdir: '新建文件夹',
     rename: '重命名',
     upload: '上传',
@@ -25,10 +27,14 @@ export function langs(): any {
     keyword: '搜索关键字',
     folder: '文件夹',
     file: '文件',
+    title: '标题',
     name: '名称',
+    info: '基本信息',
+    content: '内容',
     size: '大小',
     page: '页码',
     null: '空',
+    not: '无',
     logout: '退出登录',
     status: '状态',
     enable: '正常',
@@ -77,19 +83,61 @@ export function langs(): any {
     passwd_verify_passwd2: '两次密码不一致',
     /* SysFile */
     sys_file_total: (dirNum: number, fileNum: number, size: number)=>{
-      return '文件夹: <b>'+dirNum+'</b>&nbsp;&nbsp;文件: <b>'+fileNum+'</b>&nbsp;&nbsp;大小: <b>'+size+'</b>&nbsp;&nbsp;';
+      return '文件夹: <b>'+(dirNum || 0)+'</b>&nbsp;&nbsp;文件: <b>'+(fileNum || 0)+'</b>&nbsp;&nbsp;大小: <b>'+(size || 0)+'</b>&nbsp;&nbsp;';
     },
     sys_file_rootdir: '根目录',
     sys_file_back: '返回上级',
     sys_file_select_file: '选择文件',
     sys_file_verify_name: '名称2～32字符',
     sys_file_verify_name_exist: '已存在',
+    /* SysUser */
+    sys_user_total: (num: number)=>{
+      return '统计: 共 <b>'+(num || 0)+'</b> 条';
+    },
+    sys_user_image: '头像',
+    sys_user_type: '类型',
+    sys_user_role: '角色',
+    sys_user_perm: '权限',
+    sys_user_uname: '用户名',
+    sys_user_passwd: '密码',
+    sys_user_base: '基本信息',
+    sys_user_nickname: '昵称',
+    sys_user_department: '部门',
+    sys_user_position: '职位',
+    sys_user_name: '姓名',
+    sys_user_gender: '性别',
+    sys_user_birthday: '生日',
+    sys_user_uname_placeholder: '用户名 \\ 手机号码 \\ 邮箱',
+    sys_user_passwd_placeholder: '默认密码',
+    sys_user_verify_uname: '请输入用户名、手机号码、邮箱',
+    sys_user_verify_passwd: '密码为英文字母开头6～16位',
+    /* SysRole */
+    sys_role_total: (num: number)=>{
+      return '统计: 共 <b>'+(num || 0)+'</b> 条';
+    },
+    sys_role_perm: '权限',
+    sys_role_verify_name: '角色名称2～16字符',
+    /* SysMenus */
+    sys_menus_total: (num: number)=>{
+      return '统计: 共 <b>'+(num || 0)+'</b> 条';
+    },
+    sys_menus_fid: '所属',
+    sys_menus_ico: '图标',
+    sys_menus_title: '菜单名称',
+    sys_menus_en: '拼音',
+    sys_menus_url: '前端地址',
+    sys_menus_controller: '后端地址',
+    sys_menus_sort: '排序',
+    sys_menus_perm: '权限值',
+    sys_menus_sort_placeholder: '排序, 如: 0, 1, 2',
+    sys_menus_verify_title: '标题必须2～32字符',
     /* WebHtml */
+    web_html_total: (num: number)=>{
+      return '统计: 共 <b>'+(num || 0)+'</b> 条';
+    },
     web_html_type: '类型',
     web_html_title: '标题',
     web_html_name: '名称',
-    web_html_tabs_info: '基本信息',
-    web_html_tabs_content: '内容',
     web_html_verify_title: '标题必须2～32字符',
     web_html_verify_name: '名称必须2～16字符',
   }

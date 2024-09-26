@@ -1,10 +1,10 @@
 <template>
-  <wm-dialog v-model:show="infoShow" :title="title" width="360px" bottom="40px" @close="close()">
+  <wm-dialog v-model:show="infoShow" :title="title || langs.del" width="360px" bottom="40px" @close="close()">
     <wm-main lineHeight="60px">
-      <span v-html="state.langs.del_warn(data.length)"></span>
+      <span v-html="langs.del_warn(data.length)"></span>
     </wm-main>
     <template #bottom>
-      <wm-button effect="dark" type="danger" height="40px" @click="submit()">{{ state.langs.confirm }}</wm-button>
+      <wm-button effect="dark" type="danger" height="40px" @click="submit()">{{ langs.confirm }}</wm-button>
     </template>
   </wm-dialog>
 </template>
@@ -39,6 +39,8 @@ export default class ActionDel extends Vue {
   // 状态
   private store: any = useStore();
   state: any = this.store.state;
+  // 语言
+  langs: any = this.state.langs;
   // 变量
   infoShow: boolean = false;
 
@@ -51,8 +53,6 @@ export default class ActionDel extends Vue {
 
   /* 提交 */
   submit(): void {
-    // 验证
-    if(this.data.length<1) return Ui.Toast('无删除数据!');
     // 请求
     const load: any = Ui.Loading();
     Request.Post('web_html/del', {

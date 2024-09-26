@@ -2,6 +2,7 @@
 export function langs(): any {
   return {
     home: 'Home',
+    action: 'Action',
     search: 'Search',
     add: 'Add',
     edit: 'Edit',
@@ -9,6 +10,7 @@ export function langs(): any {
     remove: 'Remove',
     clear: 'Clear',
     export: 'Export',
+    copy: 'Copy',
     mkdir: 'New Folder',
     rename: 'Rename',
     upload: 'Upload',
@@ -25,10 +27,14 @@ export function langs(): any {
     placeholder: 'Please enter',
     folder: 'Folder',
     file: 'File',
+    title: 'Title',
     name: 'Name',
+    info: 'Information',
+    content: 'Content',
     size: 'Size',
     page: 'Page',
     null: 'Null',
+    not: 'Not',
     logout: 'Log out',
     status: 'Status',
     enable: 'Enable',
@@ -77,19 +83,61 @@ export function langs(): any {
     passwd_verify_passwd2: 'Two passwords are inconsistent',
     /* SysFile */
     sys_file_total: (dirNum: number, fileNum: number, size: number)=>{
-      return 'Folder: <b>'+dirNum+'</b>&nbsp;&nbsp;File: <b>'+fileNum+'</b>&nbsp;&nbsp;Size: <b>'+size+'</b>&nbsp;&nbsp;';
+      return 'Folder: <b>'+(dirNum || 0)+'</b>&nbsp;&nbsp;File: <b>'+(fileNum || 0)+'</b>&nbsp;&nbsp;Size: <b>'+(size || 0)+'</b>&nbsp;&nbsp;';
     },
     sys_file_rootdir: 'RootDir',
     sys_file_back: 'Back Up',
     sys_file_select_file: 'Select File',
     sys_file_verify_name: 'Name 2-32 characters',
     sys_file_verify_name_exist: 'The name already exists',
+    /* SysUser */
+    sys_user_total: (num: number)=>{
+      return 'There are a total of <b>'+(num || 0)+'</b> items';
+    },
+    sys_user_image: 'Image',
+    sys_user_type: 'Type',
+    sys_user_role: 'Role',
+    sys_user_perm: 'Permissions',
+    sys_user_uname: 'UserName',
+    sys_user_passwd: 'Password',
+    sys_user_base: 'Base Info',
+    sys_user_nickname: 'Nickname',
+    sys_user_department: 'Department',
+    sys_user_position: 'Position',
+    sys_user_name: 'Name',
+    sys_user_gender: 'Gender',
+    sys_user_birthday: 'Birthday',
+    sys_user_uname_placeholder: 'Uname \\ PhoneNumber \\ Email',
+    sys_user_passwd_placeholder: 'Default password',
+    sys_user_verify_uname: 'Please enter Uname, PhoneNumber, OR Email',
+    sys_user_verify_passwd: 'Password 6-16 characters',
+    /* SysRole */
+    sys_role_total: (num: number)=>{
+      return 'There are a total of <b>'+(num || 0)+'</b> items';
+    },
+    sys_role_perm: 'Permissions',
+    sys_role_verify_name: 'Role name 2-16 characters',
+    /* SysMenus */
+    sys_menus_total: (num: number)=>{
+      return 'There are a total of <b>'+(num || 0)+'</b> items';
+    },
+    sys_menus_fid: 'Class',
+    sys_menus_ico: 'Icon',
+    sys_menus_title: 'MenuName',
+    sys_menus_en: 'Pinyin',
+    sys_menus_url: 'FrontUrl',
+    sys_menus_controller: 'ApiUrl',
+    sys_menus_sort: 'Sort',
+    sys_menus_perm: 'Permission value',
+    sys_menus_sort_placeholder: 'Sort, such as: 0, 1, 2',
+    sys_menus_verify_title: 'The title must be 2-32 characters long',
     /* WebHtml */
+    web_html_total: (num: number)=>{
+      return 'There are a total of <b>'+(num || 0)+'</b> items';
+    },
     web_html_type: 'Type',
     web_html_title: 'Title',
     web_html_name: 'Name',
-    web_html_tabs_info: 'Base Information',
-    web_html_tabs_content: 'Content',
     web_html_verify_title: 'The title must be 2-32 characters long',
     web_html_verify_name: 'The name must be 2-16 characters long',
   }

@@ -6,21 +6,21 @@
         <template #base>
           <wm-table-form>
             <tr>
-              <td class="label">状态</td>
+              <td class="label">{{ langs.status }}</td>
               <td colspan="3">
                 <wm-switch v-model:value="form.status"></wm-switch>
               </td>
             </tr>
             <tr>
-              <td class="label">名称</td>
+              <td class="label">{{ langs.name }}</td>
               <td>
-                <wm-input v-model:value="form.name" placeholder="角色名称" maxlength="16"></wm-input>
+                <wm-input v-model:value="form.name" maxlength="16"></wm-input>
               </td>
             </tr>
             <tr>
-              <td class="label">备注</td>
+              <td class="label">{{ langs.remark }}</td>
               <td colspan="3">
-                <wm-input v-model:value="form.remark" type="textarea" :height="'80px'" placeholder="备注信息" maxlength="32"></wm-input>
+                <wm-input v-model:value="form.remark" type="textarea" :height="'80px'" maxlength="32"></wm-input>
               </td>
             </tr>
           </wm-table-form>
@@ -34,7 +34,7 @@
       </wm-tabs>
     </wm-main>
     <template #bottom>
-      <wm-button height="40px" padding="0 32px" @click="submit()">确 认</wm-button>
+      <wm-button height="40px" padding="0 32px" @click="submit()">{{ langs.confirm }}</wm-button>
     </template>
   </wm-dialog>
 </template>
@@ -74,15 +74,17 @@ export default class ActionSave extends Vue {
   title!: string;
   data!: any;
   // 状态
-  store: any = useStore();
+  private store: any = useStore();
   state: any = this.store.state;
+  // 语言
+  langs: any = this.state.langs;
   // 变量
   infoShow: boolean = false;
   // Tabs
   tabIndex: string = 'base';
   tabs: Array<any> = [
-    {label: '基本信息', value: 'base', slot: 'base'},
-    {label: '权限', value: 'perm', slot: 'perm'},
+    {label: this.langs.info, value: 'base', slot: 'base'},
+    {label: this.langs.sys_role_perm, value: 'perm', slot: 'perm'},
   ];
   // 数据
   form: any = {id: 0, status: true, name: '', remark: '', perm: ''}
@@ -111,7 +113,7 @@ export default class ActionSave extends Vue {
 
   /* 获取权限 */
   getPerm(): void {
-    Request.Post('sys_role/get_perm', {
+    Request.Post('sys_role/get_perm?lang='+this.state.lang, {
       token: this.state.token,
       perm: this.form.perm,
     }, (res:any)=>{
@@ -136,7 +138,7 @@ export default class ActionSave extends Vue {
 
   /* 验证 */
   verify(form: any): any {
-    if(form.name.length<2 || form.name.length>16) return Ui.Toast('角色名称2～16字符');
+    if(form.name.length<2 || form.name.length>16) return Ui.Toast(this.langs.sys_role_verify_name);
     return form;
   }
 

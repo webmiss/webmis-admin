@@ -1,15 +1,15 @@
 <template>
   <div class=".wm-search_body">
     <div class="flex">
-      <wm-input v-model:value="seaKey" @update:value="serachVal($event)" @iconClick="search()" :placeholder="placeholder || state.langs.keyword" width="210px" height="32px" lineHeight="32px" maxlength="32" icon="ui ui_search" iconAlign="right" padding="0 40px 0 10px" margin="0 5px 0 0"></wm-input>
-      <wm-button effect="plain" @click="reset()">{{ state.langs.reset }}</wm-button>
+      <wm-input v-model:value="seaKey" @update:value="serachVal($event)" @iconClick="search()" :placeholder="placeholder || langs.keyword" width="210px" height="32px" lineHeight="32px" maxlength="32" icon="ui ui_search" iconAlign="right" padding="0 40px 0 10px" margin="0 5px 0 0"></wm-input>
+      <wm-button effect="plain" @click="reset()">{{ langs.reset }}</wm-button>
       <wm-button effect="plain" icon="ui ui_arrow_right" padding="0 4px" @click="seaShow=true"></wm-button>
     </div>
     <!-- Content -->
     <div class="wm-search" :style="{visibility:seaShow?'inherit':'hidden'}">
       <wm-popup height="100%" :width="width" v-model:show="seaShow" position="right" bgColor="#FFF">
         <div class="wm-search_title flex">
-          <h2>{{ title || state.langs.search }}</h2>
+          <h2>{{ title || langs.search }}</h2>
           <i class="ui ui_close" @click="close"></i>
         </div>
         <div class="wm-search_ct">
@@ -25,8 +25,8 @@
           </wm-main>
         </div>
         <div class="wm-search_bottom flex">
-          <div class="reset" @click="reset()">{{ state.langs.reset }}</div>
-          <div class="search flex_center" @click="search()">{{ state.langs.confirm }}</div>
+          <div class="reset" @click="reset()">{{ langs.reset }}</div>
+          <div class="search flex_center" @click="search()">{{ langs.confirm }}</div>
         </div>
       </wm-popup>
     </div>
@@ -81,6 +81,8 @@ export default class Search extends Vue {
   // 状态
   private store: any = useStore();
   state: any = this.store.state;
+  // 语言
+  langs: any = this.state.langs;
   // 变量
   seaShow: boolean = false;
   seaKey: string = '';

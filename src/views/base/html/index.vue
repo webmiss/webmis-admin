@@ -1,14 +1,8 @@
 <template>
   <!-- Total -->
-  <div class="app_total flex">
-    <div class="total scrollbar">
-      统计: 共 <b>{{ total.list.total }}</b> 条
-    </div>
-    <div class="refresh flex">
-      <span class="time">{{ total.time }}</span>
-      <i class="ui ui_refresh" @click="loadData()"></i>
-    </div>
-  </div>
+  <wm-total :time="total.time" @refresh="loadData()">
+    <span v-html="langs.sys_menus_total(total.list.total)"></span>
+  </wm-total>
   <!-- Action -->
   <div class="app_action flex">
     <div class="botton">
@@ -20,19 +14,19 @@
         {action: 'export', slot: 'export', is_action: true},
       ]">
         <template #add>
-          <wm-button effect="dark" type="primary" icon="ui ui_add" padding="0 16px 0 8px" @click="saveData('add')">{{ state.langs.add }}</wm-button>
+          <wm-button effect="dark" type="primary" icon="ui ui_add" padding="0 16px 0 8px" @click="saveData('add')">{{ langs.add }}</wm-button>
         </template>
         <template #edit>
-          <wm-button effect="plain" type="primary" icon="ui ui_edit" padding="0 16px 0 8px" :disabled="list.num!=1" @click="saveData('edit')">{{ state.langs.edit }}</wm-button>
+          <wm-button effect="plain" type="primary" icon="ui ui_edit" padding="0 16px 0 8px" :disabled="list.num!=1" @click="saveData('edit')">{{ langs.edit }}</wm-button>
         </template>
         <template #del>
-          <wm-button effect="plain" type="danger" icon="ui ui_del" padding="0 16px 0 8px" :disabled="list.num==0" @click="delData()">{{ state.langs.del }}({{ list.num }})</wm-button>
+          <wm-button effect="plain" type="danger" icon="ui ui_del" padding="0 16px 0 8px" :disabled="list.num==0" @click="delData()">{{ langs.del }}({{ list.num }})</wm-button>
         </template>
         <template #line>
           <span class="line">|</span>
         </template>
         <template #export>
-          <wm-button effect="plain" icon="ui ui_export" padding="0 16px 0 8px" :disabled="!total.list.total" @click="exportData(total.list.total)">{{ state.langs.export }}({{ total.list.total }})</wm-button>
+          <wm-button effect="plain" icon="ui ui_export" padding="0 16px 0 8px" :disabled="!total.list.total" @click="exportData(total.list.total)">{{ langs.export }}({{ total.list.total }})</wm-button>
         </template>
       </wm-action>
     </div>
@@ -56,7 +50,7 @@
       </template>
       <template #status="d">
         <div class="tCenter">
-          <span :class="d.status?'c_success':'c_danger'">{{ d.status?state.langs.enable:state.langs.disable }}</span>
+          <span :class="d.status?'c_success':'c_danger'">{{ d.status?langs.enable:langs.disable }}</span>
         </div>
       </template>
     </wm-table>
@@ -69,9 +63,9 @@
   <!-- Save -->
   <action-save v-model:show="save.show" :title="save.title" :data="save.data" @submit="saveSubmit($event)"></action-save>
   <!-- Del -->
-  <action-del v-model:show="del.show" :title="del.title" :data="del.data" @submit="delSubmit($event)"></action-del>
+  <action-del v-model:show="del.show" :data="del.data" @submit="delSubmit($event)"></action-del>
   <!-- Export -->
-  <action-export v-model:show="exp.show" :title="exp.title" :data="getWhere()" :order="list.order" :num="exp.num" @submit="exportSubmit($event)"></action-export>
+  <action-export v-model:show="exp.show" :data="getWhere()" :order="list.order" :num="exp.num" @submit="exportSubmit($event)"></action-export>
 </template>
 
 <style lang="less" scoped>

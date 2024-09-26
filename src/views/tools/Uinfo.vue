@@ -1,15 +1,15 @@
 <template>
-  <wm-dialog v-model:show="uinfoShow" :title="state.langs.uinfo_title" width="560px" bottom="40px" @close="Close()">
+  <wm-dialog v-model:show="uinfoShow" :title="langs.uinfo_title" width="560px" bottom="40px" @close="Close()">
     <wm-main>
       <wm-table-form>
         <tr>
-          <td class="label">{{ state.langs.uinfo_nickname }}</td>
+          <td class="label">{{ langs.uinfo_nickname }}</td>
           <td colspan="2">
-            <wm-input v-model:value="form.nickname" :placeholder="state.langs.uinfo_nickname_placeholder" maxlength="16"></wm-input>
+            <wm-input v-model:value="form.nickname" :placeholder="langs.uinfo_nickname_placeholder" maxlength="16"></wm-input>
           </td>
         </tr>
         <tr>
-          <td class="label">{{ state.langs.uinfo_name }}</td>
+          <td class="label">{{ langs.uinfo_name }}</td>
           <td>
             <wm-input v-model:value="form.name" maxlength="16" disabled></wm-input>
           </td>
@@ -18,19 +18,19 @@
           </td>
         </tr>
         <tr>
-          <td class="label">{{ state.langs.uinfo_birthday }}</td>
+          <td class="label">{{ langs.uinfo_birthday }}</td>
           <td colspan="2">
             <wm-date-picker v-model:value="form.birthday" :maxDate="maxDate"></wm-date-picker>
           </td>
         </tr>
         <tr>
-          <td class="label">{{ state.langs.uinfo_department }}</td>
+          <td class="label">{{ langs.uinfo_department }}</td>
           <td colspan="2">
             <wm-input v-model:value="form.department" maxlength="16"></wm-input>
           </td>
         </tr>
         <tr>
-          <td class="label">{{ state.langs.uinfo_position }}</td>
+          <td class="label">{{ langs.uinfo_position }}</td>
           <td colspan="2">
             <wm-input v-model:value="form.position" maxlength="16"></wm-input>
           </td>
@@ -38,7 +38,7 @@
       </wm-table-form>
     </wm-main>
     <template #bottom>
-      <wm-button effect="dark" type="primary" @click="subUinfo()">{{ state.langs.confirm }}</wm-button>
+      <wm-button effect="dark" type="primary" @click="subUinfo()">{{ langs.confirm }}</wm-button>
     </template>
   </wm-dialog>
 </template>
@@ -75,6 +75,8 @@ export default class Uinfo extends Vue {
   // 状态
   private store: any = useStore();
   state: any = this.store.state;
+  // 语言
+  langs: any = this.state.langs;
   // 变量
   uinfoShow: boolean = false;
   form: any = {nickname: '', name: '', gender: '', birthday: '', department:'', position:''}
@@ -96,9 +98,9 @@ export default class Uinfo extends Vue {
         // 性别
         this.form.gender = uinfo.gender || '';
         this.genderData = [
-          {label: this.state.langs.null, value: ''},
-          {label: this.state.langs.uinfo_gender_boy, value: '男'},
-          {label: this.state.langs.uinfo_gender_girl, value: '女'},
+          {label: this.langs.null, value: ''},
+          {label: this.langs.uinfo_gender_boy, value: '男'},
+          {label: this.langs.uinfo_gender_girl, value: '女'},
         ];
       }
     }, { deep: true });

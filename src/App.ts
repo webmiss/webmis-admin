@@ -26,6 +26,7 @@ export default class App extends Base {
   // 状态
   private store: any = useStore();
   state: any = this.store.state;
+  langs: any = this.state.langs;
   copy: string = Env.copy;
   // 用户
   public uinfo: any = {show: false};

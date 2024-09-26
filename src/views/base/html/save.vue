@@ -6,31 +6,31 @@
         <template #base>
           <wm-table-form>
             <tr>
-              <td class="label">{{ state.langs.status }}</td>
+              <td class="label">{{ langs.status }}</td>
               <td>
                 <wm-switch v-model:value="form.status"></wm-switch>
               </td>
             </tr>
             <tr>
-              <td class="label">{{ state.langs.web_html_type }}</td>
+              <td class="label">{{ langs.web_html_type }}</td>
               <td>
                 <wm-select v-model:value="form.type" :options="selectType"></wm-select>
               </td>
             </tr>
             <tr>
-              <td class="label">{{ state.langs.web_html_title }}</td>
+              <td class="label">{{ langs.web_html_title }}</td>
               <td>
                 <wm-input v-model:value="form.title" maxlength="32"></wm-input>
               </td>
             </tr>
             <tr>
-              <td class="label">{{ state.langs.web_html_name }}</td>
+              <td class="label">{{ langs.web_html_name }}</td>
               <td>
                 <wm-input v-model:value="form.name" maxlength="16"></wm-input>
               </td>
             </tr>
             <tr>
-              <td class="label">{{ state.langs.remark }}</td>
+              <td class="label">{{ langs.remark }}</td>
               <td>
                 <wm-input v-model:value="form.remark" type="textarea" height="120px" maxlength="32"></wm-input>
               </td>
@@ -46,7 +46,7 @@
       </wm-tabs>
     </wm-main>
     <template #bottom>
-      <wm-button height="40px" padding="0 32px" @click="submit()">{{ state.langs.confirm }}</wm-button>
+      <wm-button height="40px" padding="0 32px" @click="submit()">{{ langs.confirm }}</wm-button>
     </template>
   </wm-dialog>
 </template>
@@ -89,13 +89,15 @@ export default class ActionSave extends Vue {
   // 状态
   store: any = useStore();
   state: any = this.store.state;
+  // 语言
+  langs: any = this.state.langs;
   // 变量
   infoShow: boolean = false;
   // Tabs
   tabIndex: string = 'base';
   tabs: Array<any> = [
-    {label: this.state.langs.web_html_tabs_info, value: 'base', slot: 'base'},
-    {label: this.state.langs.web_html_tabs_content, value: 'content', slot: 'content'},
+    {label: this.langs.info, value: 'base', slot: 'base'},
+    {label: this.langs.content, value: 'content', slot: 'content'},
   ];
   // 数据
   form: any = {id: 0, status: true, type: [], title: '', name: '', remark: '', content: ''}
@@ -124,8 +126,8 @@ export default class ActionSave extends Vue {
 
   /* 验证 */
   verify(form: any): any {
-    if(form.title.length<2 || form.title.length>32) return Ui.Toast(this.state.langs.web_html_verify_title);
-    if(form.name.length<2 || form.name.length>16) return Ui.Toast(this.state.langs.web_html_verify_name);
+    if(form.title.length<2 || form.title.length>32) return Ui.Toast(this.langs.web_html_verify_title);
+    if(form.name.length<2 || form.name.length>16) return Ui.Toast(this.langs.web_html_verify_name);
     return form;
   }
 

@@ -14,7 +14,8 @@ import wmTableForm from '@/components/table/form.vue'
 import wmPage from '@/components/page/index.vue'
 import wmDatePicker from '@/components/datepicker/index.vue'
 import wmImg from '@/components/image/index.vue'
-/* 动作、搜索、更新、删除 */
+/* 统计、动作、搜索、更新、删除、导出 */
+import wmTotal from '../../tools/Total.vue'
 import wmAction from '../../tools/Action.vue'
 import wmSearch from '../../tools/Search.vue'
 import actionSave from './save.vue'
@@ -24,8 +25,8 @@ import actionExport from './export.vue'
 /* 系统菜单 */
 @Options({
   components: {
-    wmMain, wmAction, wmSearch, wmInput, wmButton, wmTable, wmPage, wmTableForm, wmDatePicker, wmImg,
-    actionSave, actionDel, actionExport
+    wmMain, wmSearch, wmInput, wmButton, wmTable, wmPage, wmTableForm, wmDatePicker, wmImg,
+    wmTotal, wmAction, actionSave, actionDel, actionExport
   },
 })
 export default class SysMenus extends Base {
@@ -33,6 +34,8 @@ export default class SysMenus extends Base {
   // 状态
   private store: any = useStore();
   private state: any = this.store.state;
+  // 语言
+  langs: any = this.state.langs;
   // 搜索
   sea: any = {
     show: false, key: '', placeholder:'Fid、名称、接口等',
@@ -52,30 +55,30 @@ export default class SysMenus extends Base {
   public created(): void {
     // 搜索
     this.sea.columns = [
-      {label: '选择日期范围', value: '', slot: 'time'},
-      {label: '帐号', value: '', name: 'uname'},
-      {label: '昵称', value: '', name: 'nickname'},
-      {label: '部门', value: '', name: 'department'},
-      {label: '职位', value: '', name: 'position'},
-      {label: '姓名', value: '', name: 'name'},
-      {label: '备注', value: '', name: 'remark'},
+      {label: this.langs.select, value: '', slot: 'time'},
+      {label: this.langs.sys_user_uname, value: '', name: 'uname'},
+      {label: this.langs.sys_user_nickname, value: '', name: 'nickname'},
+      {label: this.langs.sys_user_department, value: '', name: 'department'},
+      {label: this.langs.sys_user_position, value: '', name: 'position'},
+      {label: this.langs.sys_user_name, value: '', name: 'name'},
+      {label: this.langs.remark, value: '', name: 'remark'},
     ];
     // 字段
     this.list.columns = [
       {title: 'UID', index: 'id', slot: 'id', order: '', width: '80px', minWidth: '60px', textAlign: 'center'},
-      {title: '角色', index: 'type', slot: 'type', order: '', width: '80px', minWidth: '80px', textAlign: 'center'},
-      {title: '头像', index: 'img', slot: 'img', width: '60px', minWidth: '60px', textAlign: 'center'},
-      {title: '帐号', index: 'uname', slot: 'uname', order: '', width: '120px'},
-      {title: '昵称', index: 'nickname'},
-      {title: '状态', index: 'status', slot: 'status', width: '60px', textAlign: 'center'},
-      {title: '操作', index: 'action', slot: 'action', width: '60px', textAlign: 'center'},
-      {title: '系统权限', index: 'perm', slot: 'perm', width: '120px', textAlign: 'center'},
-      {title: '部门', index: 'department'},
-      {title: '职位', index: 'position'},
-      {title: '姓名', index: 'name'},
-      {title: '性别', index: 'gender', slot: 'gender', textAlign: 'center'},
-      {title: '生日', index: 'birthday'},
-      {title: '备注', index: 'remark'},
+      {title: this.langs.sys_user_type, index: 'type', slot: 'type', order: '', width: '80px', minWidth: '80px', textAlign: 'center'},
+      {title: this.langs.sys_user_image, index: 'img', slot: 'img', width: '60px', minWidth: '60px', textAlign: 'center'},
+      {title: this.langs.sys_user_uname, index: 'uname', slot: 'uname', order: '', width: '120px'},
+      {title: this.langs.sys_user_nickname, index: 'nickname'},
+      {title: this.langs.status, index: 'status', slot: 'status', width: '60px', textAlign: 'center'},
+      {title: this.langs.action, index: 'action', slot: 'action', width: '60px', textAlign: 'center'},
+      {title: this.langs.sys_user_perm, index: 'perm', slot: 'perm', width: '120px', textAlign: 'center'},
+      {title: this.langs.sys_user_department, index: 'department'},
+      {title: this.langs.sys_user_position, index: 'position'},
+      {title: this.langs.sys_user_name, index: 'name'},
+      {title: this.langs.sys_user_gender, index: 'gender', slot: 'gender', textAlign: 'center'},
+      {title: this.langs.sys_user_birthday, index: 'birthday'},
+      {title: this.langs.remark, index: 'remark'},
     ];
   }
 
@@ -161,10 +164,10 @@ export default class SysMenus extends Base {
     this.save.show = true;
     this.save.type = type;
     if(type=='add') {
-      this.save.title = '添加';
+      this.save.title = this.langs.add;
       this.save.data = {};
     } else if(type=='edit') {
-      this.save.title = '编辑';
+      this.save.title = this.langs.edit;
       if(data) {
         this.save.data = data;
       } else {
@@ -173,7 +176,7 @@ export default class SysMenus extends Base {
         this.save.data = data[0];
       }
     } else if(type=='copy') {
-      this.save.title = '复制用户';
+      this.save.title = this.langs.copy;
       data.id = '';
       data.uname = '';
       data.tel = '';

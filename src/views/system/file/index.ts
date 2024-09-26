@@ -27,6 +27,8 @@ export default class SysFileManage extends Base {
   // 状态
   private store: any = useStore();
   state: any = this.store.state;
+  // 语言
+  langs: any = this.state.langs;
   // 列表
   total: any = {time: '', list: {}};
   list: any = {url: '', path: '/', check: false, data: {dirNum: 0, fileNum: 0, size: 0, folder: [], files: []}};
@@ -153,7 +155,7 @@ export default class SysFileManage extends Base {
   renameData(): void {
     // 文件名
     const names: any = this.getCheckName();
-    if(!names) return Ui.Toast(this.state.langs.select);
+    if(!names) return Ui.Toast(this.langs.select);
     // 数据
     this.rename.show = true;
     this.rename.data.path = this.list.path;
@@ -171,7 +173,7 @@ export default class SysFileManage extends Base {
   removeData(): void {
     // 文件名
     const names: any = this.getCheckName();
-    if(!names) return Ui.Toast(this.state.langs.select);
+    if(!names) return Ui.Toast(this.langs.select);
     // 数据
     this.remove.show = true;
     this.remove.data.path = this.list.path;

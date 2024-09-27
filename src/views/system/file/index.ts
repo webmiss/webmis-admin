@@ -48,9 +48,9 @@ export default class SysFileManage extends Base {
   }
 
   /* 创建完成 */
-  public mounted(): void {
-  }
   activated(): void {
+    // 加载
+    if(this.state.token) this.loadData();
   }
 
   /* 加载数据 */

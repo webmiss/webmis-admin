@@ -1,7 +1,7 @@
 <template>
   <div class="wm-page_body">
     <div class="wm-page flex_center">
-      <div v-html="state.langs.page_total(total, pageNum, num)"></div>
+      <div v-html="langs.page_total(total, pageNum, num)"></div>
       <div class="wm-page_num flex">
         <!-- Prev -->
         <span class="disabled" v-if="pageNum<=1" :style="{borderRadius: radius}"><i class="ui ui_arrow_left"></i></span>
@@ -18,7 +18,7 @@
         <span v-else @click="toPage(num)" :style="{borderRadius: radius}"><i class="ui ui_arrow_right"></i></span>
       </div>
       <div class="wm-page_tools flex">
-        <span>{{ state.langs.page_limit }}</span>
+        <span>{{ langs.page_limit }}</span>
         <span>
           <wm-select :value="selectVal" @update:value="selectChange($event)" width="80px" height="28px" position="top" :options="limitList"></wm-select>
         </span>
@@ -76,6 +76,8 @@ export default class Page extends Vue {
   // 状态
   private store: any = useStore();
   state: any = this.store.state;
+  // 语言
+  langs: any = this.state.langs;
   // 变量
   num: number = 0;
   pageNum: number = 0;

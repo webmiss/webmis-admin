@@ -63,9 +63,9 @@ export default class SysMenus extends Base {
     // 字段
     this.list.columns = [
       {title: 'ID', index: 'id', slot: 'id', order: '', width: '80px', minWidth: '60px', textAlign: 'center'},
-      {title: 'FID', index: 'id', slot: 'fid', order: '', width: '80px', minWidth: '60px', textAlign: 'center'},
+      {title: 'FID', index: 'fid', slot: 'fid', order: '', width: '80px', minWidth: '60px', textAlign: 'center'},
       {title: this.langs.sys_menus_ico, index: 'ico', slot: 'ico', width: '40px'},
-      {title: this.langs.sys_menus_title, index: 'title', order: '', width: '160px'},
+      {title: this.langs.sys_menus_title, index: 'title', slot: 'title', order: '', width: '160px'},
       {title: this.langs.sys_menus_en, index: 'en', order: '', width: '160px'},
       {title: this.langs.sys_menus_sort, index: 'sort', slot: 'sort', order: '', width: '60px', minWidth: '60px', textAlign: 'center'},
       {title: this.langs.sys_menus_url, index: 'url', order: '', width: '200px', minWidth: '160px'},

@@ -1,5 +1,5 @@
 <template>
-  <wm-dialog v-model:show="infoShow" :title="title" width="720px" bottom="40px" :overflow="tabIndex=='action'?'hidden auto':'hidden'" @close="close()">
+  <wm-dialog v-model:show="infoShow" :title="title" width="720px" bottom="40px" :overflow="tabIndex==('action' || 'langs')?'hidden auto':'hidden'" @close="close()">
     <wm-main>
       <wm-tabs v-model:value="tabIndex" :columns="tabs">
         <!-- 基本信息 -->
@@ -80,6 +80,24 @@
           </wm-table-form>
         </template>
         <!-- 动作菜单 End -->
+        <!-- 语言包 -->
+        <template #langs>
+          <wm-table-form>
+            <tr>
+              <td class="label">{{ langs.sys_menus_en_us }}</td>
+              <td>
+                <wm-input v-model:value="form.en_US" maxlength="32"></wm-input>
+              </td>
+            </tr>
+            <tr>
+              <td class="label">{{ langs.sys_menus_zh_cn }}</td>
+              <td>
+                <wm-input v-model:value="form.zh_CN" maxlength="32"></wm-input>
+              </td>
+            </tr>
+          </wm-table-form>
+        </template>
+        <!-- 语言包 End -->
       </wm-tabs>
     </wm-main>
     <template #bottom>
@@ -134,9 +152,13 @@ export default class ActionSave extends Vue {
   tabs: Array<any> = [
     {label: this.langs.info, value: 'base', slot: 'base'},
     {label: this.langs.action, value: 'action', slot: 'action'},
+    {label: this.langs.sys_menus_lang, value: 'langs', slot: 'langs'},
   ];
   // 数据
-  form: any = {id:0, fid: [], title: '', en: '', ico: '', sort: 0, url: '', controller: '', remark:'', action:[]}
+  form: any = {
+    id: 0, fid: [], title: '', en: '', ico: '', sort: 0, url: '', controller: '', remark:'', action:[],
+    en_US: '', zh_CN: '',
+  }
   // 全部分类
   fid: Array<any> = [];
   menusAll: any = [];
@@ -156,6 +178,8 @@ export default class ActionSave extends Vue {
         this.form.controller = this.data.controller || '';
         this.form.remark = this.data.remark || '';
         this.form.action = this.data.action || [];
+        this.form.en_US = this.data.en_US || '';
+        this.form.zh_CN = this.data.zh_CN || '';
         // Fid
         if(typeof this.data.fid != 'undefined') this.getFid(this.data.fid);
         else this.form.fid = [];

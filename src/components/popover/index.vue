@@ -35,7 +35,6 @@ export default class Popover extends Vue {
   show!: any;
   height!: string;
   position!: string;
-  // 变量
 
   /* 创建成功 */
   created(): void {

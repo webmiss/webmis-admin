@@ -5,6 +5,8 @@
       width: width,
       height: height,
       lineHeight: height,
+      pointerEvents: disabled?'none':'auto',
+      opacity: disabled?'0.5':'1',
   }">
     <!-- Content -->
     <div class="wm-select_body" :style="{
@@ -101,6 +103,7 @@ import wmInput from '@/components/form/input/index.vue'
     seaMinLength: {type: Number, default: 5},               // 搜索最小值
     seaPlaceholder: {type: String, default: ''},            // 搜索提示
     clearable: {type: Boolean, default: false},             // 一键清空
+    disabled: {type: Boolean, default: false},              // 禁用
   }
 })
 export default class Select extends Vue {
@@ -120,6 +123,7 @@ export default class Select extends Vue {
   seaMinLength!: number;
   seaPlaceholder!: string;
   clearable!: boolean;
+  disabled!: boolean;
   // 状态
   store: any = useStore();
   state: any = this.store.state;
@@ -144,7 +148,7 @@ export default class Select extends Vue {
       }
     }, { deep: true });
     this.$watch('options', (val:Array<any>)=>{
-      this.seaList = val;
+      this.seaList = val || [];
     }, { deep: true });
   }
 

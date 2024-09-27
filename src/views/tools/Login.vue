@@ -51,9 +51,9 @@
 .wm-langs_body .arrow{position: absolute; top: 0; left: calc(50% - 5px); transform: translateX(-50%);}
 .wm-langs_body .arrow::before{content: ''; position: absolute; width: 0px; height: 0px; border: 5px solid; border-color:transparent transparent #00000050 transparent;}
 .wm-langs_list{padding: 8px 0; margin-top: 10px; background-color: #00000050; border-radius: 8px;}
-.wm-langs_list li{cursor: pointer; margin: 1px 0; padding: 0 32px; line-height: 32px; white-space: nowrap;}
-.wm-langs_list li:hover{background-color: @Minor;}
-.wm-langs_list .active{background-color: @Minor;}
+.wm-langs_list li{cursor: pointer; margin: 1px 0; padding: 0 32px; line-height: 32px; white-space: nowrap; border-radius: 4px;}
+.wm-langs_list li:hover{color: @Minor;}
+.wm-langs_list .active{color: @Minor;}
 /* Login */
 .wm-login_popup{position: fixed; z-index: 9999; width: calc(100% + 1px); height: calc(100% + 1px); left: 0; top: 0;}
 .wm-login_bg{position: absolute; z-index: 1; width: 100%; height: 100%; background-color: #323438; background-position: center; background-size: cover; background-repeat: no-repeat; transition: All 3s ease-in-out;}

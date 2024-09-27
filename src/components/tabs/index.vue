@@ -30,7 +30,7 @@ import { Options, Vue } from 'vue-class-component';
     padding: {type: String, default: '0 8px'},        // 内部间距
     margin: {type: String, default: '0 8px 0 0'},     // 外部间距
     bodyPadding: {type: String, default: '16px 0'},   // 内容间距
-    fontSize: {type: String, default: '15px'},        // 文字大小
+    fontSize: {type: String, default: '16px'},        // 文字大小
   }
 })
 export default class Tabs extends Vue {

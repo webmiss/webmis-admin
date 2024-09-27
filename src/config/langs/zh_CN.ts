@@ -121,9 +121,12 @@ export function langs(): any {
     sys_menus_total: (num: number)=>{
       return '统计: 共 <b>'+(num || 0)+'</b> 条';
     },
+    sys_menus_lang: '语言包',
+    sys_menus_en_us: 'English',
+    sys_menus_zh_cn: '简体中文',
     sys_menus_fid: '所属',
     sys_menus_ico: '图标',
-    sys_menus_title: '菜单名称',
+    sys_menus_title: '名称',
     sys_menus_en: '拼音',
     sys_menus_url: '前端地址',
     sys_menus_controller: '后端地址',

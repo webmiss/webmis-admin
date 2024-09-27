@@ -57,6 +57,9 @@
           <span v-else>-</span>
         </div>
       </template>
+      <template #title="d">
+        {{ d[state.lang] }}
+      </template>
       <template #sort="d">
         <div class="tCenter">{{ d.sort }}</div>
       </template>

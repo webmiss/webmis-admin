@@ -121,9 +121,12 @@ export function langs(): any {
     sys_menus_total: (num: number)=>{
       return 'There are a total of <b>'+(num || 0)+'</b> items';
     },
+    sys_menus_lang: 'Language',
+    sys_menus_en_us: 'English',
+    sys_menus_zh_cn: '简体中文',
     sys_menus_fid: 'Class',
     sys_menus_ico: 'Icon',
-    sys_menus_title: 'MenuName',
+    sys_menus_title: 'Name',
     sys_menus_en: 'Pinyin',
     sys_menus_url: 'FrontUrl',
     sys_menus_controller: 'ApiUrl',

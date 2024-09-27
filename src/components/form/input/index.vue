@@ -36,7 +36,7 @@
     <!-- TextArea -->
     <textarea ref="wmTextarea" class="wm-input" v-if="type=='textarea'"
       :value="value"
-      :placeholder="placeholder || state.langs.placeholder"
+      :placeholder="placeholder || langs.placeholder"
       :maxlength="maxlength"
       :disabled="disabled"
       :readonly="readonly"
@@ -54,7 +54,7 @@
     <input ref="wmInput" class="wm-input" autocomplete="off" v-else
       :value="value"
       :type="type"
-      :placeholder="placeholder || state.langs.placeholder"
+      :placeholder="placeholder || langs.placeholder"
       :maxlength="maxlength"
       :disabled="disabled"
       :readonly="readonly"
@@ -153,6 +153,8 @@ export default class Input extends Vue {
   // 状态
   private store: any = useStore();
   state: any = this.store.state;
+  // 语言
+  langs: any = this.state.langs;
   // 变量
   val_len: any = 0;
 

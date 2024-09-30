@@ -1,5 +1,5 @@
 <template>
-  <wm-dialog v-model:show="form.show" :title="langs.passwd_title" width="420px" bottom="40px" @close="Close()">
+  <wm-dialog v-model:show="form.show" :title="state.langs.passwd_title" width="420px" bottom="40px" @close="Close()">
     <wm-main>
       <wm-table-form>
         <template v-if="!form.is_vcode">
@@ -10,13 +10,13 @@
           </tr>
           <tr>
             <td>
-              <wm-input v-model:value="form.vcode" :placeholder="langs.passwd_code_placeholder" maxlength="4" icon="ui ui_safety" padding="0 10px 0 40px" :text="form.text" @textClick="getVcode()"></wm-input>
+              <wm-input v-model:value="form.vcode" :placeholder="state.langs.passwd_code_placeholder" maxlength="4" icon="ui ui_safety" padding="0 10px 0 40px" :text="form.text" @textClick="getVcode()"></wm-input>
             </td>
           </tr>
         </template>
         <template v-else>
             <tr>
-              <td class="label">{{ langs.passwd_new }}</td>
+              <td class="label">{{ state.langs.passwd_new }}</td>
               <td>
                 <form onsubmit="return false">
                   <wm-input type="password" v-model:value="form.passwd1" maxlength="16"></wm-input>
@@ -24,7 +24,7 @@
               </td>
             </tr>
             <tr>
-              <td class="label">{{ langs.passwd_confirm }}</td>
+              <td class="label">{{ state.langs.passwd_confirm }}</td>
               <td>
                 <form onsubmit="return false">
                   <wm-input type="password" v-model:value="form.passwd2" maxlength="16"></wm-input>
@@ -35,9 +35,9 @@
       </wm-table-form>
     </wm-main>
     <template #bottom>
-      <wm-button effect="plain" type="primary" padding="0 32px" v-if="!form.is_vcode" @click="submitPwd()">{{ langs.next }}</wm-button>
-      <wm-button effect="plain" type="primary" padding="0 32px" v-if="form.is_vcode" @click="form.is_vcode=false">{{ langs.prev }}</wm-button>
-      <wm-button effect="dark" type="primary" padding="0 32px"  v-if="form.is_vcode" @click="submitPwd()">{{ langs.confirm }}</wm-button>
+      <wm-button effect="plain" type="primary" padding="0 32px" v-if="!form.is_vcode" @click="submitPwd()">{{ state.langs.next }}</wm-button>
+      <wm-button effect="plain" type="primary" padding="0 32px" v-if="form.is_vcode" @click="form.is_vcode=false">{{ state.langs.prev }}</wm-button>
+      <wm-button effect="dark" type="primary" padding="0 32px"  v-if="form.is_vcode" @click="submitPwd()">{{ state.langs.confirm }}</wm-button>
     </template>
   </wm-dialog>
 </template>
@@ -72,8 +72,6 @@ export default class Passwd extends Vue {
   // 状态
   private store: any = useStore();
   state: any = this.store.state;
-  // 语言
-  langs: any = this.state.langs;
   // 变量
   time: any;
   form: any = {show: false, uname: '', passwd1: '', passwd2: '', is_vcode: false, vcode: '', text: '', num: 60}
@@ -85,7 +83,7 @@ export default class Passwd extends Vue {
       this.form.show = val;
       if(val) {
         // 获取验证码
-        this.form.text = this.langs.passwd_code_get;
+        this.form.text = this.state.langs.passwd_code_get;
         // 帐号
         if(this.state.uinfo.tel) this.form.uname = this.state.uinfo.tel;
         else if(this.state.uinfo.email) this.form.uname = this.state.uinfo.email;
@@ -104,7 +102,7 @@ export default class Passwd extends Vue {
     let type: string='';
     if(Safety.IsRight('tel', this.form.uname)) type='tel';
     else if(Safety.IsRight('email', this.form.uname)) type='email';
-    else return Ui.Toast(this.langs.passwd_verify_null);
+    else return Ui.Toast(this.state.langs.passwd_verify_null);
     // 获取验证码
     const load: any = Ui.Loading();
     Request.Post('user/get_vcode', {type: type, uname:this.form.uname}, (res:any)=>{
@@ -125,11 +123,11 @@ export default class Passwd extends Vue {
     clearInterval(this.time);
     this.time = setInterval(()=>{
       this.form.num--;
-      this.form.text = this.langs.passwd_code_time(this.form.num);
+      this.form.text = this.state.langs.passwd_code_time(this.form.num);
       if(this.form.num<=0) {
         clearInterval(this.time);
         this.form.num = 60;
-        this.form.text = this.langs.passwd_code_resend;
+        this.form.text = this.state.langs.passwd_code_resend;
       }
     }, 1000);
   }
@@ -137,11 +135,11 @@ export default class Passwd extends Vue {
   /* 提交 */
   submitPwd(): void {
     // 验证码
-    if(this.form.vcode.length!=4) return Ui.Toast(this.langs.passwd_verify_code);
+    if(this.form.vcode.length!=4) return Ui.Toast(this.state.langs.passwd_verify_code);
     this.form.is_vcode = true;
     // 新密码
-    if(!Safety.IsRight('passwd', this.form.passwd1)) return Ui.Toast(this.langs.passwd_verify_passwd1);
-    if(this.form.passwd1!==this.form.passwd2) return Ui.Toast(this.langs.passwd_verify_passwd1);
+    if(!Safety.IsRight('passwd', this.form.passwd1)) return Ui.Toast(this.state.langs.passwd_verify_passwd1);
+    if(this.form.passwd1!==this.form.passwd2) return Ui.Toast(this.state.langs.passwd_verify_passwd1);
     // 请求
     const load: any = Ui.Loading();
     Request.Post('user/change_passwd', {uname: this.form.uname, passwd: this.form.passwd1, vcode: this.form.vcode}, (res:any)=>{

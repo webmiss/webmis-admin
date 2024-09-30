@@ -264,7 +264,7 @@ export default class Login extends Vue {
     }
     // 请求
     const load: any = Ui.Loading();
-    Request.Post('user/login', {uname: uname, passwd: passwd, vcode:this.login.vcode}, (res:any)=>{
+    Request.Post('user/login?lang='+this.state.lang, {uname: uname, passwd: passwd, vcode:this.login.vcode}, (res:any)=>{
       load.clear();
       const d: any = res.data;
       if(d.code==0){
@@ -275,7 +275,6 @@ export default class Login extends Vue {
         this.login.img = d.data.uinfo.img;
         // 缓存信息
         this.state.isLogin = true;
-        this.state.isPasswd = d.data.isPasswd;
         this.state.token = d.data.token;
         this.state.uinfo = d.data.uinfo;
         Storage.setItem('token', d.data.token);
@@ -325,7 +324,9 @@ export default class Login extends Vue {
       const d: any = res.data;
       if(d.code==0 && d.data.token_time>0) {
         this.state.isLogin = true;
-        if(!this.state.isPasswd) this.state.isPasswd = d.data.isPasswd;
+        // 修改密码
+        if(!this.state.isPasswd && this.state.lang) this.state.isPasswd = d.data.isPasswd;
+        // 用户信息
         if(Object.keys(d.data.uinfo).length!=0) {
           this.state.uinfo = d.data.uinfo;
           Storage.setItem('uname', d.data.uinfo.uname);

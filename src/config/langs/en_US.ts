@@ -41,6 +41,7 @@ export function langs(): any {
     disable: 'Disable',
     ctime: 'Create Time',
     utime: 'Modify Time',
+    network_err: 'Network error',
     del_warn: (num: number)=>{ return 'Delete <b>'+num+'</b> pieces of data' },
     export_warn: (num: number)=>{ return 'Export <b>'+num+'</b> pieces of data' },
     /* Page */

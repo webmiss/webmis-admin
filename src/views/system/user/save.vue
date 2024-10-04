@@ -209,7 +209,7 @@ export default class ActionSave extends Vue {
     if(!form) return;
     // 请求
     const load: any = Ui.Loading();
-    Request.Post('sys_user/save', {
+    Request.Post('sys_user/save?lang='+this.state.lang, {
       token: this.state.token,
       data: form,
     }, (res:any)=>{
@@ -222,7 +222,7 @@ export default class ActionSave extends Vue {
 
   /* 选项 */
   getSelect(): void {
-    Request.Post('sys_user/get_select', {
+    Request.Post('sys_user/get_select?lang='+this.state.lang, {
       token: this.state.token,
     }, (res:any)=>{
       const d: any = res.data;

@@ -76,7 +76,7 @@ export default class ActionRename extends Vue {
     if(!form) return;
     // 请求
     const load: any = Ui.Loading();
-    Request.Post('sys_file/rename', {
+    Request.Post('sys_file/rename?lang='+this.state.lang, {
       token: this.state.token,
       path: form.path,
       rename: form.rename,

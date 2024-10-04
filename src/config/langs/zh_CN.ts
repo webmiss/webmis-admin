@@ -41,6 +41,7 @@ export function langs(): any {
     disable: '禁用',
     ctime: '创建时间',
     utime: '更新时间',
+    network_err: '网络错误',
     del_warn: (num: number)=>{ return '删除 <b>'+num+'</b> 条数据' },
     export_warn: (num: number)=>{ return '导出 <b>'+num+'</b> 条数据' },
     /* Page */

@@ -11,7 +11,7 @@
 
 <style lang="less" scoped>
 .wm-tabs{position: sticky; z-index: 10; top: 0; width: 100%; border-bottom: @LighterBorder 2px solid; background-color: #FFF; box-sizing: border-box;}
-.wm-tabs li{cursor: pointer; position: relative; float: left; white-space: nowrap;}
+.wm-tabs li{user-select: none; cursor: pointer; position: relative; float: left; white-space: nowrap;}
 .wm-tabs li:hover{color: @Primary;}
 .wm-tabs .active{color: @Primary;}
 .wm-tabs .active::after{content: ''; position: absolute; left: 0; bottom: 0; width: 100%; height: 2px; background-color: @Primary; border-radius: 2px;}

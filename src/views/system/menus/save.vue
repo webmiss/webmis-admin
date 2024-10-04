@@ -241,7 +241,7 @@ export default class ActionSave extends Vue {
     if(!form) return;
     // 请求
     const load: any = Ui.Loading();
-    Request.Post('sys_menus/save', {
+    Request.Post('sys_menus/save?lang='+this.state.lang, {
       token: this.state.token,
       data: form,
     }, (res:any)=>{
@@ -255,7 +255,7 @@ export default class ActionSave extends Vue {
 
   /* 全部菜单 */
   getMenus(): void {
-    Request.Post('sys_menus/get_menus_all', {
+    Request.Post('sys_menus/get_menus_all?lang='+this.state.lang, {
       token: this.state.token,
     }, (res:any)=>{
       const d: any = res.data;

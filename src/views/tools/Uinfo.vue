@@ -76,7 +76,7 @@ export default class Uinfo extends Vue {
   private store: any = useStore();
   state: any = this.store.state;
   // 语言
-  langs: any = this.state.langs;
+  langs: any = {};
   // 变量
   uinfoShow: boolean = false;
   form: any = {nickname: '', name: '', gender: '', birthday: '', department:'', position:''}
@@ -88,6 +88,7 @@ export default class Uinfo extends Vue {
     this.$watch('show', (val:boolean)=>{
       this.uinfoShow = val;
       if(val) {
+        this.langs = this.state.langs;
         // 默认值
         const uinfo: any = this.state.uinfo;
         this.form.nickname = uinfo.nickname || '';
@@ -111,7 +112,7 @@ export default class Uinfo extends Vue {
     this.Close();
     // 请求
     const load: any = Ui.Loading();
-    Request.Post('user/change_uinfo', {token: this.state.token, uinfo: this.form}, (res:any)=>{
+    Request.Post('user/change_uinfo?lang='+this.state.lang, {token: this.state.token, uinfo: this.form}, (res:any)=>{
       load.clear();
       const d: any = res.data;
       if(d.code==0) {
@@ -124,7 +125,6 @@ export default class Uinfo extends Vue {
       }
       Ui.Toast(d.msg);
     });
-
   }
 
   /* 关闭 */

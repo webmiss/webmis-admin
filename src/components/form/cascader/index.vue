@@ -13,7 +13,7 @@
     <!-- Icon -->
     <i class="wm-cascader_arrow ui ui_arrow_down" :style="{transform: show?'rotate(180deg)':'rotate(0deg)'}"></i>
     <!-- Value -->
-    <div class="wm-cascader_value" :class="labelName?'':'none'">{{ labelName || placeholder || langs.select }}</div>
+    <div class="wm-cascader_value" :class="labelName?'':'none'">{{ labelName || placeholder || state.langs.select }}</div>
     <!-- List -->
     <div class="wm-cascader_body flex_left" :style="{visibility: show?'inherit':'hidden', opacity: show?'1':'0'}">
       <div class="arrow" :style="{left: 'calc('+bodyMinWidth+' - 5px)', transform: 'translateX(calc(-'+bodyMinWidth+' / 2))'}"></div>
@@ -108,8 +108,6 @@ export default class Cascader extends Vue {
   // 状态
   store: any = useStore();
   state: any = this.store.state;
-  // 语言
-  langs: any = this.state.langs;
   // 变量
   show: boolean = false;
   selectObj: any = null;

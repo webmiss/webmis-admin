@@ -60,7 +60,7 @@ export default class ActionExport extends Vue {
   submit(): void {
     // 请求
     const load: any = Ui.Loading();
-    Request.Post('sys_menus/export', {
+    Request.Post('sys_menus/export?lang='+this.state.lang, {
       token: this.state.token,
       data: this.data,
       order: this.order,

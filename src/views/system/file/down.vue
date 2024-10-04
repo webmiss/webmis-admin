@@ -56,7 +56,7 @@ export default class ActionDown extends Vue {
   submit(): void {
     // 请求
     const load: any = Ui.Loading();
-    Request.Post('sys_file/down', {
+    Request.Post('sys_file/down?lang='+this.state.lang, {
       token: this.state.token,
       path: this.data.path,
       filename: this.data.filename,
@@ -66,7 +66,7 @@ export default class ActionDown extends Vue {
       // 事件
       this.$emit('submit', true);
     },()=>{
-      Ui.Toast('网络加载错误!');
+      Ui.Toast(this.langs.network_err);
     },{
       responseType:'blob',
     });

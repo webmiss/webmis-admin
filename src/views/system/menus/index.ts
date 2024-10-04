@@ -117,7 +117,7 @@ export default class SysMenus extends Base {
     this.sea.show = false;
     // 请求
     const load: any = Ui.Loading();
-    Request.Post('sys_menus/list', {
+    Request.Post('sys_menus/list?lang='+this.state.lang, {
       token: this.state.token,
       data: this.getWhere(),
       page: this.page.num,

@@ -60,7 +60,7 @@ export default class ActionExport extends Vue {
   submit(): void {
     // 请求
     const load: any = Ui.Loading();
-    Request.Post('web_html/export', {
+    Request.Post('web_html/export?lang='+this.state.lang, {
       token: this.state.token,
       data: this.data,
       order: this.order,

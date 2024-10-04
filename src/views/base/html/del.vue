@@ -55,7 +55,7 @@ export default class ActionDel extends Vue {
   submit(): void {
     // 请求
     const load: any = Ui.Loading();
-    Request.Post('web_html/del', {
+    Request.Post('web_html/del?lang='+this.state.lang, {
       token: this.state.token,
       data: this.data,
     }, (res:any)=>{

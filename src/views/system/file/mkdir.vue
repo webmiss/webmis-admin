@@ -76,7 +76,7 @@ export default class ActionMkdir extends Vue {
     if(!form) return;
     // 请求
     const load: any = Ui.Loading();
-    Request.Post('sys_file/mkdir', {
+    Request.Post('sys_file/mkdir?lang='+this.state.lang, {
       token: this.state.token,
       path: form.path,
       name: form.name,

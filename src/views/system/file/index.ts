@@ -57,7 +57,7 @@ export default class SysFileManage extends Base {
   loadData(): void {
     // 请求
     const load: any = Ui.Loading();
-    Request.Post('sys_file/list', {
+    Request.Post('sys_file/list?lang='+this.state.lang, {
       token: this.state.token,
       path: this.list.path,
     }, (res:any)=>{

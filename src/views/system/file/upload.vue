@@ -104,7 +104,7 @@ export default class ActionUpload extends Vue {
     form.append('path', this.data.path);
     form.append('file', fileObj);
     // 请求
-    Request.Post('sys_file/upload', form, (res: any)=>{
+    Request.Post('sys_file/upload?lang='+this.state.lang, form, (res: any)=>{
       const d: any = res.data;
       if(d.code==0) {
         this.listData[k].state = 1;
@@ -114,7 +114,7 @@ export default class ActionUpload extends Vue {
         this.$emit('submit', false);
       }
     }, ()=>{
-      Ui.Toast('网络加载错误!');
+      Ui.Toast(this.langs.network_err);
     }, {
       headers: {
         "Content-Type": "multipart/form-data;charset=utf-8"  // 表单方式

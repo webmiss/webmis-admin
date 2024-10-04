@@ -147,7 +147,7 @@ export default class ActionSave extends Vue {
     if(!form) return;
     // 请求
     const load: any = Ui.Loading();
-    Request.Post('web_html/save', {
+    Request.Post('web_html/save?lang='+this.state.lang, {
       token: this.state.token,
       data: form,
     }, (res:any)=>{

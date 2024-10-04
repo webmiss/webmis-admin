@@ -105,7 +105,7 @@ export default class Passwd extends Vue {
     else return Ui.Toast(this.state.langs.passwd_verify_null);
     // 获取验证码
     const load: any = Ui.Loading();
-    Request.Post('user/get_vcode', {type: type, uname:this.form.uname}, (res:any)=>{
+    Request.Post('user/get_vcode?lang='+this.state.lang, {type: type, uname:this.form.uname}, (res:any)=>{
       load.clear();
       const d: any = res.data;
       if(d.code==0) {
@@ -142,11 +142,12 @@ export default class Passwd extends Vue {
     if(this.form.passwd1!==this.form.passwd2) return Ui.Toast(this.state.langs.passwd_verify_passwd1);
     // 请求
     const load: any = Ui.Loading();
-    Request.Post('user/change_passwd', {uname: this.form.uname, passwd: this.form.passwd1, vcode: this.form.vcode}, (res:any)=>{
+    Request.Post('user/change_passwd?lang='+this.state.lang, {uname: this.form.uname, passwd: this.form.passwd1, vcode: this.form.vcode}, (res:any)=>{
       load.clear();
       const d: any = res.data;
       if(d.code==0){
         this.state.isLogin = false;
+        this.Close();
       }else{
         return Ui.Toast(d.msg);
       }
@@ -155,6 +156,10 @@ export default class Passwd extends Vue {
 
   /* 关闭 */
   Close(): void {
+    this.form.is_vcode = false;
+    this.form.vcode = '';
+    this.form.passwd1 = '';
+    this.form.passwd2 = '';
     this.$emit('update:show', false);
   }
 

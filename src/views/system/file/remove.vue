@@ -64,7 +64,7 @@ export default class ActionRemove extends Vue {
     if(!form) return;
     // 请求
     const load: any = Ui.Loading();
-    Request.Post('sys_file/remove', {
+    Request.Post('sys_file/remove?lang='+this.state.lang, {
       token: this.state.token,
       path: form.path,
       data: form.names,

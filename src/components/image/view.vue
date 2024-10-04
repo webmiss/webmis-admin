@@ -10,9 +10,9 @@
     <img ref="wmImageLoading" class="loading_img" />
     <!-- Info -->
      <div class="wm-image_view_info" v-if="title">
-      {{ langs.name }}: {{title}}&nbsp;&nbsp;
-      {{ langs.size }}: {{size}}&nbsp;&nbsp;
-      {{ langs.page }}: {{ imgIndex+1 }}/{{ options.length }}
+      {{ state.langs.name }}: {{title}}&nbsp;&nbsp;
+      {{ state.langs.size }}: {{size}}&nbsp;&nbsp;
+      {{ state.langs.page }}: {{ imgIndex+1 }}/{{ options.length }}
     </div>
     <!-- Close -->
     <i class="ui ui_close tools close" @click="close()"></i>
@@ -84,8 +84,6 @@ export default class ImageView extends Vue {
   // 状态
   private store: any = useStore();
   state: any = this.store.state;
-  // 语言
-  langs: any = this.state.langs;
   // 变量
   isLoad: boolean = false;
   imgIndex: number = 0;

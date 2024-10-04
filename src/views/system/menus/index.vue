@@ -60,6 +60,11 @@
       <template #title="d">
         {{ d[state.lang] }}
       </template>
+      <template #status="d">
+        <div class="tCenter">
+          <span :class="d.status?'c_success':'c_danger'">{{ d.status?langs.enable:langs.disable }}</span>
+        </div>
+      </template>
       <template #sort="d">
         <div class="tCenter">{{ d.sort }}</div>
       </template>

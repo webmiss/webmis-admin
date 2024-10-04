@@ -6,6 +6,12 @@
         <template #base>
           <wm-table-form>
             <tr>
+              <td class="label">{{ langs.status }}</td>
+              <td colspan="3">
+                <wm-switch v-model:value="form.status"></wm-switch>
+              </td>
+            </tr>
+            <tr>
               <td class="label">{{ langs.sys_menus_fid }}</td>
               <td colspan="3">
                 <wm-cascader v-model:value="form.fid" :options="menusAll" clearable></wm-cascader>
@@ -122,12 +128,13 @@ import wmMain from '@/components/container/main.vue'
 import wmDialog from '@/components/dialog/index.vue'
 import wmInput from '@/components/form/input/index.vue'
 import wmButton from '@/components/form/button/index.vue'
+import wmSwitch from '@/components/form/switch/index.vue'
 import wmCascader from '@/components/form/cascader/index.vue'
 import wmTableForm from '@/components/table/form.vue'
 import wmTabs from '@/components/tabs/index.vue'
 
 @Options({
-  components: { wmMain, wmDialog, wmInput, wmButton, wmCascader, wmTableForm, wmTabs },
+  components: { wmMain, wmDialog, wmInput, wmButton, wmSwitch, wmCascader, wmTableForm, wmTabs },
   props: {
     show: {type: Boolean, default: false},        // 是否显示
     title: {type: String, default: ''},           // 标题
@@ -156,7 +163,7 @@ export default class ActionSave extends Vue {
   ];
   // 数据
   form: any = {
-    id: 0, fid: [], title: '', en: '', ico: '', sort: 0, url: '', controller: '', remark:'', action:[],
+    id: 0, fid: [], status: true, title: '', en: '', ico: '', sort: 0, url: '', controller: '', remark:'', action:[],
     en_US: '', zh_CN: '',
   }
   // 全部分类
@@ -170,6 +177,7 @@ export default class ActionSave extends Vue {
       if(val) {
         // 默认值
         this.form.id = this.data.id || 0;
+        this.form.status = typeof this.data.status!='undefined'?this.data.status:true;
         this.form.title = this.data.title || '';
         this.form.en = this.data.en || '';
         this.form.ico = this.data.ico || '';

@@ -10,6 +10,7 @@ import wmInput from '@/components/form/input/index.vue'
 import wmButton from '@/components/form/button/index.vue'
 import wmTable from '@/components/table/index.vue'
 import wmTableForm from '@/components/table/form.vue'
+import wmTag from '@/components/tag/index.vue'
 import wmPage from '@/components/page/index.vue'
 /* 统计、动作、搜索、更新、删除、导出 */
 import wmTotal from '../../tools/Total.vue'
@@ -22,7 +23,7 @@ import actionExport from './export.vue'
 /* 系统角色 */
 @Options({
   components: {
-    wmMain, wmSearch, wmInput, wmButton, wmTable, wmPage, wmTableForm,
+    wmMain, wmSearch, wmInput, wmButton, wmTable, wmTableForm, wmTag, wmPage,
     wmTotal, wmAction, actionSave, actionDel, actionExport
   },
 })
@@ -59,6 +60,7 @@ export default class SysMenus extends Base {
       {title: 'ID', index: 'id', slot: 'id', order: '', width: '80px', minWidth: '60px', textAlign: 'center'},
       {title: this.langs.name, index: 'name', order: '', width: '120px', minWidth: '80px'},
       {title: this.langs.sys_role_perm, slot: 'perm', width: '90px', textAlign: 'center'},
+      {title: this.langs.date, index: 'date', slot: 'date', width: '120px', minWidth: '110px', textAlign: 'center'},
       {title: this.langs.remark, index: 'remark'},
     ];
   }

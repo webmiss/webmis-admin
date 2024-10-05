@@ -196,6 +196,7 @@ export default class Login extends Vue {
     Storage.setItem('langs', JSON.stringify(v));
     this.getLangs(v);
     this.$router.push({path: '/'});
+    location.reload();
   }
 
   /* 背景动画 */

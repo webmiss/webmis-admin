@@ -11,8 +11,10 @@ import wmInput from '@/components/form/input/index.vue'
 import wmButton from '@/components/form/button/index.vue'
 import wmTable from '@/components/table/index.vue'
 import wmTableForm from '@/components/table/form.vue'
+import wmTag from '@/components/tag/index.vue'
 import wmPage from '@/components/page/index.vue'
 import wmDatePicker from '@/components/datepicker/index.vue'
+import wmSelect from '@/components/form/select/index.vue'
 import wmImg from '@/components/image/index.vue'
 /* 统计、动作、搜索、更新、删除、导出 */
 import wmTotal from '../../tools/Total.vue'
@@ -25,7 +27,7 @@ import actionExport from './export.vue'
 /* 系统菜单 */
 @Options({
   components: {
-    wmMain, wmSearch, wmInput, wmButton, wmTable, wmPage, wmTableForm, wmDatePicker, wmImg,
+    wmMain, wmSearch, wmInput, wmButton, wmTable, wmTableForm, wmTag, wmPage, wmDatePicker, wmSelect, wmImg,
     wmTotal, wmAction, actionSave, actionDel, actionExport
   },
 })
@@ -41,6 +43,8 @@ export default class SysMenus extends Base {
     show: false, key: '', placeholder:'Fid、名称、接口等',
     time: [Time.Date('Y/m/d', Time.StrToTime('-3 year')), Time.Date('Y/m/d')], maxDate: Time.Date('Y/m/d'),
     columns:[],
+    type: '',
+    role: '',
   }
   // 列表
   total: any = {time: '', list: {}};
@@ -50,12 +54,16 @@ export default class SysMenus extends Base {
   save: any = {show: false, title: '添加/编辑', type: '', data: {}};
   del: any = {show: false, title: '删除', data: []};
   exp: any = {show: false, title: '导出', num: 0};
+  // 全部分类
+  selectAll: any = {type: [], role: [], perm: []};
 
   /* 创建成功 */
   public created(): void {
     // 搜索
     this.sea.columns = [
       {label: this.langs.select, value: '', slot: 'time'},
+      {label: this.langs.sys_user_type, value: '', slot: 'type'},
+      {label: this.langs.sys_user_role, value: '', slot: 'role'},
       {label: this.langs.sys_user_uname, value: '', name: 'uname'},
       {label: this.langs.sys_user_nickname, value: '', name: 'nickname'},
       {label: this.langs.sys_user_department, value: '', name: 'department'},
@@ -66,6 +74,7 @@ export default class SysMenus extends Base {
     // 字段
     this.list.columns = [
       {title: 'UID', index: 'id', slot: 'id', order: '', width: '80px', minWidth: '60px', textAlign: 'center'},
+      {title: this.langs.date, index: 'date', slot: 'date', width: '120px', minWidth: '110px', textAlign: 'center'},
       {title: this.langs.sys_user_type, index: 'type', slot: 'type', order: '', width: '80px', minWidth: '80px', textAlign: 'center'},
       {title: this.langs.sys_user_image, index: 'img', slot: 'img', width: '60px', minWidth: '60px', textAlign: 'center'},
       {title: this.langs.sys_user_uname, index: 'uname', slot: 'uname', order: '', width: '120px'},
@@ -85,7 +94,10 @@ export default class SysMenus extends Base {
   /* 创建完成 */
   activated(): void {
     // 加载
-    if(this.state.token) this.loadData();
+    if(this.state.token) {
+      this.getSelect();
+      this.loadData();
+    }
   }
 
   /* 选中状态 */
@@ -106,6 +118,8 @@ export default class SysMenus extends Base {
     this.sea.time = [Time.Date('Y/m/d', Time.StrToTime('-3 year')), Time.Date('Y/m/d')];
     // 条件
     this.sea.key = '';
+    this.sea.type = '';
+    this.sea.role = '';
     for(let v of this.sea.columns) v.value='';
     // 其它
     this.list.order = '';
@@ -151,6 +165,8 @@ export default class SysMenus extends Base {
       key: this.sea.key,
       stime: typeof this.sea.time[0]=='string'?this.sea.time[0]:Time.Date('Y/m/d', this.sea.time[0]),
       etime: typeof this.sea.time[1]=='string'?this.sea.time[1]:Time.Date('Y/m/d', this.sea.time[1]),
+      type: this.sea.type,
+      role: this.sea.role,
     };
     // 搜索条件
     for(let v of this.sea.columns) {
@@ -183,6 +199,8 @@ export default class SysMenus extends Base {
       data.email = '';
       this.save.data = data;
     }
+    // 选项
+    this.save.data.selectAll = this.selectAll;
   }
   /* 添加&编辑-回调 */
   saveSubmit(val: boolean): void {
@@ -217,6 +235,20 @@ export default class SysMenus extends Base {
     if(!val) return;
     this.exp.show = false;
     this.clearSelect();
+  }
+
+  /* 选项 */
+  getSelect(): void {
+    Request.Post('sys_user/get_select?lang='+this.state.lang, {
+      token: this.state.token,
+    }, (res:any)=>{
+      const d: any = res.data;
+      if(d.code==0) {
+        this.selectAll.type = d.data.type;
+        this.selectAll.role = d.data.role;
+      }
+      else Ui.Toast(d.msg);
+    });
   }
 
 }

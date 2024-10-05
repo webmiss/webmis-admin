@@ -65,6 +65,11 @@
           <span :class="d.status?'c_success':'c_danger'">{{ d.status?langs.enable:langs.disable }}</span>
         </div>
       </template>
+      <template #date="d">
+        <div class="tCenter">
+          <wm-tag :title="'创建: '+d.ctime+'\n更新: '+d.utime">{{ d.utime.substr(0, 10) }}</wm-tag>
+        </div>
+      </template>
       <template #sort="d">
         <div class="tCenter">{{ d.sort }}</div>
       </template>

@@ -36,6 +36,12 @@
         <template #time="d">
           <wm-date-picker v-model:value="sea.time" range :maxDate="sea.maxDate" :placeholder="d.label"></wm-date-picker>
         </template>
+        <template #type="d">
+          <wm-select v-model:value="sea.type" :options="selectAll.type" :placeholder="d.label" clearable></wm-select>
+        </template>
+        <template #role="d">
+          <wm-select v-model:value="sea.role" :options="selectAll.role" :placeholder="d.label" clearable></wm-select>
+        </template>
       </wm-search>
       <!-- Search End -->
     </div>
@@ -47,6 +53,11 @@
     <wm-table class="table" ref="tableList" :columns="list.columns" :options="list.data" @orderBy="orderBy" @partially="selectState">
       <template #id="d">
         <div class="tCenter">{{ d.id }}</div>
+      </template>
+      <template #date="d">
+        <div class="tCenter">
+          <wm-tag :title="'注册: '+d.rtime+'\n更新: '+d.utime+'\n登录: '+d.ltime+'\n备注: '+d.remark">{{ d.ltime.substr(0, 10) }}</wm-tag>
+        </div>
       </template>
       <template #type="d">
         <div class="tCenter">{{ d.type_name || '-' }}</div>

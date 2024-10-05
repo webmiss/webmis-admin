@@ -1,19 +1,19 @@
 <template>
   <ul class="wm-checkbox">
-      <li v-if="options.disabled" class="disabled" :style="{margin:margin, padding:padding}">
-        <span class="checkbox" :class="options.checked?'active':''">
-          <i class="partially" v-if="partially"></i>
-          <i class="all" v-else></i>
-        </span>
-        <span class="label" v-if="options.label">{{ options.label }}</span>
-      </li>
-      <li v-else :style="{margin:margin, padding:padding}" @click.stop="clickCheckbox()">
-        <span class="checkbox" :class="options.checked||value==options.value?'active':''">
-          <i class="partially" v-if="partially"></i>
-          <i class="all" v-else></i>
-        </span>
-        <span class="label" v-if="options.label">{{ options.label }}</span>
-      </li>
+    <li v-if="options.disabled" class="disabled" :style="{margin:margin, padding:padding}">
+      <span class="checkbox" :class="options.checked?'active':''">
+        <i class="partially" v-if="partially"></i>
+        <i class="all" v-else></i>
+      </span>
+      <span class="label" v-if="options.label">{{ options.label }}</span>
+    </li>
+    <li v-else :style="{margin:margin, padding:padding}" @click.stop="clickCheckbox()">
+      <span class="checkbox" :class="options.checked||value==options.value?'active':''">
+        <i class="partially" v-if="partially"></i>
+        <i class="all" v-else></i>
+      </span>
+      <span class="label" v-if="options.label">{{ options.label }}</span>
+    </li>
   </ul>
 </template>
 

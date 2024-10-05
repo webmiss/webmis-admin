@@ -106,7 +106,7 @@ import wmTree from '@/components/tree/index.vue'
   props: {
     show: {type: Boolean, default: false},        // 是否显示
     title: {type: String, default: ''},           // 标题
-    data: {default: []},                          // 数据
+    data: {default: {}},                          // 数据
   }
 })
 export default class ActionSave extends Vue {
@@ -138,6 +138,8 @@ export default class ActionSave extends Vue {
     this.$watch('show', (val:boolean)=>{
       this.infoShow = val;
       if(val){
+        // 选项
+        this.selectAll = this.data.selectAll;
         // 默认值
         this.form.id = this.data.id || 0;
         this.form.status = typeof this.data.status!='undefined'?this.data.status:true;
@@ -159,12 +161,9 @@ export default class ActionSave extends Vue {
   }
   /* 创建完成 */
   public mounted(): void {
-    if(this.state.token){
-      this.getSelect();
-    }
   }
 
-  /* 获取权限 */
+  /* 私有权限-获取 */
   getPerm(): void {
     Request.Post('sys_user/get_perm?lang='+this.state.lang, {
       token: this.state.token,
@@ -173,9 +172,8 @@ export default class ActionSave extends Vue {
       const d: any = res.data;
       if(d.code==0) this.selectAll.perm = d.data;
     });
-    
   }
-  /* 权限-合成 */
+  /* 私有权限-合成 */
   updatePerm(val: any): void {
     let perm: any = {};
     let arr: Array<string> = [];
@@ -217,20 +215,6 @@ export default class ActionSave extends Vue {
       const d: any = res.data;
       Ui.Toast(d.msg);
       this.$emit('submit', d.code==0);
-    });
-  }
-
-  /* 选项 */
-  getSelect(): void {
-    Request.Post('sys_user/get_select?lang='+this.state.lang, {
-      token: this.state.token,
-    }, (res:any)=>{
-      const d: any = res.data;
-      if(d.code==0) {
-        this.selectAll.type = d.data.type;
-        this.selectAll.role = d.data.role;
-      }
-      else Ui.Toast(d.msg);
     });
   }
 

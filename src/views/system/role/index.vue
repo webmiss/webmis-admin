@@ -50,6 +50,11 @@
           <wm-button effect="text" type="primary" @click="saveData('edit', d)">{{ langs.edit }}</wm-button>
         </div>
       </template>
+      <template #date="d">
+        <div class="tCenter">
+          <wm-tag :title="'创建: '+d.ctime+'\n更新: '+d.utime">{{ d.utime.substr(0, 10) }}</wm-tag>
+        </div>
+      </template>
     </wm-table>
     <!-- List End -->
   </div>

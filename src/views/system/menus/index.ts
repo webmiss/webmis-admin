@@ -11,6 +11,7 @@ import wmInput from '@/components/form/input/index.vue'
 import wmButton from '@/components/form/button/index.vue'
 import wmTable from '@/components/table/index.vue'
 import wmTableForm from '@/components/table/form.vue'
+import wmTag from '@/components/tag/index.vue'
 import wmPage from '@/components/page/index.vue'
 import wmDatePicker from '@/components/datepicker/index.vue'
 /* 统计、动作、搜索、更新、删除、导出 */
@@ -24,7 +25,7 @@ import actionExport from './export.vue'
 /* 系统菜单 */
 @Options({
   components: {
-    wmMain, wmSearch, wmInput, wmButton, wmTable, wmPage, wmTableForm, wmDatePicker,
+    wmMain, wmSearch, wmInput, wmButton, wmTable, wmTableForm, wmTag, wmPage, wmDatePicker,
     wmTotal, wmAction, actionSave, actionDel, actionExport
   },
 })
@@ -67,6 +68,7 @@ export default class SysMenus extends Base {
       {title: this.langs.sys_menus_ico, index: 'ico', slot: 'ico', width: '40px'},
       {title: this.langs.sys_menus_title, index: 'title', slot: 'title', order: '', width: '160px'},
       {title: this.langs.status, index: 'status', slot: 'status', width: '60px', textAlign: 'center'},
+      {title: this.langs.date, index: 'date', slot: 'date', width: '120px', minWidth: '110px', textAlign: 'center'},
       {title: this.langs.sys_menus_en, index: 'en', order: '', width: '160px'},
       {title: this.langs.sys_menus_sort, index: 'sort', slot: 'sort', order: '', width: '60px', minWidth: '60px', textAlign: 'center'},
       {title: this.langs.sys_menus_url, index: 'url', order: '', width: '200px', minWidth: '160px'},

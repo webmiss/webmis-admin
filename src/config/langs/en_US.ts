@@ -83,6 +83,9 @@ export function langs(): any {
     passwd_verify_code: 'Please enter the verification code',
     passwd_verify_passwd1: 'Starting with an English letter, 6-16 characters',
     passwd_verify_passwd2: 'Two passwords are inconsistent',
+    /* Msg */
+    msg_seach: 'Search for contacts',
+    msg_null: 'No new message',
     /* SysFile */
     sys_file_total: (dirNum: number, fileNum: number, size: number)=>{
       return 'Folder: <b>'+(dirNum || 0)+'</b>&nbsp;&nbsp;File: <b>'+(fileNum || 0)+'</b>&nbsp;&nbsp;Size: <b>'+(size || 0)+'</b>&nbsp;&nbsp;';

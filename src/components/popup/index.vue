@@ -1,7 +1,7 @@
 <template>
   <div style="position: relative; width: 100%; height: 100%;" :style="{visibility:show?'inherit':'hidden'}">
     <div ref="PopupBG" class="wm-popup_bg" :style="{backgroundColor:'rgba(0,0,0,'+opacity+')'}" @click="_clickBG"></div>
-    <div ref="PopupBody" class="wm-popup_body" :style="{width:width, height:height, backgroundColor:bgColor}">
+    <div ref="PopupBody" class="wm-popup_body" :style="{width:width, height:height, backgroundColor:bgColor, borderRadius:radius}">
       <slot></slot>
     </div>
   </div>
@@ -10,7 +10,7 @@
 <style scoped>
 .wm-popup_bg,.wm-popup_body{position: absolute; z-index: 99;}
 .wm-popup_bg{width: 100%; height: 100%; top: 0; left: 0; opacity: 0;}
-.wm-popup_body{opacity: 0;}
+.wm-popup_body{overflow: hidden; opacity: 0;}
 </style>
   
 <script lang="ts">
@@ -24,6 +24,7 @@ import { Options, Vue } from 'vue-class-component';
     height: {type: String, default: ''},            // 内容高度
     opacity: {type: Number, default: 0.4},          // 背景透明度
     bgColor: {type: String, default: ''},           // 内容背景颜色
+    radius: {type: String, default: ''},            // 圆角
     bgClose: {type: Boolean, default: true},        // 点击背景关闭
     time: {type: Number, default: 400},             // 动画时间
   }
@@ -37,6 +38,7 @@ export default class Popup extends Vue {
   height!: string;
   opacity!: number;
   bgColor!: string;
+  radius!: string;
   bgClose!: boolean;
   time!: number
 

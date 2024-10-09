@@ -6,13 +6,19 @@ export default class Env {
   public version: string = '3.0.0';         // 版本
   public baseUrl: string = '';              // 网址
   public apiUrl: string = 'admin/';         // 接口地址
+  public socketUrl: string = '';            // Socket地址
   public static copy: string = '©'+(new Date()).getFullYear()+' webmis.vip';
   public static lang: string = 'zh_CN'      // 语言
 
   /* 构造函数 */
   constructor() {
-    if(this.mode=='dev') this.baseUrl='http://localhost:9000/';
-    else this.baseUrl='https://php.webmis.vip/';
+    if(this.mode=='dev') {
+      this.baseUrl = 'http://localhost:9000/';
+      this.socketUrl = 'ws://127.0.0.1:9001';
+    } else {
+      this.baseUrl = 'https://php.webmis.vip/';
+      this.socketUrl = 'wss://php.webmis.vip/wss';
+    }
     this.apiUrl = this.baseUrl+this.apiUrl;
   }
 
@@ -24,6 +30,17 @@ export default class Env {
       },
       responseType: 'json', //返回类型
       timeout: 180000,      //超时设置
+    }
+  }
+
+  /* Socket */
+  public socket(): object {
+    return {
+      start: true,              // 启动
+      server: this.socketUrl,   // 服务器
+      channel: 'admin',         // 频道
+      time: 3000,               // 重连时间
+      heartbeat: 10000,         // 心跳时间
     }
   }
 

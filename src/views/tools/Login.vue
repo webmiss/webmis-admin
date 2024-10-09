@@ -254,7 +254,7 @@ export default class Login extends Vue {
       return ;
     }
     // 验证密码
-    if(passwd.length<6) return Ui.Toast('请输入密码');
+    if(passwd.length<6) return Ui.Toast(this.state.langs.login_passwd);
     // 验证码
     if(this.login.vcode.length!=4 && this.login.is_safety) {
       // 激活输入框
@@ -310,7 +310,7 @@ export default class Login extends Vue {
       }
     },()=>{
       if(load) load.clear();
-      Ui.Toast('无法连接服务器!');
+      Ui.Toast(this.state.langs.network_err);
     });
   }
 
@@ -340,7 +340,7 @@ export default class Login extends Vue {
       }
     },()=>{
       if(load) load.clear();
-      Ui.Toast('无法连接服务器!');
+      Ui.Toast(this.state.langs.network_err);
     });
   }
 

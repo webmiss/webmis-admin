@@ -95,6 +95,14 @@ export default class Time {
     return time;
   }
 
+  /* 时间比较 */
+  public static TimeSize(t1: number|string|Date, t2?: number|string|Date): number {
+    const last = new Date(t1).getTime();
+    const now = t2?new Date(t2).getTime():new Date().getTime();
+    let t = now-last;
+    return t!=0?t/1000:0;
+  }
+
   /* 格式化-小时 */
   public static FormatHourEncode(time: number): string {
     let t1: string = '00';

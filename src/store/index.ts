@@ -10,6 +10,8 @@ export default createStore({
     token: '',           // 用户Token
     uinfo: {},           // 用户信息
     menusAction: [],     // 动作菜单
+    socket: null,        // Socket
+    msg: {gid:'', fid:'', num: 0, list: []},     // Msg
   },
   getters: {
   },

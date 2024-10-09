@@ -3,9 +3,11 @@
   <!-- Login -->
   <login ref="Login" v-model:show="state.isLogin"></login>
   <!-- Uinfo -->
-  <uinfo v-model:show="state.isUinfo"></uinfo>
+  <uinfo v-model:show="state.isUinfo" v-if="state.isLogin"></uinfo>
   <!-- Passwd -->
-  <passwd v-model:show="state.isPasswd"></passwd>
+  <passwd v-model:show="state.isPasswd" v-if="state.isLogin"></passwd>
+  <!-- Msg -->
+  <msg v-model:show="msg.show" v-if="state.isLogin"></msg>
 
   <!-- Main -->
   <div class="app_main flex">
@@ -154,7 +156,7 @@
           </li>
         </ul>
         <ul class="app_tools flex">
-          <li class="msg" title="消息"><i class="ui ui_message"></i></li>
+          <li class="msg" title="消息" @click="msg.show=true"><i class="ui ui_message"></i></li>
           <li class="user" title="用户信息" @click="uinfo.show=!uinfo.show;menus.show=false">
             <i class="ui ui_user" v-if="!state.uinfo.img || uinfo.show"></i>
             <div class="img" v-else :style="{backgroundImage: 'url('+state.uinfo.img+')'}"></div>

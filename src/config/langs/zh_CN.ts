@@ -83,6 +83,9 @@ export function langs(): any {
     passwd_verify_code: '请输入验证码',
     passwd_verify_passwd1: '英文字母开头，6～16位字符',
     passwd_verify_passwd2: '两次密码不一致',
+    /* Msg */
+    msg_seach: '搜索联系人',
+    msg_null: '暂无新消息',
     /* SysFile */
     sys_file_total: (dirNum: number, fileNum: number, size: number)=>{
       return '文件夹: <b>'+(dirNum || 0)+'</b>&nbsp;&nbsp;文件: <b>'+(fileNum || 0)+'</b>&nbsp;&nbsp;大小: <b>'+(size || 0)+'</b>&nbsp;&nbsp;';

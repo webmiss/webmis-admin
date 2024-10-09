@@ -9,14 +9,15 @@ import Storage from '@/library/storage'
 import Ui from '@/library/ui'
 import Files from '@/library/files'
 /* 组件 */
+import wmPopup from '@/components/popup/index.vue'
+/* Tools */
 import Login from '@/views/tools/Login.vue'
 import Uinfo from '@/views/tools/Uinfo.vue'
 import Passwd from '@/views/tools/Passwd.vue'
-import wmPopup from '@/components/popup/index.vue'
-import wmDialog from '@/components/dialog/index.vue'
+import Msg from '@/views/tools/Msg.vue'
 
 @Options({
-  components: {Login, Uinfo, Passwd, wmPopup, wmDialog},
+  components: {wmPopup, Login, Uinfo, Passwd, Msg},
 })
 export default class App extends Base {
 
@@ -26,7 +27,6 @@ export default class App extends Base {
   // 状态
   private store: any = useStore();
   state: any = this.store.state;
-  langs: any = this.state.langs;
   copy: string = Env.copy;
   // 用户
   public uinfo: any = {show: false};
@@ -39,6 +39,8 @@ export default class App extends Base {
   public is_menus: Boolean = true;
   // 登录
   login: any = {show: false, passwd: false};
+  // 消息
+  msg: any = {show: false};
 
   /* 创建成功 */
   created(): void {

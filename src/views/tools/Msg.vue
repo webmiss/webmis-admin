@@ -48,6 +48,7 @@
             <ul class="wm-msg_list" v-if="state.msg.list.length>0">
               <li class="flex" v-for="(v,k) in state.msg.list" :key="k" :class="v.gid==sendGid&&v.fid==sendFid?'active':''" @click="msgClick(v)">
                 <div class="img" :style="{backgroundImage: v.img?'url('+v.img+')':''}">
+                  <span class="redNum" v-if="v.num>0">{{ v.num }}</span>
                   <i class="ui ui_image" v-if="!v.img"></i>
                 </div>
                 <div class="msg_text">
@@ -73,7 +74,7 @@
                 <!-- Time -->
                 <div class="time">{{ getMsgTime(sendList[k-1]?sendList[k-1].time:v.time, v.time) }}</div>
                 <!-- Msg Left -->
-                <div class="msg_left flex_left" v-if="v.fid!=state.uinfo.uid">
+                <div class="msg_left flex_left" v-if="sendGid!=0 && v.fid!=state.uinfo.uid">
                   <div class="img" :style="{backgroundImage: v.img?'url('+v.img+')':''}">
                     <i class="ui ui_image" v-if="!v.img"></i>
                   </div>
@@ -123,7 +124,7 @@
 .wm-msg_body{position: fixed; z-index: 99; width: 100%; height: 100%;}
 .wm-msg_content{overflow: hidden; width: 100%; height: 100%; border-radius: 4px;}
 .wm-msg_content .msg_null{position: absolute; color: #999; left: 50%; top: 50%; transform: translate(-50%, -50%);}
-.wm-msg_content .img{text-align: center; background-color: #F2F2F2; border-radius: 4px; background-repeat: no-repeat; background-size: cover;}
+.wm-msg_content .img{position: relative; text-align: center; background-color: #F2F2F2; border-radius: 4px; background-repeat: no-repeat; background-size: cover;}
 /* Left */
 .wm-msg_left{width: 260px; height: 100%; background-color: #242628; color: #FFF;}
 .wm-msg_uinfo{position: relative; height: 40px; line-height: 40px; padding: 12px 16px 8px;}
@@ -153,7 +154,7 @@
 .wm-msg_list li{cursor: pointer; line-height: 40px; padding: 10px 16px; border-radius: 4px;}
 .wm-msg_list li:hover{background-color: #2E3238;}
 .wm-msg_list .active{background-color: #2E3238;}
-.wm-msg_list .img{overflow: hidden; width: 40px; height: 40px;}
+.wm-msg_list .img{width: 40px; height: 40px;}
 .wm-msg_list .img i{color: @Info; font-size: 20px;}
 .wm-msg_list .msg_text{width: calc(100% - 40px); padding-left: 10px; box-sizing: border-box;}
 .wm-msg_list .msg_text div{line-height: 20px;}
@@ -229,13 +230,12 @@ export default class Msg extends Vue {
   private socketInterval: any = null;
   private heartbeatInterval: any = null;
   // 消息间隔时间
-  private msgTime: number = 300;
+  private msgTime: number = 600;
 
   /* 创建成功 */
   created(): void {
     this.$watch('show', (val:boolean)=>{
       this.msgShow = val;
-      if(val) this.msgList();
     }, { deep: true });
   }
 
@@ -255,12 +255,31 @@ export default class Msg extends Vue {
   msg(d: any): void {
     console.log('msg', d);
     for(let v of this.state.msg.list) {
-      if(v.gid==d.gid && (v.fid==d.fid || v.fid==d.uid)) {
+      if(v.gid==d.gid && v.fid==d.fid) {
+        // 是否新信息
+        if(d.gid==this.sendGid && d.fid==this.sendFid) {
+          v.num += 0;
+          d.is_new = false;
+          this.msgRead([d.id]);
+        } else {
+          v.num += 1;
+          d.is_new = true;
+          this.state.msg.num += 1;
+        }
+        // 是否提示
+        if(!this.msgShow) {
+          Ui.Toast(d.content);
+        }
+        // 数据
         v.time = d.time;
         v.title = d.title;
         v.content = d.content;
-        v.list.push({fid:d.fid, uid:d.uid, format:0, is_new: false, title:d.title, time:d.time, img:'', content:d.content});
+        v.list.push({gid: d.gid, fid: d.fid, uid: d.uid, format: 0, is_new: d.is_new, title: d.title, time: d.time, img: d.img, content:d.content});
+        // 调换位置
+        this.msgToTop(v);
+        // 调转底部
         this.msgToBottom();
+        break;
       }
     }
   }
@@ -284,6 +303,17 @@ export default class Msg extends Vue {
     this.sendTitle = row.title;
     this.sendList = row.list;
     this.sendContent = row.sendContent || '';
+    this.msgToBottom();
+    // 标记阅读
+    let ids: any = [];
+    for(let v of row.list) {
+      if(v.is_new){
+          v.is_new = false;
+          ids.push(v.id);
+        }
+    }
+    row.num = 0;
+    this.msgRead(ids);
   }
   /* 消息-内容 */
   msgInput(): void {
@@ -291,6 +321,12 @@ export default class Msg extends Vue {
     for(let v of this.state.msg.list) {
       if(v.gid==this.sendGid && v.fid==this.sendFid) v.sendContent = this.sendContent;
     }
+  }
+  /* 消息-调转顶部 */
+  msgToTop(v: any) {
+    let k: number = this.state.msg.list.indexOf(v);
+    this.state.msg.list.unshift(v);
+    this.state.msg.list.splice(k+1, 1);
   }
   /* 消息-调转底部 */
   msgToBottom(): void {
@@ -317,20 +353,40 @@ export default class Msg extends Vue {
     // 追加
     for(let v of this.state.msg.list) {
       if(v.gid==gid && v.fid==fid) {
-        v.list.push({fid:uid, uid:fid, format:0, is_new: false, title:title, time:Time.Date('Y-m-d H:i:s'), img:img, content:content});
+        v.time = Time.Date('Y-m-d H:i:s');
+        v.content = content;
+        v.list.push({gid:gid, fid:uid, uid:fid, format:0, is_new: false, title:title, time:Time.Date('Y-m-d H:i:s'), img:img, content:content});
+        // 调换位置
+        this.msgToTop(v);
+        // 调转底部
+        this.msgToBottom();
+        break;
       }
     }
     // 发送
     this.state.socket.send(JSON.stringify({
+      gid: gid,
+      uid: fid || uid,
       type: 'msg',
-      gid: this.sendGid,
-      uid: this.sendFid,
       title: this.state.uinfo.name,
       content: this.sendContent,
+      img: img,
     }));
-    // 清空
+    // 清空内容
     this.sendContent = '';
-    this.msgToBottom();
+  }
+  /* 消息-标记阅读 */
+  msgRead(ids: any=[]): void {
+    if(ids.length==0) return;
+    Request.Post('msg/read?lang='+this.state.lang, {
+      token: this.state.token,
+      ids: ids,
+    }, (res:any)=>{
+      const d: any = res.data;
+      if(d.code==0) {
+        this.state.msg.num -= ids.length;
+      }
+    });
   }
 
   /* 日期转换 */
@@ -381,6 +437,8 @@ export default class Msg extends Vue {
           this.socketClose();
         }
       }, this.socketCfg.heartbeat);
+      // 消息列表
+      this.msgList();
     }
     // 接收
     this.state.socket.onmessage = (res: any)=>{

@@ -25,7 +25,7 @@ h3{font-size: 16px; font-weight: 500;}
 .back{display: inline-block; width: 32px; text-align: center;}
 .back.icons{color: rgba(88,88,88,1);}
 .hide{display: none;}
-.redNum{position: absolute; padding: 0 4px; margin-top: -5px; line-height: 16px; color: #FFF; font-size: 12px; font-weight: normal; border-radius: 10px; background-color: #FF0000;}
+.redNum{position: absolute; right: -5px; zoom: 0.9; padding: 0 5px; margin-top: -5px; line-height: 16px; color: #FFF; font-size: 12px; font-weight: normal; border-radius: 8px; background-color: #FF0000;}
 /* 位置 */
 .center{position: absolute; z-index: 10; left: 50%; top: 50%; transform: translate(-50%,-50%);}
 .divCenter{position: absolute; left: 0; right: 0; top: 0; bottom: 0; margin: auto;}
@@ -68,8 +68,8 @@ h3{font-size: 16px; font-weight: 500;}
 .flex_nowrap{display: flex; justify-content: space-around; flex-direction: row; white-space:nowrap;}
 .flex_in{display: flex; justify-content: center; align-items:center;}
 .nowrap{overflow: hidden; white-space: nowrap; text-overflow: ellipsis;}
-.nowrap_text{overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;}
-.nowrap_three{overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;}
+.nowrap_text{overflow: hidden; text-overflow: ellipsis; display: -webkit-box; line-clamp: 2; -webkit-box-orient: vertical;}
+.nowrap_three{overflow: hidden; text-overflow: ellipsis; display: -webkit-box; line-clamp: 3; -webkit-box-orient: vertical;}
 
 /* 切换动画 */
 .view{position: fixed; z-index: 10; width:100%; height: 100%; transition: all .2s ease; background-color: #FFF;}

@@ -156,7 +156,10 @@
           </li>
         </ul>
         <ul class="app_tools flex">
-          <li class="msg" title="消息" @click="msg.show=true"><i class="ui ui_message"></i></li>
+          <li class="msg" title="消息" @click="msg.show=true">
+            <span class="redNum" v-if="state.msg.num>0">{{ state.msg.num }}</span>
+            <i class="ui ui_message"></i>
+          </li>
           <li class="user" title="用户信息" @click="uinfo.show=!uinfo.show;menus.show=false">
             <i class="ui ui_user" v-if="!state.uinfo.img || uinfo.show"></i>
             <div class="img" v-else :style="{backgroundImage: 'url('+state.uinfo.img+')'}"></div>

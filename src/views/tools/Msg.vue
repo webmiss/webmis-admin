@@ -1,6 +1,6 @@
 <template>
   <div class="wm-msg_body" :style="{visibility:msgShow?'inherit':'hidden'}">
-    <wm-popup width="920px" height="640px" v-model:show="msgShow" @close="close()">
+    <wm-popup width="980px" height="700px" v-model:show="msgShow" @close="close()">
       <div class="wm-msg_content flex">
         <div class="wm-msg_left">
           <!-- Uinfo -->
@@ -169,7 +169,8 @@
 .wm-msg_ct .time{line-height: 48px; color: #999; text-align: center; font-size: 12px;}
 .wm-msg_ct .img{width: 48px; height: 48px; line-height: 48px; text-align: center; background-color: #FFF; border-radius: 4px;}
 .wm-msg_ct .img i{font-size: 24px; color: @BaseBorder;}
-.wm-msg_ct .content{position: relative; line-height: 24px; padding: 10px 16px; border-radius: 4px; color: #000; word-break: break-all;}
+.wm-msg_ct .content{position: relative; max-width: calc(100% - 30px); line-height: 24px; padding: 10px 16px; border-radius: 4px; color: #000; word-break: break-all;}
+.wm-msg_ct .content pre{white-space: pre-wrap;}
 .wm-msg_ct .arrow{position: absolute; width: 8px; height: 8px; top: 20px; transform: rotate(45deg);}
 .wm-msg_ct .msg_left{padding: 10px 0;}
 .wm-msg_ct .msg_left .msg_body{margin-left: 10px; width: calc(100% - 116px);}
@@ -253,7 +254,6 @@ export default class Msg extends Vue {
 
   /* 消息 */
   msg(d: any): void {
-    console.log('msg', d);
     for(let v of this.state.msg.list) {
       if(v.gid==d.gid && v.fid==d.fid) {
         // 是否新信息
@@ -267,13 +267,15 @@ export default class Msg extends Vue {
           this.state.msg.num += 1;
         }
         // 是否提示
-        if(!this.msgShow) {
-          Ui.Toast(d.content);
-        }
+        if(!this.msgShow) Ui.Toast(d.content);
+        // 移除加载
+        let n: number = v.list.length;
+        if(n>0 && v.list[n-1].loading) v.list.splice(n-1, 1);
         // 数据
         v.time = d.time;
         v.title = d.title;
         v.content = d.content;
+        // 加载中
         v.list.push({gid: d.gid, fid: d.fid, uid: d.uid, format: 0, is_new: d.is_new, title: d.title, time: d.time, img: d.img, content:d.content});
         // 调换位置
         this.msgToTop(v);
@@ -353,9 +355,13 @@ export default class Msg extends Vue {
     // 追加
     for(let v of this.state.msg.list) {
       if(v.gid==gid && v.fid==fid) {
-        v.time = Time.Date('Y-m-d H:i:s');
+        const time: string = Time.Date('Y-m-d H:i:s');
+        // 消息
+        v.time = time;
         v.content = content;
-        v.list.push({gid:gid, fid:uid, uid:fid, format:0, is_new: false, title:title, time:Time.Date('Y-m-d H:i:s'), img:img, content:content});
+        v.list.push({gid:gid, fid:uid, uid:fid, format:0, is_new: false, title:title, time:time, img:img, content:content});
+        // 系统消息
+        if(gid==1) v.list.push({gid:gid, fid:0, uid:uid, format:0, is_new: false, title:title, time:time, img:img, content:'正在思考...', loading: true});
         // 调换位置
         this.msgToTop(v);
         // 调转底部

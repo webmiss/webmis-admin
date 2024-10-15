@@ -28,18 +28,15 @@
             <div class="user_list_body" v-if="sea.show">
               <div class="arrow arrow_up"></div>
               <ul class="user_list">
-                <li class="flex">
-                  <div class="img">
-                    <i class="ui ui_image"></i>
-                  </div>
-                  <div class="name nowrap">用户昵称</div>
-                </li>
-                <li class="flex">
-                  <div class="img">
-                    <i class="ui ui_image"></i>
-                  </div>
-                  <div class="name nowrap">用户昵称</div>
-                </li>
+                <template v-if="sea.list.length>0">
+                  <li class="flex" v-for="(v,k) in sea.list" :key="k" @click="searchClick(v)">
+                    <div class="img" :style="{backgroundImage: v.img?'url('+v.img+')':''}">
+                      <i class="ui ui_image" v-if="!v.img"></i>
+                    </div>
+                    <div class="name nowrap">{{ v.title }}</div>
+                  </li>
+                </template>
+                <li class="null" v-else></li>
               </ul>
             </div>
           </div>
@@ -74,7 +71,7 @@
                 <!-- Time -->
                 <div class="time">{{ getMsgTime(sendList[k-1]?sendList[k-1].time:v.time, v.time) }}</div>
                 <!-- Msg Left -->
-                <div class="msg_left flex_left" v-if="sendGid!=0 && v.fid!=state.uinfo.uid">
+                <div class="msg_left flex_left" v-if="v.fid!=state.uinfo.uid">
                   <div class="img" :style="{backgroundImage: v.img?'url('+v.img+')':''}">
                     <i class="ui ui_image" v-if="!v.img"></i>
                   </div>
@@ -141,7 +138,7 @@
 .wm-msg_search .sea{position: absolute; margin-top: 2px; width: 36px; text-align: center; color: #949698; font-size: 20px;}
 .wm-msg_search input{border: transparent 1px solid; padding: 0 10px 0 36px; width: 100%; line-height: 36px; background-color: #040608; color: #FFF; font-size: 14px; border-radius: 20px; box-sizing: border-box;}
 .wm-msg_search input:focus{outline: none; border-color: @Minor; box-shadow: none;}
-.wm-msg_search .user_list_body{position: absolute; padding-top: 8px; width: calc(100% - 32px);}
+.wm-msg_search .user_list_body{position: absolute; z-index: 1; padding-top: 8px; width: calc(100% - 32px);}
 .wm-msg_search .user_list_body .arrow{position: absolute; left: 50%; top: -3px; transform: translateX(-50%);}
 .wm-msg_search .user_list{padding: 4px; background-color: #FFF; border-radius: 4px; box-shadow: 0 0 8px rgba(0,0,0,0.3);}
 .wm-msg_search .user_list li{cursor: pointer; line-height: 32px; padding: 4px;}
@@ -219,7 +216,7 @@ export default class Msg extends Vue {
   // 变量
   msgShow: boolean = false;
   more: boolean = false;
-  sea: any = {show: false, key:''};
+  sea: any = {show: false, key:'', list:[]};
   // 发送内容
   sendGid: number | string = '';
   sendFid: number | string = '';
@@ -247,43 +244,90 @@ export default class Msg extends Vue {
 
   /* 搜索 */
   search(): void {
-    const key: string = this.sea.key;
-    this.sea.show = key.length>0?true:false;
-    console.log(key);
+    const key: string = this.sea.key.trim();
+    if(key.length>0) {
+      this.sea.show = true;
+      Request.Post('msg/sea?lang='+this.state.lang, {
+        token: this.state.token,
+        key: key,
+      }, (res:any)=>{
+        const d = res.data;
+        if(d.code==0) this.sea.list=d.data;
+      });
+    } else {
+      this.sea.show = false;
+    }
+  }
+  /* 搜索-点击 */
+  searchClick(row: any): void {
+    // 已存在
+    for(let v of this.state.msg.list) {
+      if(v.gid==row.gid && v.fid==row.fid) {
+        return this.msgClick(v);
+      }
+    }
+    // 追加
+    const data: any = {
+      gid: row.gid,
+      fid: row.fid,
+      title: row.title,
+      content: '',
+      img: row.img,
+      time: Time.Date('Y-m-d H:i:s'),
+      list: [],
+    }
+    this.state.msg.list.unshift(data);
+    return this.msgClick(data);
   }
 
   /* 消息 */
-  msg(d: any): void {
+  msg(row: any): void {
+    // 已存在列表
     for(let v of this.state.msg.list) {
-      if(v.gid==d.gid && v.fid==d.fid) {
+      if(v.gid==row.gid && v.fid==row.fid) {
         // 是否新信息
-        if(d.gid==this.sendGid && d.fid==this.sendFid) {
+        if(row.gid==this.sendGid && row.fid==this.sendFid) {
           v.num += 0;
-          d.is_new = false;
-          this.msgRead([d.id]);
+          row.is_new = false;
+          this.msgRead([row.id]);
         } else {
           v.num += 1;
-          d.is_new = true;
+          row.is_new = true;
           this.state.msg.num += 1;
         }
         // 是否提示
-        if(!this.msgShow) Ui.Toast(d.content);
+        if(!this.msgShow) Ui.Toast(row.content);
         // 移除加载
         let n: number = v.list.length;
         if(n>0 && v.list[n-1].loading) v.list.splice(n-1, 1);
         // 数据
-        v.time = d.time;
-        v.title = d.title;
-        v.content = d.content;
+        v.time = row.time;
+        v.title = row.title;
+        v.content = row.content;
         // 加载中
-        v.list.push({gid: d.gid, fid: d.fid, uid: d.uid, format: 0, is_new: d.is_new, title: d.title, time: d.time, img: d.img, content:d.content});
+        v.list.push({gid: row.gid, fid: row.fid, uid: row.uid, format: 0, is_new: row.is_new, title: row.title, time: row.time, img: row.img, content: row.content});
         // 调换位置
         this.msgToTop(v);
         // 调转底部
         this.msgToBottom();
-        break;
+        return ;
       }
     }
+    // 追加
+    const data: any = {
+      type: row.gid,
+      gid: row.gid,
+      fid: row.fid,
+      num: 1,
+      time: row.time,
+      title: row.title,
+      content: row.content,
+      img: row.img,
+      list: [
+
+      ],
+    }
+    this.state.msg.list.unshift(data);
   }
 
   /* 消息-列表 */
@@ -300,6 +344,7 @@ export default class Msg extends Vue {
   }
   /* 消息-点击 */
   msgClick(row: any): void {
+    this.sea.show = false;
     this.sendGid = row.gid;
     this.sendFid = row.fid;
     this.sendTitle = row.title;
@@ -369,15 +414,18 @@ export default class Msg extends Vue {
         break;
       }
     }
-    // 发送
-    this.state.socket.send(JSON.stringify({
+    // 数据
+    const msg: string = JSON.stringify({
       gid: gid,
       uid: fid || uid,
       type: 'msg',
       title: this.state.uinfo.name,
       content: this.sendContent,
       img: img,
-    }));
+    });
+    // 发送
+    this.state.socket.send(msg);
+    console.log('send', msg);
     // 清空内容
     this.sendContent = '';
   }

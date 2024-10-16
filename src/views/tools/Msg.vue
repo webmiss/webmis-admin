@@ -78,6 +78,7 @@
                   <div class="msg_body flex_left">
                     <div class="content">
                       <span class="arrow"></span>
+                      <span class="red" v-if="v.loading"></span>
                       <pre>{{ v.content }}</pre>
                     </div>
                   </div>
@@ -87,6 +88,7 @@
                   <div class="msg_body flex_right">
                     <div class="content">
                       <span class="arrow"></span>
+                      <span class="red" v-if="v.loading"></span>
                       <pre>{{ v.content }}</pre>
                     </div>
                   </div>
@@ -169,14 +171,17 @@
 .wm-msg_ct .content{position: relative; max-width: calc(100% - 30px); line-height: 24px; padding: 10px 16px; border-radius: 4px; color: #000; word-break: break-all;}
 .wm-msg_ct .content pre{white-space: pre-wrap;}
 .wm-msg_ct .arrow{position: absolute; width: 8px; height: 8px; top: 20px; transform: rotate(45deg);}
+.wm-msg_ct .red{position: absolute; width: 8px; height: 8px; top: 20px; background-color: @Danger; border-radius: 50%;}
 .wm-msg_ct .msg_left{padding: 10px 0;}
 .wm-msg_ct .msg_left .msg_body{margin-left: 10px; width: calc(100% - 116px);}
 .wm-msg_ct .msg_left .content{background-color: #FFF;}
 .wm-msg_ct .msg_left .arrow{left: -4px; background-color: #FFF;}
+.wm-msg_ct .msg_left .red{right: -16px;}
 .wm-msg_ct .msg_right{padding: 10px 0;}
 .wm-msg_ct .msg_right .msg_body{margin-right: 10px; width: calc(100% - 116px);}
 .wm-msg_ct .msg_right .content{background-color: #B2E281;}
 .wm-msg_ct .msg_right .arrow{right: -4px; background-color: #B2E281;}
+.wm-msg_ct .msg_right .red{left: -16px;}
 /* Tools */
 .wm-msg_tools{overflow: hidden; padding: 0 10px;}
 .wm-msg_tools li{cursor: pointer; width: 40px; height: 40px; line-height: 40px; text-align: center; color: @Info;}
@@ -221,8 +226,9 @@ export default class Msg extends Vue {
   sendGid: number | string = '';
   sendFid: number | string = '';
   sendTitle: string = '';
-  sendList: Array<any> = [];
   sendContent: string = '';
+  sendImg: string = '';
+  sendList: Array<any> = [];
   // Socket
   private socketCfg: any = new Env().socket();
   private socketInterval: any = null;
@@ -260,6 +266,7 @@ export default class Msg extends Vue {
   }
   /* 搜索-点击 */
   searchClick(row: any): void {
+    this.sea.show = false;
     // 已存在
     for(let v of this.state.msg.list) {
       if(v.gid==row.gid && v.fid==row.fid) {
@@ -281,12 +288,14 @@ export default class Msg extends Vue {
   }
 
   /* 消息 */
-  msg(row: any): void {
+  msg(d: any): void {
+    if(d.code!=0) return Ui.Toast(d.msg);
+    const row: any = d.data;
     // 已存在列表
     for(let v of this.state.msg.list) {
-      if(v.gid==row.gid && v.fid==row.fid) {
+      if(v.gid==d.gid && v.fid==d.fid) {
         // 是否新信息
-        if(row.gid==this.sendGid && row.fid==this.sendFid) {
+        if(d.gid==this.sendGid && d.fid==this.sendFid) {
           v.num += 0;
           row.is_new = false;
           this.msgRead([row.id]);
@@ -297,15 +306,14 @@ export default class Msg extends Vue {
         }
         // 是否提示
         if(!this.msgShow) Ui.Toast(row.content);
-        // 移除加载
+        // 加载中
         let n: number = v.list.length;
         if(n>0 && v.list[n-1].loading) v.list.splice(n-1, 1);
-        // 数据
+        // 追加数据
         v.time = row.time;
-        v.title = row.title;
         v.content = row.content;
-        // 加载中
-        v.list.push({gid: row.gid, fid: row.fid, uid: row.uid, format: 0, is_new: row.is_new, title: row.title, time: row.time, img: row.img, content: row.content});
+        v.img = row.img;
+        v.list.push(row);
         // 调换位置
         this.msgToTop(v);
         // 调转底部
@@ -314,8 +322,9 @@ export default class Msg extends Vue {
       }
     }
     // 追加
+    row.is_new = true;
     const data: any = {
-      type: row.gid,
+      type: d.type,
       gid: row.gid,
       fid: row.fid,
       num: 1,
@@ -323,11 +332,11 @@ export default class Msg extends Vue {
       title: row.title,
       content: row.content,
       img: row.img,
-      list: [
-
-      ],
+      list: [row],
     }
+    this.state.msg.num += 1;
     this.state.msg.list.unshift(data);
+    Ui.Toast(row.content);
   }
 
   /* 消息-列表 */
@@ -344,12 +353,12 @@ export default class Msg extends Vue {
   }
   /* 消息-点击 */
   msgClick(row: any): void {
-    this.sea.show = false;
     this.sendGid = row.gid;
     this.sendFid = row.fid;
     this.sendTitle = row.title;
-    this.sendList = row.list;
     this.sendContent = row.sendContent || '';
+    this.sendImg = row.img;
+    this.sendList = row.list;
     this.msgToBottom();
     // 标记阅读
     let ids: any = [];
@@ -395,18 +404,22 @@ export default class Msg extends Vue {
     const fid: number|string = this.sendFid;
     const uid: number|string = this.state.uinfo.uid;
     const title: string = this.state.uinfo.nickname;
-    const content: string = this.sendContent;
+    const content: string = this.sendContent.trim();
     const img: string = this.state.uinfo.img;
     // 追加
+    let row: any = {};
     for(let v of this.state.msg.list) {
       if(v.gid==gid && v.fid==fid) {
+        row = v;
+        // 时间
         const time: string = Time.Date('Y-m-d H:i:s');
-        // 消息
+        const tmp: any = {gid:gid, fid:uid, uid:fid, format:0, is_new: false, title:title, time:time, img:img, content:content, loading: gid==1?false:true};
+        // 预发送
         v.time = time;
         v.content = content;
-        v.list.push({gid:gid, fid:uid, uid:fid, format:0, is_new: false, title:title, time:time, img:img, content:content});
+        v.list.push(tmp);
         // 系统消息
-        if(gid==1) v.list.push({gid:gid, fid:0, uid:uid, format:0, is_new: false, title:title, time:time, img:img, content:'正在思考...', loading: true});
+        if(gid==1) v.list.push({gid:gid, fid:0, uid:uid, format:0, is_new: false, title:title, time:time, img:this.sendImg, content:'...', loading: true});
         // 调换位置
         this.msgToTop(v);
         // 调转底部
@@ -416,18 +429,21 @@ export default class Msg extends Vue {
     }
     // 数据
     const msg: string = JSON.stringify({
+      type: 'msg',
       gid: gid,
       uid: fid || uid,
-      type: 'msg',
-      title: this.state.uinfo.name,
-      content: this.sendContent,
-      img: img,
+      data: {
+        format: 0,
+        title: this.state.uinfo.name,
+        content: content,
+        img: img,
+      }
     });
     // 发送
     this.state.socket.send(msg);
-    console.log('send', msg);
     // 清空内容
     this.sendContent = '';
+    row.sendContent = '';
   }
   /* 消息-标记阅读 */
   msgRead(ids: any=[]): void {

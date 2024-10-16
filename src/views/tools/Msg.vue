@@ -3,12 +3,12 @@
     <wm-popup width="980px" height="700px" v-model:show="msgShow" @close="close()">
       <div class="wm-msg_content flex">
         <div class="wm-msg_left">
-          <!-- Uinfo -->
+          <!-- Uinfo  -->
           <div class="wm-msg_uinfo flex">
-            <div class="img">
-              <i class="ui ui_image"></i>
+            <div class="img" :style="{backgroundImage: this.state.uinfo.img?'url('+this.state.uinfo.img+')':''}">
+              <i class="ui ui_image" v-if="!this.state.uinfo.img"></i>
             </div>
-            <div class="name nowrap">WebMIS</div>
+            <div class="name nowrap">{{ this.state.uinfo.nickname }}</div>
             <div class="more" tabindex="0" @blur="more=false" @focus="more=true">
               <i class="ui ui_more"></i>
               <ul class="config" v-if="more">

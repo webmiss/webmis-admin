@@ -14,7 +14,8 @@ export default class Env {
   constructor() {
     if(this.mode=='dev') {
       this.baseUrl = 'http://localhost:9000/';
-      this.socketUrl = 'ws://127.0.0.1:9001';
+      // this.socketUrl = 'ws://127.0.0.1:9001';
+      this.socketUrl = 'wss://php.webmis.vip/wss';
     } else {
       this.baseUrl = 'https://php.webmis.vip/';
       this.socketUrl = 'wss://php.webmis.vip/wss';

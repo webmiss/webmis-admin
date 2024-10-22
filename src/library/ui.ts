@@ -2,7 +2,7 @@
 export default class Ui {
 
   /* 提示 */
-  public static Toast(text: string='提示', type: string="primary", time: number = 3000): void {
+  public static Toast(text: string='提示', time: number = 5000, type: string="primary"): void {
     // 创建对象
     let obj: HTMLDivElement = document.createElement('div');
     obj.setAttribute('class','wm-ui_toast');

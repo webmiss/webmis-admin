@@ -320,7 +320,7 @@ export default class Login extends Vue {
     let load: any;
     if(uinfo) load= Ui.Loading();
     // 请求
-    Request.Post('user/token', {token: this.state.token, uinfo: uinfo}, (res:any)=>{
+    Request.Post('user/token?lang='+this.state.lang, {token: this.state.token, uinfo: uinfo}, (res:any)=>{
       if(load) load.clear();
       const d: any = res.data;
       if(d.code==0 && d.data.token_time>0) {

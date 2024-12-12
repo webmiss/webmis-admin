@@ -76,8 +76,8 @@
       <div class="app_on" @click="MenusShow()"><i class="ui" :class="is_menus?'ui_arrow_left':'ui_arrow_right'"></i></div>
       <!-- Logo -->
       <div class="app_logo flex">
-        <div class="logo" @click="menus.show=!menus.show;uinfo.show=false" :style="{backgroundImage:'url('+require('./assets/logo.svg')+')'}"></div>
-        <div class="logo_text" v-if="is_menus">WebMIS 3.0</div>
+        <div class="logo" :title="title" @click="menus.show=!menus.show;uinfo.show=false" :style="{backgroundImage:'url('+require('./assets/logo.svg')+')'}"></div>
+        <div class="logo_text" v-if="is_menus">{{ title }}</div>
       </div>
       <!-- Search -->
       <div class="app_search" v-if="is_menus">

@@ -21,13 +21,12 @@ import Msg from '@/views/tools/Msg.vue'
 })
 export default class App extends Base {
 
-  // private cfg: any = new Env();          // 配置信息
+  private cfg: any = new Env();          // 配置信息
   // private route: any = useRoute();       // 路由信息
   // private router: any = useRouter();     // 路由
   // 状态
   private store: any = useStore();
   state: any = this.store.state;
-  cfg: any = new Env();
   title: string = this.cfg.title+' '+this.cfg.version;
   copy: string = Env.copy;
   // 用户

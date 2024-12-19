@@ -4,7 +4,7 @@
     overflowX: overflowX,
     overflowY: overflowY,
   }">
-    <table class="wm-table" :style="{width: width}">
+    <table class="wm-table" :style="{width: width, height: options.length==0?height:''}">
       <thead class="wm-table_title">
         <tr>
           <td class="checkbox" v-if="isCheckbox">
@@ -17,10 +17,10 @@
             textAlign: v.textAlign
           }">
             {{ v.title }}
-            <div class="order_body" v-if="['', 'asc', 'desc'].includes(v.order)" @click="OrderBy(k, v.index, v.order)">
+            <div class="order_body" v-if="['', 'ASC', 'DESC'].includes(v.order)" @click="OrderBy(k, v.index, v.order)">
               <div class="order">
-                <i class="ui ui_arrow_up" :class="v.order=='desc'?'active':''"></i>
-                <i class="ui ui_arrow_down" :class="v.order=='asc'?'active':''"></i>
+                <i class="ui ui_arrow_up" :class="v.order=='DESC'?'active':''"></i>
+                <i class="ui ui_arrow_down" :class="v.order=='ASC'?'active':''"></i>
               </div>
             </div>
           </td>
@@ -32,12 +32,13 @@
             <td class="checkbox" v-if="isCheckbox" :class="data.checked?'active':''">
               <wm-checkBox :options="{label:'', value:data.id, checked:data.checked, disabled:data.disabled}" margin="0" @checkbox="Checkbox"></wm-checkBox>
             </td>
-            <td v-for="(v, n) in columns" :key="n" :title="data[v.index]" :class="data.checked?'active':''">
+            <td v-for="(v, n) in columns" :key="n" :title="data[v.index]" :class="[data.checked?'active':'', v.class?v.class: '']">
               <slot v-if="v.slot" v-bind="data" :name="v.slot" :index="k"></slot>
               <span v-else>{{ data[v.index] || '-' }}</span>
             </td>
           </tr>
         </template>
+        <slot v-else-if="options.length==0&&isSlot"></slot>
         <tr v-else>
           <td class="null" :colspan="columns.length+(isCheckbox?1:0)"></td>
         </tr>
@@ -55,7 +56,7 @@
 .wm-table .checkbox::before{right: -1px; top: 0; border-right: @Primary5 1px solid;}
 .wm-table td{padding: 4px 8px; height: 40px; line-height: 1; white-space: nowrap; border: #FFF 1px solid; box-sizing: border-box;}
 .wm-table_title{position: sticky; z-index: 2; top: 0;}
-.wm-table_title::after{content: ''; position: absolute; top: -1px; width: 100%; height: 1px; background-color: #F4F6F8;}
+.wm-table_title::after{content: ''; position: absolute; top: -1px; width: 100%; height: 2px; background-color: #F4F6F8;}
 .wm-table_title td{position: relative; background-color: #F4F6F8; color: @Minor4; font-weight: bold; font-size: 12px;}
 .wm-table_title .order_body{cursor: pointer; position: absolute; right: 0; top: 0; width: 16px; height: 100%; background-color: #F4F6F8;}
 .wm-table_title .order_body:hover{background-color: #FFF; color: @Primary;}
@@ -65,7 +66,7 @@
 .wm-table_list tr:nth-child(odd) td{background-color: #FFF;}
 .wm-table_list tr:nth-child(even) td{background-color: #F4F6F8;}
 .wm-table_list tr:hover td{background-color: #EAF0F4;}
-.wm-table_list tr:last-child td{border-bottom-color: #F2F2F2;}
+.wm-table_list tr:last-child td{border-bottom-color: #F4F6F8;}
 .wm-table_list tr td.active{background: #D7E3EE;}
 .wm-table_list .null{height: 160px;}
 </style>
@@ -85,6 +86,7 @@ import wmCheckBox from '@/components/form/checkbox/index.vue'
     overflowX: {type: String, default: 'auto'},   // 滚动条: x轴
     overflowY: {type: String, default: 'auto'},   // 滚动条: y轴
     isCheckbox: {type: Boolean, default: true},   // 是否多选
+    isSlot: {type: Boolean, default: false},      // 是否自定义表体
   }
 })
 export default class Table extends Vue {
@@ -97,6 +99,7 @@ export default class Table extends Vue {
   overflowX!: any;
   overflowY!: any;
   isCheckbox!: boolean;
+  isSlot!: boolean;
   // 变量
   checkbox: any = {checked: false, partially: false, value:'', data:{label:'', value:'all'}};
 
@@ -166,9 +169,9 @@ export default class Table extends Vue {
 
   /* 排序 */
   OrderBy(k:number, index: string, order: string): void {
-    if(order=='asc') order = 'desc';
-    else if(order=='desc') order = '';
-    else order = 'asc';
+    if(order=='ASC') order = 'DESC';
+    else if(order=='DESC') order = '';
+    else order = 'ASC';
     this.columns[k].order = order;
     this.$emit('orderBy', order?index+' '+order:'');
   }

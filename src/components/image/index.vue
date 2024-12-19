@@ -11,7 +11,7 @@
     <i v-else-if="!isLoad" class="ui ui_loading loading" :style="{fontSize: icoSize}"></i>
     <div v-else class="img" :style="{backgroundImage: imgUrl?'url('+img+')':''}" @click="imgClick(img)"></div>
   </div>
-  <wm-img-view v-model:show="imgShow" :options="imgs"></wm-img-view>
+  <wm-img-view v-model:show="imgShow" :options="imgData"></wm-img-view>
 </template>
 
 <style lang="less" scoped>
@@ -54,7 +54,7 @@ export default class Image extends Vue {
   isLoad: boolean = false;
   imgUrl: string = '';
   imgShow: boolean = false;
-  imgs: Array<any> = [];
+  imgData: Array<any> = [];
 
   /* 创建成功 */
   created(): void {
@@ -83,7 +83,7 @@ export default class Image extends Vue {
     this.$emit('imgClick', img);
     if(this.isView) {
       this.imgShow = true;
-      this.imgs = [{label:img, value:img}];
+      this.imgData = [{label:img, value:img}];
     }
   }
 

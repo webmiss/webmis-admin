@@ -55,6 +55,16 @@ export default class Files {
     return file?success(file):error('文件转换失败!');
   }
 
+  /* 获取后缀名 */
+  public static GetTypeExt(type: string): string {
+    switch(type) {
+      case 'image/jpeg': return 'jpg';
+      case 'image/png': return 'png';
+      case 'image/gif': return 'gif';
+      default : return '';
+    }
+  }
+
   /* 图片压缩 */
   public static ImageCompress(file: string, cfg: Object, success: Function=()=>{}, error: Function=()=>{}): void {
     // 参数
@@ -125,7 +135,7 @@ export default class Files {
       dst_x = Math.round(param.width-w)/2;
       dst_y = Math.round(param.height-h)/2;
       context.drawImage(this, dst_x, dst_y, w, h);
-      let data = canvas.toDataURL(param.mimeType[param.ext], param.quality);
+      let data = canvas.toDataURL(param.type, param.quality);
       return success(data);
     }
   }

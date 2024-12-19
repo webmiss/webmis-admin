@@ -11,7 +11,9 @@
     <!-- Info -->
      <div class="wm-image_view_info" v-if="title">
       {{ state.langs.name }}: {{title}}&nbsp;&nbsp;
-      {{ state.langs.size }}: {{size}}&nbsp;&nbsp;
+      <template v-if="size">
+        {{ state.langs.size }}: {{size}}&nbsp;&nbsp;
+      </template>
       {{ state.langs.page }}: {{ imgIndex+1 }}/{{ options.length }}
     </div>
     <!-- Close -->
@@ -132,7 +134,7 @@ export default class ImageView extends Vue {
     let imgUrl: string = this.options[k]?this.options[k].value:'';
     if(!imgUrl) return Ui.Toast('无图片地址');
     this.title = this.options[k].label;
-    this.size = this.options[k].size || '0';
+    this.size = this.options[k].size || '';
     // 加载图片
     this.isLoad = false;
     const imgLoad: any = this.$refs.wmImageLoading;

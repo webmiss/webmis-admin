@@ -30,7 +30,8 @@ import { Options, Vue } from 'vue-class-component';
     padding: {type: String, default: '0 8px'},        // 内部间距
     margin: {type: String, default: '0 8px 0 0'},     // 外部间距
     bodyPadding: {type: String, default: '16px 0'},   // 内容间距
-    fontSize: {type: String, default: '16px'},        // 文字大小
+    fontSize: {type: String, default: '15px'},        // 文字大小
+    clickFlg: {type: Boolean, default: false},        // 禁止点击
   }
 })
 export default class Tabs extends Vue {
@@ -43,9 +44,11 @@ export default class Tabs extends Vue {
   margin!: string;
   bodyPadding!: string;
   fontSize!: string;
+  clickFlg!: boolean;
 
   /* 切换 */
   tabClick(d: any): void {
+    if(this.clickFlg) return;
     // 事件
     this.$emit('update:value', d.value);
     this.$emit('change', d);

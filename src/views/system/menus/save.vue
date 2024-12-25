@@ -1,5 +1,5 @@
 <template>
-  <wm-dialog v-model:show="infoShow" :title="title" width="720px" bottom="40px" :overflow="tabIndex==('action' || 'langs')?'hidden auto':'hidden'" @close="close()">
+  <wm-dialog v-model:show="infoShow" :title="title" width="720px" bottom="40px" :overflow="tabIndex=='action'||tabIndex=='langs'?'hidden auto':'hidden'" @close="close()">
     <wm-main>
       <wm-tabs v-model:value="tabIndex" :columns="tabs">
         <!-- 基本信息 -->

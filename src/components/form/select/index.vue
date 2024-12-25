@@ -38,7 +38,7 @@
       <!-- List End -->
     </div>
     <!-- Clear -->
-    <div class="wm-select_clear_body" v-if="value&&clearable" :style="{width: height, height: height}" @click.stop="clear()">
+    <div class="wm-select_clear_body" v-if="labelName&&clearable" :style="{width: height, height: height}" @click.stop="clear()">
       <div class="wm-select_clear" :style="{width: 'calc('+height+' / 2)', height: 'calc('+height+' / 2)'}"></div>
     </div>
     <!-- Icon -->
@@ -67,7 +67,7 @@
 .wm-select_list li:hover{background-color: #F4F6F8;}
 .wm-select_list li:hover .label{color: @Primary;}
 .wm-select_list li:hover .info{background-color: #F4F6F8;}
-.wm-select_list .label{float: left; color: @Text; padding: 0 16px;}
+.wm-select_list .label{text-align: left; width: auto; max-width: none; float: left; color: @Text; padding: 0 16px;}
 .wm-select_list .info{float: right; position: absolute; right: 0; height: 100%; padding: 0 10px; font-size: 12px; color: @RegularText; background-color: #FFF;}
 .wm-select_list .null{height: 120px; line-height: 120px;}
 .wm-select_list .null:hover{cursor: default; background-color: #FFF;}
@@ -90,7 +90,7 @@ import wmInput from '@/components/form/input/index.vue'
   components: { wmInput },
   props: {
     value: {default: ''},                                   // 默认值
-    options: {type: Array, default: []},                    // 数据: [{label:'男', value:'男', disabled: true},{label:'女', value:'女'}]
+    options: {type: Array, default: []},                    // 数据: [{label:'男', value:'男', checked: true},{label:'女', value:'女'}]
     multiple: {type: Boolean, default: false},              // 是否多选
     width: {type: String, default: '100%'},                 // 宽
     height: {type: String, default: '40px'},                // 高
@@ -139,14 +139,19 @@ export default class Select extends Vue {
   created(): void {
     // 监听
     this.$watch('value', (val:Array<any>)=>{
-      if(!val) return this.clear();
       // 勾选默认值
-      for(let i in this.seaList) {
-        if(val.includes(this.seaList[i].value)) this.selectClick(i, false);
+      if(val) {
+        for(let i in this.seaList) {
+          this.seaList[i].checked = val.includes(this.seaList[i].value);
+        }
+        this.selectData(false);
+      } else {
+        this.clear();
       }
     }, { deep: true });
     this.$watch('options', (val:Array<any>)=>{
       this.seaList = val || [];
+      this.selectData();
     }, { deep: true });
   }
 
@@ -182,41 +187,43 @@ export default class Select extends Vue {
     this.seaDisplay = n>0;
   }
 
-  /* 选择 */
-  selectClick(k: any, isStatus: boolean=true): void {
+  /* 选择-点击 */
+  selectClick(k: any): void {
+    // 多选
+    if(this.multiple) {
+      // 选择
+      this.seaList[k].checked = this.seaList[k].checked?false:true;
+    } else {
+      // 单选
+      for(let i in this.seaList) {
+        if(i==k) this.seaList[i].checked = this.seaList[k].checked?false:true;
+        else this.seaList[i].checked = false;
+      }
+      // 隐藏
+      this.show = false;
+    }
+    // 数据
+    this.selectData();
+  }
+
+  /* 选择-数据 */
+  selectData(isStatus: boolean=true): void {
     let labs: Array<any> = [];
     let vals: Array<any> = [];
     let data: Array<any> = [];
+    // 数据
     for(let i in this.seaList) {
-      // 多选
-      if(this.multiple){
-        if(i==k) this.seaList[k].checked = !this.seaList[k].checked;
-        if(this.seaList[i].checked) {
-          labs.push(this.seaList[i].label);
-          vals.push(this.seaList[i].value);
-          data.push(this.seaList[i]);
-        }
-      }else{
-        // 单选
-        if(i==k){
-          labs.push(this.seaList[i].label);
-          vals.push(this.seaList[i].value);
-          data.push(this.seaList[i]);
-          this.seaList[i].checked = true;
-        }else{
-          this.seaList[i].checked = false;
-        }
+      if(this.seaList[i].checked) {
+        labs.push(this.seaList[i].label);
+        vals.push(this.seaList[i].value);
+        data.push(this.seaList[i]);
       }
     }
     // 事件
     this.labelName = labs.join(',');
-    if(isStatus){
+    if(isStatus) {
       this.$emit('update:value', vals);
       this.$emit('data', data);
-    }
-    // 单选隐藏
-    if(!this.multiple){
-      this.show = false;
     }
   }
 
@@ -224,6 +231,7 @@ export default class Select extends Vue {
   clear(): void {
     this.labelName = '';
     this.$emit('update:value', '');
+    for(let v of this.seaList) v.checked=false;
   }
 
 }

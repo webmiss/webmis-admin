@@ -204,6 +204,8 @@ export default class Select extends Vue {
     }
     // 数据
     this.selectData();
+    // 事件
+    this.$emit('change');
   }
 
   /* 选择-数据 */

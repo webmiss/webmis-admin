@@ -10,11 +10,16 @@
     <img ref="wmImageLoading" class="loading_img" />
     <!-- Info -->
      <div class="wm-image_view_info" v-if="title">
-      {{ state.langs.name }}: {{title}}&nbsp;&nbsp;
+      <span>{{ state.langs.name }}: {{title}}</span>
       <template v-if="size">
-        {{ state.langs.size }}: {{size}}&nbsp;&nbsp;
+        <span>{{ state.langs.size }}: {{size}}</span>
       </template>
-      {{ state.langs.page }}: {{ imgIndex+1 }}/{{ options.length }}
+      <template v-if="other">
+        <template v-for="(v,k) in other" :key="k">
+          <span>{{ k }}: {{ v }}</span>
+        </template>
+      </template>
+      <span>{{ state.langs.page }}: {{ imgIndex+1 }}/{{ options.length }}</span>
     </div>
     <!-- Close -->
     <i class="ui ui_close tools close" @click="close()"></i>
@@ -45,7 +50,8 @@
 .wm-image_view .loading{color: @Minor; animation: loading 2s linear 0s infinite;}
 .wm-image_view img{transition: @Transition;}
 .wm-image_view .loading_img{display: none;}
-.wm-image_view_info{position: absolute; z-index: 10; max-width: calc(100% - 120px); left: 50%; bottom: 16px; transform: translateX(-50%); padding: 0 24px; line-height: 40px; background-color: #00000050; color: #FFF; border-radius: 20px;}
+.wm-image_view_info{overflow: hidden; position: absolute; z-index: 10; white-space: nowrap; max-width: calc(100% - 200px); left: 50%; bottom: 16px; transform: translateX(-50%); padding: 0 16px; line-height: 40px; background-color: #00000050; color: #FFF; border-radius: 20px;}
+.wm-image_view_info span{padding: 0 8px;}
 /* Tools */
 .wm-image_view .tools{cursor: pointer; position: absolute; z-index: 10; width: 48px; line-height: 48px; color: #FFF; background-color: #00000005; text-align: center; border-radius: 50%;}
 .wm-image_view .tools:hover{background-color: #00000050; color: @Minor;}
@@ -70,7 +76,7 @@ import Ui from '@/library/ui'
   props: {
     show: {type: Boolean, default: false},              // 是否显示
     index: {type: Number, default: 0},                  // 默认展示
-    options: {type: Array, default: []},                // 图片地址: [{label:'名称', value:'', size:''}]
+    options: {type: Array, default: []},                // 图片地址: [{label:'名称', value:'', size:'', other:[{'名称':'内容'}]}]
     bgColor: {type: String, default: 'rgba(0,0,0,.8)'}, // 背景颜色
     icoSize: {type: String, default: '32px'},           // 图标大小
   }
@@ -93,6 +99,7 @@ export default class ImageView extends Vue {
   isFull: boolean = false;
   title: string = '';
   size: string = '';
+  other: any = '';
 
   /* 创建成功 */
   created(): void {
@@ -132,9 +139,13 @@ export default class ImageView extends Vue {
     this.imgIndex = k;
     // 图片
     let imgUrl: string = this.options[k]?this.options[k].value:'';
-    if(!imgUrl) return Ui.Toast('无图片地址');
+    if(!imgUrl) {
+      this.close();
+      return Ui.Toast('无图片地址');
+    }
     this.title = this.options[k].label;
     this.size = this.options[k].size || '';
+    this.other = this.options[k].other || '';
     // 加载图片
     this.isLoad = false;
     const imgLoad: any = this.$refs.wmImageLoading;

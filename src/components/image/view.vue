@@ -50,11 +50,11 @@
 .wm-image_view .loading{color: @Minor; animation: loading 2s linear 0s infinite;}
 .wm-image_view img{transition: @Transition;}
 .wm-image_view .loading_img{display: none;}
-.wm-image_view_info{overflow: hidden; position: absolute; z-index: 10; white-space: nowrap; max-width: calc(100% - 200px); left: 50%; bottom: 16px; transform: translateX(-50%); padding: 0 16px; line-height: 40px; background-color: #00000050; color: #FFF; border-radius: 20px;}
+.wm-image_view_info{overflow: hidden; position: absolute; z-index: 10; white-space: nowrap; max-width: calc(100% - 200px); left: 50%; bottom: 16px; transform: translateX(-50%); padding: 0 16px; line-height: 40px; background-color: #00000080; color: #FFF; border-radius: 20px;}
 .wm-image_view_info span{padding: 0 8px;}
 /* Tools */
 .wm-image_view .tools{cursor: pointer; position: absolute; z-index: 10; width: 48px; line-height: 48px; color: #FFF; background-color: #00000005; text-align: center; border-radius: 50%;}
-.wm-image_view .tools:hover{background-color: #00000050; color: @Minor;}
+.wm-image_view .tools:hover{background-color: #00000080; color: @Minor;}
 .wm-image_view .close{right: 16px; top: 16px; font-size: 20px;}
 .wm-image_view .full{right: 16px; bottom: 16px; font-size: 20px;}
 .wm-image_view .prev,.wm-image_view .next{position: absolute; z-index: 9; top: 0; width: 80px; height: 100%;}

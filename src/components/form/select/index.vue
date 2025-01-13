@@ -144,7 +144,6 @@ export default class Select extends Vue {
         for(let i in this.seaList) {
           this.seaList[i].checked = val.includes(this.seaList[i].value);
         }
-        this.selectData(false);
       } else {
         this.clear();
       }

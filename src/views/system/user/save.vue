@@ -138,8 +138,6 @@ export default class ActionSave extends Vue {
     this.$watch('show', (val:boolean)=>{
       this.infoShow = val;
       if(val){
-        // 选项
-        this.selectAll = this.data.selectAll;
         // 默认值
         this.form.id = this.data.id || 0;
         this.form.status = typeof this.data.status!='undefined'?this.data.status:true;
@@ -150,6 +148,8 @@ export default class ActionSave extends Vue {
         this.form.department = this.data.department || '';
         this.form.position = this.data.position || '';
         this.form.remark = this.data.remark || '';
+        // 选项
+        this.getSelect();
         // 类型、角色
         this.form.type = typeof this.data.type!='undefined'?[this.data.type]:[];
         this.form.role = this.data.role || '';
@@ -159,8 +159,23 @@ export default class ActionSave extends Vue {
       }
     }, { deep: true });
   }
-  /* 创建完成 */
-  public mounted(): void {
+
+  /* 选项 */
+  getSelect(): void {
+    Request.Post('sys_user/get_select?lang='+this.state.lang, {
+      token: this.state.token,
+    }, (res:any)=>{
+      const d: any = res.data;
+      if(d.code==0) {
+        this.selectAll.type = d.data.type;
+        this.selectAll.role = d.data.role;
+        // 默认值
+        setTimeout(()=>{
+          this.form.type = typeof this.data.type!='undefined'?[parseInt(this.data.type)]:[];
+          this.form.role = this.data.role || '';
+        }, 300);
+      } else Ui.Toast(d.msg);
+    });
   }
 
   /* 私有权限-获取 */

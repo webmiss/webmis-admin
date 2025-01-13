@@ -28,6 +28,7 @@
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
 @Options({
+  name: 'WmMain',
   components: {},
   props: {
     width: {type: String, default: '100%'},           // 宽

@@ -71,36 +71,6 @@ export default class SysMenus extends Base {
     if(this.state.token) this.loadData();
   }
 
-  /* 选中状态 */
-  selectState(n:number, t:number): void {
-    this.list.num = n;
-    this.list.total = t;
-  }
-
-  /* 排序 */
-  orderBy(val: string): void {
-    this.list.order = val;
-    this.loadData();
-  }
-
-  /* 重置条件 */
-  resetData(): void {
-    // 条件
-    this.sea.key = '';
-    for(let v of this.sea.columns) v.value='';
-    // 其它
-    this.list.order = '';
-    this.page.num = 1;
-    // 加载
-    this.loadData();
-  }
-
-  /* 清除勾选 */
-  clearSelect(): void {
-    const obj:any = this.$refs.tableList;
-    obj.checkboxAll(false);
-  }
-
   /* 加载数据 */
   loadData(): void {
     this.sea.show = false;
@@ -121,21 +91,42 @@ export default class SysMenus extends Base {
         this.page.total = d.data.total.total;
         this.list.data = d.data.list;
         this.clearSelect();
-      }else{
-        Ui.Toast(d.msg);
-      }
+      } else Ui.Toast(d.msg);
     });
   }
-  /* 数据 */
+  /* 搜索条件 */
   getWhere(): object {
     const data: any = {
       key: this.sea.key,
     };
-    // 搜索条件
-    for(let v of this.sea.columns) {
-      if(v.name) data[v.name] = v.value;
-    }
+    for(let v of this.sea.columns) if(v.name) data[v.name] = v.value;
     return data;
+  }
+  /* 选中状态 */
+  selectState(n:number, t:number): void {
+    this.list.num = n;
+    this.list.total = t;
+  }
+  /* 排序 */
+  orderBy(val: string): void {
+    this.list.order = val;
+    this.loadData();
+  }
+  /* 重置条件 */
+  resetData(): void {
+    // 条件
+    this.sea.key = '';
+    for(let v of this.sea.columns) v.value='';
+    // 其它
+    this.list.order = '';
+    this.page.num = 1;
+    // 加载
+    this.loadData();
+  }
+  /* 清除勾选 */
+  clearSelect(): void {
+    const obj:any = this.$refs.tableList;
+    obj.checkboxAll(false);
   }
 
   /* 添加&编辑 */

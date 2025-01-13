@@ -107,9 +107,6 @@ export default class ActionSave extends Vue {
       }
     }, { deep: true });
   }
-  /* 创建完成 */
-  public mounted(): void {
-  }
 
   /* 获取权限 */
   getPerm(): void {

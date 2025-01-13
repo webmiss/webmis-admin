@@ -36,18 +36,19 @@ export default class Time {
   /* 时间戳转换 */
   public static StrToTime(datetime: string=''): number {
     const arr = datetime.split(' ');
-    const num: number = parseInt(arr[0]);
-    let n = 0;
+    const n: number = parseInt(arr[0]);
+    let d: any = new Date(datetime);
+    if(d=='Invalid Date') d = new Date();
     switch (arr[1]) {
-      case 'second': n=num*1; break;
-      case 'minute': n=num*60; break;
-      case 'hour': n=num*60*60; break;
-      case 'day': n=num*60*60*24; break;
-      case 'week': n=num*60*60*24*7; break;
-      case 'month': n=num*60*60*24*7*30; break;
-      case 'year': n=num*60*60*24*365; break;
+      case 'second': d.setSeconds(d.getSeconds()+n); break;
+      case 'minute': d.setMinutes(d.getMinutes()+n); break;
+      case 'hour': d.setHours(d.getHours()+n); break;
+      case 'day': d.setDate(d.getDate()+n); break;
+      case 'week': d.setDate(d.getDate()+n*7); break;
+      case 'month': d.setMonth(d.getMonth()+n); break;
+      case 'year': d.setFullYear(d.getFullYear()+n); break;
     }
-    let now: number = n!=0?new Date().getTime():new Date(datetime).getTime();
+    let now: number = d.getTime();
     now = Math.round(now/1000)+n;
     return now>0?now:0;
   }

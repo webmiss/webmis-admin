@@ -45,7 +45,7 @@
 </template>
 
 <style lang="less" scoped>
-.wm-image_view{position: fixed; z-index: 99; left: 0; top: 0; width: 100%; height: 100%; transition: @Transition;}
+.wm-image_view{position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; transition: @Transition;}
 .wm-image_view .loading, .wm-image_view img{position: absolute; z-index: 1; left: 50%; top: 50%; transform: translate(-50%, -50%);}
 .wm-image_view .loading{color: @Minor; animation: loading 2s linear 0s infinite;}
 .wm-image_view img{transition: @Transition;}

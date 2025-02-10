@@ -28,14 +28,16 @@
       </thead>
       <tbody class="wm-table_list">
         <template v-if="options.length>0">
-          <tr v-for="(data, k) in options" :key="k">
-            <td class="checkbox" v-if="isCheckbox" :class="data.checked?'active':''">
-              <wm-checkBox :options="{label:'', value:data.id, checked:data.checked, disabled:data.disabled}" margin="0" @checkbox="Checkbox"></wm-checkBox>
+          <tr v-for="(d, k) in options" :key="k">
+            <td class="checkbox" v-if="isCheckbox" :class="d.checked?'active':''">
+              <wm-checkBox :options="{label:'', value:d.id, checked:d.checked, disabled:d.disabled}" margin="0" @checkbox="Checkbox"></wm-checkBox>
             </td>
-            <td v-for="(v, n) in columns" :key="n" :title="data[v.index]" :class="[data.checked?'active':'', v.class?v.class: '']">
-              <slot v-if="v.slot" v-bind="data" :name="v.slot" :index="k"></slot>
-              <span v-else>{{ data[v.index] || '-' }}</span>
-            </td>
+            <template v-if="typeof d.display=='undefined' || d.display">
+              <td v-for="(v, n) in columns" :key="n" :title="d[v.index]" :class="[d.checked?'active':'', v.class?v.class: '']">
+                <slot v-if="v.slot" v-bind="d" :name="v.slot" :index="k"></slot>
+                <span v-else>{{ d[v.index] || '-' }}</span>
+              </td>
+            </template>
           </tr>
         </template>
         <slot v-else-if="options.length==0&&isSlot"></slot>
@@ -54,7 +56,7 @@
 .wm-table .checkbox::after,.wm-table .checkbox::before{content: ''; position: absolute; width: 1px; height: 100%;}
 .wm-table .checkbox::after{left: -1px; top: 0; border-left: #F4F6F8 1px solid;}
 .wm-table .checkbox::before{right: -1px; top: 0; border-right: @Primary5 1px solid;}
-.wm-table td{padding: 4px 8px; height: 40px; line-height: 1; white-space: nowrap; border: #FFF 1px solid; box-sizing: border-box;}
+.wm-table td{padding: 4px; height: 40px; line-height: 1; white-space: nowrap; border: #FFF 1px solid; box-sizing: border-box;}
 .wm-table_title{position: sticky; z-index: 2; top: 0;}
 .wm-table_title::after{content: ''; position: absolute; top: -1px; width: 100%; height: 2px; background-color: #F4F6F8;}
 .wm-table_title td{position: relative; background-color: #F4F6F8; color: @Minor4; font-weight: bold; font-size: 12px;}

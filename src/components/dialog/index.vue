@@ -2,14 +2,18 @@
   <div class="wm-dialog_body" :style="{visibility:cfg.show?'inherit':'hidden'}">
     <wm-popup ref="Popup" v-model:show="cfg.show" width="100%" height="100%" position="top" :time="600">
       <div class="wm-dialog_bg" @click="close(isClose)"></div>
-      <div class="wm-dialog" :style="{width:width, height:height, borderRadius:borderRadius}">
+      <div class="wm-dialog" :style="{width:width, maxWidth:maxWidth, height:height, borderRadius:borderRadius}">
         <!-- Title -->
         <div class="wm-dialog_title">
           <span>{{ title }}</span>
           <div class="wm-dialog_close" @click="close(true)"></div>
         </div>
+        <!-- Top -->
+        <div class="wm-dialog_top" v-if="top" :style="{height:top+'', lineHeight:top+''}">
+          <slot name="top"></slot>
+        </div>
         <!-- Content -->
-        <div class="wm-dialog_content scrollbar" :style="{overflow: overflow, maxHeight: 'calc('+cfg.height+'px - 46px - 40px - '+bottom+')'}">
+        <div class="wm-dialog_content scrollbar" :style="{overflow: overflow, maxHeight: 'calc('+cfg.height+'px - 46px - 40px - '+top+' - '+bottom+')'}">
           <slot></slot>
         </div>
         <!-- Bottom -->
@@ -32,8 +36,9 @@
 .wm-dialog_close::after,.wm-dialog_close::before{content: ''; position: absolute; width: 12px; height: 1.6px; background-color: #666; left: 50%; top: 50%; transform-origin: center;}
 .wm-dialog_close::after{transform: rotate(45deg); margin-left: -16%;}
 .wm-dialog_close::before{transform: rotate(-45deg); margin-left: -16%;}
+.wm-dialog_top{position: relative; overflow: hidden;}
 .wm-dialog_content{width: 100%; height: 100%;}
-.wm-dialog_bottom{padding: 5px 0 16px; text-align: center;}
+.wm-dialog_bottom{position: relative; padding: 4px 0 16px; text-align: center;}
 </style>
   
 <script lang="ts">
@@ -46,9 +51,11 @@ import wmPopup from '@/components/popup/index.vue'
     show: {type: Boolean, default: false},          // 是否显示
     title: {type: String, default: ''},             // 标题
     width: {type: String, default: '360px'},        // 内容宽度
+    maxWidth: {type: String, default: '1920px'},    // 最大宽度
     height: {type: String, default: 'auto'},        // 内容高度
     overflow: {type: String, default: 'inherit'},   // 内容滚动条
     borderRadius: {type: String, default: '4px'},   // 圆角
+    top: {type: String, default: ''},               // 顶部高度
     bottom: {type: String, default: ''},            // 底部高度
     isClose: {type: Boolean, default: false},       // 点击关闭
   }
@@ -59,9 +66,11 @@ export default class Dialog extends Vue {
   show!: boolean;
   title!: string;
   width!: string;
+  maxWidth!: string;
   height!: string;
   overflow!: string;
   borderRadius!: string;
+  top!: string;
   bottom!: string;
   isClose!: boolean;
   // 变量

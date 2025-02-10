@@ -86,16 +86,8 @@ export default class Page extends Vue {
   created(): void {
     // 监听
     this.$watch('total', (val:number)=>{
-      this.init();
+      if(val) this.init();
     }, { deep: true });
-    this.$watch('page', (val:number)=>{
-      this.init();
-    }, { deep: true });
-  }
-
-  /* 创建完成 */
-  public mounted(): void {
-    this.init();
   }
 
   /* 初始化 */
@@ -132,15 +124,11 @@ export default class Page extends Vue {
       this.$emit('update:page', page);
       this.$emit('pageData', {total: this.total, page: page, num: this.num, limit: this.limit});
     }
-    
   }
 
   /* 选择页码 */
   selectChange(val: any): void {
     this.$emit('update:limit', val[0]);
-    this.$nextTick(()=>{
-      this.init();
-    });
   }
 
 }

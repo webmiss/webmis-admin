@@ -14,6 +14,7 @@
       padding: paddingY+' '+paddingX,
       overflowX: overflowX,
       overflowY: overflowY,
+      textAlign: textAlign,
     }">
       <slot></slot>
     </div>
@@ -22,7 +23,7 @@
 
 <style lang="less" scoped>
 .wm-main_body{position: relative;}
-.wm-main_ct{width: 100%; height: 100%;}
+.wm-main_ct{width: 100%; height: 100%; line-height: 24px;}
 </style>
 
 <script lang="ts">
@@ -39,6 +40,7 @@ import { Options, Vue } from 'vue-class-component';
     bgColor: {type: String, default: 'transparent'},  // 背景颜色
     overflowX: {type: String, default: ''},           // x轴滚动条
     overflowY: {type: String, default: ''},           // y轴滚动条
+    textAlign: {type: String, default: 'left'},       // 文本-对齐方式
   }
 })
 export default class Main extends Vue {
@@ -52,6 +54,7 @@ export default class Main extends Vue {
   bgColor!: string;
   overflowX!: any;
   overflowY!: any;
+  textAlign!: any;
 
 }
 </script>

@@ -163,7 +163,7 @@ export default class SysMenus extends Base {
   /* 清除勾选 */
   clearSelect(): void {
     const obj:any = this.$refs.tableList;
-    obj.checkboxAll(false);
+    setTimeout(()=>{ obj.checkboxAll(false); }, 300);
   }
 
   /* 添加&编辑 */

@@ -4,6 +4,7 @@ import Base from '../../../service/Base'
 /* JS组件 */
 import Ui from '@/library/ui'
 import Request from '@/library/request'
+import Permission from '@/library/permission';
 /* 组件 */
 import wmMain from '@/components/container/main.vue'
 import wmInput from '@/components/form/input/index.vue'
@@ -34,6 +35,7 @@ export default class SysMenus extends Base {
   state: any = this.store.state;
   // 语言
   langs: any = this.state.langs;
+  isAction:Function = Permission.isAction;
   // 搜索
   sea: any = {
     show: false, key: '', placeholder:'名称、备注',
@@ -137,14 +139,8 @@ export default class SysMenus extends Base {
       this.save.title = this.langs.add;
       this.save.data = {};
     } else if(type=='edit') {
-      this.save.title = this.langs.edit;
-      if(data) {
-        this.save.data = data;
-      } else {
-        const obj:any = this.$refs.tableList;
-        const data: Array<any> = obj.getData();
-        this.save.data = data[0];
-      }
+      this.save.title = this.langs.edit+'( '+data.name+' )';
+      this.save.data = data;
     }
   }
   /* 添加&编辑-回调 */

@@ -1,12 +1,14 @@
 <template>
-  <div class="flex">
-    <template v-for="(v,k) in columns" :key="k">
+  <ul class="action_tools">
+    <li v-for="(v,k) in columns" :key="k">
       <slot v-bind="v" :name="v.slot" :index="k" v-if="v.is_action?isAction(v.action):true"></slot>
-    </template>
-  </div>
+    </li>
+  </ul>
 </template>
 
 <style lang="less" scoped>
+.action_tools{display: flex; flex-wrap: nowrap;}
+.action_tools li{position: relative; white-space: nowrap;}
 </style>
 
 <script lang="ts">

@@ -4,6 +4,7 @@ import Base from '../../../service/Base'
 /* JS组件 */
 import Ui from '@/library/ui'
 import Request from '@/library/request'
+import Permission from '@/library/permission';
 import Time from '@/library/time'
 /* 组件 */
 import wmMain from '@/components/container/main.vue'
@@ -36,6 +37,7 @@ export default class SysMenus extends Base {
   state: any = this.store.state;
   // 语言
   langs: any = this.state.langs;
+  isAction:Function = Permission.isAction;
   // 搜索
   sea: any = {
     show: false, key: '', placeholder:'Fid、名称、接口等',
@@ -67,6 +69,7 @@ export default class SysMenus extends Base {
       {title: 'FID', index: 'fid', slot: 'fid', order: '', width: '80px', minWidth: '60px', textAlign: 'center'},
       {title: this.langs.sys_menus_ico, index: 'ico', slot: 'ico', width: '40px'},
       {title: this.langs.sys_menus_title, index: 'title', slot: 'title', order: '', width: '160px'},
+      {title: this.langs.action, slot: 'action', textAlign: 'center', width: '40px'},
       {title: this.langs.status, index: 'status', slot: 'status', width: '60px', textAlign: 'center'},
       {title: this.langs.date, index: 'date', slot: 'date', width: '120px', minWidth: '110px', textAlign: 'center'},
       {title: this.langs.sys_menus_en, index: 'en', order: '', width: '160px'},
@@ -146,17 +149,15 @@ export default class SysMenus extends Base {
   }
 
   /* 添加&编辑 */
-  saveData(type: string): void {
+  saveData(type: string, data?: any): void {
     this.save.show = true;
     this.save.type = type;
     if(type=='add') {
       this.save.title = this.langs.add;
       this.save.data = {};
     } else if(type=='edit') {
-      this.save.title = this.langs.edit;
-      const obj:any = this.$refs.tableList;
-      const data: Array<any> = obj.getData();
-      this.save.data = data[0];
+      this.save.title = this.langs.edit+'( '+data.title+' )';
+      this.save.data = data;
     }
   }
   /* 添加&编辑-回调 */

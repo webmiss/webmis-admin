@@ -4,6 +4,7 @@ import Base from '../../../service/Base'
 /* JS组件 */
 import Ui from '@/library/ui'
 import Request from '@/library/request'
+import Permission from '@/library/permission';
 import Time from '@/library/time'
 /* 组件 */
 import wmMain from '@/components/container/main.vue'
@@ -38,6 +39,7 @@ export default class SysMenus extends Base {
   private state: any = this.store.state;
   // 语言
   langs: any = this.state.langs;
+  isAction:Function = Permission.isAction;
   // 搜索
   sea: any = {
     show: false, key: '', placeholder:'Fid、名称、接口等',
@@ -174,14 +176,8 @@ export default class SysMenus extends Base {
       this.save.title = this.langs.add;
       this.save.data = {};
     } else if(type=='edit') {
-      this.save.title = this.langs.edit;
-      if(data) {
-        this.save.data = data;
-      } else {
-        const obj:any = this.$refs.tableList;
-        const data: Array<any> = obj.getData();
-        this.save.data = data[0];
-      }
+      this.save.title = this.langs.edit+'( '+(data.uname || data.tel || data.email || '')+' )';
+      this.save.data = data;
     } else if(type=='copy') {
       this.save.title = this.langs.copy;
       data.id = '';

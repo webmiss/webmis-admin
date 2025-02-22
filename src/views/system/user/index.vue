@@ -5,19 +5,15 @@
   </wm-total>
   <!-- Action -->
   <div class="app_action flex">
-    <div class="botton">
+    <div class="app_action_tools scrollbar">
       <wm-action :columns="[
         {action: 'save', slot: 'add', is_action: true},
-        {action: 'save', slot: 'edit', is_action: true},
         {action: 'del', slot: 'del', is_action: true},
         {action: 'line', slot: 'line'},
         {action: 'export', slot: 'export', is_action: true},
       ]">
         <template #add>
           <wm-button effect="dark" type="primary" icon="ui ui_add" padding="0 16px 0 8px" @click="saveData('add')">{{ langs.add }}</wm-button>
-        </template>
-        <template #edit>
-          <wm-button effect="plain" type="primary" icon="ui ui_edit" padding="0 16px 0 8px" :disabled="list.num!=1" @click="saveData('edit')">{{ langs.edit }}</wm-button>
         </template>
         <template #del>
           <wm-button effect="plain" type="danger" icon="ui ui_del" padding="0 16px 0 8px" :disabled="list.num==0" @click="delData()">{{ langs.del }}({{ list.num }})</wm-button>
@@ -30,7 +26,7 @@
         </template>
       </wm-action>
     </div>
-    <div class="search flex">
+    <div class="app_action_search flex">
       <!-- Search -->
       <wm-search v-model:show="sea.show" v-model:keys="sea.key" :columns="sea.columns" @keyup.enter="loadData()" @search="loadData()" @reset="resetData()">
         <template #time="d">
@@ -77,15 +73,17 @@
       </template>
       <template #action="d">
         <div class="tCenter">
-          <wm-button @click="saveData('copy', d)">{{ langs.copy }}</wm-button>
+          <wm-button v-if="isAction('save')" @click="saveData('copy', d)">{{ langs.copy }}</wm-button>
+          <span v-else>-</span>
         </div>
       </template>
       <template #perm="d">
-        <div class="tCenter">
-          <wm-button v-if="d.perm" effect="text" type="danger" @click="saveData('edit', d)">私有</wm-button>
-          <wm-button v-else-if="d.role" effect="text" type="primary" @click="saveData('edit', d)">{{ d.role_name }}</wm-button>
-          <wm-button v-else effect="text" type="info" @click="saveData('edit', d)">设置</wm-button>
+        <div class="tCenter" v-if="isAction('save')">
+          <wm-button v-if="d.perm" effect="text" type="danger" padding="0 8px" @click="saveData('edit', d)">私有</wm-button>
+          <wm-button v-else-if="d.role" effect="text" type="primary" padding="0 8px" @click="saveData('edit', d)">{{ d.role_name }}</wm-button>
+          <wm-button v-else effect="text" type="info" padding="0 8px" @click="saveData('edit', d)">设置</wm-button>
         </div>
+        <div class="tCenter" v-else>-</div>
       </template>
       <template #gender="d">
         <div class="tCenter">{{ d.gender || '-' }}</div>

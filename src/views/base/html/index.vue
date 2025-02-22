@@ -5,7 +5,7 @@
   </wm-total>
   <!-- Action -->
   <div class="app_action flex">
-    <div class="botton">
+    <div class="app_action_tools scrollbar">
       <wm-action :columns="[
         {action: 'save', slot: 'add', is_action: true},
         {action: 'save', slot: 'edit', is_action: true},
@@ -30,7 +30,7 @@
         </template>
       </wm-action>
     </div>
-    <div class="search flex">
+    <div class="app_action_search flex">
       <!-- Search -->
       <wm-search v-model:show="sea.show" v-model:keys="sea.key" :columns="sea.columns" @keyup.enter="loadData()" @search="loadData()" @reset="resetData()">
       </wm-search>

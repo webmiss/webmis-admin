@@ -5,19 +5,15 @@
   </wm-total>
   <!-- Action -->
   <div class="app_action flex">
-    <div class="botton">
+    <div class="app_action_tools scrollbar">
       <wm-action :columns="[
         {action: 'save', slot: 'add', is_action: true},
-        {action: 'save', slot: 'edit', is_action: true},
         {action: 'del', slot: 'del', is_action: true},
         {action: 'line', slot: 'line'},
         {action: 'export', slot: 'export', is_action: true},
       ]">
         <template #add>
           <wm-button effect="dark" type="primary" icon="ui ui_add" padding="0 16px 0 8px" @click="saveData('add')">{{ langs.add }}</wm-button>
-        </template>
-        <template #edit>
-          <wm-button effect="plain" type="primary" icon="ui ui_edit" padding="0 16px 0 8px" :disabled="list.num!=1" @click="saveData('edit')">{{ langs.edit }}</wm-button>
         </template>
         <template #del>
           <wm-button effect="plain" type="danger" icon="ui ui_del" padding="0 16px 0 8px" :disabled="list.num==0" @click="delData()">{{ langs.del }}({{ list.num }})</wm-button>
@@ -30,7 +26,7 @@
         </template>
       </wm-action>
     </div>
-    <div class="search flex">
+    <div class="app_action_search flex">
       <!-- Search -->
       <wm-search v-model:show="sea.show" v-model:keys="sea.key" :columns="sea.columns" @keyup.enter="loadData()" @search="loadData()" @reset="resetData()">
       </wm-search>
@@ -47,7 +43,7 @@
       </template>
       <template #perm="d">
         <div class="tCenter">
-          <wm-button effect="text" type="primary" @click="saveData('edit', d)">{{ langs.edit }}</wm-button>
+          <wm-button @click="saveData('edit', d)" v-if="isAction('edit')">{{ langs.edit }}</wm-button>
         </div>
       </template>
       <template #date="d">

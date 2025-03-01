@@ -1,8 +1,9 @@
 <template>
   <div class="wm-table_body scrollbar" :style="{
     height: height,
-    overflowX: overflowX,
-    overflowY: overflowY,
+    overflow: overflow,
+    // overflowX: overflowX,
+    // overflowY: overflowY,
   }">
     <table class="wm-table" :style="{width: width, height: options.length==0?height:''}">
       <thead class="wm-table_title">
@@ -45,12 +46,17 @@
           <td class="null" :colspan="columns.length+(isCheckbox?1:0)"></td>
         </tr>
       </tbody>
+      <tr v-if="isBottom">
+        <td :colspan="columns.length+(isCheckbox?1:0)">
+          <slot name="bottom"></slot>
+        </td>
+      </tr>
     </table>
   </div>
 </template>
 
 <style lang="less" scoped>
-.wm-table_body{overflow: hidden;}
+.wm-table_body{overflow: visible;}
 .wm-table{width: 100%; border-collapse: collapse;}
 .wm-table .checkbox{width: 24px; text-align: center; position: sticky; z-index: 1; left: 0;}
 .wm-table .checkbox::after,.wm-table .checkbox::before{content: ''; position: absolute; width: 1px; height: 100%;}
@@ -81,14 +87,14 @@ import wmCheckBox from '@/components/form/checkbox/index.vue'
 @Options({
   components: { wmCheckBox },
   props: {
-    columns: {type: Array, default: []},          // 字段: [{title: '名称', index: 'title', slot: 'title', width: '40px', minWidth: '30px', maxWidth: '120px', textAlign: 'right'}]
-    options: {type: Array, default: []},          // 数据: [{id: 1, title: '系统', remark: '', checked:true, }]
-    width: {type: String, default: '100%'},       // 宽
-    height: {type: String, default: '100%'},      // 高
-    overflowX: {type: String, default: 'auto'},   // 滚动条: x轴
-    overflowY: {type: String, default: 'auto'},   // 滚动条: y轴
-    isCheckbox: {type: Boolean, default: true},   // 是否多选
-    isSlot: {type: Boolean, default: false},      // 是否自定义表体
+    columns: {type: Array, default: []},            // 字段: [{title: '名称', index: 'title', slot: 'title', width: '40px', minWidth: '30px', maxWidth: '120px', textAlign: 'right'}]
+    options: {type: Array, default: []},            // 数据: [{id: 1, title: '系统', remark: '', checked:true, }]
+    width: {type: String, default: '100%'},         // 宽
+    height: {type: String, default: '100%'},        // 高
+    overflow: {type: String, default: ''},          // 滚动条
+    isCheckbox: {type: Boolean, default: true},     // 是否多选
+    isSlot: {type: Boolean, default: false},        // 是否自定义表体
+    isBottom: {type: Boolean, default: false},      // 是否底部内容
   }
 })
 export default class Table extends Vue {
@@ -98,10 +104,10 @@ export default class Table extends Vue {
   options!: Array<any>;
   width!: string;
   height!: string;
-  overflowX!: any;
-  overflowY!: any;
+  overflow!: string;
   isCheckbox!: boolean;
   isSlot!: boolean;
+  isBottom!: boolean;
   // 变量
   checkbox: any = {checked: false, partially: false, value:'', data:{label:'', value:'all'}};
 

@@ -37,7 +37,7 @@
   <!-- Content -->
   <div class="app_ct">
     <!-- List -->
-    <wm-table class="table" ref="tableList" :columns="list.columns" :options="list.data" @orderBy="orderBy" @partially="selectState">
+   <wm-table ref="tableList" overflow="auto" :columns="list.columns" :options="list.data" @orderBy="orderBy" @partially="selectState">
       <template #id="d">
         <div class="tCenter">{{ d.id }}</div>
       </template>

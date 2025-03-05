@@ -4,6 +4,7 @@ import Base from '../../../service/Base'
 /* JS组件 */
 import Ui from '@/library/ui'
 import Request from '@/library/request'
+import Time from '@/library/time'
 /* 组件 */
 import wmMain from '@/components/container/main.vue'
 import wmInput from '@/components/form/input/index.vue'
@@ -73,20 +74,64 @@ export default class SysMenus extends Base {
     if(this.state.token) this.loadData();
   }
 
+  /* 加载数据 */
+  loadData(): void {
+    this.sea.show = false;
+    // 列表
+    this.list.data = [];
+    const load: any = Ui.Loading();
+    Request.Post('web_html/list?lang=' + this.state.lang, {
+      token: this.state.token,
+      data: this.getWhere(),
+      page: this.page.num,
+      limit: this.page.limit,
+      order: this.list.order,
+    }, (res: any) => {
+      load.clear();
+      const { code, time, data, msg }: any = res.data;
+      if (code === 0) {
+        this.total.time = time;
+        this.list.data = data;
+        this.clearSelect();
+      } else Ui.Toast(msg);
+    });
+    // 统计
+    this.page.total = 0;
+    Request.Post('web_html/total?lang='+this.state.lang, {
+      token: this.state.token,
+      data: this.getWhere(),
+    }, (res:any)=>{
+      const { code, time, data, msg }: any = res.data;
+      if(code==0) {
+        this.total.time = time;
+        this.page.total = data.total;
+      } else Ui.Toast(msg);
+    });
+  }
+  /* 搜索条件 */
+  getWhere(): object {
+    const data: any = {
+      key: this.sea.key,
+      stime: typeof this.sea.time[0]=='string'?this.sea.time[0]:Time.Date('Y/m/d', this.sea.time[0]),
+      etime: typeof this.sea.time[1]=='string'?this.sea.time[1]:Time.Date('Y/m/d', this.sea.time[1]),
+    };
+    for(let v of this.sea.columns) if(v.name) data[v.name] = v.value;
+    return data;
+  }
   /* 选中状态 */
   selectState(n:number, t:number): void {
     this.list.num = n;
     this.list.total = t;
   }
-
   /* 排序 */
   orderBy(val: string): void {
     this.list.order = val;
     this.loadData();
   }
-
   /* 重置条件 */
   resetData(): void {
+    // 时间
+    this.sea.time = [Time.Date('Y/m/d', Time.StrToTime('-3 year')), Time.Date('Y/m/d')];
     // 条件
     this.sea.key = '';
     for(let v of this.sea.columns) v.value='';
@@ -96,48 +141,10 @@ export default class SysMenus extends Base {
     // 加载
     this.loadData();
   }
-
   /* 清除勾选 */
   clearSelect(): void {
     const obj:any = this.$refs.tableList;
-    obj.checkboxAll(false);
-  }
-
-  /* 加载数据 */
-  loadData(): void {
-    this.sea.show = false;
-    // 请求
-    const load: any = Ui.Loading();
-    Request.Post('web_html/list?lang='+this.state.lang, {
-      token: this.state.token,
-      data: this.getWhere(),
-      page: this.page.num,
-      limit: this.page.limit,
-      order: this.list.order,
-    }, (res:any)=>{
-      load.clear();
-      const d: any = res.data;
-      if(d.code==0) {
-        this.total.time = d.time;
-        this.total.list = d.data.total;
-        this.page.total = d.data.total.total;
-        this.list.data = d.data.list;
-        this.clearSelect();
-      }else{
-        Ui.Toast(d.msg);
-      }
-    });
-  }
-  /* 数据 */
-  getWhere(): object {
-    const data: any = {
-      key: this.sea.key,
-    };
-    // 搜索条件
-    for(let v of this.sea.columns) {
-      if(v.name) data[v.name] = v.value;
-    }
-    return data;
+    setTimeout(()=>{ obj.checkboxAll(false); }, 300);
   }
 
   /* 添加&编辑 */

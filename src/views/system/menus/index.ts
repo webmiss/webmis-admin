@@ -89,24 +89,35 @@ export default class SysMenus extends Base {
   /* 加载数据 */
   loadData(): void {
     this.sea.show = false;
-    // 请求
+    // 列表
+    this.list.data = [];
     const load: any = Ui.Loading();
-    Request.Post('sys_menus/list?lang='+this.state.lang, {
+    Request.Post('sys_menus/list?lang=' + this.state.lang, {
       token: this.state.token,
       data: this.getWhere(),
       page: this.page.num,
       limit: this.page.limit,
       order: this.list.order,
-    }, (res:any)=>{
+    }, (res: any) => {
       load.clear();
-      const d: any = res.data;
-      if(d.code==0) {
-        this.total.time = d.time;
-        this.total.list = d.data.total;
-        this.page.total = d.data.total.total;
-        this.list.data = d.data.list;
+      const { code, time, data, msg }: any = res.data;
+      if (code === 0) {
+        this.total.time = time;
+        this.list.data = data;
         this.clearSelect();
-      } else Ui.Toast(d.msg);
+      } else Ui.Toast(msg);
+    });
+    // 统计
+    this.page.total = 0;
+    Request.Post('sys_menus/total?lang='+this.state.lang, {
+      token: this.state.token,
+      data: this.getWhere(),
+    }, (res:any)=>{
+      const { code, time, data, msg }: any = res.data;
+      if(code==0) {
+        this.total.time = time;
+        this.page.total = data.total;
+      } else Ui.Toast(msg);
     });
   }
   /* 搜索条件 */

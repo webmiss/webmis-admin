@@ -47,7 +47,7 @@
         </tr>
       </tbody>
       <tr v-if="isBottom">
-        <td :colspan="columns.length+(isCheckbox?1:0)">
+        <td :colspan="columns.length+(isCheckbox?1:0)" style="padding: 0;">
           <slot name="bottom"></slot>
         </td>
       </tr>

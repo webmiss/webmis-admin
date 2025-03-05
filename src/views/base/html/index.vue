@@ -1,7 +1,7 @@
 <template>
   <!-- Total -->
   <wm-total :time="total.time" @refresh="loadData()">
-    <span v-html="langs.sys_menus_total(total.list.total)"></span>
+    <span v-html="langs.sys_menus_total(page.total)"></span>
   </wm-total>
   <!-- Action -->
   <div class="app_action flex">

@@ -82,9 +82,9 @@ export default class ActionMkdir extends Vue {
       name: form.name,
     }, (res:any)=>{
       load.clear();
-      const d: any=res.data;
+      const {code}: any = res.data;
       // 事件
-      this.$emit('submit', d.code==0);
+      this.$emit('submit', code==0);
     });
   }
 

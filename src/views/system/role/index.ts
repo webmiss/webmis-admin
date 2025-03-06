@@ -68,7 +68,7 @@ export default class SysMenus extends Base {
   }
 
   /* 创建完成 */
-  activated(): void {
+  mounted(): void {
     // 加载
     if(this.state.token) this.loadData();
   }
@@ -87,7 +87,7 @@ export default class SysMenus extends Base {
       order: this.list.order,
     }, (res: any) => {
       load.clear();
-      const { code, time, data, msg }: any = res.data;
+      const {code, msg, time, data}: any = res.data;
       if (code === 0) {
         this.total.time = time;
         this.list.data = data;
@@ -100,7 +100,7 @@ export default class SysMenus extends Base {
       token: this.state.token,
       data: this.getWhere(),
     }, (res:any)=>{
-      const { code, time, data, msg }: any = res.data;
+      const {code, msg, time, data}: any = res.data;
       if(code==0) {
         this.total.time = time;
         this.page.total = data.total;

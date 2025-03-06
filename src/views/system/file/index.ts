@@ -48,7 +48,7 @@ export default class SysFileManage extends Base {
   }
 
   /* 创建完成 */
-  activated(): void {
+  mounted(): void {
     // 加载
     if(this.state.token) this.loadData();
   }
@@ -62,14 +62,14 @@ export default class SysFileManage extends Base {
       path: this.list.path,
     }, (res:any)=>{
       load.clear();
-      const d: any = res.data;
-      if(d.code==0) {
-        this.total.time = d.time;
+      const {code, msg, time, data}: any = res.data;
+      if(code==0) {
+        this.total.time = time;
         this.list.check = false;
-        this.list.url = d.data.url;
-        this.list.data = d.data.list;
-      }else{
-        Ui.Toast(d.msg);
+        this.list.url = data.url;
+        this.list.data = data.list;
+      } else {
+        Ui.Toast(msg);
       }
     });
   }

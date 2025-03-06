@@ -70,9 +70,9 @@ export default class ActionRemove extends Vue {
       data: form.names,
     }, (res:any)=>{
       load.clear();
-      const d: any = res.data;
-      Ui.Toast(d.msg);
-      this.$emit('submit', d.code==0);
+      const {code, msg}: any = res.data;
+      Ui.Toast(msg);
+      this.$emit('submit', code==0);
     });
   }
 

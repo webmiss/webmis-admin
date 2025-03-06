@@ -105,8 +105,8 @@ export default class ActionUpload extends Vue {
     form.append('file', fileObj);
     // 请求
     Request.Post('sys_file/upload?lang='+this.state.lang, form, (res: any)=>{
-      const d: any = res.data;
-      if(d.code==0) {
+      const {code}: any = res.data;
+      if(code==0) {
         this.listData[k].state = 1;
         this.$emit('submit', true);
       } else {

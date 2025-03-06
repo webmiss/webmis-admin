@@ -22,7 +22,7 @@
           <span class="line">|</span>
         </template>
         <template #export>
-          <wm-button effect="plain" icon="ui ui_export" padding="0 16px 0 8px" :disabled="!total.list.total" @click="exportData(total.list.total)">{{ langs.export }}({{ total.list.total }})</wm-button>
+          <wm-button effect="plain" icon="ui ui_export" padding="0 16px 0 8px" :disabled="!page.total" @click="exportData(page.total)">{{ langs.export }}({{ page.total }})</wm-button>
         </template>
       </wm-action>
     </div>

@@ -30,6 +30,8 @@ import actionExport from './export.vue'
 })
 export default class SysMenus extends Base {
 
+  // 是否加载
+  private isLoad: boolean = false;
   // 状态
   private store: any = useStore();
   state: any = this.store.state;
@@ -69,8 +71,10 @@ export default class SysMenus extends Base {
 
   /* 创建完成 */
   mounted(): void {
-    // 加载
-    if(this.state.token) this.loadData();
+    this.isLoad = true;
+  }
+  activated(): void {
+    if(this.isLoad) this.loadData();
   }
 
   /* 加载数据 */

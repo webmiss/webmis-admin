@@ -34,6 +34,8 @@ import actionExport from './export.vue'
 })
 export default class SysMenus extends Base {
 
+  // 是否加载
+  private isLoad: boolean = false;
   // 状态
   private store: any = useStore();
   private state: any = this.store.state;
@@ -45,8 +47,6 @@ export default class SysMenus extends Base {
     show: false, key: '', placeholder:'Fid、名称、接口等',
     time: [Time.Date('Y/m/d', Time.StrToTime('-1 year')), Time.Date('Y/m/d')], maxDate: Time.Date('Y/m/d'),
     columns:[],
-    type: '',
-    role: '',
   }
   // 列表
   total: any = {time: '', list: {}};
@@ -95,11 +95,10 @@ export default class SysMenus extends Base {
 
   /* 创建完成 */
   mounted(): void {
-    // 加载
-    if(this.state.token) {
-      this.getSelect();
-      this.loadData();
-    }
+    if (this.state.token) this.getSelect();
+  }
+  activated(): void {
+    if(this.isLoad) this.loadData();
   }
 
   /* 加载数据 */
@@ -242,6 +241,9 @@ export default class SysMenus extends Base {
       if(d.code==0) {
         this.selectAll.type = d.data.type;
         this.selectAll.role = d.data.role;
+        // 加载
+        this.isLoad = true;
+        this.loadData();
       } else Ui.Toast(d.msg);
     });
   }

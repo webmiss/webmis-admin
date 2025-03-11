@@ -23,28 +23,17 @@
 .tools-total_refresh i:hover{color: @Primary; background-color: @Minor8;}
 </style>
 
-<script lang="ts">
-import { Options, Vue } from 'vue-class-component';
-import { useStore } from 'vuex';
+<script setup lang="ts">
 
-@Options({
-  components: {},
-  props: {
-    time: {type: String, default: ''},    // 时间
-  }
-})
-export default class Total extends Vue {
+/* 参数 */
+const props = defineProps({
+  time: {type: String, default: ''},    // 时间
+});
+const emit = defineEmits(['refresh']);
 
-  // 参数
-  time!: string;
-  // 状态
-  private store: any = useStore();
-  state: any = this.store.state;
-
-  /* 刷新 */
-  refresh(): void {
-    this.$emit('refresh');
-  }
-
+/* 刷新 */
+const refresh = (): void =>{
+  emit('refresh');
 }
+
 </script>

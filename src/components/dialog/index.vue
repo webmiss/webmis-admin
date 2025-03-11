@@ -1,6 +1,6 @@
 <template>
   <div class="wm-dialog_body" :style="{visibility:cfg.show?'inherit':'hidden'}">
-    <wm-popup ref="Popup" v-model:show="cfg.show" width="100%" height="100%" position="top" :time="600">
+    <wmPopup ref="Popup" v-model:show="cfg.show" width="100%" height="100%" position="top" :time="600">
       <div class="wm-dialog_bg" @click="close(isClose)"></div>
       <div class="wm-dialog" :style="{width:width, maxWidth:maxWidth, height:height, borderRadius:borderRadius}">
         <!-- Title -->
@@ -21,7 +21,7 @@
           <slot name="bottom"></slot>
         </div>
       </div>
-    </wm-popup>
+    </wmPopup>
   </div>
 </template>
   
@@ -41,72 +41,54 @@
 .wm-dialog_bottom{position: relative; padding: 4px 0 16px; text-align: center;}
 </style>
   
-<script lang="ts">
-import { Options, Vue } from 'vue-class-component';
-import wmPopup from '@/components/popup/index.vue'
+<script setup lang="ts">
+import { ref, watch } from 'vue';
+import wmPopup from '../../components/popup/index.vue'
 
-@Options({
-  components: { wmPopup },
-  props: {
-    show: {type: Boolean, default: false},          // 是否显示
-    title: {type: String, default: ''},             // 标题
-    width: {type: String, default: '360px'},        // 内容宽度
-    maxWidth: {type: String, default: '1920px'},    // 最大宽度
-    height: {type: String, default: 'auto'},        // 内容高度
-    overflow: {type: String, default: 'inherit'},   // 内容滚动条
-    borderRadius: {type: String, default: '4px'},   // 圆角
-    top: {type: String, default: '0px'},            // 顶部高度
-    bottom: {type: String, default: ''},            // 底部高度
-    isClose: {type: Boolean, default: false},       // 点击关闭
-  }
-})
-export default class Dialog extends Vue {
-  
-  // 参数
-  show!: boolean;
-  title!: string;
-  width!: string;
-  maxWidth!: string;
-  height!: string;
-  overflow!: string;
-  borderRadius!: string;
-  top!: string;
-  bottom!: string;
-  isClose!: boolean;
-  // 变量
-  cfg: any = {show: false, width:0, height:0};
+/* 参数 */
+const props = defineProps({
+  show: {type: Boolean, default: false},          // 是否显示
+  title: {type: String, default: ''},             // 标题
+  width: {type: String, default: '360px'},        // 内容宽度
+  maxWidth: {type: String, default: '1920px'},    // 最大宽度
+  height: {type: String, default: 'auto'},        // 内容高度
+  overflow: {type: String, default: 'inherit'},   // 内容滚动条
+  borderRadius: {type: String, default: '4px'},   // 圆角
+  top: {type: String, default: '0px'},            // 顶部高度
+  bottom: {type: String, default: ''},            // 底部高度
+  isClose: {type: Boolean, default: false},       // 点击关闭
+});
+const emit = defineEmits(['update:show', 'close']);
+// 变量
+const cfg = ref({show: false, width:0, height:0});
 
-  /* 创建成功 */
-  created(): void {
-    // 监听
-    this.$watch('show', (val:any)=>{
-      this.cfg.show = val;
-      if(val) {
-        this.cfg.width =  window.innerWidth;
-        this.cfg.height =  window.innerHeight;
-        // 事件
-        document.addEventListener('keydown', this.keydownFun);
-      }
-    }, { deep: true });
-  }
-
-  /* 键盘事件 */
-  keydownFun(event: any): void {
-    const keyCode: any = event.keyCode || event.which;
-    switch (keyCode) {
-      case 27: this.close(true); break;
-    }
-  }
-
-  /* 关闭 */
-  close(isTrue: Boolean): void {
+/* 监听 */
+watch(()=>props.show, (val: boolean)=>{
+  cfg.value.show = val;
+  if(val) {
+    cfg.value.width =  window.innerWidth;
+    cfg.value.height =  window.innerHeight;
     // 事件
-    if(isTrue) this.$emit('update:show', false);
-    this.$emit('close');
-    // 移除
-    document.removeEventListener('keydown', this.keydownFun);
+    document.addEventListener('keydown', keydownFun);
   }
+},{ deep: true });
 
+/* 键盘事件 */
+const keydownFun = (event: any): void => {
+  const keyCode: any = event.keyCode || event.which;
+  switch (keyCode) {
+    case 27: close(true); break;
+  }
 }
+
+/* 关闭 */
+const close = (isTrue: Boolean): void => {
+  // 事件
+  if(isTrue) emit('update:show', false);
+  emit('close', false);
+  // 移除
+  document.removeEventListener('keydown', keydownFun);
+}
+
 </script>
   

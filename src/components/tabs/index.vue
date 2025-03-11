@@ -18,41 +18,27 @@
 .wm-tabs_body{padding: 16px 0;}
 </style>
 
-<script lang="ts">
-import { Options, Vue } from 'vue-class-component';
+<script setup lang="ts">
 
-@Options({
-  components: {},
-  props: {
-    value: {default: ''},                             // 默认值
-    columns: {type: Array, default: []},              // 字段: [{label: '基本信息', value: 'base', slot: 'base'}]
-    height: {type: String, default: '40px'},          // 高度
-    padding: {type: String, default: '0 8px'},        // 内部间距
-    margin: {type: String, default: '0 8px 0 0'},     // 外部间距
-    bodyPadding: {type: String, default: '16px 0'},   // 内容间距
-    fontSize: {type: String, default: '15px'},        // 文字大小
-    clickFlg: {type: Boolean, default: false},        // 禁止点击
-  }
-})
-export default class Tabs extends Vue {
+/* 参数 */
+const props = defineProps({
+  value: {default: ''},                             // 默认值
+  columns: {type: Array<any>, default: []},         // 字段: [{label: '基本信息', value: 'base', slot: 'base'}]
+  height: {type: String, default: '40px'},          // 高度
+  padding: {type: String, default: '0 8px'},        // 内部间距
+  margin: {type: String, default: '0 8px 0 0'},     // 外部间距
+  bodyPadding: {type: String, default: '16px 0'},   // 内容间距
+  fontSize: {type: String, default: '15px'},        // 文字大小
+  clickFlg: {type: Boolean, default: false},        // 禁止点击
+});
+const emit = defineEmits(['update:value', 'change']);
 
-  // 参数
-  value!: any;
-  columns!: Array<any>;
-  height!: string;
-  padding!: string;
-  margin!: string;
-  bodyPadding!: string;
-  fontSize!: string;
-  clickFlg!: boolean;
-
-  /* 切换 */
-  tabClick(d: any): void {
-    if(this.clickFlg) return;
-    // 事件
-    this.$emit('update:value', d.value);
-    this.$emit('change', d);
-  }
-
+/* 切换 */
+const tabClick = (d: any): void => {
+  if(props.clickFlg) return;
+  // 事件
+  emit('update:value', d.value);
+  emit('change', d);
 }
+
 </script>

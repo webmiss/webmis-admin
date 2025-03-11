@@ -66,7 +66,7 @@
   <!-- 上传 -->
   <action-upload v-model:show="upload.show" :data="upload.data" @submit="uploadSubmit($event)"></action-upload>
   <!-- 图片预览 -->
-  <wm-img-view v-model:show="imgView.show" :index="imgView.index" :options="imgView.imgs"></wm-img-view>
+  <wmImgView v-model:show="imgView.show" :index="imgView.index" :options="imgView.imgs"></wmImgView>
 
 </template>
 
@@ -121,4 +121,238 @@
 }
 </style>
 
-<script lang="ts" src="./index.ts"></script>
+<script setup lang="ts">
+import { ref, onMounted, onActivated } from 'vue';
+import { useStore } from 'vuex';
+/* JS组件 */
+import Ui from '../../../library/ui'
+import Request from '../../../library/request'
+/* 组件 */
+import wmButton from '../../../components/form/button/index.vue'
+import wmImgView from '../../../components/image/view.vue'
+/* 动作 */
+import wmTotal from '../../tools/Total.vue'
+import actionMkdir from './mkdir.vue'
+import actionRename from './rename.vue'
+import actionRemove from './remove.vue'
+import actionDown from './down.vue'
+import actionUpload from './upload.vue'
+
+// 是否加载
+const isLoad = ref(false);
+// 状态
+const store = useStore();
+const state = store.state;
+const langs: any = state.langs;
+// 列表
+const total = ref({time: '', list: {}});
+const list = ref({url: '', path: '/', check: false, data: {path:'', dirNum: 0, fileNum: 0, size: 0, folder: <any>[], files: <any>[]}});
+// 新建文件夹、重命名、删除、下载、上传
+const mkdir = ref({show: false, data:{path: '', name: ''}});
+const rename = ref({show: false, data:{path: '', name: '', rename: ''}});
+const remove = ref({show: false, data:{path: '', names: []}});
+const down = ref({show: false, data:{path: '', filename: ''}});
+const upload = ref({show: false, data:{url: '', path: '', files: []}});
+  // 图片预览
+const imgView = ref({show: false, imgs: <any>[], index: 0});
+
+/* 创建完成 */
+onMounted(()=>{
+  isLoad.value = true;
+});
+onActivated(()=>{
+  if(isLoad) loadData();
+});
+
+/* 加载数据 */
+const loadData = (): void => {
+  // 请求
+  const load: any = Ui.Loading();
+  Request.Post('sys_file/list?lang='+state.lang, {
+    token: state.token,
+    path: list.value.path,
+  }, (res:any)=>{
+    load.clear();
+    const {code, msg, time, data}: any = res.data;
+    if(code==0) {
+      total.value.time = time;
+      list.value.check = false;
+      list.value.url = data.url;
+      list.value.data = data.list;
+    } else {
+      Ui.Toast(msg);
+    }
+  });
+}
+
+/* 全选/不选 */
+const selectAll = (check: boolean): void => {
+  list.value.check = check;
+  // 文件夹
+  const folder = list.value.data.folder;
+  for(let i in folder) folder[i].check=check;
+  // 文件
+  const files = list.value.data.files;
+  for(let i in files) files[i].check=check;
+}
+
+/* 返回上级 */
+const backDir = (): void => {
+  const data: any = list.value.path.split("/").filter((d: any)=>d);
+  if(data.length<=1){
+    list.value.path = '/';
+  }else{
+    list.value.path = '/';
+    for(let i=0; i<data.length-1; i++){
+      list.value.path += data[i]+'/';
+    }
+  }
+  // 加载数据
+  loadData();
+}
+
+/* 打开文件夹 */
+const openFolder = (name: string): void => {
+  list.value.path += name+'/';
+  // 加载数据
+  loadData();
+}
+
+/* 打开文件 */
+const openFile = (filename: string): void => {
+  const ext = getExt(filename);
+  // 下载
+  if(!isImg(ext)) {
+    down.value.show = true;
+    down.value.data = {path: list.value.path, filename: filename};
+    return ;
+  }
+  // 图片
+  let index: number = 0;
+  let imgs: Array<any> = [];
+  let i: number = 0;
+  for(let v of list.value.data.files) {
+    if(isImg(v.ext)) {
+      if(filename==v.name) index=i;
+      imgs.push({
+        label: v.name,
+        value: list.value.url+list.value.path+v.name,
+        size: v.size,
+      });
+      i++;
+    }
+  }
+  // 预览
+  if(imgs.length>0) {
+    imgView.value.show = true;
+    imgView.value.index = index;
+    imgView.value.imgs = imgs;
+  }
+}
+
+/* 新建文件夹 */
+const mkdirData = (): void => {
+  mkdir.value.show = true;
+  mkdir.value.data.path = list.value.path;
+}
+/* 新建文件夹-回调 */
+const mkdirSubmit = (val: boolean): void => {
+  if(!val) return;
+  mkdir.value.show = false;
+  loadData();
+}
+
+/* 重命名 */
+const renameData = (): void => {
+  // 文件名
+  const names: any = getCheckName();
+  if(!names) return Ui.Toast(langs.select);
+  // 数据
+  rename.value.show = true;
+  rename.value.data.path = list.value.path;
+  rename.value.data.name = names[0];
+  rename.value.data.rename = names[0];
+}
+/* 重命名-回调 */
+const renameSubmit = (val: boolean): void => {
+  if(!val) return;
+  rename.value.show = false;
+  loadData();
+}
+
+/* 删除 */
+const removeData = (): void => {
+  // 文件名
+  const names: any = getCheckName();
+  if(!names) return Ui.Toast(langs.select);
+  // 数据
+  remove.value.show = true;
+  remove.value.data.path = list.value.path;
+  remove.value.data.names = names;
+}
+/* 删除-回调 */
+const removeSubmit = (val: boolean): void => {
+  if(!val) return;
+  remove.value.show = false;
+  loadData();
+}
+
+/* 下载-回调 */
+const downSubmit = (val: boolean): void => {
+  if(!val) return;
+  down.value.show = false;
+  loadData();
+}
+
+/* 上传 */
+const uploadData = (): void => {
+  // 数据
+  upload.value.show = true;
+  upload.value.data.url = list.value.url;
+  upload.value.data.path = list.value.path;
+}
+/* 上传-回调 */
+const uploadSubmit = (val: boolean): void => {
+  if(!val) return;
+  loadData();
+}
+
+/* 获取后缀 */
+const getExt = (filename: string): string => {
+  const index1 = filename.lastIndexOf('.')+1;
+  const index2 = filename.length;
+  return filename.substring(index1,index2);
+}
+
+/* 获取选中 */
+const getCheckName = (): Array<any> | boolean => {
+  let name: any = [];
+  // 文件夹
+  for(let v of list.value.data.folder) if(v.check) name.push(v.name);
+  // 文件
+  for(let v of list.value.data.files) if(v.check) name.push(v.name);
+  // 返回
+  return name.length>0?name:false;
+}
+
+/* 是否图片 */
+const isImg = (ext: string): boolean => {
+  const arr = ['png','jpg','jpeg','gif','svg'];
+  const index = arr.indexOf(ext);
+  return index>=0?true:false;
+}
+
+/* 是否存在 */
+const isExist = (name: string): boolean => {
+  // 文件夹
+  for(let v of list.value.data.folder){
+    if(v.name==name) return true;
+  }
+  // 文件
+  for(let v of list.value.data.files){
+    if(v.name==name) return true;
+  }
+  return false;
+}
+
+</script>

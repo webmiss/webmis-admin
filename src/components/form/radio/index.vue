@@ -29,43 +29,36 @@
 .wm-radio .disabled .active{border-color: rgba(0,0,0,0.2);}
 </style>
 
-<script lang="ts">
-import { Options, Vue } from 'vue-class-component';
-@Options({
-  components: { },
-  props: {
-    value: {default: ''},                 // 默认值
-    options: {type: Array, default: []},  // 数据: [{label:'男', value:'男', disabled: true},{label:'女', value:'女'}]
-  }
-})
-export default class Radio extends Vue {
+<script setup lang="ts">
+import { ref, onMounted, watch } from 'vue';
 
-  // 参数
-  value!: any;
-  options!: any;
-  // 变量
-  list: Array<any>=[];
+/* 参数 */
+const props = defineProps({
+  value: {default: ''},                       // 默认值
+  options: {type: Array<any>, default: []},   // 数据: [{label:'男', value:'男', disabled: true},{label:'女', value:'女'}]
+});
+const emit = defineEmits(['update:value', 'update:options']);
+// 变量
+const list = ref(<any>[]);
 
-  /* 创建成功 */
-  created(): void {
-    // 监听
-    this.$watch('options', (val:any)=>{
-      this.list = val;
-    }, { deep: true });
-  }
-  /* 创建完成 */
-  public mounted(): void {
-    this.list = this.options;
-  }
+/* 监听 */
+watch(()=>props.options, (val: any)=>{
+  list.value = val
+},{ deep: true });
 
-  /* 点击选择 */
-  clickRadio(k: number): void {
-    for(let i in this.list) {
-      this.list[k].checked = k.toString()==i;
-    }
-    this.$emit('update:value', this.list[k].value);
-    this.$emit('update:options', this.list);
-  }
+/* 创建完成 */
+onMounted(()=>{
+  list.value = props.options;
+});
 
+
+/* 点击选择 */
+const clickRadio = (k: number): void => {
+  for(let i in list) {
+    list[k].checked = k.toString()==i;
+  }
+  emit('update:value', list[k].value);
+  emit('update:options', list);
 }
+
 </script>

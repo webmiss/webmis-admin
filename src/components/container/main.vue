@@ -26,35 +26,19 @@
 .wm-main_ct{width: 100%; height: 100%; line-height: 24px;}
 </style>
 
-<script lang="ts">
-import { Options, Vue } from 'vue-class-component';
-@Options({
-  name: 'WmMain',
-  components: {},
-  props: {
-    width: {type: String, default: '100%'},           // 宽
-    height: {type: String, default: '100%'},          // 高
-    lineHeight: {type: String, default: ''},          // 行高
-    paddingX: {type: String, default: '16px'},        // x轴边距
-    paddingY: {type: String, default: '16px'},        // y轴边距
-    bgColor: {type: String, default: 'transparent'},  // 背景颜色
-    overflowX: {type: String, default: ''},           // x轴滚动条
-    overflowY: {type: String, default: ''},           // y轴滚动条
-    textAlign: {type: String, default: 'left'},       // 文本-对齐方式
-  }
-})
-export default class Main extends Vue {
+<script setup lang="ts">
 
-  // 参数
-  width!: string;
-  height!: string;
-  lineHeight!: string;
-  paddingX!: string;
-  paddingY!: string;
-  bgColor!: string;
-  overflowX!: any;
-  overflowY!: any;
-  textAlign!: any;
+/* 参数 */
+const props = defineProps({
+  width: {type: String, default: '100%'},           // 宽
+  height: {type: String, default: '100%'},          // 高
+  lineHeight: {type: String, default: ''},          // 行高
+  paddingX: {type: String, default: '16px'},        // x轴边距
+  paddingY: {type: String, default: '16px'},        // y轴边距
+  bgColor: {type: String, default: 'transparent'},  // 背景颜色
+  overflowX: {type: String, default: ''},           // x轴滚动条
+  overflowY: {type: String, default: ''},           // y轴滚动条
+  textAlign: {type: String, default: 'left'},       // 文本-对齐方式
+});
 
-}
 </script>

@@ -27,7 +27,7 @@
     <i class="ui tools full" :class="isFull?'ui_video_fullscreen_exit':'ui_video_fullscreen'" @click="Fullscreen()"></i>
     <!-- Prev -->
     <div class="prev">
-      <i class="ui ui_arrow_left" @click.stop="loadImg(this.imgIndex-1)" :style="{
+      <i class="ui ui_arrow_left" @click.stop="loadImg(imgIndex-1)" :style="{
         width: 'calc('+icoSize+' + 16px)',
         lineHeight: 'calc('+icoSize+' + 16px)',
         fontSize: 'calc('+icoSize+' - 12px)'
@@ -35,7 +35,7 @@
     </div>
     <!-- Next -->
     <div class="next">
-      <i class="ui ui_arrow_right" @click.stop="loadImg(this.imgIndex+1)" :style="{
+      <i class="ui ui_arrow_right" @click.stop="loadImg(imgIndex+1)" :style="{
         width: 'calc('+icoSize+' + 16px)',
         lineHeight: 'calc('+icoSize+' + 16px)',
         fontSize: 'calc('+icoSize+' - 12px)'
@@ -67,152 +67,142 @@
 .wm-image_view .next i{right: 16px;}
 </style>
 
-<script lang="ts">
-import { Options, Vue } from 'vue-class-component';
+<script setup lang="ts">
+import { ref, watch, getCurrentInstance, nextTick } from 'vue';
 import { useStore } from 'vuex';
-import Ui from '@/library/ui'
-@Options({
-  components: { },
-  props: {
+import Ui from '../../library/ui'
+
+/* 参数 */
+const props = defineProps({
     show: {type: Boolean, default: false},              // 是否显示
     index: {type: Number, default: 0},                  // 默认展示
-    options: {type: Array, default: []},                // 图片地址: [{label:'名称', value:'', size:'', other:[{'名称':'内容'}]}]
+    options: {type: Array<any>, default: []},           // 图片地址: [{label:'名称', value:'', size:'', other:[{'名称':'内容'}]}]
     bgColor: {type: String, default: 'rgba(0,0,0,.8)'}, // 背景颜色
     icoSize: {type: String, default: '32px'},           // 图标大小
+  });
+const { proxy } = getCurrentInstance() as any ;
+const emit = defineEmits(['update:show']);
+// 状态
+const store = useStore();
+const state = store.state;
+// 变量
+const isLoad = ref(false);
+const imgIndex = ref(0);
+const imgUrl = ref('');
+const isFull = ref(false);
+const title = ref('');
+const size = ref('');
+const other = ref('');
+
+/* 监听 */
+watch(()=>props.show, (val: boolean)=>{
+  if(val) {
+    imgIndex.value = props.index;
+    loadImg(imgIndex.value);
+    // 事件
+    window.addEventListener('resize', resizeFun);
+    document.addEventListener('keydown', keydownFun);
   }
-})
-export default class ImageView extends Vue {
+},{ deep: true });
 
-  // 参数
-  show!: boolean;
-  index!: number;
-  options!: Array<any>;
-  bgColor!: string;
-  icoSize!: string;
-  // 状态
-  private store: any = useStore();
-  state: any = this.store.state;
-  // 变量
-  isLoad: boolean = false;
-  imgIndex: number = 0;
-  imgUrl: string = '';
-  isFull: boolean = false;
-  title: string = '';
-  size: string = '';
-  other: any = '';
 
-  /* 创建成功 */
-  created(): void {
-    // 监听
-    this.$watch('show', (val:any)=>{
-      if(val) {
-        this.imgIndex = this.index;
-        this.loadImg(this.imgIndex);
-        // 事件
-        window.addEventListener('resize', this.resizeFun);
-        document.addEventListener('keydown', this.keydownFun);
-      }
-    }, { deep: true });
-  }
-
-  /* 窗口事件 */
-  resizeFun(): void {
-    if(this.show) this.loadImg(this.imgIndex);
-  }
-
-  /* 键盘事件 */
-  keydownFun(event: any): void {
-    const keyCode: any = event.keyCode || event.which;
-    switch (keyCode) {
-      case 37: this.loadImg(this.imgIndex-1); break;
-      case 39: this.loadImg(this.imgIndex+1); break;
-      case 27: this.close(); break;
-    }
-  }
-
-  /* 加载图片 */
-  loadImg(k: number): void {
-    // 上一页、下一页
-    if(k<0) k=this.options.length-1;
-    if(k>=this.options.length) k=0;
-    // 更新索引
-    this.imgIndex = k;
-    // 图片
-    let imgUrl: string = this.options[k]?this.options[k].value:'';
-    if(!imgUrl) {
-      this.close();
-      return Ui.Toast('无图片地址');
-    }
-    this.title = this.options[k].label;
-    this.size = this.options[k].size || '';
-    this.other = this.options[k].other || '';
-    // 加载图片
-    this.isLoad = false;
-    const imgLoad: any = this.$refs.wmImageLoading;
-    imgLoad.src = imgUrl;
-    imgLoad.onload = ()=>{
-      const w: number = document.body.clientWidth;
-      const h: number = document.body.clientHeight;
-      const dst_size: number = w/h;
-      const src_size: number = imgLoad.width/imgLoad.height;
-      let width: string = 'auto';
-      let height: string = 'auto';
-      // 是否缩放
-      if(imgLoad.width>w || imgLoad.height>h){
-        if(src_size > dst_size) width = '100%';
-        else height = '100%';
-      }
-      // 显示
-      this.isLoad = true;
-      this.imgUrl = imgUrl;
-      // 动画
-      this.$nextTick(()=>{
-        const img: any = this.$refs.wmImageView;
-        img.style.opacity = '0';
-        img.style.width = '0';
-        img.style.height = '0';
-        setTimeout(()=>{
-          img.style.opacity = '1';
-          img.style.width = width;
-          img.style.height = height;
-        }, 300);
-      });
-    }
-  }
-
-  /* 全屏 */
-  Fullscreen(): void {
-    this.isFull = !this.isFull;
-    let obj: any = this.$refs.wmImageViewBg;
-    if(obj.webkitRequestFullScreen){
-      // @ts-ignore Chrome
-      if(document.webkitIsFullScreen) document.webkitCancelFullScreen();
-      else obj.webkitRequestFullScreen();
-    }else if(obj.mozRequestFullScreen){
-      // @ts-ignore Firefox
-      if(document.mozFullScreen) document.mozCancelFullScreen();
-      else obj.mozRequestFullScreen();
-    }else if(obj.msRequestFullscreen){
-      // @ts-ignore IE11
-      if(document.msFullscreenElement) document.msExitFullscreen();
-      else obj.msRequestFullscreen();
-    }else if(obj.requestFullscreen){
-      // @ts-ignore W3C
-      if(document.exitFullscreen) document.exitFullscreen();
-      else obj.requestFullscreen();
-    }
-  }
-
-  /* 关闭 */
-  close(): void {
-    // 隐藏
-    this.$emit('update:show', false);
-    // 退出全屏
-    if(this.isFull) this.Fullscreen();
-    // 移除事件
-    window.removeEventListener('resize', this.resizeFun);
-    document.removeEventListener('keydown', this.keydownFun);
-  }
-
+/* 窗口事件 */
+const resizeFun = (): void => {
+  if(props.show) loadImg(imgIndex.value);
 }
+
+/* 键盘事件 */
+const keydownFun = (event: any): void => {
+  const keyCode: any = event.keyCode || event.which;
+  switch (keyCode) {
+    case 37: loadImg(imgIndex.value-1); break;
+    case 39: loadImg(imgIndex.value+1); break;
+    case 27: close(); break;
+  }
+}
+
+/* 加载图片 */
+const loadImg = (k: number): void => {
+  // 上一页、下一页
+  if(k<0) k=props.options.length-1;
+  if(k>=props.options.length) k=0;
+  // 更新索引
+  imgIndex.value = k;
+  // 图片
+  let imgUrlTmp: string = props.options[k]?props.options[k].value:'';
+  if(!imgUrlTmp) {
+    close();
+    return Ui.Toast('无图片地址');
+  }
+  title.value = props.options[k].label;
+  size.value = props.options[k].size || '';
+  other.value = props.options[k].other || '';
+  // 加载图片
+  isLoad.value = false;
+  const imgLoad: any = proxy.$refs.wmImageLoading;
+  imgLoad.src = imgUrlTmp;
+  imgLoad.onload = ()=>{
+    const w: number = document.body.clientWidth;
+    const h: number = document.body.clientHeight;
+    const dst_size: number = w/h;
+    const src_size: number = imgLoad.width/imgLoad.height;
+    let width: string = 'auto';
+    let height: string = 'auto';
+    // 是否缩放
+    if(imgLoad.width>w || imgLoad.height>h){
+      if(src_size > dst_size) width = '100%';
+      else height = '100%';
+    }
+    // 显示
+    isLoad.value = true;
+    imgUrl.value = imgUrlTmp;
+    // 动画
+    nextTick(()=>{
+      const img: any = proxy.$refs.wmImageView;
+      img.style.opacity = '0';
+      img.style.width = '0';
+      img.style.height = '0';
+      setTimeout(()=>{
+        img.style.opacity = '1';
+        img.style.width = width;
+        img.style.height = height;
+      }, 300);
+    });
+  }
+}
+
+/* 全屏 */
+const Fullscreen = (): void => {
+  isFull.value = !isFull.value;
+  let obj: any = proxy.$refs.wmImageViewBg;
+  if(obj.webkitRequestFullScreen){
+    // @ts-ignore Chrome
+    if(document.webkitIsFullScreen) document.webkitCancelFullScreen();
+    else obj.webkitRequestFullScreen();
+  }else if(obj.mozRequestFullScreen){
+    // @ts-ignore Firefox
+    if(document.mozFullScreen) document.mozCancelFullScreen();
+    else obj.mozRequestFullScreen();
+  }else if(obj.msRequestFullscreen){
+    // @ts-ignore IE11
+    if(document.msFullscreenElement) document.msExitFullscreen();
+    else obj.msRequestFullscreen();
+  }else if(obj.requestFullscreen){
+    // @ts-ignore W3C
+    if(document.exitFullscreen) document.exitFullscreen();
+    else obj.requestFullscreen();
+  }
+}
+
+/* 关闭 */
+const close = (): void => {
+  // 隐藏
+  emit('update:show', false);
+  // 退出全屏
+  if(isFull.value) Fullscreen();
+  // 移除事件
+  window.removeEventListener('resize', resizeFun);
+  document.removeEventListener('keydown', keydownFun);
+}
+
 </script>

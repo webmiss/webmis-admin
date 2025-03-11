@@ -53,185 +53,165 @@
 .wm-tree_content i{width: 16px; font-size: 10px; text-align: center; transition: @Transition;}
 </style>
 
-<script lang="ts">
-import { Options, Vue } from 'vue-class-component';
-import wmCheckBox from '@/components/form/checkbox/index.vue'
-@Options({
-  components: { wmCheckBox },
-  props: {
+<script setup lang="ts">
+import { ref, watch } from 'vue';
+import wmCheckBox from '../form/checkbox/index.vue'
+
+/* 参数 */
+const props = defineProps({
     options: {type: Array, default: []},                    // 数据: [{label:'一级菜单', value:'m1', checked: true, children: []}]
     width: {type: String, default: '100%'},                 // 宽
     padding: {type: String, default: '2px 0'},              // 内部间距
     level: {type: Number, default: 3},                      // 菜单级数
-  }
-})
-export default class Tree extends Vue {
+  });
+const emit = defineEmits(['update:value', 'data']);
+// 变量
+const listData = ref(<any>[]);
 
-  // 参数
-  value!: any;
-  options!: any;
-  width!: string;
-  height!: string;
-  padding!: string;
-  level!: number;
-  // 变量
-  show: boolean = false;
-  selectObj: any = null;
-  listData: Array<any> = [];
-  partially: Array<any> = [];
+/* 监听 */
+watch(()=>props.options, (val: Array<any>)=>{
+  listData.value = val;
+  setPartially();
+},{ deep: true });
 
-  /* 创建成功 */
-  created(): void {
-    // 监听
-    this.$watch('options', (val:Array<any>)=>{
-      this.listData = val;
-      this.setPartially();
-    }, { deep: true });
+/* 选择 */
+const selectClick = (val: string, level: string, pos: Array<number>, isStatus: boolean=true): void => {
+  let d1: any, d2: any, d3: any, d4: any;
+  // 层级
+  if(level=='1') {
+    // 选中
+    d1 = listData[pos[0]];
+    d1.checked = val?true:false;
+    // 勾选下级
+    if(d1.children) nextChecked(d1.children, val?true:false);
+  } else if(level=='2') {
+    // 选中
+    d2 = listData[pos[0]].children[pos[1]];
+    d2.checked = val?true:false;
+    // 勾选下级
+    if(d2.children) nextChecked(d2.children, val?true:false);
+    // 勾选上级
+    d1 = listData[pos[0]];
+    prevChecked(d1);
+  } else if(level=='3') {
+    // 选中
+    d3 = listData[pos[0]].children[pos[1]].children[pos[2]];
+    d3.checked = val?true:false;
+    // 勾选下级
+    if(d3.children) nextChecked(d3.children, val?true:false);
+    // 勾选上级
+    d1 = listData[pos[0]];
+    d2 = listData[pos[0]].children[pos[1]];
+    prevChecked(d2);
+    prevChecked(d1);
+  } else if(level=='4') {
+    // 选中、
+    d4 = listData[pos[0]].children[pos[1]].children[pos[2]].children[pos[3]];
+    d4.checked = val?true:false;
+    // 勾选上级
+    d1 = listData[pos[0]];
+    d2 = listData[pos[0]].children[pos[1]];
+    d3 = listData[pos[0]].children[pos[1]].children[pos[2]];
+    prevChecked(d3);
+    prevChecked(d2);
+    prevChecked(d1);
   }
-
-  /* 创建完成 */
-  public mounted(): void {
+  // 部分选择
+  setPartially();
+  // 事件
+  if(isStatus) {
+    emit('update:value', getData());
+    emit('data', listData);
   }
-
-  /* 选择 */
-  selectClick(val: string, level: string, pos: Array<number>, isStatus: boolean=true): void {
-    let d1: any, d2: any, d3: any, d4: any;
-    // 层级
-    if(level=='1') {
-      // 选中
-      d1 = this.listData[pos[0]];
-      d1.checked = val?true:false;
-      // 勾选下级
-      if(d1.children) this.nextChecked(d1.children, val?true:false);
-    } else if(level=='2') {
-      // 选中
-      d2 = this.listData[pos[0]].children[pos[1]];
-      d2.checked = val?true:false;
-      // 勾选下级
-      if(d2.children) this.nextChecked(d2.children, val?true:false);
-      // 勾选上级
-      d1 = this.listData[pos[0]];
-      this.prevChecked(d1);
-    } else if(level=='3') {
-      // 选中
-      d3 = this.listData[pos[0]].children[pos[1]].children[pos[2]];
-      d3.checked = val?true:false;
-      // 勾选下级
-      if(d3.children) this.nextChecked(d3.children, val?true:false);
-      // 勾选上级
-      d1 = this.listData[pos[0]];
-      d2 = this.listData[pos[0]].children[pos[1]];
-      this.prevChecked(d2);
-      this.prevChecked(d1);
-    } else if(level=='4') {
-      // 选中、
-      d4 = this.listData[pos[0]].children[pos[1]].children[pos[2]].children[pos[3]];
-      d4.checked = val?true:false;
-      // 勾选上级
-      d1 = this.listData[pos[0]];
-      d2 = this.listData[pos[0]].children[pos[1]];
-      d3 = this.listData[pos[0]].children[pos[1]].children[pos[2]];
-      this.prevChecked(d3);
-      this.prevChecked(d2);
-      this.prevChecked(d1);
-    }
-    // 部分选择
-    this.setPartially();
-    // 事件
-    if(isStatus) {
-      this.$emit('update:value', this.getData());
-      this.$emit('data', this.listData);
-    }
-  }
-  /* 勾选上级 */
-  private prevChecked(d: any): void {
-    let n: number = this.checkedNum(d.children);
-    if(n==0){
-      d.checked = false;
-    } else if(n==d.children.length){
-      d.checked = true;
-    } else {
-      d.checked = true;
-    }
-  }
-
-  /* 勾选下级 */
-  private nextChecked(data: any, checked: boolean): void {
-    for(let i in data){
-      data[i].checked = checked;
-      if(data[i].children) this.nextChecked(data[i].children, checked);
-    }
-  }
-
-  /* 部分选择 */
-  setPartially(): void {
-    let n1:boolean=false, n2:boolean=false, n3:boolean=false, n4:boolean=false;
-    // 一级
-    for(let v1 of this.listData) {
-      n1 = v1['children']?this.isPartially(v1['children']):false;
-      v1['partially'] = v1['checked']&&n1?true:false;
-      if(!v1['children']) continue;
-      // 二级
-      for(let v2 of v1['children']) {
-        n2 = v2['children']?this.isPartially(v2['children']):false;
-        v2['partially'] = v2['checked']&&n2?true:false;
-        if(!v2['children']) continue;
-        // 三级
-        for(let v3 of v2['children']) {
-          n3 = v3['children']?this.isPartially(v3['children']):false;
-          v3['partially'] = v3['checked']&&n3?true:false;
-          if(!v3['children']) continue;
-        }
-      }
-    }
-  }
-  /* 是否选择 */
-  private isPartially(d: any): boolean {
-    let res: boolean=false;
-    for(let v of d) {
-      if(v['children']) {
-        res = this.isPartially(v['children']);
-        if(res) return res;
-      } else {
-        let n: number = this.checkedNum(d);
-        if(n!=d.length) return true;
-      }
-    }
-    return res;
-  }
-  /* 获取选中数量 */
-  private checkedNum(data: any): number {
-    let n: number = 0;
-    for(let v of data) if(v.checked) n++;
-    return n; 
-  }
-
-  /* 获取数据 */
-  getData(): Array<string> {
-    let values: Array<string> = [];
-    for(let v1 of this.listData) {
-      if(v1.checked) values.push(v1.value);
-      if(!v1.children) continue;
-      for(let v2 of v1.children) {
-        if(v2.checked) values.push(v2.value);
-        if(!v2.children) continue;
-        for(let v3 of v2.children) {
-          if(v3.checked) values.push(v3.value);
-          if(!v3.children) continue;
-          for(let v4 of v3.children) {
-            if(v4.checked) values.push(v4.value);
-          }
-        }
-      }
-    }
-    return values;
-  }
-
-  /* 清空 */
-  clear(): void {
-    // this.$emit('update:value', '');
-    this.nextChecked(this.listData, false);
-  }
-
 }
+/* 勾选上级 */
+const prevChecked = (d: any): void => {
+  let n: number = checkedNum(d.children);
+  if(n==0){
+    d.checked = false;
+  } else if(n==d.children.length){
+    d.checked = true;
+  } else {
+    d.checked = true;
+  }
+}
+
+/* 勾选下级 */
+const nextChecked = (data: any, checked: boolean): void => {
+  for(let i in data){
+    data[i].checked = checked;
+    if(data[i].children) nextChecked(data[i].children, checked);
+  }
+}
+
+/* 部分选择 */
+const setPartially = (): void => {
+  let n1:boolean=false, n2:boolean=false, n3:boolean=false, n4:boolean=false;
+  // 一级
+  for(let v1 of listData.value) {
+    n1 = v1['children']?isPartially(v1['children']):false;
+    v1['partially'] = v1['checked']&&n1?true:false;
+    if(!v1['children']) continue;
+    // 二级
+    for(let v2 of v1['children']) {
+      n2 = v2['children']?isPartially(v2['children']):false;
+      v2['partially'] = v2['checked']&&n2?true:false;
+      if(!v2['children']) continue;
+      // 三级
+      for(let v3 of v2['children']) {
+        n3 = v3['children']?isPartially(v3['children']):false;
+        v3['partially'] = v3['checked']&&n3?true:false;
+        if(!v3['children']) continue;
+      }
+    }
+  }
+}
+/* 是否选择 */
+const isPartially = (d: any): boolean => {
+  let res: boolean=false;
+  for(let v of d) {
+    if(v['children']) {
+      res = isPartially(v['children']);
+      if(res) return res;
+    } else {
+      let n: number = checkedNum(d);
+      if(n!=d.length) return true;
+    }
+  }
+  return res;
+}
+/* 获取选中数量 */
+const checkedNum = (data: any): number => {
+  let n: number = 0;
+  for(let v of data) if(v.checked) n++;
+  return n; 
+}
+
+/* 获取数据 */
+const getData = (): Array<string> => {
+  let values: Array<string> = [];
+  for(let v1 of listData.value) {
+    if(v1.checked) values.push(v1.value);
+    if(!v1.children) continue;
+    for(let v2 of v1.children) {
+      if(v2.checked) values.push(v2.value);
+      if(!v2.children) continue;
+      for(let v3 of v2.children) {
+        if(v3.checked) values.push(v3.value);
+        if(!v3.children) continue;
+        for(let v4 of v3.children) {
+          if(v4.checked) values.push(v4.value);
+        }
+      }
+    }
+  }
+  return values;
+}
+
+/* 清空 */
+const clear = (): void => {
+  // $emit('update:value', '');
+  nextChecked(listData, false);
+}
+
 </script>

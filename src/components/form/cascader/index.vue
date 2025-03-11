@@ -75,13 +75,12 @@
 .wm-cascader_clear::before{transform: translate(-50%, -50%) rotate(-45deg);}
 </style>
 
-<script lang="ts">
-import { Options, Vue } from 'vue-class-component';
+<script setup lang="ts">
+import { ref, onMounted, watch, getCurrentInstance } from 'vue';
 import { useStore } from 'vuex';
-import wmInput from '@/components/form/input/index.vue'
-@Options({
-  components: { wmInput },
-  props: {
+
+/* 参数 */
+const props = defineProps({
     value: {default: ''},                                   // 默认值
     options: {type: Array, default: []},                    // 数据: [{label:'一级菜单', value:'m1', children: []}]
     multiple: {type: Boolean, default: false},              // 是否多选
@@ -91,181 +90,166 @@ import wmInput from '@/components/form/input/index.vue'
     level: {type: Number, default: 3},                      // 菜单级数
     bodyMinWidth: {type: String, default: '160px'},         // 内容最小高度
     clearable: {type: Boolean, default: false},             // 一键清空
-  }
-})
-export default class Cascader extends Vue {
+});
+const { proxy } = getCurrentInstance() as any ;
+const emit = defineEmits(['update:value', 'data']);
+// 状态
+const store = useStore();
+const state = store.state;
+// 变量
+let selectObj: any = null;
+const show = ref(false);
+const listData = ref(<any>[]);
+const k1 = ref(-1);
+const k2 = ref(-1);
+const k3 = ref(-1);
+const k4 = ref(-1);
+const labelName = ref('');
 
-  // 参数
-  value!: any;
-  options!: any;
-  multiple!: boolean;
-  width!: string;
-  height!: string;
-  placeholder!: string;
-  level!: number;
-  bodyMinWidth!: string;
-  clearable!: boolean;
-  // 状态
-  store: any = useStore();
-  state: any = this.store.state;
-  // 变量
-  show: boolean = false;
-  selectObj: any = null;
-  listData: Array<any> = [];
-  k1: number = -1;
-  k2: number = -1;
-  k3: number = -1;
-  k4: number = -1;
-  labelName: string = '';
-
-  /* 创建成功 */
-  created(): void {
-    // 监听
-    this.$watch('value', (val:Array<any>)=>{
-      let level: string = '';
-      let k1: number = -1;
-      let k2: number = -1;
-      let k3: number = -1;
-      let k4: number = -1;
-      // 一级
-      this.listData.forEach((v1: any, i1: number)=>{
-        if(val[0]==v1.value) { level='1'; k1=i1; }
-        // 二级
-        if(v1.children) {
-          v1.children.forEach((v2: any, i2: number)=>{
-            if(val[1]==v2.value) { level='2'; k2=i2; }
-            // 三级
-            if(v2.children) {
-              v2.children.forEach((v3: any, i3: number)=>{
-                if(val[2]==v3.value) { level='3'; k3=i3; }
-                // 四级
-                if(v3.children) {
-                  v3.children.forEach((v4: any, i4: number)=>{
-                    if(val[3]==v4.value) { level='4'; k4=i4; }
-                  });
-                }
+/* 监听 */
+watch(()=>props.value, (val: any)=>{
+  let level: string = '';
+  let k1: number = -1;
+  let k2: number = -1;
+  let k3: number = -1;
+  let k4: number = -1;
+  // 一级
+  listData.value.forEach((v1: any, i1: number)=>{
+    if(val[0]==v1.value) { level='1'; k1=i1; }
+    // 二级
+    if(v1.children) {
+      v1.children.forEach((v2: any, i2: number)=>{
+        if(val[1]==v2.value) { level='2'; k2=i2; }
+        // 三级
+        if(v2.children) {
+          v2.children.forEach((v3: any, i3: number)=>{
+            if(val[2]==v3.value) { level='3'; k3=i3; }
+            // 四级
+            if(v3.children) {
+              v3.children.forEach((v4: any, i4: number)=>{
+                if(val[3]==v4.value) { level='4'; k4=i4; }
               });
             }
           });
         }
       });
-      if(level) this.selectClick(level, [k1, k2, k3, k4], false);
-      else this.clear();
-    }, { deep: true });
-    this.$watch('options', (val:Array<any>)=>{
-      this.listData = val;
-    }, { deep: true });
-  }
-
-  /* 创建完成 */
-  public mounted(): void {
-    this.init();
-  }
-
-  /* 初始化 */
-  init(): void {
-    // 失去焦点
-    this.selectObj = this.$refs.formCascader;
-    this.selectObj.addEventListener('focusout', ()=>{
-      this.show = false;
-    });
-  }
-
-  /* 选择 */
-  selectClick(level: string, pos: Array<number>, isStatus: boolean=true): void {
-    let labels: Array<any> = [];
-    let values: Array<any> = [];
-    // 位置
-    this.k1= pos[0];
-    this.k2= pos[1];
-    this.k3= pos[2];
-    this.k4= pos[3];
-    // 层级
-    if(level=='1') {
-      // 清除、选中
-      this.selectClear(this.listData);
-      this.listData[this.k1].checked = true;
-      // 数据
-      labels = [this.listData[this.k1].label];
-      values = [this.listData[this.k1].value];
-    } else if(level=='2') {
-      // 清除、选中
-      this.selectClear(this.listData[this.k1].children);
-      this.listData[this.k1].checked = true;
-      this.listData[this.k1].children[this.k2].checked = true;
-      // 数据
-      labels = [
-        this.listData[this.k1].label,
-        this.listData[this.k1].children[this.k2].label,
-      ];
-      values = [
-        this.listData[this.k1].value,
-        this.listData[this.k1].children[this.k2].value,
-      ];
-    } else if(level=='3') {
-      // 清除、选中
-      this.selectClear(this.listData[this.k1].children[this.k2].children);
-      this.listData[this.k1].checked = true;
-      this.listData[this.k1].children[this.k2].checked = true;
-      this.listData[this.k1].children[this.k2].children[this.k3].checked = true;
-      // 数据
-      labels = [
-        this.listData[this.k1].label,
-        this.listData[this.k1].children[this.k2].label,
-        this.listData[this.k1].children[this.k2].children[this.k3].label,
-      ];
-      values = [
-        this.listData[this.k1].value,
-        this.listData[this.k1].children[this.k2].value,
-        this.listData[this.k1].children[this.k2].children[this.k3].value,
-      ];
-    } else if(level=='4') {
-      // 清除、选中
-      this.selectClear(this.listData[this.k1].children[this.k2].children[this.k3].children);
-      this.listData[this.k1].checked = true;
-      this.listData[this.k1].children[this.k2].checked = true;
-      this.listData[this.k1].children[this.k2].children[this.k3].checked = true;
-      this.listData[this.k1].children[this.k2].children[this.k3].children[this.k4].checked = true;
-      // 数据
-      labels = [
-        this.listData[this.k1].label,
-        this.listData[this.k1].children[this.k2].label,
-        this.listData[this.k1].children[this.k2].children[this.k3].label,
-        this.listData[this.k1].children[this.k2].children[this.k3].children[this.k4].label,
-      ];
-      values = [
-        this.listData[this.k1].value,
-        this.listData[this.k1].children[this.k2].value,
-        this.listData[this.k1].children[this.k2].children[this.k3].value,
-        this.listData[this.k1].children[this.k2].children[this.k3].children[this.k4].value,
-      ];
     }
-    // 事件
-    this.labelName = labels.join(' > ');
-    if(isStatus){
-      this.$emit('update:value', values);
-      this.$emit('data', this.listData);
-    }
+  });
+  if(level) selectClick(level, [k1, k2, k3, k4], false);
+  else clear();
+},{ deep: true });
+watch(()=>props.options, (val: any)=>{
+  listData.value = val;
+},{ deep: true });
+
+/* 创建完成 */
+onMounted(()=>{
+  init();
+});
+
+/* 初始化 */
+const init = (): void => {
+  // 失去焦点
+  selectObj = proxy.$refs.formCascader;
+  selectObj.addEventListener('focusout', ()=>{
+    show.value = false;
+  });
+}
+
+/* 选择 */
+const selectClick = (level: string, pos: Array<number>, isStatus: boolean=true): void => {
+  let labels: Array<any> = [];
+  let values: Array<any> = [];
+  // 位置
+  k1.value= pos[0];
+  k2.value= pos[1];
+  k3.value= pos[2];
+  k4.value= pos[3];
+  // 层级
+  if(level=='1') {
+    // 清除、选中
+    selectClear(listData);
+    listData[k1.value].checked = true;
+    // 数据
+    labels = [listData[k1.value].label];
+    values = [listData[k1.value].value];
+  } else if(level=='2') {
+    // 清除、选中
+    selectClear(listData[k1.value].children);
+    listData[k1.value].checked = true;
+    listData[k1.value].children[k2.value].checked = true;
+    // 数据
+    labels = [
+      listData[k1.value].label,
+      listData[k1.value].children[k2.value].label,
+    ];
+    values = [
+      listData[k1.value].value,
+      listData[k1.value].children[k2.value].value,
+    ];
+  } else if(level=='3') {
+    // 清除、选中
+    selectClear(listData[k1.value].children[k2.value].children);
+    listData[k1.value].checked = true;
+    listData[k1.value].children[k2.value].checked = true;
+    listData[k1.value].children[k2.value].children[k3.value].checked = true;
+    // 数据
+    labels = [
+      listData[k1.value].label,
+      listData[k1.value].children[k2.value].label,
+      listData[k1.value].children[k2.value].children[k3.value].label,
+    ];
+    values = [
+      listData[k1.value].value,
+      listData[k1.value].children[k2.value].value,
+      listData[k1.value].children[k2.value].children[k3.value].value,
+    ];
+  } else if(level=='4') {
+    // 清除、选中
+    selectClear(listData[k1.value].children[k2.value].children[k3.value].children);
+    listData[k1.value].checked = true;
+    listData[k1.value].children[k2.value].checked = true;
+    listData[k1.value].children[k2.value].children[k3.value].checked = true;
+    listData[k1.value].children[k2.value].children[k3.value].children[k4.value].checked = true;
+    // 数据
+    labels = [
+      listData[k1.value].label,
+      listData[k1.value].children[k2.value].label,
+      listData[k1.value].children[k2.value].children[k3.value].label,
+      listData[k1.value].children[k2.value].children[k3.value].children[k4.value].label,
+    ];
+    values = [
+      listData[k1.value].value,
+      listData[k1.value].children[k2.value].value,
+      listData[k1.value].children[k2.value].children[k3.value].value,
+      listData[k1.value].children[k2.value].children[k3.value].children[k4.value].value,
+    ];
   }
+  // 事件
+  labelName.value = labels.join(' > ');
+  if(isStatus){
+    emit('update:value', values);
+    emit('data', listData);
+  }
+}
 
   /* 清空下级 */
-  private selectClear(data: any): void {
+  const selectClear = (data: any): void => {
     for(let i in data){
       data[i].checked = false;
-      if(data[i].children) this.selectClear(data[i].children);
+      if(data[i].children) selectClear(data[i].children);
     }
   }
 
-  /* 清空 */
-  clear(): void {
-    this.k1= -1;
-    this.k2= -1;
-    this.k3= -1;
-    this.k4= -1;
-    this.labelName = '';
-    this.$emit('update:value', '');
-    this.selectClear(this.listData);
-  }
-
+/* 清空 */
+const clear = (): void => {
+  k1.value= -1;
+  k2.value= -1;
+  k3.value= -1;
+  k4.value= -1;
+  labelName.value = '';
+  emit('update:value', '');
+  selectClear(listData);
 }
+
 </script>

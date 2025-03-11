@@ -37,51 +37,34 @@
 .wm-alert.dark_info{background-color: @Info; color: @Info6;}
 </style>
 
-<script lang="ts">
-import { Options, Vue } from 'vue-class-component';
-@Options({
-  components: {},
-  props: {
-    effect: {type: String, default: 'plain'},         // 样式: plain, dark
-    type: {type: String, default: 'primary'},         // 类型: primary, success, warning, danger, info
-    width: {type: String, default: 'auto'},           // 宽度
-    maxWidth: {type: String, default: 'auto'},        // 最大宽度
-    height: {type: String, default: '24px'},          // 高度
-    lineHeight: {type: String, default: '24px'},      // 行度
-    padding: {type: String, default: '8px 16px'},     // 内部间距
-    margin: {type: String, default: '0 16px'},        // 外部间距
-    radius: {type: String, default: '4px'},           // 圆角
-    fontSize: {type: String, default: '14px'},        // 文字大小
-    icon: {type: String, default: ''},                // 图标
-    iconSize: {type: String, default: '14px'},        // 图标大小
-    closable: {type: Boolean, default: false},        // 关闭
-    closeText: {type: String, default: '<i class="ui ui_close" style="font-size: 14px;"></i>'},
-  }
-})
-export default class Alert extends Vue {
+<script setup lang="ts">
+import { ref } from 'vue';
 
-  // 参数
-  effect!: string;
-  type!: string;
-  width!: string;
-  height!: string;
-  lineHeight!: string;
-  padding!: string;
-  margin!: string;
-  radius!: string;
-  fontSize!: string;
-  icon!: string;
-  iconSize!: string;
-  closable!: boolean;
-  closeText!: string;
-  // 变量
-  show: boolean = true;
+/* 参数 */
+const props = defineProps({
+  effect: {type: String, default: 'plain'},         // 样式: plain, dark
+  type: {type: String, default: 'primary'},         // 类型: primary, success, warning, danger, info
+  width: {type: String, default: 'auto'},           // 宽度
+  maxWidth: {type: String, default: 'auto'},        // 最大宽度
+  height: {type: String, default: '24px'},          // 高度
+  lineHeight: {type: String, default: '24px'},      // 行度
+  padding: {type: String, default: '8px 16px'},     // 内部间距
+  margin: {type: String, default: '0 16px'},        // 外部间距
+  radius: {type: String, default: '4px'},           // 圆角
+  fontSize: {type: String, default: '14px'},        // 文字大小
+  icon: {type: String, default: ''},                // 图标
+  iconSize: {type: String, default: '14px'},        // 图标大小
+  closable: {type: Boolean, default: false},        // 关闭
+  closeText: {type: String, default: '<i class="ui ui_close" style="font-size: 14px;"></i>'},
+});
+const emit = defineEmits(['close']);
+// 变量
+const show = ref(true);
 
-  /* 关闭 */
-  close(): void {
-    this.show = false;
-    this.$emit('close');
-  }
-
+/* 关闭 */
+const close = (): void => {
+  show.value = false;
+  emit('close');
 }
+
 </script>

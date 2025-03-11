@@ -49,80 +49,69 @@
 .wm-search_bottom .search:hover{background: linear-gradient(@Primary, @Primary1);}
 </style>
 
-<script lang="ts">
-import { Options, Vue } from 'vue-class-component';
+<script setup lang="ts">
+import { onMounted, watch } from 'vue';
 import { useStore } from 'vuex';
 /* 组件 */
-import wmMain from '@/components/container/main.vue'
-import wmPopup from '@/components/popup/index.vue'
-import wmTableForm from '@/components/table/form.vue'
-import wmInput from '@/components/form/input/index.vue'
-import wmButton from '@/components/form/button/index.vue'
+import wmMain from '../../components/container/main.vue'
+import wmPopup from '../../components/popup/index.vue'
+import wmTableForm from '../../components/table/form.vue'
+import wmInput from '../../components/form/input/index.vue'
+import wmButton from '../../components/form/button/index.vue'
 
-@Options({
-  components: { wmMain, wmPopup, wmTableForm, wmInput, wmButton },
-  props: {
-    show: {type: Boolean, default: false},              // 是否显示
-    keys: {type: String, default: ''},                  // 关键字
-    columns: {type: Array, default: []},                // 字段: [{label: '名称', value: '', slot: 'name'}]
-    title: {type: String, default: ''},                 // 标题
-    width: {type: String, default: '360px'},            // 宽
-    placeholder: {type: String, default: ''},           // 提示
-  }
-})
-export default class Search extends Vue {
-  // 参数
-  show!: boolean;
-  keys!: string;
-  columns!: Array<any>;
-  title!: string;
-  width!: string;
-  placeholder!: string;
-  // 状态
-  private store: any = useStore();
-  state: any = this.store.state;
+/* 参数 */
+const props = defineProps({
+  show: {type: Boolean, default: false},              // 是否显示
+  keys: {type: String, default: ''},                  // 关键字
+  columns: {type: Array<any>, default: []},           // 字段: [{label: '名称', value: '', slot: 'name'}]
+  title: {type: String, default: ''},                 // 标题
+  width: {type: String, default: '360px'},            // 宽
+  placeholder: {type: String, default: ''},           // 提示
+});
+const emit = defineEmits(['update:show', 'update:keys', 'search', 'reset']);
+// 状态
+const store = useStore();
+const state = store.state;
   // 语言
-  langs: any = this.state.langs;
-  // 变量
-  seaShow: boolean = false;
-  seaKey: string = '';
+const langs: any = state.langs;
+// 变量
+let seaShow: boolean = false;
+let seaKey: string = '';
 
-  /* 创建成功 */
-  created(): void {
-    this.$watch('show', (val:boolean)=>{
-      this.seaShow = val;
-    }, { deep: true });
-    this.$watch('keys', (val:string)=>{
-      this.seaKey = val;
-    }, { deep: true });
-    this.$watch('seaShow', (val:boolean)=>{
-     this.$emit('update:show', val);
-    }, { deep:  true });
-  }
-  /* 创建完成 */
-  public mounted(): void {
-    this.seaKey = this.keys;
-  }
+/* 监听 */
+watch(()=>props.show, (val: boolean)=>{
+  seaShow = val;
+},{ deep: true });
+watch(()=>props.keys, (val: string)=>{
+  seaKey = val;
+},{ deep: true });
+watch(()=>seaShow, (val: boolean)=>{
+  emit('update:show', val);
+},{ deep: true });
 
-  /* 搜索内容 */
-  serachVal(val: string): void {
-    this.$emit('update:keys', val);
-  }
+/* 创建完成 */
+onMounted(()=>{
+  seaKey = props.keys;
+});
 
-  /* 搜索 */
-  search(): void {
-    this.$emit('search');
-  }
-
-  /* 重置 */
-  reset(): void {
-    this.$emit('reset');
-  }
-
-  /* 关闭 */
-  close(): void {
-    this.$emit('update:show', false);
-  }
-
+/* 搜索内容 */
+const serachVal = (val: string): void => {
+  emit('update:keys', val);
 }
+
+/* 搜索 */
+const search = (): void => {
+  emit('search');
+}
+
+/* 重置 */
+const reset = (): void => {
+  emit('reset');
+}
+
+/* 关闭 */
+const close = (): void => {
+  emit('update:show', false);
+}
+
 </script>

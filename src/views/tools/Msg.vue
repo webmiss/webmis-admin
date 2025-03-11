@@ -1,15 +1,15 @@
 <template>
   <div class="wm-msg_body" :style="{visibility:msgShow?'inherit':'hidden'}">
-    <wm-popup width="980px" height="700px" v-model:show="msgShow" @close="close()">
+    <wmPopup width="980px" height="700px" v-model:show="msgShow" @close="close()">
       <div class="wm-msg_content flex">
         <div class="wm-msg_left">
           <!-- Uinfo  -->
           <div class="wm-msg_uinfo flex">
-            <div class="img" :style="{backgroundImage: this.state.uinfo.img?'url('+this.state.uinfo.img+')':''}">
-              <i class="ui ui_image" v-if="!this.state.uinfo.img"></i>
+            <div class="img" :style="{backgroundImage: state.uinfo.img?'url('+state.uinfo.img+')':''}">
+              <i class="ui ui_image" v-if="!state.uinfo.img"></i>
             </div>
-            <div class="name nowrap">{{ this.state.uinfo.nickname }}</div>
-            <div class="more" tabindex="0" @blur="more=false" @focus="more=true">
+            <div class="name nowrap">{{ state.uinfo.nickname }}</div>
+            <div class="more" tabindex="0" @blur="more=false" @focus="more=false">
               <i class="ui ui_more"></i>
               <ul class="config" v-if="more">
                 <li class="flex_left" @click="state.isUinfo=true">
@@ -109,11 +109,11 @@
           <textarea class="wm-msg_area scrollbar" v-model="sendContent" @input="msgInput()" @keyup.ctrl.enter="msgCtrlEnter()" @keydown.enter.exact="msgSend"></textarea>
           <div class="wm-msg_action flex_right">
             <span>按下Ctrl+Enter换行</span>
-            <wm-button padding="0 32px" @click="msgSend()">发送</wm-button>
+            <wmButton padding="0 32px" @click="msgSend()">发送</wmButton>
           </div>
         </div>
       </div>
-    </wm-popup>
+    </wmPopup>
   </div>
   
   
@@ -194,339 +194,332 @@
 .wm-msg_action span{padding: 0 8px; color: @Info;}
 </style>
 
-<script lang="ts">
-import { Options, Vue } from 'vue-class-component';
+<script setup lang="ts">
+import { onMounted, watch } from 'vue';
 import { useStore } from 'vuex';
 /* UI组件 */
-import Env from '@/config/Env';
-import Ui from '@/library/ui'
-import Request from '@/library/request'
-import Time from '@/library/time'
+import Env from '../../config/Env';
+import Ui from '../../library/ui'
+import Request from '../../library/request'
+import Time from '../../library/time'
 /* 组件 */
-import wmPopup from '@/components/popup/index.vue'
-import wmButton from '@/components/form/button/index.vue'
+import wmPopup from '../../components/popup/index.vue'
+import wmButton from '../../components/form/button/index.vue'
 
-@Options({
-  components: { wmPopup, wmButton },
-  props: {
-    show: {type: Boolean, default: false},   // 是否显示
-  }
-})
-export default class Msg extends Vue {
-  // 参数
-  show!: boolean;
-  // 状态
-  private store: any = useStore();
-  state: any = this.store.state;
-  // 变量
-  msgShow: boolean = false;
-  more: boolean = false;
-  sea: any = {show: false, key:'', list:[]};
-  // 发送内容
-  sendGid: number | string = '';
-  sendFid: number | string = '';
-  sendTitle: string = '';
-  sendContent: string = '';
-  sendImg: string = '';
-  sendList: Array<any> = [];
-  // Socket
-  private socketCfg: any = new Env().socket();
-  private socketInterval: any = null;
-  private heartbeatInterval: any = null;
-  // 消息间隔时间
-  private msgTime: number = 600;
+/* 参数 */
+const props = defineProps({
+  show: {type: Boolean, default: false},   // 是否显示
+});
+const emit = defineEmits(['update:show']);
+// 状态
+const store = useStore();
+const state = store.state;
+// 变量
+let msgShow: boolean = false;
+let more: boolean = false;
+let sea: any = {show: false, key:'', list:[]};
+// 发送内容
+let sendGid: number | string = '';
+let sendFid: number | string = '';
+let sendTitle: string = '';
+let sendContent: string = '';
+let sendImg: string = '';
+let sendList: Array<any> = [];
+// Socket
+let socketCfg: any = new Env().socket();
+let socketInterval: any = null;
+let heartbeatInterval: any = null;
+// 消息间隔时间
+let msgTime: number = 600;
 
-  /* 创建成功 */
-  created(): void {
-    this.$watch('show', (val:boolean)=>{
-      this.msgShow = val;
-    }, { deep: true });
-  }
+/* 监听 */
+watch(()=>props.show, (val: boolean)=>{
+  msgShow = val;
+},{ deep: true });
 
-  /* 创建完成 */
-  mounted(): void {
-    if(this.socketCfg.start) this.socketStart();
-  }
+/* 创建完成 */
+onMounted(()=>{
+  if(socketCfg.start) socketStart();
+});
 
-  /* 搜索 */
-  search(): void {
-    const key: string = this.sea.key.trim();
-    if(key.length>0) {
-      this.sea.show = true;
-      Request.Post('msg/sea?lang='+this.state.lang, {
-        token: this.state.token,
-        key: key,
-      }, (res:any)=>{
-        const d = res.data;
-        if(d.code==0) this.sea.list=d.data;
-      });
-    } else {
-      this.sea.show = false;
-    }
-  }
-  /* 搜索-点击 */
-  searchClick(row: any): void {
-    this.sea.show = false;
-    // 已存在
-    for(let v of this.state.msg.list) {
-      if(v.gid==row.gid && v.fid==row.fid) {
-        return this.msgClick(v);
-      }
-    }
-    // 追加
-    const data: any = {
-      gid: row.gid,
-      fid: row.fid,
-      title: row.title,
-      content: '',
-      img: row.img,
-      time: Time.Date('Y-m-d H:i:s'),
-      list: [],
-    }
-    this.state.msg.list.unshift(data);
-    return this.msgClick(data);
-  }
-
-  /* 消息 */
-  msg(d: any): void {
-    if(d.code!=0) return Ui.Toast(d.msg);
-    const row: any = d.data;
-    // 已存在列表
-    for(let v of this.state.msg.list) {
-      if(v.gid==d.gid && v.fid==d.fid) {
-        // 是否新信息
-        if(d.gid==this.sendGid && d.fid==this.sendFid) {
-          v.num += 0;
-          row.is_new = false;
-          this.msgRead([row.id]);
-        } else {
-          v.num += 1;
-          row.is_new = true;
-          this.state.msg.num += 1;
-        }
-        // 是否提示
-        if(!this.msgShow) Ui.Toast(row.content);
-        // 加载中
-        let n: number = v.list.length;
-        if(n>0 && v.list[n-1].loading) v.list.splice(n-1, 1);
-        // 追加数据
-        v.time = row.time;
-        v.content = row.content;
-        v.img = row.img;
-        v.list.push(row);
-        // 调换位置
-        this.msgToTop(v);
-        // 调转底部
-        this.msgToBottom();
-        return ;
-      }
-    }
-    // 追加
-    row.is_new = true;
-    const data: any = {
-      type: d.type,
-      gid: row.gid,
-      fid: row.fid,
-      num: 1,
-      time: row.time,
-      title: row.title,
-      content: row.content,
-      img: row.img,
-      list: [row],
-    }
-    this.state.msg.num += 1;
-    this.state.msg.list.unshift(data);
-    Ui.Toast(row.content);
-  }
-
-  /* 消息-列表 */
-  msgList(): void {
-    Request.Post('msg/list?lang='+this.state.lang, {token: this.state.token}, (res:any)=>{
-      const d: any = res.data;
-      if(d.code==0) {
-        if(this.state.msg.list.length==0) this.state.msg.list = d.data.list;
-        this.state.msg.num = d.data.num;
-      }
-    },()=>{
-      Ui.Toast(this.state.langs.network_err);
-    });
-  }
-  /* 消息-点击 */
-  msgClick(row: any): void {
-    this.sendGid = row.gid;
-    this.sendFid = row.fid;
-    this.sendTitle = row.title;
-    this.sendContent = row.sendContent || '';
-    this.sendImg = row.img;
-    this.sendList = row.list;
-    this.msgToBottom();
-    // 标记阅读
-    let ids: any = [];
-    for(let v of row.list) {
-      if(v.is_new){
-          v.is_new = false;
-          ids.push(v.id);
-        }
-    }
-    row.num = 0;
-    this.msgRead(ids);
-  }
-  /* 消息-内容 */
-  msgInput(): void {
-    if(!this.sendTitle) return;
-    for(let v of this.state.msg.list) {
-      if(v.gid==this.sendGid && v.fid==this.sendFid) v.sendContent = this.sendContent;
-    }
-  }
-  /* 消息-调转顶部 */
-  msgToTop(v: any) {
-    let k: number = this.state.msg.list.indexOf(v);
-    this.state.msg.list.unshift(v);
-    this.state.msg.list.splice(k+1, 1);
-  }
-  /* 消息-调转底部 */
-  msgToBottom(): void {
-    setTimeout(()=>{
-      document.querySelector('#msgBottom')?.scrollIntoView(true);
-    }, 300);
-  }
-  /* 消息-换行 */
-  msgCtrlEnter(): void {
-    this.sendContent += '\n';
-  }
-  /* 消息-发送 */
-  msgSend(event: any=null): void {
-    // 禁止换行
-    if(event) event.preventDefault();
-    if(!this.sendTitle || this.sendContent.trim()=='') return ;
-    // 参数
-    const gid: number|string = this.sendGid;
-    const fid: number|string = this.sendFid;
-    const uid: number|string = this.state.uinfo.uid;
-    const title: string = this.state.uinfo.nickname;
-    const content: string = this.sendContent.trim();
-    const img: string = this.state.uinfo.img;
-    // 追加
-    let row: any = {};
-    for(let v of this.state.msg.list) {
-      if(v.gid==gid && v.fid==fid) {
-        row = v;
-        // 时间
-        const time: string = Time.Date('Y-m-d H:i:s');
-        const tmp: any = {gid:gid, fid:uid, uid:fid, format:0, is_new: false, title:title, time:time, img:img, content:content, loading: gid==1?false:true};
-        // 预发送
-        v.time = time;
-        v.content = content;
-        v.list.push(tmp);
-        // 系统消息
-        if(gid==1) v.list.push({gid:gid, fid:0, uid:uid, format:0, is_new: false, title:title, time:time, img:this.sendImg, content:'...', loading: true});
-        // 调换位置
-        this.msgToTop(v);
-        // 调转底部
-        this.msgToBottom();
-        break;
-      }
-    }
-    // 数据
-    const msg: string = JSON.stringify({
-      type: 'msg',
-      gid: gid,
-      uid: fid || uid,
-      data: {
-        format: 0,
-        title: this.state.uinfo.name,
-        content: content,
-        img: img,
-      }
-    });
-    // 发送
-    this.state.socket.send(msg);
-    // 清空内容
-    this.sendContent = '';
-    row.sendContent = '';
-  }
-  /* 消息-标记阅读 */
-  msgRead(ids: any=[]): void {
-    if(ids.length==0) return;
-    Request.Post('msg/read?lang='+this.state.lang, {
-      token: this.state.token,
-      ids: ids,
+/* 搜索 */
+const search = (): void => {
+  const key: string = sea.key.trim();
+  if(key.length>0) {
+    sea.show = true;
+    Request.Post('msg/sea?lang='+state.lang, {
+      token: state.token,
+      key: key,
     }, (res:any)=>{
-      const d: any = res.data;
-      if(d.code==0) {
-        this.state.msg.num -= ids.length;
-      }
+      const d = res.data;
+      if(d.code==0) sea.list=d.data;
     });
+  } else {
+    sea.show = false;
   }
-
-  /* 日期转换 */
-  getMsgDate(d: string): string {
-    const day: string = Time.Date('Y-m-d');
-    const t1: number = Time.StrToTime(day+' 00:00:00');
-    const t2: number = Time.StrToTime(d);
-    let str: string = t2>=t1?d.substring(11, 16):d.substring(5, 10);
-    return str;
-  }
-  /* 时间转换 */
-  getMsgTime(t1: string, t2: string): string {
-    if(t1==t2) return Time.FormatTime(t1);
-    return Time.TimeSize(t1, t2)>this.msgTime?Time.FormatTime(t2):'';
-  }
-
-  /* 关闭 */
-  close(): void {
-    this.$emit('update:show', false);
-  }
-
-  /* 路由 */
-  router(d: any): void {
-    if(d.type=='msg') this.msg(d);
-    if(d.type=='online') console.log('online', d);
-  }
-
-  /* Socket-启动 */
-  socketStart(): void {
-    clearInterval(this.socketInterval);
-    this.socketInterval = setInterval(()=>{
-      if(this.state.isLogin && (!this.state.socket || this.state.socket.readyState!=1)) this.socketOpen();
-    }, this.socketCfg.time);
-  }
-
-  /* Socket-连接 */
-  socketOpen(): void {
-    const url: string = this.socketCfg.server+'?lang='+this.state.lang+'&channel='+this.socketCfg.channel+'&token='+this.state.token;
-    this.state.socket = new WebSocket(url);
-    // 链接
-    this.state.socket.onopen = ()=>{
-      // 心跳包
-      clearInterval(this.heartbeatInterval);
-      this.heartbeatInterval = setInterval(()=>{
-        try{
-          this.state.socket.send(JSON.stringify({type:''}));
-        }catch(e){
-          this.socketClose();
-        }
-      }, this.socketCfg.heartbeat);
-      // 消息列表
-      this.msgList();
-    }
-    // 接收
-    this.state.socket.onmessage = (res: any)=>{
-      const d = JSON.parse(res.data);
-      this.router(d);
-    }
-    // 关闭
-    this.state.socket.onclose = ()=>{
-      this.socketClose();
-    }
-  }
-
-  /* Socket-关闭 */
-  socketClose(): void {
-    if(!this.state.socket) return;
-    this.state.socket.close();
-    this.state.socket = null;
-  }
-
 }
+/* 搜索-点击 */
+const searchClick = (row: any): void => {
+  sea.show = false;
+  // 已存在
+  for(let v of state.msg.list) {
+    if(v.gid==row.gid && v.fid==row.fid) {
+      return msgClick(v);
+    }
+  }
+  // 追加
+  const data: any = {
+    gid: row.gid,
+    fid: row.fid,
+    title: row.title,
+    content: '',
+    img: row.img,
+    time: Time.Date('Y-m-d H:i:s'),
+    list: [],
+  }
+  state.msg.list.unshift(data);
+  return msgClick(data);
+}
+
+/* 消息 */
+const msgData = (d: any): void =>{
+  if(d.code!=0) return Ui.Toast(d.msg);
+  const row: any = d.data;
+  // 已存在列表
+  for(let v of state.msg.list) {
+    if(v.gid==d.gid && v.fid==d.fid) {
+      // 是否新信息
+      if(d.gid==sendGid && d.fid==sendFid) {
+        v.num += 0;
+        row.is_new = false;
+        msgRead([row.id]);
+      } else {
+        v.num += 1;
+        row.is_new = true;
+        state.msg.num += 1;
+      }
+      // 是否提示
+      if(!msgShow) Ui.Toast(row.content);
+      // 加载中
+      let n: number = v.list.length;
+      if(n>0 && v.list[n-1].loading) v.list.splice(n-1, 1);
+      // 追加数据
+      v.time = row.time;
+      v.content = row.content;
+      v.img = row.img;
+      v.list.push(row);
+      // 调换位置
+      msgToTop(v);
+      // 调转底部
+      msgToBottom();
+      return ;
+    }
+  }
+  // 追加
+  row.is_new = true;
+  const data: any = {
+    type: d.type,
+    gid: row.gid,
+    fid: row.fid,
+    num: 1,
+    time: row.time,
+    title: row.title,
+    content: row.content,
+    img: row.img,
+    list: [row],
+  }
+  state.msg.num += 1;
+  state.msg.list.unshift(data);
+  Ui.Toast(row.content);
+}
+
+/* 消息-列表 */
+const msgList = (): void => {
+  Request.Post('msg/list?lang='+state.lang, {token: state.token}, (res:any)=>{
+    const d: any = res.data;
+    if(d.code==0) {
+      if(state.msg.list.length==0) state.msg.list = d.data.list;
+      state.msg.num = d.data.num;
+    }
+  },()=>{
+    Ui.Toast(state.langs.network_err);
+  });
+}
+/* 消息-点击 */
+const msgClick = (row: any): void => {
+  sendGid = row.gid;
+  sendFid = row.fid;
+  sendTitle = row.title;
+  sendContent = row.sendContent || '';
+  sendImg = row.img;
+  sendList = row.list;
+  msgToBottom();
+  // 标记阅读
+  let ids: any = [];
+  for(let v of row.list) {
+    if(v.is_new){
+        v.is_new = false;
+        ids.push(v.id);
+      }
+  }
+  row.num = 0;
+  msgRead(ids);
+}
+/* 消息-内容 */
+const msgInput = (): void => {
+  if(!sendTitle) return;
+  for(let v of state.msg.list) {
+    if(v.gid==sendGid && v.fid==sendFid) v.sendContent = sendContent;
+  }
+}
+/* 消息-调转顶部 */
+const msgToTop = (v: any) => {
+  let k: number = state.msg.list.indexOf(v);
+  state.msg.list.unshift(v);
+  state.msg.list.splice(k+1, 1);
+}
+/* 消息-调转底部 */
+const msgToBottom = (): void => {
+  setTimeout(()=>{
+    document.querySelector('#msgBottom')?.scrollIntoView(true);
+  }, 300);
+}
+/* 消息-换行 */
+const msgCtrlEnter = (): void => {
+  sendContent += '\n';
+}
+/* 消息-发送 */
+const msgSend = (event: any=null): void => {
+  // 禁止换行
+  if(event) event.preventDefault();
+  if(!sendTitle || sendContent.trim()=='') return ;
+  // 参数
+  const gid: number|string = sendGid;
+  const fid: number|string = sendFid;
+  const uid: number|string = state.uinfo.uid;
+  const title: string = state.uinfo.nickname;
+  const content: string = sendContent.trim();
+  const img: string = state.uinfo.img;
+  // 追加
+  let row: any = {};
+  for(let v of state.msg.list) {
+    if(v.gid==gid && v.fid==fid) {
+      row = v;
+      // 时间
+      const time: string = Time.Date('Y-m-d H:i:s');
+      const tmp: any = {gid:gid, fid:uid, uid:fid, format:0, is_new: false, title:title, time:time, img:img, content:content, loading: gid==1?false:true};
+      // 预发送
+      v.time = time;
+      v.content = content;
+      v.list.push(tmp);
+      // 系统消息
+      if(gid==1) v.list.push({gid:gid, fid:0, uid:uid, format:0, is_new: false, title:title, time:time, img:sendImg, content:'...', loading: true});
+      // 调换位置
+      msgToTop(v);
+      // 调转底部
+      msgToBottom();
+      break;
+    }
+  }
+  // 数据
+  const msg: string = JSON.stringify({
+    type: 'msg',
+    gid: gid,
+    uid: fid || uid,
+    data: {
+      format: 0,
+      title: state.uinfo.name,
+      content: content,
+      img: img,
+    }
+  });
+  // 发送
+  state.socket.send(msg);
+  // 清空内容
+  sendContent = '';
+  row.sendContent = '';
+}
+/* 消息-标记阅读 */
+const msgRead = (ids: any=[]): void => {
+  if(ids.length==0) return;
+  Request.Post('msg/read?lang='+state.lang, {
+    token: state.token,
+    ids: ids,
+  }, (res:any)=>{
+    const d: any = res.data;
+    if(d.code==0) {
+      state.msg.num -= ids.length;
+    }
+  });
+}
+
+/* 日期转换 */
+const getMsgDate = (d: string): string => {
+  const day: string = Time.Date('Y-m-d');
+  const t1: number = Time.StrToTime(day+' 00:00:00');
+  const t2: number = Time.StrToTime(d);
+  let str: string = t2>=t1?d.substring(11, 16):d.substring(5, 10);
+  return str;
+}
+/* 时间转换 */
+const getMsgTime = (t1: string, t2: string): string => {
+  if(t1==t2) return Time.FormatTime(t1);
+  return Time.TimeSize(t1, t2)>msgTime?Time.FormatTime(t2):'';
+}
+
+/* 关闭 */
+const close = (): void => {
+  emit('update:show', false);
+}
+
+/* 路由 */
+const router = (d: any): void => {
+  if(d.type=='msg') msgData(d);
+  if(d.type=='online') console.log('online', d);
+}
+
+/* Socket-启动 */
+const socketStart = (): void => {
+  clearInterval(socketInterval);
+  socketInterval = setInterval(()=>{
+    if(state.isLogin && (!state.socket || state.socket.readyState!=1)) socketOpen();
+  }, socketCfg.time);
+}
+
+/* Socket-连接 */
+const socketOpen = (): void => {
+  const url: string = socketCfg.server+'?lang='+state.lang+'&channel='+socketCfg.channel+'&token='+state.token;
+  state.socket = new WebSocket(url);
+  // 链接
+  state.socket.onopen = ()=>{
+    // 心跳包
+    clearInterval(heartbeatInterval);
+    heartbeatInterval = setInterval(()=>{
+      try{
+        state.socket.send(JSON.stringify({type:''}));
+      }catch(e){
+        socketClose();
+      }
+    }, socketCfg.heartbeat);
+    // 消息列表
+    msgList();
+  }
+  // 接收
+  state.socket.onmessage = (res: any)=>{
+    const d = JSON.parse(res.data);
+    router(d);
+  }
+  // 关闭
+  state.socket.onclose = ()=>{
+    socketClose();
+  }
+}
+
+/* Socket-关闭 */
+const socketClose = (): void => {
+  if(!state.socket) return;
+  state.socket.close();
+  state.socket = null;
+}
+
 </script>

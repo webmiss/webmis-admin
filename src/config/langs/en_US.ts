@@ -1,5 +1,5 @@
 /* English */
-export function langs(): any {
+export function en_US(): any {
   return {
     home: 'Home',
     action: 'Action',

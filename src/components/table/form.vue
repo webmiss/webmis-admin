@@ -14,21 +14,12 @@
 .wm-table_form .red_dot::after{content: '*'; position: absolute; right: -12px; top: 20%; color: @Danger; font-size: 20px;}
 </style>
 
-<script lang="ts">
-import { Options, Vue } from 'vue-class-component';
-@Options({
-  name: 'WmTableForm',
-  components: {},
-  props: {
-    width: {type: String, default: '100%'},     // 宽
-    height: {type: String, default: 'auto'},    // 高
-  }
-})
-export default class TableForm extends Vue {
+<script setup lang="ts">
 
-  // 参数
-  width!: string;
-  height!: string;
-  
-}
+/* 参数 */
+const props = defineProps({
+  width: {type: String, default: '100%'},     // 宽
+  height: {type: String, default: 'auto'},    // 高
+});
+
 </script>

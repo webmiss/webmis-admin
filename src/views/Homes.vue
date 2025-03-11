@@ -25,7 +25,7 @@
       <!-- Left -->
       <div class="index_left">
         <div class="index_chart bg line_top c1">
-          <wm-chart-pie type="stack" theme="classicDark" html="<span style='font-size: 18px;'>库存</span>" :value="chart.pie" />
+          <wm-chart-pie type="stack" theme="classicDark" html="<span style='font-size: 18px;'>库存</span>" :value="chartPie" />
         </div>
         <div class="index_chart bg line_top c2 scrollbar">
           <ul class="c2_list">
@@ -40,35 +40,35 @@
         <div class="index_chart bg line_top line_bottom c3">
           <ul class="c3_list">
             <li>
-              <div :class="chart.active=='c1'?'active':''" @click="chickChart('c1')">
+              <div :class="chartActive=='c1'?'active':''" @click="chickChart('c1')">
                 <span class="title line_bottom">采购入库</span>
                 <h2>8920</h2>
                 <span class="ratio">同比上期&nbsp;&nbsp;<b class="up">12%</b></span>
               </div>
             </li>
             <li>
-              <div :class="chart.active=='c2'?'active':''" @click="chickChart('c2')">
+              <div :class="chartActive=='c2'?'active':''" @click="chickChart('c2')">
                 <span class="title">采购退货</span>
                 <h2>720</h2>
                 <span class="ratio">同比上期&nbsp;&nbsp;<b class="down">32%</b></span>
               </div>
             </li>
             <li>
-              <div :class="chart.active=='c3'?'active':''" @click="chickChart('c3')">
+              <div :class="chartActive=='c3'?'active':''" @click="chickChart('c3')">
                 <span class="title">调拨出</span>
                 <h2>5960</h2>
                 <span class="ratio">同比上期&nbsp;&nbsp;<b class="up">8%</b></span>
               </div>
             </li>
             <li>
-              <div :class="chart.active=='c4'?'active':''" @click="chickChart('c4')">
+              <div :class="chartActive=='c4'?'active':''" @click="chickChart('c4')">
                 <span class="title">调拨入</span>
                 <h2>5810</h2>
                 <span class="ratio">同比上期&nbsp;&nbsp;<b class="down">8%</b></span>
               </div>
             </li>
             <li>
-              <div :class="chart.active=='c5'?'active':''" @click="chickChart('c5')">
+              <div :class="chartActive=='c5'?'active':''" @click="chickChart('c5')">
                 <span class="title">销售出仓</span>
                 <h2>2343</h2>
                 <span class="ratio">同比上期&nbsp;&nbsp;<b class="up">5%</b></span>
@@ -77,7 +77,7 @@
           </ul>
         </div>
         <div class="index_chart bg line_top line_bottom c4">
-          <wm-chart-interval type="dodge" theme="classicDark" :value="chart.interval" />
+          <wm-chart-interval type="dodge" theme="classicDark" :value="chartInterval" />
         </div>
       </div>
     </div>
@@ -137,4 +137,74 @@
 .c3_list li .ratio .down{color: #6AD177;}
 </style>
 
-<script lang="ts" src="./Home.ts"></script>
+<script setup lang="ts">
+import { ref, onActivated } from 'vue';
+/* UI组件 */
+import wmChartPie from '../components/chart/pie.vue'
+import wmChartInterval from '../components/chart/interval.vue'
+
+// 全屏
+const full_screen = ref(false);
+// 图表
+const chartActive = ref('c1');
+const chartPie = ref([{}]);
+const chartInterval = ref([]);
+
+onActivated(()=>{
+  chickChart('c2');
+  loadData();
+});
+
+/* 加载数据 */
+const loadData = (): void => {
+  // 图表数据
+  chartPie.value = [
+    {label: 'n1', value: 90},
+    {label: 'n2', value: 200},
+    {label: 'n3', value: 120},
+  ];
+  chickChart(chartActive.value);
+}
+
+/* 图表 */
+const chickChart = (name: string): void => {
+  const data: any = {
+    c1: [
+      {label: 'n1', value: 100},
+      {label: 'n2', value: 50},
+      {label: 'n3', value: 110},
+      {label: 'n4', value: 360},
+      {label: 'n5', value: 240},
+      {label: 'n6', value: 120},
+    ],
+    c2: [
+      {label: 'n1', value: 300},
+      {label: 'n2', value: 200},
+      {label: 'n3', value: 450},
+    ],
+    c3: [
+      {label: 'n1', value: 100},
+      {label: 'n2', value: 200},
+      {label: 'n3', value: 150},
+      {label: 'n4', value: 280},
+      {label: 'n5', value: 120},
+      {label: 'n6', value: 80},
+    ],
+    c4: [
+      {label: 'n1', value: 60},
+      {label: 'n2', value: 30},
+      {label: 'n3', value: 180},
+      {label: 'n4', value: 260},
+      {label: 'n5', value: 210},
+    ],
+    c5: [
+      {label: 'n1', value: 80},
+      {label: 'n2', value: 210},
+      {label: 'n3', value: 110},
+    ],
+  };
+  chartActive.value = name;
+  chartInterval.value = data[name];
+}
+
+</script>

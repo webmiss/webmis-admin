@@ -22,14 +22,13 @@
 .dp__input{vertical-align: middle; height: 40px;}
 </style>
 
-<script lang="ts">
-import { Options, Vue } from 'vue-class-component';
+<script setup lang="ts">
+import { ref, onMounted, watch, getCurrentInstance } from 'vue';
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
-import Time from '@/library/time'
-@Options({
-  components: { VueDatePicker },
-  props: {
+
+/* 参数 */
+const props = defineProps({
     value: {default: ''},                                     // 日期: '2024-01-01'、['2024-01-01', '2024-01-31']
     range: {type: Boolean, default: false},                   // 范围选择
     format: {type: String, default: 'yyyy/MM/dd'},            // 格式: yyyy-MM-dd HH:mm:ss
@@ -42,45 +41,29 @@ import Time from '@/library/time'
     height: {type: String, default: '40px'},                  // 高
     placeholder: {type: String, default: '请选择日期'},       // 提示
     language: {type: String, default: 'zh-CN'},               // 语言
-    dayName: {type: Array, default: ['一', '二', '三', '四', '五', '六', '日']},
-  }
-})
-export default class DatePicker extends Vue {
+    dayName: {type: Array<string>, default: ['一', '二', '三', '四', '五', '六', '日']},
+});
+const { proxy } = getCurrentInstance() as any ;
+const emit = defineEmits(['update:value']);
+/* 变量 */
+const date = ref('');
 
-  // 参数
-  value!: any;
-  range!: boolean;
-  format!: string;
-  isTime!: boolean;
-  isText!: boolean;
-  isMulti!: boolean;
-  minDate!: string;
-  maxDate!: string;
-  width!: string;
-  height!: string;
-  placeholder!: string;
-  language!: string;
-  dayName!: Array<string>;
-  // 变量
-  date: string='';
-
-  /* 创建成功 */
-  created(): void {
-    // 监听
-    this.$watch('value', (val:any)=>{
-      if(val) {
-        this.date = val;
-        this.$emit('update:value', val);
-      }
-    }, { deep: true });
-    this.$watch('date', (val:any)=>{
-      if(val) this.$emit('update:value', val);
-    }, { deep: true });
+/* 监听 */
+watch(()=>props.value, (val: any)=>{
+  if(val) {
+    date.value = val;
+    emit('update:value', val);
   }
-  /* 创建完成 */
-  public mounted(): void {
-    this.date = this.value;
+},{ deep: true });
+watch(date, (val: any)=>{
+  if(val) {
+    emit('update:value', val);
   }
+},{ deep: true });
 
-}
+/* 创建完成 */
+onMounted(()=>{
+  date.value = props.value;
+});
+
 </script>

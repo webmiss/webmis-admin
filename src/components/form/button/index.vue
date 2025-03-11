@@ -67,38 +67,21 @@
 .wm-button.text_info:hover{box-shadow: none; color: @Info1; background-color: @Info6;}
 </style>
 
-<script lang="ts">
-import { Options, Vue } from 'vue-class-component';
-@Options({
-  components: {},
-  props: {
-    effect: {type: String, default: 'plain'},         // 样式: plain, dark, text
-    type: {type: String, default: 'default'},         // 类型: primary, success, warning, danger, info
-    width: {type: String, default: 'max-content'},    // 宽度
-    height: {type: String, default: '32px'},          // 高度
-    padding: {type: String, default: '0 16px'},       // 内部间距
-    margin: {type: String, default: '0 4px'},         // 外部间距
-    radius: {type: String, default: '4px'},           // 圆角
-    fontSize: {type: String, default: '14px'},        // 文字大小
-    icon: {type: String, default: ''},                // 图标
-    iconSize: {type: String, default: '14px'},        // 图标大小
-    disabled: {type: Boolean, default: false},        // 是否禁用
-  }
-})
-export default class Button extends Vue {
+<script setup lang="ts">
 
-  // 参数
-  effect!: string;
-  type!: string;
-  width!: string;
-  height!: string;
-  padding!: string;
-  margin!: string;
-  radius!: string;
-  fontSize!: string;
-  icon!: string;
-  iconSize!: string;
-  disabled!: boolean;
+/* 参数 */
+const props = defineProps({
+  effect: {type: String, default: 'plain'},         // 样式: plain, dark, text
+  type: {type: String, default: 'default'},         // 类型: primary, success, warning, danger, info
+  width: {type: String, default: 'max-content'},    // 宽度
+  height: {type: String, default: '32px'},          // 高度
+  padding: {type: String, default: '0 16px'},       // 内部间距
+  margin: {type: String, default: '0 4px'},         // 外部间距
+  radius: {type: String, default: '4px'},           // 圆角
+  fontSize: {type: String, default: '14px'},        // 文字大小
+  icon: {type: String, default: ''},                // 图标
+  iconSize: {type: String, default: '14px'},        // 图标大小
+  disabled: {type: Boolean, default: false},        // 是否禁用
+});
 
-}
 </script>

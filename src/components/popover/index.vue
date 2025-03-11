@@ -18,41 +18,29 @@
 
 </style>
 
-<script lang="ts">
-import { Options, Vue } from 'vue-class-component';
-import wmInput from '@/components/form/input/index.vue'
-@Options({
-  components: { wmInput },
-  props: {
-    show: {type: String, default: ''},                  // 是否显示
-    height: {type: String, default: '40px'},            // 高
-    position: {type: String, default: 'top'},        // 位置: let、right、top、bottom
-  }
-})
-export default class Popover extends Vue {
+<script setup lang="ts">
+import { onMounted, watch } from 'vue';
 
-  // 参数
-  show!: any;
-  height!: string;
-  position!: string;
+/* 参数 */
+const props = defineProps({
+  show: {type: String, default: ''},               // 是否显示
+  height: {type: String, default: '40px'},         // 高
+  position: {type: String, default: 'top'},        // 位置: let、right、top、bottom
+});
 
-  /* 创建成功 */
-  created(): void {
-    // 监听
-    this.$watch('total', (val:number)=>{
-      this.init();
-    }, { deep: true });
-  }
+/* 监听 */
+watch(()=>props.show, (val: string)=>{
+  init();
+},{ deep: true });
 
-  /* 创建完成 */
-  public mounted(): void {
-    this.init();
-  }
+/* 创建完成 */
+onMounted(()=>{
+  init();
+});
 
-  /* 初始化 */
-  init(): void {
-    
-  }
-
+/* 初始化 */
+const init = (): void => {
+  
 }
+
 </script>

@@ -1,19 +1,18 @@
 <template>
-
   <!-- Login -->
-  <login ref="Login" v-model:show="state.isLogin"></login>
+  <Login :show="true"></Login>
   <!-- Uinfo -->
   <uinfo v-model:show="state.isUinfo" v-if="state.isLogin"></uinfo>
   <!-- Passwd -->
   <passwd v-model:show="state.isPasswd" v-if="state.isLogin"></passwd>
   <!-- Msg -->
-  <msg v-model:show="msg.show" v-if="state.isLogin"></msg>
+  <msg v-model:show="msgShow" v-if="state.isLogin"></msg>
 
   <!-- Main -->
   <div class="app_main flex">
     <!-- MenusAll -->
-    <div class="app_menus_all" :style="{visibility:menus.show&&state.isLogin?'inherit':'hidden'}">
-      <wm-popup height="100%" width="900px" v-model:show="menus.show" position="left" bgColor="#FFF" :time="600">
+    <div class="app_menus_all" :style="{visibility:menusShow&&state.isLogin?'inherit':'hidden'}">
+      <wmPopup height="100%" width="900px" v-model:show="menusShow" position="left" bgColor="#FFF" :time="600">
         <div class="menus_body flex">
           <!-- MenusLeft -->
           <div class="menus_left">
@@ -44,7 +43,7 @@
                 <i class="ui ui_search"></i>
                 <input type="text" class="input" v-model="menus.key" @input="MenusSearch()" :placeholder="state.langs.menus_placeholder">
               </div>
-              <i class="ui ui_close" @click="menus.show=false"></i>
+              <i class="ui ui_close" @click="menusShow=false"></i>
             </div>
             <div class="menus_ct scrollbar">
               <div class="null center" v-if="menus.key&&menus.seaList.length==0"></div>
@@ -69,14 +68,14 @@
           </div>
           <!-- MenusRight End -->
         </div>
-      </wm-popup>
+      </wmPopup>
     </div>
     <!-- Left -->
     <div class="app_left" :style="{width: is_menus?'240px':'56px'}">
       <div class="app_on" @click="MenusShow()"><i class="ui" :class="is_menus?'ui_arrow_left':'ui_arrow_right'"></i></div>
       <!-- Logo -->
       <div class="app_logo flex">
-        <div class="logo" :title="title" @click="menus.show=!menus.show;uinfo.show=false" :style="{backgroundImage:'url('+require('./assets/logo.svg')+')'}"></div>
+        <div class="logo" :title="title" @click="menusShow=!menusShow;uinfoShow=false"></div>
         <div class="logo_text" v-if="is_menus">{{ title }}</div>
       </div>
       <!-- Search -->
@@ -125,8 +124,8 @@
      <!-- Right -->
     <div class="app_right" :style="{width: is_menus?'calc(100% - 240px)':'calc(100% - 56px)'}">
       <!-- UserInfo -->
-      <div class="app_user_info_body" :style="{visibility:uinfo.show&&state.isLogin?'inherit':'hidden'}">
-        <wm-popup height="100%" width="320px" v-model:show="uinfo.show" position="right" bgColor="#FFF">
+      <div class="app_user_info_body" :style="{visibility:uinfoShow&&state.isLogin?'inherit':'hidden'}">
+        <wmPopup height="100%" width="320px" v-model:show="uinfoShow" position="right" bgColor="#FFF">
           <div class="app_user_info scrollbar">
             <div class="img" :style="{backgroundImage: state.uinfo.img?'url('+state.uinfo.img+')':'none'}" @click="userUpImg()">
               <div class="img_load">{{ state.langs.uinfo_img }}</div>
@@ -145,7 +144,7 @@
             </ul>
           </div>
           <div class="app_user_close" @click="logout()">{{ state.langs.logout }}</div>
-        </wm-popup>
+        </wmPopup>
       </div>
       <!-- Tabs -->
       <div class="app_tabs_body flex">
@@ -156,12 +155,12 @@
           </li>
         </ul>
         <ul class="app_tools flex">
-          <li class="msg" title="消息" @click="msg.show=true">
+          <li class="msg" title="消息" @click="msgShow=true;menusShow=false;uinfoShow=false">
             <span class="redNum" v-if="state.msg.num>0">{{ state.msg.num }}</span>
             <i class="ui ui_message"></i>
           </li>
-          <li class="user" title="用户信息" @click="uinfo.show=!uinfo.show;menus.show=false">
-            <i class="ui ui_user" v-if="!state.uinfo.img || uinfo.show"></i>
+          <li class="user" title="用户信息" @click="uinfoShow=!uinfoShow;menusShow=false">
+            <i class="ui ui_user" v-if="!state.uinfo.img || uinfoShow"></i>
             <div class="img" v-else :style="{backgroundImage: 'url('+state.uinfo.img+')'}"></div>
           </li>
         </ul>
@@ -178,7 +177,6 @@
     <!-- Right End -->
   </div>
   <!-- Main END -->
-
 </template>
 
 <style lang="less">
@@ -192,4 +190,270 @@
 @import url('./assets/style/app.less');
 </style>
 
-<script lang="ts" src="./App.ts"></script>
+<script setup lang="ts">
+import { ref, watch, onMounted, getCurrentInstance } from 'vue';
+import { useStore } from 'vuex';
+import { useRouter } from 'vue-router'; 
+/* UI组件 */
+import Env from './config/Env';
+import Request from './library/request'
+import Storage from './library/storage'
+import Ui from './library/ui'
+import Files from './library/files'
+/* 组件 */
+import wmPopup from './components/popup/index.vue'
+/* Tools */
+import Login from './views/tools/UserLogin.vue';
+import Uinfo from './views/tools/Uinfo.vue'
+import Passwd from './views/tools/Passwd.vue'
+import Msg from './views/tools/Msg.vue'
+
+const { proxy } = getCurrentInstance() as any ;
+const emit = defineEmits(['update:show', 'close']);
+// 变量
+const store = useStore();
+const state = store.state;
+const router = useRouter();
+// 配置
+const cfg: any = new Env();
+const title: string = cfg.title+' '+cfg.version;
+const copy: string = Env.copy;
+// 用户、消息
+const uinfoShow = ref(false);
+const msgShow = ref(false);
+// 菜单
+const menusShow = ref(false);
+const tabs = ref({active:'/', list:<any>[]});
+const menus = ref({
+  key:'',
+  list:<any>[], seaList:<any>[], tmpList:<any>[],
+});
+const is_menus = ref(true);
+
+
+/* 监听 */
+watch(()=>proxy.$route, (to: any, from: any)=>{
+  tabs.value.active = to.path;
+},{ deep: true });
+watch(()=>state.isLogin, (val: boolean)=>{
+  if(val) MenusList();
+},{ deep: true });
+watch(()=>menus.value.list, (val: Array<any>)=>{
+  let title: string = '';
+  const url: string = proxy.$route.path;
+  for(let v1 of val) {
+    if(!v1.children) continue;
+    for(let v2 of v1.children) {
+      if(!v2.children) continue;
+      for(let v3 of v2.children) {
+        if(v3.value.url==url) {
+          title=v3.langs[state.lang]; break;
+        }
+      }
+    }
+  }
+  // 点击当前页
+  if(title && url) MenusClick(title, url);
+},{ deep: true });
+
+/* 加载完成 */
+onMounted(()=>{
+  // 菜单导航
+  is_menus.value = Storage.getItem('IsMenus')?true:false;
+  const tmp: any = Storage.getItem('MenusTabs') || '';
+  tabs.value.list = tmp?JSON.parse(tmp):[];
+  // 最近访问
+  const menusTmp: any = Storage.getItem('MenusTmp');
+  menus.value.tmpList.value = menusTmp?JSON.parse(menusTmp):[];
+});
+
+/* 获取菜单 */
+const MenusList = (): void => {
+  // 请求
+  Request.Post('sys_menus/get_menus_perm', {token: state.token}, (res:any)=>{
+    const d: any = res.data;
+    if(d.code==0) {
+      menus.value.list = d.data;
+    }else{
+      Ui.Toast(d.msg);
+    }
+  });
+}
+
+/* 菜单-显示/隐藏 */
+const MenusShow = (): void => {
+  if(is_menus.value){
+    is_menus.value = false;
+    Storage.setItem('IsMenus', '');
+  }else{
+    is_menus.value = true;
+    Storage.setItem('IsMenus', '1');
+  }
+}
+/* 菜单-搜索 */
+const MenusSearch = (): void => {
+  const key: string = menus.value.key;
+  const reg =new RegExp(key.toLowerCase());
+  const list: any = menus.value.list;
+  let tmp:any, label: string, en: string, display: boolean;
+  let keys: Array<any> = [];
+  menus.value.seaList = [];
+  // 一级
+  for(const k1 in list) {
+    // 二级
+    if(!list[k1].children) continue;
+    for(const k2 in list[k1].children) {
+      // 三级
+      if(!list[k1].children[k2].children) continue;
+      for(const k3 in list[k1].children[k2].children) {
+        // 是否显示
+        if(key.length>0) {
+          tmp = list[k1].children[k2].children[k3];
+          label = tmp.langs[state.lang].toLowerCase();
+          en = tmp.en.toLowerCase();
+          display = reg.test(label) || reg.test(en);
+          // 结果
+          if(display) {
+            keys.push([k1, k2]);
+            menus.value.seaList.push({label:tmp.langs[state.lang], icon:tmp.icon, url:tmp.value.url});
+          }
+        } else {
+          display = true;
+        }
+        // 赋值
+        list[k1].children[k2].display = true;
+        list[k1].children[k2].children[k3].display = display;
+      }
+    }
+  }
+  // 隐藏二级菜单
+  if(!key) return;
+  for(const k1 in list) {
+    if(!list[k1].children) continue;
+    for(const k2 in list[k1].children) {
+      let is_true: boolean = false;
+      for(const i in keys) {
+        if(keys[i][0]==k1&&keys[i][1]==k2) {
+          is_true = true;
+          continue;
+        }
+      }
+      list[k1].children[k2].display = is_true;
+    }
+  }
+}
+/* 菜单-切换 */
+const MenusClick = (name: string, url: string, isShow: boolean=false): void => {
+  // 是加载菜单
+  if(menus.value.list.length==0) return;
+  // 隐藏菜单
+  if(isShow) {
+    menusShow.value = false;
+    uinfoShow.value = false;
+  }
+  // 是否首页
+  if(url!='/') {
+    // 是否存在
+    let inArr: Boolean = false;
+    const list: any = tabs.value.list;
+    for (const k in list) {
+      if(list[k].url==url){
+        inArr=true; break;
+      }
+    }
+    // 追加、缓存
+    if(!inArr) tabs.value.list.push({name: name, url: url});
+    Storage.setItem('MenusTabs', JSON.stringify(tabs.value.list));
+  }
+  // 数据
+  const list: any = menus.value.list;
+  let tmp: any={}, data: any, action: Array<any> = [];
+  for(const k1 in list) {
+    if(!list[k1].children) continue;
+    for(const k2 in list[k1].children) {
+      if(!list[k1].children[k2].children) continue;
+      for(const k3 in list[k1].children[k2].children) {
+        tmp = list[k1].children[k2].children[k3];
+        if(tmp.value.url==url){
+          data = {label:tmp.langs[state.lang], icon:tmp.icon, url:tmp.value.url};
+          action = tmp.value.action;
+          break;
+        }
+      }
+    }
+  }
+  // 最近访问
+  if(data) {
+    let menus: any = Storage.getItem('MenusTmp');
+    menus = menus?JSON.parse(menus):[];
+    for(let i in menus) {
+      if(menus[i].url==url || parseInt(i)>=9) menus.splice(i, 1);
+    }
+    menus.unshift(data);
+    menus.tmpList = menus;
+    Storage.setItem('MenusTmp', JSON.stringify(menus));
+  }
+  // 动作菜单
+  if(action) {
+    state.menusAction = action;
+  }
+  // 跳转
+  router.push({path: url});
+}
+/* 菜单-关闭 */
+const MenusClose = (url: string): void => {
+  const list: any = tabs.value.list;
+  for (const k in list) {
+    if(list[k].url==url){
+      list.splice(k, 1);
+      // 跳转
+      if(tabs.value.active==url){
+        let i: number = parseInt(k)-1;
+        if(i<0) MenusClick(state.langs.home, '/');
+        else MenusClick(list[i.toString()].name, list[i.toString()].url);
+      }
+      break;
+    }
+  }
+  // 缓存
+  Storage.setItem('MenusTabs', JSON.stringify(tabs.value.list));
+}
+
+/* 上传头像 */
+const userUpImg = (): void => {
+  // 选择文件
+  Files.Select({}, (fileObj:any)=>{
+    // 转Base64
+    Files.FileToBase64(fileObj, (base64: any)=>{
+      // 压缩图片
+      Files.ImageCompress(base64, {width:200, height:200, type:fileObj.type}, (imgBase64: any)=>{
+        // 请求
+        Request.Post('user/upimg', {token: state.token, base64:imgBase64}, (res:any)=>{
+          const d = res.data;
+          if(d.code==0){
+            // 更新用户信息
+            proxy.$refs.Login.verifyToken(true);
+          }
+          return Ui.Toast(d.msg);
+        });
+      }, (err: string)=>{
+        Ui.Toast(err);
+      });
+    })
+  }, (err: string)=>{
+    Ui.Toast(err);
+  });
+}
+
+/* 退出登录 */
+const logout = (): void => {
+  // 隐藏
+  uinfoShow.value = false;
+  menusShow.value = false;
+  // 清除
+  MenusClick(state.langs.home, '/');
+  tabs.value.list = [];
+  proxy.$refs.Login.logout();
+}
+
+</script>

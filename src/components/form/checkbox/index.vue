@@ -34,50 +34,39 @@
 .wm-checkbox .disabled .active{border-color: rgba(0,0,0,0.2);}
 </style>
 
-<script lang="ts">
-import { Options, Vue } from 'vue-class-component';
-@Options({
-  components: { },
-  props: {
-    value: {type: String, default: ''},           // 默认值
-    options: {type: Object, default: {}},         // 数据: {label:'北京市', value:1, disabled: true}
-    partially: {type: Boolean, default: false},   // 局部选中
-    margin: {type: String, default: '0 4px'},     // 外部间距
-    padding: {type: String, default: '4px'},      // 内部间距
-  }
-})
-export default class CheckBox extends Vue {
+<script setup lang="ts">
+import { ref, onMounted, watch } from 'vue';
 
-  // 参数
-  value!: any;
-  options!: any;
-  partially!: boolean;
-  margin!: string;
-  padding!: string;
-  // 变量
-  list: Array<any>=[];
+/* 参数 */
+const props = defineProps({
+  value: {type: String, default: ''},           // 默认值
+  options: {type: Object, default: {}},         // 数据: {label:'北京市', value:1, disabled: true}
+  partially: {type: Boolean, default: false},   // 局部选中
+  margin: {type: String, default: '0 4px'},     // 外部间距
+  padding: {type: String, default: '4px'},      // 内部间距
+});
+const emit = defineEmits(['update:value', 'checkbox']);
+// 变量
+const list = ref({});
 
-  /* 创建成功 */
-  created(): void {
-    // 监听
-    this.$watch('options', (val:any)=>{
-      this.list = val;
-    }, { deep: true });
-  }
-  /* 创建完成 */
-  public mounted(): void {
-    this.list = this.options;
-  }
+/* 监听 */
+watch(()=>props.options, (val: any)=>{
+  list.value = val
+},{ deep: true });
 
-  /* 点击选择 */
-  clickCheckbox(): void {
-    const data: any = this.list;
-    // 勾选、取消
-    data.checked = !data.checked;
-    // 事件
-    this.$emit('update:value', data.checked?data.value:'');
-    this.$emit('checkbox', data.label, data.value);
-  }
+/* 创建完成 */
+onMounted(()=>{
+  list.value = props.options;
+});
 
+/* 点击选择 */
+const clickCheckbox = (): void => {
+  const data: any = list.value;
+  // 勾选、取消
+  data.checked = !data.checked;
+  // 事件
+  emit('update:value', data.checked?data.value:'');
+  emit('checkbox', data.label, data.value);
 }
+
 </script>

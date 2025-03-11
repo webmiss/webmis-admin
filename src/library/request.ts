@@ -1,4 +1,5 @@
-import axios, { AxiosRequestConfig } from 'axios'
+import axios from 'axios'
+import type { AxiosRequestConfig } from 'axios'
 import Env from '../config/Env';
 
 /* 请求 */

@@ -52,31 +52,16 @@
 .wm-tag.text_info:hover{box-shadow: none; color: @Info1; background-color: @Info6;}
 </style>
 
-<script lang="ts">
-import { Options, Vue } from 'vue-class-component';
-import wmInput from '@/components/form/input/index.vue'
-@Options({
-  components: { wmInput },
-  props: {
-    show: {type: String, default: ''},                // 是否显示
-    height: {type: String, default: '24px'},          // 高
-    padding: {type: String, default: '0 8px'},        // 内部间距
-    effect: {type: String, default: 'plain'},         // 样式: plain, dark, text
-    type: {type: String, default: 'default'},         // 类型: primary, success, warning, danger, info
-    radius: {type: String, default: '4px'},           // 圆角
-    fontSize: {type: String, default: '12px'},        // 字体大小
-  }
-})
-export default class Tag extends Vue {
+<script setup lang="ts">
 
-  // 参数
-  show!: any;
-  height!: string;
-  padding!: string;
-  effect!: string;
-  type!: string;
-  radius!: string;
-  fontSize!: string;
+const props = defineProps({
+  show: {type: String, default: ''},                // 是否显示
+  height: {type: String, default: '24px'},          // 高
+  padding: {type: String, default: '0 8px'},        // 内部间距
+  effect: {type: String, default: 'plain'},         // 样式: plain, dark, text
+  type: {type: String, default: 'default'},         // 类型: primary, success, warning, danger, info
+  radius: {type: String, default: '4px'},           // 圆角
+  fontSize: {type: String, default: '12px'},        // 字体大小
+});
 
-}
 </script>

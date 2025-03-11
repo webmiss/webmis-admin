@@ -2,14 +2,12 @@
   <div class="wm-table_body scrollbar" :style="{
     height: height,
     overflow: overflow,
-    // overflowX: overflowX,
-    // overflowY: overflowY,
   }">
     <table class="wm-table" :style="{width: width, height: options.length==0?height:''}">
       <thead class="wm-table_title">
         <tr>
           <td class="checkbox" v-if="isCheckbox">
-            <wm-checkBox v-model:value="checkbox.value" :partially="checkbox.partially" :options="checkbox.data" margin="0" @checkbox="checkboxAll()"></wm-checkBox>
+            <wmCheckBox v-model:value="checkbox.value" :partially="checkbox.partially" :options="checkbox.data" margin="0" @checkbox="checkboxAll()"></wmCheckBox>
           </td>
           <td v-for="(v, k) in columns" :key="k" :style="{
             width: v.width,
@@ -79,110 +77,94 @@
 .wm-table_list .null{height: 160px;}
 </style>
 
-<script lang="ts">
-import { Options, Vue } from 'vue-class-component';
-/* 组件 */
-import wmCheckBox from '@/components/form/checkbox/index.vue'
+<script setup lang="ts">
+import { ref, watch } from 'vue';
+import wmCheckBox from '../form/checkbox/index.vue'
 
-@Options({
-  components: { wmCheckBox },
-  props: {
-    columns: {type: Array, default: []},            // 字段: [{title: '名称', index: 'title', slot: 'title', width: '40px', minWidth: '30px', maxWidth: '120px', textAlign: 'right'}]
-    options: {type: Array, default: []},            // 数据: [{id: 1, title: '系统', remark: '', checked:true, }]
+/* 参数 */
+const props = defineProps({
+    columns: {type: Array<any>, default: []},       // 字段: [{title: '名称', index: 'title', slot: 'title', width: '40px', minWidth: '30px', maxWidth: '120px', textAlign: 'right'}]
+    options: {type: Array<any>, default: []},       // 数据: [{id: 1, title: '系统', remark: '', checked:true, }]
     width: {type: String, default: '100%'},         // 宽
     height: {type: String, default: '100%'},        // 高
     overflow: {type: String, default: ''},          // 滚动条
     isCheckbox: {type: Boolean, default: true},     // 是否多选
     isSlot: {type: Boolean, default: false},        // 是否自定义表体
     isBottom: {type: Boolean, default: false},      // 是否底部内容
+  });
+const emit = defineEmits(['partially', 'orderBy']);
+// 变量
+const checkbox = ref({checked: false, partially: false, value:'', data:{label:'', value:'all', checked:false}});
+
+/* 监听 */
+watch(()=>props.columns, (val: Array<any>)=>{
+  partially();
+},{ deep: true });
+
+/* 全选、全不选 */
+const checkboxAll = (status: boolean | string = ''): void => {
+  if(props.options.length==0) return ;
+  checkbox.value.checked = typeof status=='boolean'?status:!checkbox.value.checked;
+  for(let i in props.options) {
+    if(!props.options[i].disabled) props.options[i].checked = checkbox.value.checked;
   }
-})
-export default class Table extends Vue {
-
-  // 参数
-  columns!: Array<any>;
-  options!: Array<any>;
-  width!: string;
-  height!: string;
-  overflow!: string;
-  isCheckbox!: boolean;
-  isSlot!: boolean;
-  isBottom!: boolean;
-  // 变量
-  checkbox: any = {checked: false, partially: false, value:'', data:{label:'', value:'all'}};
-
-  /* 创建成功 */
-  created(): void {
-    this.$watch('columns', (val: Array<any>)=>{
-      this.partially();
-    }, { deep: true });
-  }
-
-  /* 全选、全不选 */
-  checkboxAll(status: boolean | string = ''): void {
-    if(this.options.length==0) return ;
-    this.checkbox.checked = typeof status=='boolean'?status:!this.checkbox.checked;
-    for(let i in this.options) {
-      if(!this.options[i].disabled) this.options[i].checked = this.checkbox.checked;
-    }
-    this.partially();
-  }
-
-  /* 勾选 */
-  Checkbox(label: any, value: any): void {
-    for(let i in this.options) {
-      if(this.options[i].id==value){
-        this.options[i].checked=!this.options[i].checked;
-        break;
-      }
-    }
-    this.partially();
-  }
-
-  /* 局部选中 */
-  partially(): void {
-    let n: number = 0;
-    const t: number = this.options.length;
-    for(let i in this.options) {
-      if(this.options[i].checked) n++;
-    }
-    // 状态
-    if(t>0 && t==n){
-      this.checkbox.checked = true;
-      this.checkbox.value = 'all';
-      this.checkbox.partially = false;
-      this.checkbox.data.checked = true;
-    }else if(t>0 && n>0) {
-      this.checkbox.checked = true;
-      this.checkbox.value = 'all';
-      this.checkbox.partially = true;
-      this.checkbox.data.checked = true;
-    } else {
-      this.checkbox.checked = false;
-      this.checkbox.value = 'other';
-      this.checkbox.partially = false;
-      this.checkbox.data.checked = false;
-    }
-    this.$emit('partially', n, t);
-  }
-
-  /* 获取数据 */
-  getData(): Array<any> {
-    let data: Array<any> = [];
-    for(let i in this.options) {
-      if(this.options[i].checked) data.push(this.options[i]);
-    }
-    return data;
-  }
-
-  /* 排序 */
-  OrderBy(k:number, index: string, order: string): void {
-    if(order=='ASC') order = 'DESC';
-    else if(order=='DESC') order = '';
-    else order = 'ASC';
-    this.columns[k].order = order;
-    this.$emit('orderBy', order?index+' '+order:'');
-  }
-
+  partially();
 }
+
+/* 勾选 */
+const Checkbox = (label: any, value: any): void => {
+  for(let i in props.options) {
+    if(props.options[i].id==value){
+      props.options[i].checked=!props.options[i].checked;
+      break;
+    }
+  }
+  partially();
+}
+
+/* 局部选中 */
+const partially = (): void => {
+  let n: number = 0;
+  const t: number = props.options.length;
+  for(let i in props.options) {
+    if(props.options[i].checked) n++;
+  }
+  // 状态
+  if(t>0 && t==n){
+    checkbox.value.checked = true;
+    checkbox.value.value = 'all';
+    checkbox.value.partially = false;
+    checkbox.value.data.checked = true;
+  }else if(t>0 && n>0) {
+    checkbox.value.checked = true;
+    checkbox.value.value = 'all';
+    checkbox.value.partially = true;
+    checkbox.value.data.checked = true;
+  } else {
+    checkbox.value.checked = false;
+    checkbox.value.value = 'other';
+    checkbox.value.partially = false;
+    checkbox.value.data.checked = false;
+  }
+  emit('partially', n, t);
+}
+
+/* 获取数据 */
+const getData = (): Array<any> => {
+  let data: Array<any> = [];
+  for(let i in props.options) {
+    if(props.options[i].checked) data.push(props.options[i]);
+  }
+  return data;
+}
+
+/* 排序 */
+const OrderBy = (k:number, index: string, order: string): void => {
+  if(order=='ASC') order = 'DESC';
+  else if(order=='DESC') order = '';
+  else order = 'ASC';
+  props.columns[k].order = order;
+  emit('orderBy', order?index+' '+order:'');
+}
+
 </script>

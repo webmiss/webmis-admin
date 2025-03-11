@@ -4,7 +4,7 @@
       <div class="file_up_top flex_center">
         <wm-button effect="text" type="primary" padding="0 8px" @click="selectFile()">{{ langs.sys_file_select_file }}</wm-button>
         <span>|</span>
-        <wm-button effect="text" type="danger" padding="0 8px" @click="removeAll()" :disabled="this.listData.length==0">{{ langs.clear }}</wm-button>
+        <wm-button effect="text" type="danger" padding="0 8px" @click="removeAll()" :disabled="listData.length==0">{{ langs.clear }}</wm-button>
       </div>
       <div class="file_up_body scrollbar">
         <ul class="file_up_list" v-if="listData.length>0">
@@ -41,113 +41,103 @@
 .file_up_list .ui_close:hover{color: @Danger; background-color: @Danger6;}
 </style>
 
-<script lang="ts">
-import { Options, Vue } from 'vue-class-component';
+<script setup lang="ts">
+import { ref, watch } from 'vue';
 import { useStore } from 'vuex';
 /* UI组件 */
-import Ui from '@/library/ui'
-import Request from '@/library/request'
-import Files from '@/library/files'
+import Ui from '../../../library/ui'
+import Request from '../../../library/request'
+import Files from '../../../library/files'
 /* 组件 */
-import wmPopup from '@/components/popup/index.vue'
-import wmButton from '@/components/form/button/index.vue'
+import wmPopup from '../../../components/popup/index.vue'
+import wmButton from '../../../components/form/button/index.vue'
 
-@Options({
-  components: { wmPopup, wmButton },
-  props: {
-    show: {type: Boolean, default: false},        // 是否显示
-    title: {type: String, default: ''},           // 标题
-    data: {type: Object, default: {}},            // 数据
-  }
-})
-export default class ActionUpload extends Vue {
-  // 参数
-  show!: boolean;
-  title!: string;
-  data!: any;
-  // 状态
-  private store: any = useStore();
-  state: any = this.store.state;
-  // 语言
-  langs: any = this.state.langs;
-  // 变量
-  infoShow: boolean = false;
-  listData: Array<any> = [];
+/* 参数 */
+const props = defineProps({
+  show: {type: Boolean, default: false},        // 是否显示
+  title: {type: String, default: ''},           // 标题
+  data: {type: Object, default: {}},            // 数据
+});
+const emit = defineEmits(['update:show', 'submit']);
+// 状态
+const store = useStore();
+const state = store.state;
+const langs: any = state.langs;
+// 变量
+const infoShow = ref(false);
+const listData = ref(<any>[]);
 
-  /* 创建成功 */
-  created(): void {
-    this.$watch('show', (val:boolean)=>{
-      this.infoShow = val;
-      if(val) this.listData = this.data.files;
-    }, { deep: true });
-  }
+/* 监听 */
+watch(()=>props.show, (val: boolean)=>{
+  infoShow.value = val;
+  if(val) listData.value = props.data.files;
+},{ deep: true });
 
-  /* 选择文件 */
-  selectFile(): void {
-    let k: number = 0;
-    Files.Select({multiple:true, mimeType:[]}, (res: any)=>{
-      for(let v of res) {
-        if(!this.isExist(v.name)){
-          k = this.listData.length;
-          this.listData.push({path: this.data.path, name: v.name, state: 0, load:0});
-          this.upFile(k, v);
-        }
+/* 选择文件 */
+const selectFile = (): void => {
+  let k: number = 0;
+  Files.Select({multiple:true, mimeType:[]}, (res: any)=>{
+    for(let v of res) {
+      if(!isExist(v.name)){
+        k = listData.value.length;
+        listData.value.push({path: props.data.path, name: v.name, state: 0, load:0});
+        upFile(k, v);
       }
-    });
-  }
-
-  /* 上传文件 */
-  upFile(k: number, fileObj: any): void {
-    // 表单数据
-    let form = new FormData();
-    form.append('token', this.state.token);
-    form.append('path', this.data.path);
-    form.append('file', fileObj);
-    // 请求
-    Request.Post('sys_file/upload?lang='+this.state.lang, form, (res: any)=>{
-      const {code}: any = res.data;
-      if(code==0) {
-        this.listData[k].state = 1;
-        this.$emit('submit', true);
-      } else {
-        this.listData[k].state = 2;
-        this.$emit('submit', false);
-      }
-    }, ()=>{
-      Ui.Toast(this.langs.network_err);
-    }, {
-      headers: {
-        "Content-Type": "multipart/form-data;charset=utf-8"  // 表单方式
-      },
-      onUploadProgress:(event: any) => {
-        let complete = (event.loaded/event.total*100 | 0);
-        this.listData[k].load = complete;
-      }
-    });
-  }
-
-  /* 是否存在 */
-  isExist(name: string): boolean {
-    for(let v of this.listData){
-      if(v.name==name) return true;
     }
-    return false;
-  }
-
-  /* 移除 */
-  remove(k: number): void {
-    this.listData.splice(k, 1);
-  }
-  /* 移除全部 */
-  removeAll(): void {
-    if(this.listData.length==0) return;
-    this.listData.splice(0, this.listData.length);
-  }
-
-  /* 关闭 */
-  close(): void {
-    this.$emit('update:show', false);
-  }
-
+  });
 }
+
+/* 上传文件 */
+const upFile = (k: number, fileObj: any): void => {
+  // 表单数据
+  let form = new FormData();
+  form.append('token', state.token);
+  form.append('path', props.data.path);
+  form.append('file', fileObj);
+  // 请求
+  Request.Post('sys_file/upload?lang='+state.lang, form, (res: any)=>{
+    const {code}: any = res.data;
+    if(code==0) {
+      listData[k].state = 1;
+      emit('submit', true);
+    } else {
+      listData[k].state = 2;
+      emit('submit', false);
+    }
+  }, ()=>{
+    Ui.Toast(langs.network_err);
+  }, {
+    headers: {
+      "Content-Type": "multipart/form-data;charset=utf-8"  // 表单方式
+    },
+    onUploadProgress:(event: any) => {
+      let complete = (event.loaded/event.total*100 | 0);
+      listData[k].load = complete;
+    }
+  });
+}
+
+/* 是否存在 */
+const isExist = (name: string): boolean => {
+  for(let v of listData.value){
+    if(v.name==name) return true;
+  }
+  return false;
+}
+
+/* 移除 */
+const remove = (k: number): void => {
+  listData.value.splice(k, 1);
+}
+/* 移除全部 */
+const removeAll = (): void => {
+  if(listData.value.length==0) return;
+  listData.value.splice(0, listData.value.length);
+}
+
+/* 关闭 */
+const close = (): void => {
+  emit('update:show', false);
+}
+
 </script>

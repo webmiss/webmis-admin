@@ -89,114 +89,81 @@
 .wm-input_clear::before{transform: translate(-50%, -50%) rotate(-45deg);}
 </style>
 
-<script lang="ts">
-import { Options, Vue } from 'vue-class-component';
+<script setup lang="ts">
+import { ref, onMounted, watch, getCurrentInstance, nextTick } from 'vue';
 import { useStore } from 'vuex';
-@Options({
-  components: {},
-  props: {
-    value: {default: ''},                               // 值
-    type: {type: String, default: 'text'},              // 类型: textarea, text
-    width: {type: String, default: '100%'},             // 宽
-    height: {type: String, default: '40px'},            // 高
-    lineHeight: {type: String, default: '40px'},        // 行高
-    placeholder: {type: String, default: ''},           // 提示
-    maxlength: {type: String, default: ''},             // 最大长度
-    padding: {type: String, default: '0 10px'},         // 内部间距
-    margin: {type: String, default: '0'},               // 外部间距
-    disabled: {type: Boolean, default: false},          // 是否禁用
-    readonly: {type: Boolean, default: false},          // 是否读写
-    clearable: {type: Boolean, default: false},         // 一键清空
-    icon: {type: String, default: ''},                  // 图标
-    iconSize: {type: String, default: '20px'},          // 图标-大小
-    iconAlign: {type: String, default: 'left'},         // 图标-对齐方式: left、right
-    iconColor: {type: String, default: ''},             // 图标-颜色
-    iconBgcolor: {type: String, default: ''},           // 图标-背景颜色
-    iconRadius: {type: String, default: '4px 0 0 4px'}, // 图标-圆角
-    text: {type: String, default: ''},                  // 文本
-    textPadding: {type: String, default: '0 10px'},     // 文本-内部间距
-    textAlign: {type: String, default: 'right'},        // 文本-对齐方式: left、right
-    textColor: {type: String, default: ''},             // 文本-颜色
-    textBgcolor: {type: String, default: ''},           // 文本-背景颜色
-    textRadius: {type: String, default: '0 4px 4px 0'}, // 文本-圆角
-    textLen: {type: Boolean, default: false},           // 是否统计长度
-  }
-})
-export default class Input extends Vue {
 
-  // 参数
-  value!: any;
-  type!: string;
-  width!: string;
-  height!: string;
-  lineHeight!: string;
-  placeholder!: string;
-  maxlength!: string;
-  padding!: string;
-  margin!: string;
-  disabled!: boolean;
-  readonly!: boolean;
-  clearable!: boolean;
-  icon!: string;
-  iconSize!: string;
-  iconAlign!: string;
-  iconColor!: string;
-  iconBgcolor!: string;
-  iconRadius!: string;
-  text!: string;
-  textPadding!: string;
-  textAlign!: string;
-  textColor!: string;
-  textBgcolor!: string;
-  textRadius!: string;
-  textLen!: boolean;
-  // 状态
-  private store: any = useStore();
-  state: any = this.store.state;
-  // 变量
-  val_len: any = 0;
+/* 参数 */
+const props = defineProps({
+  value: {default: ''},                               // 值
+  type: {type: String, default: 'text'},              // 类型: textarea, text
+  width: {type: String, default: '100%'},             // 宽
+  height: {type: String, default: '40px'},            // 高
+  lineHeight: {type: String, default: '40px'},        // 行高
+  placeholder: {type: String, default: ''},           // 提示
+  maxlength: {type: String, default: ''},             // 最大长度
+  padding: {type: String, default: '0 10px'},         // 内部间距
+  margin: {type: String, default: '0'},               // 外部间距
+  disabled: {type: Boolean, default: false},          // 是否禁用
+  readonly: {type: Boolean, default: false},          // 是否读写
+  clearable: {type: Boolean, default: false},         // 一键清空
+  icon: {type: String, default: ''},                  // 图标
+  iconSize: {type: String, default: '20px'},          // 图标-大小
+  iconAlign: {type: String, default: 'left'},         // 图标-对齐方式: left、right
+  iconColor: {type: String, default: ''},             // 图标-颜色
+  iconBgcolor: {type: String, default: ''},           // 图标-背景颜色
+  iconRadius: {type: String, default: '4px 0 0 4px'}, // 图标-圆角
+  text: {type: String, default: ''},                  // 文本
+  textPadding: {type: String, default: '0 10px'},     // 文本-内部间距
+  textAlign: {type: String, default: 'right'},        // 文本-对齐方式: left、right
+  textColor: {type: String, default: ''},             // 文本-颜色
+  textBgcolor: {type: String, default: ''},           // 文本-背景颜色
+  textRadius: {type: String, default: '0 4px 4px 0'}, // 文本-圆角
+  textLen: {type: Boolean, default: false},           // 是否统计长度
+});
+const { proxy } = getCurrentInstance() as any ;
+const emit = defineEmits(['update:value', 'update:focus', 'update:blur', 'iconClick', 'textClick', 'clear', 'close']);
+/* 状态 */
+const store = useStore();
+const state = store.state;
+/* 变量 */
+const val_len = ref(0);
 
-  /* 创建成功 */
-  created(): void {
-    // 监听
-    this.$watch('$props', (props:any)=>{
-      this.val_len = props.value.length;
-    }, { deep: true });
-  }
+/* 监听 */
+watch(()=>props.value, (val: any)=>{
+  val_len.value = val.length;
+},{ deep: true });
 
-  /* 事件-变化 */
-  input($event: any): void {
-    this.$emit('update:value', $event.target.value);
-  }
-  /* 事件-激活 */
-  inputFocus($event: any): void {
-    this.$emit('update:focus', $event.target.value);
-  }
-  /* 事件-失焦 */
-  inputBlur($event: any): void {
-    this.$emit('update:blur', $event.target.value);
-  }
-
-  /* 图标事件 */
-  iconClick(): void {
-    this.$emit('iconClick');
-  }
-
-  /* 文本事件 */
-  textClick(): void {
-    this.$emit('textClick');
-  }
-
-  /* 清空 */
-  Clear(): void {
-    this.$emit('Clear');
-    this.$emit('update:value', '');
-    if(this.type=='textarea') {
-      (this.$refs.wmTextarea as any).focus();
-    }else{
-      (this.$refs.wmInput as any).focus();
-    }
-  }
-
+/* 事件-变化 */
+const input = ($event: any): void => {
+  emit('update:value', $event.target.value);
 }
+/* 事件-激活 */
+const inputFocus = ($event: any): void => {
+  emit('update:focus', $event.target.value);
+}
+/* 事件-失焦 */
+const inputBlur = ($event: any): void => {
+  emit('update:blur', $event.target.value);
+}
+/* 事件-点击图标 */
+const iconClick = (): void => {
+  emit('iconClick');
+}
+/* 事件-点击文本 */
+const textClick = (): void => {
+  emit('textClick');
+}
+
+/* 清空 */
+const Clear = (): void => {
+  emit('clear');
+  emit('update:value', '');
+  if(props.type=='textarea') {
+    proxy.$refs.wmTextarea.focus();
+  }else{
+    proxy.$refs.wmInput.focus();
+  }
+}
+
 </script>

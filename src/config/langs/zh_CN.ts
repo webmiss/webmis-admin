@@ -1,5 +1,5 @@
 /* 简体中文 */
-export function langs(): any {
+export function zh_CN(): any {
   return {
     home: '首页',
     action: '操作',

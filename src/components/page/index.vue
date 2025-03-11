@@ -20,7 +20,7 @@
       <div class="wm-page_tools flex">
         <span>{{ state.langs.page_limit }}</span>
         <span>
-          <wm-select :value="selectVal" @update:value="selectChange($event)" width="80px" height="28px" position="top" :options="limitList"></wm-select>
+          <wmSelect :value="selectVal" @update:value="selectChange($event)" width="80px" height="28px" position="top" :options="limitList"></wmSelect>
         </span>
       </div>
     </div>
@@ -43,93 +43,80 @@
 .wm-page_tools span{padding: 0 4px;}
 </style>
 
-<script lang="ts">
-import { Options, Vue } from 'vue-class-component';
+<script setup lang="ts">
+import { ref, watch } from 'vue';
 import { useStore } from 'vuex';
-import wmSelect from '@/components/form/select/index.vue'
-import Format from '@/library/format'
-@Options({
-  components: { wmSelect },
-  props: {
-    total: {default: 0},                      // 总条数
-    page: {type: Number, default: 1},         // 当前页码
-    maxPage: {type: Number, default: 11},     // 显示页数
-    limit: {type: Number, default: 100},      // 每页条数
-    limitList: {type: Array, default: [       // 条数选择
-      {label: '100', value: 100},
-      {label: '200', value: 200},
-      {label: '300', value: 300},
-      {label: '500', value: 500},
-    ]},
-    radius: {type: String, default: '14px'},  // 显示页数
-  }
-})
-export default class Page extends Vue {
+import wmSelect from '../form/select/index.vue'
+import Format from '.././../library/format'
 
-  // 参数
-  total!: any;
-  page!: number;
-  limit!: number;
-  limitList!: Array<any>;
-  maxPage!: number;
-  radius!: string;
-  // 状态
-  private store: any = useStore();
-  state: any = this.store.state;
-  // 变量
-  num: number = 0;
-  pageNum: number = 0;
-  list: Array<any> = [];
-  selectVal: Array<any> = [];
+/* 参数 */
+const props = defineProps({
+  total: {default: 0},                      // 总条数
+  page: {type: Number, default: 1},         // 当前页码
+  maxPage: {type: Number, default: 11},     // 显示页数
+  limit: {type: Number, default: 100},      // 每页条数
+  limitList: {type: Array, default: [       // 条数选择
+    {label: '100', value: 100},
+    {label: '200', value: 200},
+    {label: '300', value: 300},
+    {label: '500', value: 500},
+  ]},
+  radius: {type: String, default: '14px'},  // 显示页数
+});
+const emit = defineEmits(['update:page', 'update:limit', 'pageData']);
+// 状态
+const store = useStore();
+const state = store.state;
+// 变量
+const num = ref(0);
+const pageNum = ref(0);
+const list = ref(<any>[]);
+const selectVal = ref(<any>[]);
 
-  /* 创建成功 */
-  created(): void {
-    // 监听
-    this.$watch('total', (val:number)=>{
-      if(val) this.init();
-    }, { deep: true });
-  }
+/* 监听 */
+watch(()=>props.total, (val: number)=>{
+  if(val) init();
+},{ deep: true });
 
-  /* 初始化 */
-  init(): void {
-    // 默认值
-    this.pageNum = this.page;
-    this.selectVal = [this.limit];
-    // 分页
-    this.num = Math.ceil(this.total/this.limit);
-    this.toPage(this.page, false);
-  }
-
-  /* 翻页 */
-  toPage(n: number, isStatus: boolean=true): void {
-    // 边界
-    let page: number = n;
-    if(n<1) page = 1;
-    else if(n>this.num) page = this.num;
-    // 中间
-    let list: Array<number> = [];
-    const nx = Format.Fixed(this.maxPage/2, 0);
-    const start = n-nx>=1?n-nx:1;
-    if(this.num>this.maxPage){
-      for(let i=0; i<this.maxPage; i++){
-        if(n+nx<=this.num) list.push(start+i);
-        else list.push(start+i-(n+nx-this.num));
-      }
-    } else {
-      for(let i=0; i<this.num; i++) list.push(i+1);
-    }
-    this.list = list;
-    this.pageNum = page;
-    if(isStatus){
-      this.$emit('update:page', page);
-      this.$emit('pageData', {total: this.total, page: page, num: this.num, limit: this.limit});
-    }
-  }
-
-  /* 选择页码 */
-  selectChange(val: any): void {
-    this.$emit('update:limit', val[0]);
-  }
-
+/* 初始化 */
+const init = (): void => {
+  // 默认值
+  pageNum.value = props.page;
+  selectVal.value = [props.limit];
+  // 分页
+  num.value = Math.ceil(props.total/props.limit);
+  toPage(props.page, false);
 }
+
+/* 翻页 */
+const toPage = (n: number, isStatus: boolean=true): void => {
+  // 边界
+  let page: number = n;
+  if(n<1) page = 1;
+  else if(n>num.value) page = num.value;
+  // 中间
+  let list: Array<number> = [];
+  const nx = Format.Fixed(props.maxPage/2, 0);
+  const start = n-nx>=1?n-nx:1;
+  if(num.value>props.maxPage){
+    for(let i=0; i<props.maxPage; i++){
+      if(n+nx<=num.value) list.push(start+i);
+      else list.push(start+i-(n+nx-num.value));
+    }
+  } else {
+    for(let i=0; i<num.value; i++) list.push(i+1);
+  }
+  list = list;
+  pageNum.value = page;
+  if(isStatus){
+    emit('update:page', page);
+    emit('pageData', {total: props.total, page: page, num: num, limit: props.limit});
+  }
+}
+
+/* 选择页码 */
+const selectChange = (val: any): void => {
+  emit('update:limit', val[0]);
+}
+
 </script>

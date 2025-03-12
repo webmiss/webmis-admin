@@ -208,7 +208,6 @@ const showUser = (): void => {
   const uname: string = Storage.getItem('uname') || '';
   const img: string = Storage.getItem('user_img') || '';
   const uinfo: string = Storage.getItem('uinfo') || '';
-  console.log(uname);
   if(!uname) return;
   login.value.uname = uname;
   login.value.local_uname = uname;

@@ -81,6 +81,7 @@ watch(()=>props.show, (val: boolean)=>{
     // 帐号
     if(state.uinfo.tel) form.value.uname = state.uinfo.tel;
     else if(state.uinfo.email) form.value.uname = state.uinfo.email;
+    else if(state.uinfo.uname) form.value.uname = state.uinfo.uname;
   }
 },{ deep: true });
 

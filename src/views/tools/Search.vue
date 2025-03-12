@@ -50,7 +50,7 @@
 </style>
 
 <script setup lang="ts">
-import { onMounted, watch } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import { useStore } from 'vuex';
 /* 组件 */
 import wmMain from '../../components/container/main.vue'
@@ -72,26 +72,25 @@ const emit = defineEmits(['update:show', 'update:keys', 'search', 'reset']);
 // 状态
 const store = useStore();
 const state = store.state;
-  // 语言
 const langs: any = state.langs;
 // 变量
-let seaShow: boolean = false;
-let seaKey: string = '';
+const seaShow = ref(false);
+const seaKey = ref('');
 
 /* 监听 */
 watch(()=>props.show, (val: boolean)=>{
-  seaShow = val;
+  seaShow.value = val;
 },{ deep: true });
 watch(()=>props.keys, (val: string)=>{
-  seaKey = val;
+  seaKey.value = val;
 },{ deep: true });
-watch(()=>seaShow, (val: boolean)=>{
+watch(seaShow, (val: boolean)=>{
   emit('update:show', val);
 },{ deep: true });
 
 /* 创建完成 */
 onMounted(()=>{
-  seaKey = props.keys;
+  seaKey.value = props.keys;
 });
 
 /* 搜索内容 */

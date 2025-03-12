@@ -27,7 +27,7 @@
           </div>
           <div class="wm-login_form" v-else-if="login.is_safety">
             <i class="ui ui_safety ico"></i>
-            <img class="vcode" :src="login.vcode_url" :alt="langs.login_refresh" @click="changeVcode()" />
+            <img class="vcode" :src="login.vcode_url" :alt="state.langs.login_refresh" @click="changeVcode()" />
             <input ref="loginVcode" type="text" class="input" v-model="login.vcode" @keyup.enter="clickLogin()" maxlength="4" :placeholder="state.langs.login_vcode">
           </div>
           <div class="wm-login_bottom">
@@ -114,7 +114,7 @@ const copy = Env.copy;
 const animationTime = ref(10000);       // 动画切换间隔时间
 const verifyTokenTime = ref(30000);     // Token验证间隔时间
 // 语言
-let langs: any = {};
+const langs = ref(<any>{});
 const langsList: Array<any> = Env.LangList();
 // 登录
 const loginShow = ref(false);           // 是否显示
@@ -129,26 +129,31 @@ let tokenTime: any = null;
 watch(()=>state.isLogin, (val:Boolean)=>{
   if(val) {
     loginShow.value = false;
-    // 用户信息
-    showUser();
     // 验证Token
-    clearInterval(time);
     clearInterval(tokenTime);
     tokenTime = setInterval(()=>{
       verifyToken();
     }, verifyTokenTime.value);
   } else {
     loginShow.value = true;
+    clearInterval(tokenTime);
     logout();
+  }
+}, { deep: true });
+watch(loginShow, (val:Boolean)=> {
+  if (val) {
+    // 用户信息
+    showUser();
     // 背景动画
     bgAnimation();
     clearInterval(time);
-    clearInterval(tokenTime);
     time = setInterval(()=>{
       bgAnimation();
     }, animationTime.value);
+  } else {
+    clearInterval(time);
   }
-}, { deep: true });
+});
 
 /* 创建完成 */
 onMounted(()=>{
@@ -203,6 +208,7 @@ const showUser = (): void => {
   const uname: string = Storage.getItem('uname') || '';
   const img: string = Storage.getItem('user_img') || '';
   const uinfo: string = Storage.getItem('uinfo') || '';
+  console.log(uname);
   if(!uname) return;
   login.value.uname = uname;
   login.value.local_uname = uname;
@@ -352,5 +358,10 @@ const logout = (): void => {
     else proxy.$refs.loginPasswd.focus();
   });
 }
+
+/* 外部函数 */
+defineExpose({  
+  logout,
+});
 
 </script>

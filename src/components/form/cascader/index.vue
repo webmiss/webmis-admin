@@ -76,13 +76,14 @@
 </style>
 
 <script setup lang="ts">
-import { ref, onMounted, watch, getCurrentInstance } from 'vue';
+import { ref, watch, onMounted, getCurrentInstance } from 'vue';
 import { useStore } from 'vuex';
+import wmInput from '../../form/input/index.vue'
 
 /* 参数 */
 const props = defineProps({
-    value: {default: ''},                                   // 默认值
-    options: {type: Array, default: []},                    // 数据: [{label:'一级菜单', value:'m1', children: []}]
+    value: {type: Array<any>, default: ''},                 // 默认值
+    options: {type: Array<any>, default: []},               // 数据: [{label:'一级菜单', value:'m1', children: []}]
     multiple: {type: Boolean, default: false},              // 是否多选
     width: {type: String, default: '100%'},                 // 宽
     height: {type: String, default: '40px'},                // 高
@@ -97,8 +98,8 @@ const emit = defineEmits(['update:value', 'data']);
 const store = useStore();
 const state = store.state;
 // 变量
-let selectObj: any = null;
 const show = ref(false);
+const selectObj = ref();
 const listData = ref(<any>[]);
 const k1 = ref(-1);
 const k2 = ref(-1);
@@ -107,7 +108,7 @@ const k4 = ref(-1);
 const labelName = ref('');
 
 /* 监听 */
-watch(()=>props.value, (val: any)=>{
+watch(()=>props.value, (val: Array<any>)=>{
   let level: string = '';
   let k1: number = -1;
   let k2: number = -1;
@@ -137,10 +138,10 @@ watch(()=>props.value, (val: any)=>{
   });
   if(level) selectClick(level, [k1, k2, k3, k4], false);
   else clear();
-},{ deep: true });
-watch(()=>props.options, (val: any)=>{
+});
+watch(()=>props.options, (val: Array<any>)=>{
   listData.value = val;
-},{ deep: true });
+});
 
 /* 创建完成 */
 onMounted(()=>{
@@ -150,8 +151,8 @@ onMounted(()=>{
 /* 初始化 */
 const init = (): void => {
   // 失去焦点
-  selectObj = proxy.$refs.formCascader;
-  selectObj.addEventListener('focusout', ()=>{
+  selectObj.value = proxy.$refs.formCascader;
+  selectObj.value.addEventListener('focusout', ()=>{
     show.value = false;
   });
 }
@@ -161,85 +162,85 @@ const selectClick = (level: string, pos: Array<number>, isStatus: boolean=true):
   let labels: Array<any> = [];
   let values: Array<any> = [];
   // 位置
-  k1.value= pos[0];
-  k2.value= pos[1];
-  k3.value= pos[2];
-  k4.value= pos[3];
+  k1.value = pos[0];
+  k2.value = pos[1];
+  k3.value = pos[2];
+  k4.value = pos[3];
   // 层级
   if(level=='1') {
     // 清除、选中
-    selectClear(listData);
-    listData[k1.value].checked = true;
+    selectClear(listData.value);
+    listData.value[k1.value].checked = true;
     // 数据
-    labels = [listData[k1.value].label];
-    values = [listData[k1.value].value];
+    labels = [listData.value[k1.value].label];
+    values = [listData.value[k1.value].value];
   } else if(level=='2') {
     // 清除、选中
-    selectClear(listData[k1.value].children);
-    listData[k1.value].checked = true;
-    listData[k1.value].children[k2.value].checked = true;
+    selectClear(listData.value[k1.value].children);
+    listData.value[k1.value].checked = true;
+    listData.value[k1.value].children[k2.value].checked = true;
     // 数据
     labels = [
-      listData[k1.value].label,
-      listData[k1.value].children[k2.value].label,
+      listData.value[k1.value].label,
+      listData.value[k1.value].children[k2.value].label,
     ];
     values = [
-      listData[k1.value].value,
-      listData[k1.value].children[k2.value].value,
+      listData.value[k1.value].value,
+      listData.value[k1.value].children[k2.value].value,
     ];
   } else if(level=='3') {
     // 清除、选中
-    selectClear(listData[k1.value].children[k2.value].children);
-    listData[k1.value].checked = true;
-    listData[k1.value].children[k2.value].checked = true;
-    listData[k1.value].children[k2.value].children[k3.value].checked = true;
+    selectClear(listData.value[k1.value].children[k2.value].children);
+    listData.value[k1.value].checked = true;
+    listData.value[k1.value].children[k2.value].checked = true;
+    listData.value[k1.value].children[k2.value].children[k3.value].checked = true;
     // 数据
     labels = [
-      listData[k1.value].label,
-      listData[k1.value].children[k2.value].label,
-      listData[k1.value].children[k2.value].children[k3.value].label,
+      listData.value[k1.value].label,
+      listData.value[k1.value].children[k2.value].label,
+      listData.value[k1.value].children[k2.value].children[k3.value].label,
     ];
     values = [
-      listData[k1.value].value,
-      listData[k1.value].children[k2.value].value,
-      listData[k1.value].children[k2.value].children[k3.value].value,
+      listData.value[k1.value].value,
+      listData.value[k1.value].children[k2.value].value,
+      listData.value[k1.value].children[k2.value].children[k3.value].value,
     ];
   } else if(level=='4') {
     // 清除、选中
-    selectClear(listData[k1.value].children[k2.value].children[k3.value].children);
-    listData[k1.value].checked = true;
-    listData[k1.value].children[k2.value].checked = true;
-    listData[k1.value].children[k2.value].children[k3.value].checked = true;
-    listData[k1.value].children[k2.value].children[k3.value].children[k4.value].checked = true;
+    selectClear(listData.value[k1.value].children[k2.value].children[k3.value].children);
+    listData.value[k1.value].checked = true;
+    listData.value[k1.value].children[k2.value].checked = true;
+    listData.value[k1.value].children[k2.value].children[k3.value].checked = true;
+    listData.value[k1.value].children[k2.value].children[k3.value].children[k4.value].checked = true;
     // 数据
     labels = [
-      listData[k1.value].label,
-      listData[k1.value].children[k2.value].label,
-      listData[k1.value].children[k2.value].children[k3.value].label,
-      listData[k1.value].children[k2.value].children[k3.value].children[k4.value].label,
+      listData.value[k1.value].label,
+      listData.value[k1.value].children[k2.value].label,
+      listData.value[k1.value].children[k2.value].children[k3.value].label,
+      listData.value[k1.value].children[k2.value].children[k3.value].children[k4.value].label,
     ];
     values = [
-      listData[k1.value].value,
-      listData[k1.value].children[k2.value].value,
-      listData[k1.value].children[k2.value].children[k3.value].value,
-      listData[k1.value].children[k2.value].children[k3.value].children[k4.value].value,
+      listData.value[k1.value].value,
+      listData.value[k1.value].children[k2.value].value,
+      listData.value[k1.value].children[k2.value].children[k3.value].value,
+      listData.value[k1.value].children[k2.value].children[k3.value].children[k4.value].value,
     ];
   }
   // 事件
   labelName.value = labels.join(' > ');
   if(isStatus){
     emit('update:value', values);
-    emit('data', listData);
+    emit('data', listData.value);
   }
 }
 
-  /* 清空下级 */
-  const selectClear = (data: any): void => {
-    for(let i in data){
-      data[i].checked = false;
-      if(data[i].children) selectClear(data[i].children);
-    }
+/* 清空下级 */
+const selectClear = (data: any): void => {
+  for(let i in data){
+    data[i].checked = false;
+    if(data[i].children) selectClear(data[i].children);
   }
+}
 
 /* 清空 */
 const clear = (): void => {
@@ -249,7 +250,7 @@ const clear = (): void => {
   k4.value= -1;
   labelName.value = '';
   emit('update:value', '');
-  selectClear(listData);
+  selectClear(listData.value);
 }
 
 </script>

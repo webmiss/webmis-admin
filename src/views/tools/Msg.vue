@@ -195,7 +195,7 @@
 </style>
 
 <script setup lang="ts">
-import { onMounted, watch } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import { useStore } from 'vuex';
 /* UI组件 */
 import Env from '../../config/Env';
@@ -215,9 +215,9 @@ const emit = defineEmits(['update:show']);
 const store = useStore();
 const state = store.state;
 // 变量
-let msgShow: boolean = false;
-let more: boolean = false;
-let sea: any = {show: false, key:'', list:[]};
+const msgShow = ref(false);
+const more = ref(false);
+const sea = ref({show: false, key:'', list:<any>[]});
 // 发送内容
 let sendGid: number | string = '';
 let sendFid: number | string = '';
@@ -234,7 +234,7 @@ let msgTime: number = 600;
 
 /* 监听 */
 watch(()=>props.show, (val: boolean)=>{
-  msgShow = val;
+  msgShow.value = val;
 },{ deep: true });
 
 /* 创建完成 */
@@ -244,23 +244,23 @@ onMounted(()=>{
 
 /* 搜索 */
 const search = (): void => {
-  const key: string = sea.key.trim();
+  const key: string = sea.value.key.trim();
   if(key.length>0) {
-    sea.show = true;
+    sea.value.show = true;
     Request.Post('msg/sea?lang='+state.lang, {
       token: state.token,
       key: key,
     }, (res:any)=>{
       const d = res.data;
-      if(d.code==0) sea.list=d.data;
+      if(d.code==0) sea.value.list=d.data;
     });
   } else {
-    sea.show = false;
+    sea.value.show = false;
   }
 }
 /* 搜索-点击 */
 const searchClick = (row: any): void => {
-  sea.show = false;
+  sea.value.show = false;
   // 已存在
   for(let v of state.msg.list) {
     if(v.gid==row.gid && v.fid==row.fid) {

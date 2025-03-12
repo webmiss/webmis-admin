@@ -29,7 +29,7 @@ import '@vuepic/vue-datepicker/dist/main.css';
 
 /* 参数 */
 const props = defineProps({
-    value: {default: ''},                                     // 日期: '2024-01-01'、['2024-01-01', '2024-01-31']
+    value: {default: ''},      // 日期: '2024-01-01'、['2024-01-01', '2024-01-31']
     range: {type: Boolean, default: false},                   // 范围选择
     format: {type: String, default: 'yyyy/MM/dd'},            // 格式: yyyy-MM-dd HH:mm:ss
     isTime: {type: Boolean, default: false},                  // 时间选择
@@ -46,7 +46,7 @@ const props = defineProps({
 const { proxy } = getCurrentInstance() as any ;
 const emit = defineEmits(['update:value']);
 /* 变量 */
-const date = ref('');
+const date = ref();
 
 /* 监听 */
 watch(()=>props.value, (val: any)=>{

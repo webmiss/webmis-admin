@@ -122,8 +122,8 @@ const labelName = ref('');
 /* 监听 */
 watch(()=>props.value, (val: any)=>{
   if(val) {
-    for(let i in seaList) {
-      seaList[i].checked = val.includes(seaList[i].value);
+    for(let i in seaList.value) {
+      seaList.value[i].checked = val.includes(seaList.value[i].value);
     }
   } else {
     clear();
@@ -155,13 +155,13 @@ const init = (): void => {
 const seaKey = (key: any): void => {
   let label: string, n: number=0;
   const reg =new RegExp(key.toLowerCase());
-  for(let i in seaList){
-    label = seaList[i].label.toLowerCase();
+  for(let i in seaList.value){
+    label = seaList.value[i].label.toLowerCase();
     if(reg.test(label)){
       n++;
-      seaList[i].display = true;
+      seaList.value[i].display = true;
     }else{
-      seaList[i].display = false;
+      seaList.value[i].display = false;
     }
   }
   seaDisplay.value = n>0;
@@ -172,12 +172,12 @@ const selectClick = (k: any): void => {
   // 多选
   if(props.multiple) {
     // 选择
-    seaList[k].checked = seaList[k].checked?false:true;
+    seaList.value[k].checked = seaList.value[k].checked?false:true;
   } else {
     // 单选
-    for(let i in seaList) {
-      if(i==k) seaList[i].checked = seaList[k].checked?false:true;
-      else seaList[i].checked = false;
+    for(let i in seaList.value) {
+      if(i==k) seaList.value[i].checked = seaList.value[k].checked?false:true;
+      else seaList.value[i].checked = false;
     }
     // 隐藏
     show.value = false;
@@ -194,11 +194,11 @@ const selectData = (isStatus: boolean=true): void => {
   let vals: Array<any> = [];
   let data: Array<any> = [];
   // 数据
-  for(let i in seaList) {
-    if(seaList[i].checked) {
-      labs.push(seaList[i].label);
-      vals.push(seaList[i].value);
-      data.push(seaList[i]);
+  for(let i in seaList.value) {
+    if(seaList.value[i].checked) {
+      labs.push(seaList.value[i].label);
+      vals.push(seaList.value[i].value);
+      data.push(seaList.value[i]);
     }
   }
   // 事件

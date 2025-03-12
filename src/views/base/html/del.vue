@@ -12,64 +12,54 @@
 <style lang="less" scoped>
 </style>
 
-<script lang="ts">
-import { Options, Vue } from 'vue-class-component';
+<script setup lang="ts">
+import { ref, watch } from 'vue';
 import { useStore } from 'vuex';
 /* UI组件 */
-import Ui from '@/library/ui'
-import Request from '@/library/request'
+import Ui from '../../../library/ui'
+import Request from '../../../library/request'
 /* 组件 */
-import wmMain from '@/components/container/main.vue'
-import wmDialog from '@/components/dialog/index.vue'
-import wmButton from '@/components/form/button/index.vue'
+import wmMain from '../../../components/container/main.vue'
+import wmDialog from '../../../components/dialog/index.vue'
+import wmButton from '../../../components/form/button/index.vue'
 
-@Options({
-  components: { wmMain, wmDialog, wmButton },
-  props: {
-    show: {type: Boolean, default: false},        // 是否显示
-    title: {type: String, default: ''},           // 标题
-    data: {type: Array, default: []},             // 数据
-  }
-})
-export default class ActionDel extends Vue {
-  // 参数
-  show!: boolean;
-  title!: string;
-  data!: any;
-  // 状态
-  private store: any = useStore();
-  state: any = this.store.state;
-  // 语言
-  langs: any = this.state.langs;
-  // 变量
-  infoShow: boolean = false;
+/* 参数 */
+const props = defineProps({
+  show: {type: Boolean, default: false},        // 是否显示
+  title: {type: String, default: ''},           // 标题
+  data: {type: Array, default: []},             // 数据
+});
+const emit = defineEmits(['update:show', 'submit']);
+// 状态
+const store = useStore();
+const state = store.state;
+const langs: any = state.langs;
+// 变量
+const infoShow = ref(false);
 
-  /* 创建成功 */
-  created(): void {
-    this.$watch('show', (val:boolean)=>{
-      this.infoShow = val;
-    }, { deep: true });
-  }
+/* 监听 */
+watch(()=>props.show, (val: boolean)=>{
+  infoShow.value = val;
+},{ deep: true });
 
-  /* 提交 */
-  submit(): void {
-    // 请求
-    const load: any = Ui.Loading();
-    Request.Post('web_html/del?lang='+this.state.lang, {
-      token: this.state.token,
-      data: this.data,
-    }, (res:any)=>{
-      load.clear();
-      const d: any = res.data;
-      Ui.Toast(d.msg);
-      this.$emit('submit', d.code==0);
-    });
-  }
-
-  /* 关闭 */
-  close(): void {
-    this.$emit('update:show', false);
-  }
-
+/* 提交 */
+const submit = (): void => {
+  // 请求
+  const load: any = Ui.Loading();
+  Request.Post('web_html/del?lang='+state.lang, {
+    token: state.token,
+    data: props.data,
+  }, (res:any)=>{
+    load.clear();
+    const d: any = res.data;
+    Ui.Toast(d.msg);
+    emit('submit', d.code==0);
+  });
 }
+
+/* 关闭 */
+const close = (): void => {
+  emit('update:show', false);
+}
+
 </script>

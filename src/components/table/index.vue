@@ -101,6 +101,8 @@ watch(()=>props.columns, (val: Array<any>)=>{
   partially();
 },{ deep: true });
 
+
+
 /* 全选、全不选 */
 const checkboxAll = (status: boolean | string = ''): void => {
   if(props.options.length==0) return ;
@@ -166,5 +168,11 @@ const OrderBy = (k:number, index: string, order: string): void => {
   props.columns[k].order = order;
   emit('orderBy', order?index+' '+order:'');
 }
+
+/* 外部函数 */
+defineExpose({  
+  checkboxAll,
+  getData,
+});
 
 </script>

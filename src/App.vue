@@ -1,6 +1,6 @@
 <template>
   <!-- Login -->
-  <Login :show="true"></Login>
+  <Login ref="userLogin" :show="true"></Login>
   <!-- Uinfo -->
   <uinfo v-model:show="state.isUinfo" v-if="state.isLogin"></uinfo>
   <!-- Passwd -->
@@ -210,6 +210,7 @@ import Msg from './views/tools/Msg.vue'
 
 const { proxy } = getCurrentInstance() as any ;
 const emit = defineEmits(['update:show', 'close']);
+const userLogin = ref();
 // 变量
 const store = useStore();
 const state = store.state;
@@ -453,7 +454,7 @@ const logout = (): void => {
   // 清除
   MenusClick(state.langs.home, '/');
   tabs.value.list = [];
-  proxy.$refs.Login.logout();
+  userLogin.value.logout();
 }
 
 </script>

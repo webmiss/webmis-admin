@@ -40,7 +40,7 @@
         <!-- 基本信息 End -->
          <!-- 内容 -->
         <template #content>
-          <wm-tinymce v-model:value="form.content" :language="state.lang=='zh_CN'?state.lang:''" :upload="upload" :height="480"></wm-tinymce>
+          <!-- <wm-tinymce v-model:value="form.content" :language="state.lang=='zh_CN'?state.lang:''" :upload="upload" :height="480"></wm-tinymce> -->
         </template>
         <!-- 内容 End -->
       </wm-tabs>
@@ -56,112 +56,99 @@
 .wm-table_form .action{width: 60px; text-align: center;}
 </style>
 
-<script lang="ts">
-import { Options, Vue } from 'vue-class-component';
+<script setup lang="ts">
+import { ref, watch, onMounted } from 'vue';
 import { useStore } from 'vuex';
 /* UI组件 */
-import Ui from '@/library/ui'
-import Request from '@/library/request'
+import Ui from '../../../library/ui'
+import Request from '../../../library/request'
 /* 组件 */
-import wmMain from '@/components/container/main.vue'
-import wmDialog from '@/components/dialog/index.vue'
-import wmInput from '@/components/form/input/index.vue'
-import wmButton from '@/components/form/button/index.vue'
-import wmSwitch from '@/components/form/switch/index.vue'
-import wmSelect from '@/components/form/select/index.vue'
-import wmTableForm from '@/components/table/form.vue'
-import wmTabs from '@/components/tabs/index.vue'
-import wmTinymce from '@/components/tinymce/index.vue'
+import wmMain from '../../../components/container/main.vue'
+import wmDialog from '../../../components/dialog/index.vue'
+import wmInput from '../../../components/form/input/index.vue'
+import wmButton from '../../../components/form/button/index.vue'
+import wmSwitch from '../../../components/form/switch/index.vue'
+import wmSelect from '../../../components/form/select/index.vue'
+import wmTableForm from '../../../components/table/form.vue'
+import wmTabs from '../../../components/tabs/index.vue'
+// import wmTinymce from '../../../components/tinymce/index.vue'
 
-@Options({
-  components: { wmMain, wmDialog, wmInput, wmButton, wmSwitch, wmSelect, wmTableForm, wmTabs, wmTinymce },
-  props: {
-    show: {type: Boolean, default: false},        // 是否显示
-    title: {type: String, default: ''},           // 标题
-    data: {default: []},                          // 数据
-  }
-})
-export default class ActionSave extends Vue {
-  // 参数
-  show!: boolean;
-  title!: string;
-  data!: any;
-  // 状态
-  store: any = useStore();
-  state: any = this.store.state;
-  // 语言
-  langs: any = this.state.langs;
-  // 变量
-  infoShow: boolean = false;
-  // Tabs
-  tabIndex: string = 'base';
-  tabs: Array<any> = [
-    {label: this.langs.info, value: 'base', slot: 'base'},
-    {label: this.langs.content, value: 'content', slot: 'content'},
-  ];
-  // 数据
-  form: any = {id: 0, status: true, type: [], title: '', name: '', remark: '', content: ''}
-  // 全部分类
-  selectType: Array<any> = [{label: 'PC版', value: 0}, {label: '手机版', value: 1}];
+/* 参数 */
+const props = defineProps({
+  show: {type: Boolean, default: false},        // 是否显示
+  title: {type: String, default: ''},           // 标题
+  data: {type: Object, default: []},            // 数据
+});
+const emit = defineEmits(['update:show', 'submit']);
+// 状态
+const store = useStore();
+const state = store.state;
+const langs: any = state.langs;
+// 变量
+const infoShow = ref(false);
+// Tabs
+const tabIndex = ref('base');
+const tabs = ref([
+  {label: langs.info, value: 'base', slot: 'base'},
+  {label: langs.content, value: 'content', slot: 'content'},
+]);
+// 数据
+const form = ref({id: 0, status: true, type: <any>[], title: '', name: '', remark: '', content: ''});
+// 全部分类
+const selectType = ref([{label: 'PC版', value: 0}, {label: '手机版', value: 1}]);
 
-  /* 创建成功 */
-  created(): void {
-    this.$watch('show', (val:boolean)=>{
-      this.infoShow = val;
-      if(val){
-        // 默认值
-        this.form.id = this.data.id || 0;
-        this.form.status = typeof this.data.status!='undefined'?this.data.status:true;
-        this.form.type = typeof this.data.type!='undefined'?[this.data.type]:[];
-        this.form.title = this.data.title || '';
-        this.form.name = this.data.name || '';
-        this.form.remark = this.data.remark || '';
-        this.form.content = this.data.content || '';
-      }
-    }, { deep: true });
+/* 监听 */
+watch(()=>props.show, (val: boolean)=>{
+  infoShow.value = val;
+  if(val){
+    // 默认值
+    form.value.id = props.data.id || 0;
+    form.value.status = typeof props.data.status!='undefined'?props.data.status:true;
+    form.value.type = typeof props.data.type!='undefined'?[parseInt(props.data.type)]:[];
+    form.value.title = props.data.title || '';
+    form.value.name = props.data.name || '';
+    form.value.remark = props.data.remark || '';
+    form.value.content = props.data.content || '';
   }
-  /* 创建完成 */
-  public mounted(): void {
-  }
+});
 
-  /* 验证 */
-  verify(form: any): any {
-    if(form.title.length<2 || form.title.length>32) return Ui.Toast(this.langs.web_html_verify_title);
-    if(form.name.length<2 || form.name.length>16) return Ui.Toast(this.langs.web_html_verify_name);
-    return form;
-  }
-
-  /* 上传文件 */
-  upload(blobInfo:any, progress:any): any {
-    return new Promise((resolve, reject) => {
-      const fileObj = blobInfo.blob();
-      console.log(fileObj);
-      resolve('img_url');
-    })
-  }
-
-  /* 提交 */
-  submit(): void {
-    // 验证
-    const form = this.verify(this.form);
-    if(!form) return;
-    // 请求
-    const load: any = Ui.Loading();
-    Request.Post('web_html/save?lang='+this.state.lang, {
-      token: this.state.token,
-      data: form,
-    }, (res:any)=>{
-      load.clear();
-      const d: any = res.data;
-      Ui.Toast(d.msg);
-      this.$emit('submit', d.code==0);
-    });
-  }
-
-  /* 关闭 */
-  close(): void {
-    this.$emit('update:show', false);
-  }
-
+/* 上传文件 */
+const upload = (blobInfo:any, progress:any): any => {
+  return new Promise((resolve, reject) => {
+    const fileObj = blobInfo.blob();
+    console.log(fileObj);
+    resolve('img_url');
+  })
 }
+
+/* 验证 */
+const verify = (form: any): any => {
+  if(form.title.length<2 || form.title.length>32) return Ui.Toast(langs.web_html_verify_title);
+  if(form.name.length<2 || form.name.length>16) return Ui.Toast(langs.web_html_verify_name);
+  return form;
+}
+
+/* 提交 */
+const submit = (): void => {
+  // 验证
+  const data = verify(form.value);
+  if(!data) return;
+  // 请求
+  const load: any = Ui.Loading();
+  Request.Post('web_html/save?lang='+state.lang, {
+    token: state.token,
+    data: data,
+  }, (res:any)=>{
+    load.clear();
+    const d: any = res.data;
+    Ui.Toast(d.msg);
+    emit('submit', d.code==0);
+  });
+}
+
+/* 关闭 */
+const close = (): void => {
+  emit('update:show', false);
+}
+
 </script>

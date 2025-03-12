@@ -1,15 +1,15 @@
 <template>
-  <wmDialog v-model:show="uinfoShow" :title="langs.uinfo_title" width="560px" bottom="40px" @close="Close()">
+  <wmDialog v-model:show="uinfoShow" :title="state.langs.uinfo_title" width="560px" bottom="40px" @close="Close()">
     <wmMain>
       <wmTableForm>
         <tr>
-          <td class="label">{{ langs.uinfo_nickname }}</td>
+          <td class="label">{{ state.langs.uinfo_nickname }}</td>
           <td colspan="2">
-            <wmInput v-model:value="form.nickname" :placeholder="langs.uinfo_nickname_placeholder" maxlength="16"></wmInput>
+            <wmInput v-model:value="form.nickname" :placeholder="state.langs.uinfo_nickname_placeholder" maxlength="16"></wmInput>
           </td>
         </tr>
         <tr>
-          <td class="label">{{ langs.uinfo_name }}</td>
+          <td class="label">{{ state.langs.uinfo_name }}</td>
           <td>
             <wmInput v-model:value="form.name" maxlength="16" disabled></wmInput>
           </td>
@@ -18,19 +18,19 @@
           </td>
         </tr>
         <tr>
-          <td class="label">{{ langs.uinfo_birthday }}</td>
+          <td class="label">{{ state.langs.uinfo_birthday }}</td>
           <td colspan="2">
             <wmDatePicker v-model:value="form.birthday" :maxDate="maxDate"></wmDatePicker>
           </td>
         </tr>
         <tr>
-          <td class="label">{{ langs.uinfo_department }}</td>
+          <td class="label">{{ state.langs.uinfo_department }}</td>
           <td colspan="2">
             <wmInput v-model:value="form.department" maxlength="16"></wmInput>
           </td>
         </tr>
         <tr>
-          <td class="label">{{ langs.uinfo_position }}</td>
+          <td class="label">{{ state.langs.uinfo_position }}</td>
           <td colspan="2">
             <wmInput v-model:value="form.position" maxlength="16"></wmInput>
           </td>
@@ -38,7 +38,7 @@
       </wmTableForm>
     </wmMain>
     <template #bottom>
-      <wmButton effect="dark" type="primary" @click="subUinfo()">{{ langs.confirm }}</wmButton>
+      <wmButton padding="0 32px" @click="subUinfo()">{{ state.langs.confirm }}</wmButton>
     </template>
   </wmDialog>
 </template>
@@ -71,8 +71,6 @@ const emit = defineEmits(['update:show']);
 // 状态
 const store = useStore();
 const state = store.state;
-// 语言
-let langs: any = {};
 // 变量
 let uinfoShow: boolean = false;
 const form = ref({nickname: '', name: '', gender: '', birthday: '', department:'', position:''});
@@ -83,7 +81,6 @@ let genderData: Array<any> = [];
 watch(()=>props.show, (val: boolean)=>{
   uinfoShow = val;
   if(val) {
-    langs = state.langs;
     // 默认值
     const uinfo: any = state.uinfo;
     form.value.nickname = uinfo.nickname || '';
@@ -94,9 +91,9 @@ watch(()=>props.show, (val: boolean)=>{
     // 性别
     form.value.gender = uinfo.gender || '';
     genderData = [
-      {label: langs.null, value: ''},
-      {label: langs.uinfo_gender_boy, value: '男'},
-      {label: langs.uinfo_gender_girl, value: '女'},
+      {label: state.langs.null, value: ''},
+      {label: state.langs.uinfo_gender_boy, value: '男'},
+      {label: state.langs.uinfo_gender_girl, value: '女'},
     ];
   }
 },{ deep: true });

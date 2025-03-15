@@ -8,7 +8,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted, watch, getCurrentInstance, nextTick } from 'vue';
-import { Chart } from '@antv/g2'
+import { Chart } from '@antv/g2';
 
 /* 参数 */
 const props = defineProps({

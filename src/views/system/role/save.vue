@@ -1,42 +1,42 @@
 <template>
-  <wm-dialog v-model:show="infoShow" :title="title" width="640px" bottom="40px" :overflow="tabIndex=='perm'?'hidden auto':'hidden'" @close="close()">
-    <wm-main paddingY="0">
-      <wm-tabs v-model:value="tabIndex" :columns="tabs">
+  <wmDialog v-model:show="infoShow" :title="title" width="640px" bottom="40px" :overflow="tabIndex=='perm'?'hidden auto':'hidden'" @close="close()">
+    <wmMain paddingY="0">
+      <wmTabs v-model:value="tabIndex" :columns="tabs">
         <!-- 基本信息 -->
         <template #base>
-          <wm-table-form>
+          <wmTableForm>
             <tr>
               <td class="label">{{ langs.status }}</td>
               <td colspan="3">
-                <wm-switch v-model:value="form.status"></wm-switch>
+                <wmSwitch v-model:value="form.status"></wmSwitch>
               </td>
             </tr>
             <tr>
               <td class="label">{{ langs.name }}</td>
               <td>
-                <wm-input v-model:value="form.name" maxlength="16"></wm-input>
+                <wmInput v-model:value="form.name" maxlength="16"></wmInput>
               </td>
             </tr>
             <tr>
               <td class="label">{{ langs.remark }}</td>
               <td colspan="3">
-                <wm-input v-model:value="form.remark" type="textarea" :height="'80px'" maxlength="32"></wm-input>
+                <wmInput v-model:value="form.remark" type="textarea" :height="'80px'" maxlength="32"></wmInput>
               </td>
             </tr>
-          </wm-table-form>
+          </wmTableForm>
         </template>
         <!-- 基本信息 End -->
          <!-- 权限 -->
         <template #perm>
-          <wm-tree @update:value="updatePerm" :options="selectAll.perm"></wm-tree>
+          <wmTree @update:value="updatePerm" :options="selectAll.perm"></wmTree>
         </template>
         <!-- 权限 End -->
-      </wm-tabs>
-    </wm-main>
+      </wmTabs>
+    </wmMain>
     <template #bottom>
-      <wm-button height="40px" padding="0 32px" @click="submit()">{{ langs.confirm }}</wm-button>
+      <wmButton height="40px" padding="0 32px" @click="submit()">{{ langs.confirm }}</wmButton>
     </template>
-  </wm-dialog>
+  </wmDialog>
 </template>
 
 <style lang="less" scoped>
@@ -48,17 +48,17 @@
 import { ref, watch } from 'vue';
 import { useStore } from 'vuex';
 /* UI组件 */
-import Ui from '../../../library/ui'
-import Request from '../../../library/request'
+import Ui from '../../../library/ui';
+import Request from '../../../library/request';
 /* 组件 */
-import wmMain from '../../../components/container/main.vue'
-import wmDialog from '../../../components/dialog/index.vue'
-import wmInput from '../../../components/form/input/index.vue'
-import wmButton from '../../../components/form/button/index.vue'
-import wmSwitch from '../../../components/form/switch/index.vue'
-import wmTableForm from '../../../components/table/form.vue'
-import wmTabs from '../../../components/tabs/index.vue'
-import wmTree from '../../../components/tree/index.vue'
+import wmMain from '../../../components/container/main.vue';
+import wmDialog from '../../../components/dialog/index.vue';
+import wmInput from '../../../components/form/input/index.vue';
+import wmButton from '../../../components/form/button/index.vue';
+import wmSwitch from '../../../components/form/switch/index.vue';
+import wmTableForm from '../../../components/table/form.vue';
+import wmTabs from '../../../components/tabs/index.vue';
+import wmTree from '../../../components/tree/index.vue';
 
 /* 参数 */
 const props = defineProps({
@@ -142,9 +142,9 @@ const submit = (): void => {
     data: data,
   }, (res:any)=>{
     load.clear();
-    const d: any = res.data;
-    Ui.Toast(d.msg);
-    emit('submit', d.code==0);
+    const {code, msg, data}: any = res.data;
+    Ui.Toast(msg);
+    emit('submit', code==0);
   });
 }
 

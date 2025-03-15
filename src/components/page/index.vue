@@ -46,8 +46,8 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue';
 import { useStore } from 'vuex';
-import wmSelect from '../form/select/index.vue'
-import Format from '.././../library/format'
+import wmSelect from '../form/select/index.vue';
+import Format from '.././../library/format';
 
 /* 参数 */
 const props = defineProps({
@@ -95,18 +95,18 @@ const toPage = (n: number, isStatus: boolean=true): void => {
   if(n<1) page = 1;
   else if(n>num.value) page = num.value;
   // 中间
-  let list: Array<number> = [];
+  let data: Array<number> = [];
   const nx = Format.Fixed(props.maxPage/2, 0);
   const start = n-nx>=1?n-nx:1;
   if(num.value>props.maxPage){
     for(let i=0; i<props.maxPage; i++){
-      if(n+nx<=num.value) list.push(start+i);
-      else list.push(start+i-(n+nx-num.value));
+      if(n+nx<=num.value) data.push(start+i);
+      else data.push(start+i-(n+nx-num.value));
     }
   } else {
-    for(let i=0; i<num.value; i++) list.push(i+1);
+    for(let i=0; i<num.value; i++) data.push(i+1);
   }
-  list = list;
+  list.value = data;
   pageNum.value = page;
   if(isStatus){
     emit('update:page', page);

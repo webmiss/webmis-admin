@@ -31,13 +31,14 @@ export default class Files {
   }
 
   /* 文件对象 to Base64 */
-  public static FileToBase64(fileObj: any, success: Function=()=>{}, error: Function=()=>{}): void {
+  public static FileToBase64(fileObj: any, success: Function=()=>{}, type: string='base64'): void {
     let ready = new FileReader();
-    ready.readAsDataURL(fileObj);
+    if(type=='base64') ready.readAsDataURL(fileObj);
+    else if(type=='blob') ready.readAsBinaryString(fileObj);
+    else if(type=='text') ready.readAsText(fileObj);
     ready.onloadend = function(){
       return success(this.result);
     }
-    return error('文件读取失败!');
   }
 
   /* Base64 to 文件对象 */

@@ -27,7 +27,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted, watch, getCurrentInstance } from 'vue';
-import wmImgView from './view.vue'
+import wmImgView from './view.vue';
 
 /* 参数 */
 const props = defineProps({

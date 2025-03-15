@@ -79,7 +79,7 @@
 
 <script setup lang="ts">
 import { ref, watch } from 'vue';
-import wmCheckBox from '../form/checkbox/index.vue'
+import wmCheckBox from '../form/checkbox/index.vue';
 
 /* 参数 */
 const props = defineProps({

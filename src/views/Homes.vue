@@ -25,7 +25,7 @@
       <!-- Left -->
       <div class="index_left">
         <div class="index_chart bg line_top c1">
-          <wm-chart-pie type="stack" theme="classicDark" html="<span style='font-size: 18px;'>库存</span>" :value="chartPie" />
+          <wmChartPie type="stack" theme="classicDark" html="<span style='font-size: 18px;'>库存</span>" :value="chartPie"></wmChartPie>
         </div>
         <div class="index_chart bg line_top c2 scrollbar">
           <ul class="c2_list">
@@ -77,7 +77,7 @@
           </ul>
         </div>
         <div class="index_chart bg line_top line_bottom c4">
-          <wm-chart-interval type="dodge" theme="classicDark" :value="chartInterval" />
+          <wmChartInterval type="dodge" theme="classicDark" :value="chartInterval"></wmChartInterval>
         </div>
       </div>
     </div>
@@ -140,8 +140,8 @@
 <script setup lang="ts">
 import { ref, onActivated } from 'vue';
 /* UI组件 */
-import wmChartPie from '../components/chart/pie.vue'
-import wmChartInterval from '../components/chart/interval.vue'
+import wmChartPie from '../components/chart/pie.vue';
+import wmChartInterval from '../components/chart/interval.vue';
 
 // 全屏
 const full_screen = ref(false);

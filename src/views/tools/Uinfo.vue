@@ -51,17 +51,17 @@
 import { ref, watch } from 'vue';
 import { useStore } from 'vuex';
 /* UI组件 */
-import Ui from '../../library/ui'
-import Request from '../../library/request'
-import Time from '../../library/time'
+import Ui from '../../library/ui';
+import Request from '../../library/request';
+import Time from '../../library/time';
 /* 组件 */
-import wmMain from '../../components/container/main.vue'
-import wmDialog from '../../components/dialog/index.vue'
-import wmInput from '../../components/form/input/index.vue'
-import wmButton from '../../components/form/button/index.vue'
-import wmTableForm from '../../components/table/form.vue'
-import wmRadio from '../../components/form/radio/index.vue'
-import wmDatePicker from '../../components/datepicker/index.vue'
+import wmMain from '../../components/container/main.vue';
+import wmDialog from '../../components/dialog/index.vue';
+import wmInput from '../../components/form/input/index.vue';
+import wmButton from '../../components/form/button/index.vue';
+import wmTableForm from '../../components/table/form.vue';
+import wmRadio from '../../components/form/radio/index.vue';
+import wmDatePicker from '../../components/datepicker/index.vue';
 
 /* 参数 */
 const props = defineProps({
@@ -105,8 +105,8 @@ const subUinfo = (): void => {
   const load: any = Ui.Loading();
   Request.Post('user/change_uinfo?lang='+state.lang, {token: state.token, uinfo: form}, (res:any)=>{
     load.clear();
-    const d: any = res.data;
-    if(d.code==0) {
+    const {code, msg}: any = res.data;
+    if(code==0) {
       state.uinfo.nickname = form.value.nickname;
       state.uinfo.name = form.value.name;
       state.uinfo.gender = form.value.gender;
@@ -114,7 +114,7 @@ const subUinfo = (): void => {
       state.uinfo.department = form.value.department;
       state.uinfo.position = form.value.position;
     }
-    Ui.Toast(d.msg);
+    Ui.Toast(msg);
   });
 }
 

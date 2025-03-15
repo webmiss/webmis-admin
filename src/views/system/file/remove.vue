@@ -16,12 +16,12 @@
 import { ref, watch } from 'vue';
 import { useStore } from 'vuex';
 /* UI组件 */
-import Ui from '../../../library/ui'
-import Request from '../../../library/request'
+import Ui from '../../../library/ui';
+import Request from '../../../library/request';
 /* 组件 */
-import wmMain from '../../../components/container/main.vue'
-import wmDialog from '../../../components/dialog/index.vue'
-import wmButton from '../../../components/form/button/index.vue'
+import wmMain from '../../../components/container/main.vue';
+import wmDialog from '../../../components/dialog/index.vue';
+import wmButton from '../../../components/form/button/index.vue';
 
 /* 参数 */
 const props = defineProps({

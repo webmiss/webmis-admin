@@ -50,15 +50,15 @@
 import { ref, watch } from 'vue';
 import { useStore } from 'vuex';
 /* UI组件 */
-import Ui from '../../library/ui'
+import Ui from '../../library/ui';
 import Safety from '../../library/safety';
-import Request from '../../library/request'
+import Request from '../../library/request';
 /* 组件 */
-import wmMain from '../../components/container/main.vue'
-import wmDialog from '../../components/dialog/index.vue'
-import wmInput from '../../components/form/input/index.vue'
-import wmButton from '../../components/form/button/index.vue'
-import wmTableForm from '../../components/table/form.vue'
+import wmMain from '../../components/container/main.vue';
+import wmDialog from '../../components/dialog/index.vue';
+import wmInput from '../../components/form/input/index.vue';
+import wmButton from '../../components/form/button/index.vue';
+import wmTableForm from '../../components/table/form.vue';
 
 /* 参数 */
 const props = defineProps({
@@ -97,15 +97,15 @@ const getVcode = (): void => {
   const load: any = Ui.Loading();
   Request.Post('user/get_vcode?lang='+state.lang, {type: type, uname:form.value.uname}, (res:any)=>{
     load.clear();
-    const d: any = res.data;
-    if(d.code==0) {
+    const {code, msg, data}: any = res.data;
+    if(code==0) {
       vcodeTime();
-      form.value.vcode = d.data.toString();
-    }else if(d.code==4001) {
-      form.value.num = d.data;
+      form.value.vcode = data.toString();
+    }else if(code==4001) {
+      form.value.num = data;
       vcodeTime();
     }
-    return Ui.Toast(d.msg);
+    return Ui.Toast(msg);
   });
 }
 /* 验证码倒计时 */
@@ -134,12 +134,12 @@ const submitPwd = (): void => {
   const load: any = Ui.Loading();
   Request.Post('user/change_passwd?lang='+state.lang, {uname: form.value.uname, passwd: form.value.passwd1, vcode: form.value.vcode}, (res:any)=>{
     load.clear();
-    const d: any = res.data;
-    if(d.code==0){
+    const {code, msg}: any = res.data;
+    if(code==0){
       state.isLogin = false;
       Close();
     }else{
-      return Ui.Toast(d.msg);
+      return Ui.Toast(msg);
     }
   });
 }

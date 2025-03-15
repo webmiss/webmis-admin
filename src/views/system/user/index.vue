@@ -1,44 +1,48 @@
 <template>
   <!-- Total -->
-  <wm-total :time="total.time" @refresh="loadData()">
+  <wmTotal :time="total.time" @refresh="loadData()">
     <span v-html="langs.sys_user_total(page.total)"></span>
-  </wm-total>
+  </wmTotal>
   <!-- Action -->
   <div class="app_action flex">
     <div class="app_action_tools scrollbar">
-      <wm-action :columns="[
+      <wmAction :columns="[
         {action: 'save', slot: 'add', is_action: true},
         {action: 'del', slot: 'del', is_action: true},
         {action: 'line', slot: 'line'},
         {action: 'export', slot: 'export', is_action: true},
       ]">
         <template #add>
-          <wm-button effect="dark" type="primary" icon="ui ui_add" padding="0 16px 0 8px" @click="saveData('add')">{{ langs.add }}</wm-button>
+          <wmButton effect="dark" type="primary" icon="ui ui_add" padding="0 16px 0 8px" @click="saveData('add')">{{ langs.add }}</wmButton>
         </template>
         <template #del>
-          <wm-button effect="plain" type="danger" icon="ui ui_del" padding="0 16px 0 8px" :disabled="list.num==0" @click="delData()">{{ langs.del }}({{ list.num }})</wm-button>
+          <wmButton effect="plain" type="danger" icon="ui ui_del" padding="0 16px 0 8px" :disabled="list.num==0" @click="delData()">{{ langs.del }}({{ list.num }})</wmButton>
         </template>
         <template #line>
           <span class="line">|</span>
         </template>
         <template #export>
-          <wm-button effect="plain" icon="ui ui_export" padding="0 16px 0 8px" :disabled="!page.total" @click="exportData(page.total)">{{ langs.export }}({{ page.total }})</wm-button>
+          <wmButton effect="plain" icon="ui ui_export" padding="0 16px 0 8px" :disabled="!page.total" @click="exportData(page.total)">{{ langs.export }}({{ page.total }})</wmButton>
         </template>
-      </wm-action>
+      </wmAction>
     </div>
     <div class="app_action_search flex">
       <!-- Search -->
-      <wm-search v-model:show="sea.show" v-model:keys="sea.key" :columns="sea.columns" @keyup.enter="loadData()" @search="loadData()" @reset="resetData()">
+      <wmSearch v-model:show="sea.show" v-model:keys="sea.key" :columns="sea.columns" @keyup.enter="loadData()" @search="loadData()" @reset="resetData()">
         <template #time="d">
-          <wm-date-picker v-model:value="sea.time" range :maxDate="sea.maxDate" :placeholder="d.label"></wm-date-picker>
+          <wmDatePicker v-model:value="sea.time" range :maxDate="sea.maxDate" :placeholder="d.label"></wmDatePicker>
         </template>
         <template #type="d">
-          <wm-select v-model:value="sea.type" :options="selectAll.type" :placeholder="d.label" clearable></wm-select>
+          <!-- <wmSelect v-model:value="sea.type" :options="selectAll.type_name" :placeholder="d.label" clearable></wmSelect> -->
+           {{ selectAll.type_name || '123' }}
         </template>
         <template #role="d">
-          <wm-select v-model:value="sea.role" :options="selectAll.role" :placeholder="d.label" clearable></wm-select>
+          <wmSelect v-model:value="sea.role" :options="selectAll.role_name" :placeholder="d.label" clearable></wmSelect>
         </template>
-      </wm-search>
+        <template #status="d">
+          <wmSelect v-model:value="sea.status" :options="selectAll.status_name" :placeholder="d.label" clearable></wmSelect>
+        </template>
+      </wmSearch>
       <!-- Search End -->
     </div>
   </div>
@@ -46,13 +50,13 @@
   <!-- Content -->
   <div class="app_ct">
     <!-- List -->
-   <wm-table ref="tableList" overflow="auto" :columns="list.columns" :options="list.data" @orderBy="orderBy" @partially="selectState">
+   <wmTable ref="tableList" overflow="auto" :columns="list.columns" :options="list.data" @orderBy="orderBy" @partially="selectState">
       <template #id="d">
         <div class="tCenter">{{ d.id }}</div>
       </template>
       <template #date="d">
         <div class="tCenter">
-          <wm-tag :title="'注册: '+d.rtime+'\n更新: '+d.utime+'\n登录: '+d.ltime+'\n备注: '+d.remark">{{ d.ltime.substr(0, 10) }}</wm-tag>
+          <wmTag :title="'注册: '+d.rtime+'\n更新: '+d.utime+'\n登录: '+d.ltime+'\n备注: '+d.remark">{{ d.ltime.substr(0, 10) }}</wmTag>
         </div>
       </template>
       <template #type="d">
@@ -60,7 +64,7 @@
       </template>
       <template #img="d">
         <div class="flex_center">
-          <wm-img v-model:img="d.img"></wm-img>
+          <wmImg v-model:img="d.img"></wmImg>
         </div>
       </template>
       <template #uname="d">
@@ -73,34 +77,34 @@
       </template>
       <template #action="d">
         <div class="tCenter">
-          <wm-button v-if="isAction('save')" @click="saveData('copy', d)">{{ langs.copy }}</wm-button>
+          <wmButton v-if="isAction('save')" @click="saveData('copy', d)">{{ langs.copy }}</wmButton>
           <span v-else>-</span>
         </div>
       </template>
       <template #perm="d">
         <div class="tCenter" v-if="isAction('save')">
-          <wm-button v-if="d.perm" effect="text" type="danger" padding="0 8px" @click="saveData('edit', d)">私有</wm-button>
-          <wm-button v-else-if="d.role" effect="text" type="primary" padding="0 8px" @click="saveData('edit', d)">{{ d.role_name }}</wm-button>
-          <wm-button v-else effect="text" type="info" padding="0 8px" @click="saveData('edit', d)">设置</wm-button>
+          <wmButton v-if="d.perm" effect="text" type="danger" padding="0 8px" @click="saveData('edit', d)">私有</wmButton>
+          <wmButton v-else-if="d.role" effect="text" type="primary" padding="0 8px" @click="saveData('edit', d)">{{ d.role_name }}</wmButton>
+          <wmButton v-else effect="text" type="info" padding="0 8px" @click="saveData('edit', d)">设置</wmButton>
         </div>
         <div class="tCenter" v-else>-</div>
       </template>
       <template #gender="d">
         <div class="tCenter">{{ d.gender || '-' }}</div>
       </template>
-    </wm-table>
+    </wmTable>
     <!-- List End -->
   </div>
   <!-- Page -->
   <div class="app_page">
-    <wm-page v-model:total="page.total" v-model:page="page.num" @update:page="loadData()" v-model:limit="page.limit" @update:limit="page.num=1;loadData()"></wm-page>
+    <wmPage v-model:total="page.total" v-model:page="page.num" @update:page="loadData()" v-model:limit="page.limit" @update:limit="page.num=1;loadData()"></wmPage>
   </div>
   <!-- Save -->
-  <action-save v-model:show="save.show" :title="save.title" :data="save.data" @submit="saveSubmit($event)"></action-save>
+  <actionSave v-model:show="save.show" :title="save.title" :data="save.data" @submit="saveSubmit($event)"></actionSave>
   <!-- Del -->
-  <action-del v-model:show="del.show" :data="del.data" @submit="delSubmit($event)"></action-del>
+  <actionDel v-model:show="del.show" :data="del.data" @submit="delSubmit($event)"></actionDel>
   <!-- Export -->
-  <action-export v-model:show="exp.show" :data="getWhere()" :order="list.order" :num="exp.num" @submit="exportSubmit($event)"></action-export>
+  <actionExport v-model:show="exp.show" :data="getWhere()" :order="list.order" :num="exp.num" @submit="exportSubmit($event)"></actionExport>
 </template>
 
 <style lang="less" scoped>
@@ -111,25 +115,25 @@
 import { ref, onMounted, onActivated, nextTick } from 'vue';
 import { useStore } from 'vuex';
 /* JS组件 */
-import Ui from '../../../library/ui'
-import Request from '../../../library/request'
+import Ui from '../../../library/ui';
+import Request from '../../../library/request';
 import Permission from '../../../library/permission';
-import Time from '../../../library/time'
+import Time from '../../../library/time';
 /* 组件 */
-import wmButton from '../../../components/form/button/index.vue'
-import wmTable from '../../../components/table/index.vue'
-import wmTag from '../../../components/tag/index.vue'
-import wmPage from '../../../components/page/index.vue'
-import wmDatePicker from '../../../components/datepicker/index.vue'
-import wmSelect from '../../../components/form/select/index.vue'
-import wmImg from '../../../components/image/index.vue'
+import wmButton from '../../../components/form/button/index.vue';
+import wmTable from '../../../components/table/index.vue';
+import wmTag from '../../../components/tag/index.vue';
+import wmPage from '../../../components/page/index.vue';
+import wmDatePicker from '../../../components/datepicker/index.vue';
+import wmSelect from '../../../components/form/select/index.vue';
+import wmImg from '../../../components/image/index.vue';
 /* 统计、动作、搜索、更新、删除、导出 */
-import wmTotal from '../../tools/Total.vue'
-import wmAction from '../../tools/Action.vue'
-import wmSearch from '../../tools/Search.vue'
-import actionSave from './save.vue'
-import actionDel from './del.vue'
-import actionExport from './export.vue'
+import wmTotal from '../../tools/Total.vue';
+import wmAction from '../../tools/Action.vue';
+import wmSearch from '../../tools/Search.vue';
+import actionSave from './save.vue';
+import actionDel from './del.vue';
+import actionExport from './export.vue';
 
 // 是否加载
 const isLoad = ref(false);
@@ -147,6 +151,7 @@ const sea = ref({
     {label: langs.select, value: '', slot: 'time'},
     {label: langs.sys_user_type, value: '', slot: 'type'},
     {label: langs.sys_user_role, value: '', slot: 'role'},
+    {label: langs.status, value: '', slot: 'status'},
     {label: langs.sys_user_uname, value: '', name: 'uname'},
     {label: langs.sys_user_nickname, value: '', name: 'nickname'},
     {label: langs.sys_user_department, value: '', name: 'department'},
@@ -154,7 +159,7 @@ const sea = ref({
     {label: langs.sys_user_name, value: '', name: 'name'},
     {label: langs.remark, value: '', name: 'remark'},
   ],
-  type: '', role: '',
+  type: '', role: '', status: '',
 });
 // 列表
 const total = ref({time: '', list: {}});
@@ -181,7 +186,7 @@ const save = ref({show: false, title: '添加/编辑', type: '', data: {}});
 const del = ref({show: false, title: '删除', data: <any>[]});
 const exp = ref({show: false, title: '导出', num: 0});
 // 全部分类
-const selectAll = ref({type: <any>[], role: <any>[], perm: <any>[]});
+const selectAll = ref({type_name: <any>[], role_name: <any>[], status_name: <any>[]});
 
 /* 创建完成 */
 onMounted(()=>{
@@ -233,6 +238,7 @@ const getWhere = (): object => {
     etime: typeof sea.value.time[1]=='string'?sea.value.time[1]:Time.Date('Y/m/d', sea.value.time[1]),
     type: sea.value.type,
     role: sea.value.role,
+    status: sea.value.status,
   };
   for(let v of sea.value.columns) if(v.name) data[v.name] = v.value;
   return data;
@@ -255,6 +261,7 @@ const resetData = (): void => {
   sea.value.key = '';
   sea.value.type = '';
   sea.value.role = '';
+  sea.value.status = '';
   for(let v of sea.value.columns) v.value='';
   // 其它
   list.value.order = '';
@@ -329,8 +336,9 @@ const getSelect = (): void => {
   }, (res:any)=>{
     const {code, msg, data}: any = res.data;
     if(code==0) {
-      selectAll.value.type = data.type;
-      selectAll.value.role = data.role;
+      selectAll.value.type_name = data.type_name;
+      selectAll.value.role_name = data.role_name;
+      selectAll.value.status_name = data.status_name;
       // 加载
       isLoad.value = true;
       loadData();

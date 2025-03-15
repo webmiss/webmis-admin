@@ -1,35 +1,35 @@
 <template>
   <!-- Total -->
-  <wm-total :time="total.time" @refresh="loadData()">
+  <wmTotal :time="total.time" @refresh="loadData()">
     <span v-html="langs.sys_menus_total(page.total)"></span>
-  </wm-total>
+  </wmTotal>
   <!-- Action -->
   <div class="app_action flex">
     <div class="app_action_tools scrollbar">
-      <wm-action :columns="[
+      <wmAction :columns="[
         {action: 'save', slot: 'add', is_action: true},
         {action: 'del', slot: 'del', is_action: true},
         {action: 'line', slot: 'line'},
         {action: 'export', slot: 'export', is_action: true},
       ]">
         <template #add>
-          <wm-button effect="dark" type="primary" icon="ui ui_add" padding="0 16px 0 8px" @click="saveData('add')">{{ langs.add }}</wm-button>
+          <wmButton effect="dark" type="primary" icon="ui ui_add" padding="0 16px 0 8px" @click="saveData('add')">{{ langs.add }}</wmButton>
         </template>
         <template #del>
-          <wm-button effect="plain" type="danger" icon="ui ui_del" padding="0 16px 0 8px" :disabled="list.num==0" @click="delData()">{{ langs.del }}({{ list.num }})</wm-button>
+          <wmButton effect="plain" type="danger" icon="ui ui_del" padding="0 16px 0 8px" :disabled="list.num==0" @click="delData()">{{ langs.del }}({{ list.num }})</wmButton>
         </template>
         <template #line>
           <span class="line">|</span>
         </template>
         <template #export>
-          <wm-button effect="plain" icon="ui ui_export" padding="0 16px 0 8px" :disabled="!page.total" @click="exportData(page.total)">{{ langs.export }}({{ page.total }})</wm-button>
+          <wmButton effect="plain" icon="ui ui_export" padding="0 16px 0 8px" :disabled="!page.total" @click="exportData(page.total)">{{ langs.export }}({{ page.total }})</wmButton>
         </template>
-      </wm-action>
+      </wmAction>
     </div>
     <div class="app_action_search flex">
       <!-- Search -->
-      <wm-search v-model:show="sea.show" v-model:keys="sea.key" :columns="sea.columns" @keyup.enter="loadData()" @search="loadData()" @reset="resetData()">
-      </wm-search>
+      <wmSearch v-model:show="sea.show" v-model:keys="sea.key" :columns="sea.columns" @keyup.enter="loadData()" @search="loadData()" @reset="resetData()">
+      </wmSearch>
       <!-- Search End -->
     </div>
   </div>
@@ -37,7 +37,7 @@
   <!-- Content -->
   <div class="app_ct">
     <!-- List -->
-   <wm-table ref="tableList" overflow="auto" :columns="list.columns" :options="list.data" @orderBy="orderBy" @partially="selectState" height="calc(100% - 58px)">
+   <wmTable ref="tableList" overflow="auto" :columns="list.columns" :options="list.data" @orderBy="orderBy" @partially="selectState" height="calc(100% - 58px)">
       <template #id="d">
         <div class="tCenter">{{ d.id }}</div>
       </template>
@@ -46,7 +46,7 @@
       </template>
       <template #action="d">
         <div class="tCenter">
-          <wm-button v-if="isAction('save')" @click="saveData('edit', d)">{{ langs.edit }}</wm-button>
+          <wmButton v-if="isAction('save')" @click="saveData('edit', d)">{{ langs.edit }}</wmButton>
           <span class="c_info" v-else><i class="ui ui_safety"></i></span>
         </div>
       </template>
@@ -55,19 +55,19 @@
           <span :class="d.status?'c_success':'c_danger'">{{ d.status?langs.enable:langs.disable }}</span>
         </div>
       </template>
-    </wm-table>
+    </wmTable>
     <!-- List End -->
   </div>
   <!-- Page -->
   <div class="app_page">
-    <wm-page v-model:total="page.total" v-model:page="page.num" @update:page="loadData()" v-model:limit="page.limit" @update:limit="page.num=1;loadData()"></wm-page>
+    <wmPage v-model:total="page.total" v-model:page="page.num" @update:page="loadData()" v-model:limit="page.limit" @update:limit="page.num=1;loadData()"></wmPage>
   </div>
   <!-- Save -->
-  <action-save v-model:show="save.show" :title="save.title" :data="save.data" @submit="saveSubmit($event)"></action-save>
+  <actionSave v-model:show="save.show" :title="save.title" :data="save.data" @submit="saveSubmit($event)"></actionSave>
   <!-- Del -->
-  <action-del v-model:show="del.show" :data="del.data" @submit="delSubmit($event)"></action-del>
+  <actionDel v-model:show="del.show" :data="del.data" @submit="delSubmit($event)"></actionDel>
   <!-- Export -->
-  <action-export v-model:show="exp.show" :data="getWhere()" :order="list.order" :num="exp.num" @submit="exportSubmit($event)"></action-export>
+  <actionExport v-model:show="exp.show" :data="getWhere()" :order="list.order" :num="exp.num" @submit="exportSubmit($event)"></actionExport>
 </template>
 
 <style lang="less" scoped>
@@ -78,21 +78,21 @@
 import { ref, onMounted, onActivated, nextTick } from 'vue';
 import { useStore } from 'vuex';
 /* JS组件 */
-import Ui from '../../../library/ui'
-import Request from '../../../library/request'
+import Ui from '../../../library/ui';
+import Request from '../../../library/request';
 import Permission from '../../../library/permission';
-import Time from '../../../library/time'
+import Time from '../../../library/time';
 /* 组件 */
-import wmButton from '../../../components/form/button/index.vue'
-import wmTable from '../../../components/table/index.vue'
-import wmPage from '../../../components/page/index.vue'
+import wmButton from '../../../components/form/button/index.vue';
+import wmTable from '../../../components/table/index.vue';
+import wmPage from '../../../components/page/index.vue';
 /* 统计、动作、搜索、更新、删除、导出 */
-import wmTotal from '../../tools/Total.vue'
-import wmAction from '../../tools/Action.vue'
-import wmSearch from '../../tools/Search.vue'
-import actionSave from './save.vue'
-import actionDel from './del.vue'
-import actionExport from './export.vue'
+import wmTotal from '../../tools/Total.vue';
+import wmAction from '../../tools/Action.vue';
+import wmSearch from '../../tools/Search.vue';
+import actionSave from './save.vue';
+import actionDel from './del.vue';
+import actionExport from './export.vue';
 
 // 是否加载
 const isLoad = ref(false);

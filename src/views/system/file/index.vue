@@ -1,25 +1,25 @@
 <template>
   <!-- Total -->
-  <wm-total :time="total.time" @refresh="loadData()">
+  <wmTotal :time="total.time" @refresh="loadData()">
     <span v-html="langs.sys_file_total(list.data.dirNum, list.data.fileNum, list.data.size)"></span>
-  </wm-total>
+  </wmTotal>
   <!-- Action -->
   <div class="app_action flex">
     <div class="flex">
-      <wm-button effect="text" type="primary" padding="0 8px" v-if="list.path=='/'" disabled>{{ langs.sys_file_rootdir }}</wm-button>
-      <wm-button effect="text" type="primary" padding="0 8px" v-else @click="backDir()">{{ langs.sys_file_back }}</wm-button>
+      <wmButton effect="text" type="primary" padding="0 8px" v-if="list.path=='/'" disabled>{{ langs.sys_file_rootdir }}</wmButton>
+      <wmButton effect="text" type="primary" padding="0 8px" v-else @click="backDir()">{{ langs.sys_file_back }}</wmButton>
       <span class="line">|</span>
-      <wm-button effect="text" type="primary" padding="0 8px" v-if="!list.check" @click="selectAll(true)">{{ langs.select_all }}</wm-button>
-      <wm-button effect="text" type="primary" padding="0 8px" v-else @click="selectAll(false)">{{ langs.select_not }}</wm-button>
+      <wmButton effect="text" type="primary" padding="0 8px" v-if="!list.check" @click="selectAll(true)">{{ langs.select_all }}</wmButton>
+      <wmButton effect="text" type="primary" padding="0 8px" v-else @click="selectAll(false)">{{ langs.select_not }}</wmButton>
       <span class="line">|</span>
       <span class="text">{{ list.path }}</span>
     </div>
     <div class="flex">
-      <wm-button icon="ui ui_add" padding="0 16px 0 8px" @click="mkdirData()">{{ langs.mkdir }}</wm-button>
-      <wm-button icon="ui ui_edit" padding="0 16px 0 8px" @click="renameData()">{{ langs.rename }}</wm-button>
-      <wm-button effect="plain" type="danger" icon="ui ui_del" padding="0 16px 0 8px" @click="removeData()">{{ langs.del }}</wm-button>
+      <wmButton icon="ui ui_add" padding="0 16px 0 8px" @click="mkdirData()">{{ langs.mkdir }}</wmButton>
+      <wmButton icon="ui ui_edit" padding="0 16px 0 8px" @click="renameData()">{{ langs.rename }}</wmButton>
+      <wmButton effect="plain" type="danger" icon="ui ui_del" padding="0 16px 0 8px" @click="removeData()">{{ langs.del }}</wmButton>
       <span class="line">|</span>
-      <wm-button effect="dark" type="primary" icon="ui ui_upload" padding="0 16px 0 8px" @click="uploadData()">{{ langs.upload }}</wm-button>
+      <wmButton effect="dark" type="primary" icon="ui ui_upload" padding="0 16px 0 8px" @click="uploadData()">{{ langs.upload }}</wmButton>
     </div>
   </div>
   <!-- Action End -->
@@ -56,15 +56,15 @@
   </div>
 
   <!-- 新建文件夹 -->
-  <action-mkdir v-model:show="mkdir.show" :data="mkdir.data" @submit="mkdirSubmit($event)"></action-mkdir>
+  <actionMkdir v-model:show="mkdir.show" :data="mkdir.data" @submit="mkdirSubmit($event)"></actionMkdir>
   <!-- 重命名 -->
-  <action-rename v-model:show="rename.show" :data="rename.data" @submit="renameSubmit($event)"></action-rename>
+  <actionRename v-model:show="rename.show" :data="rename.data" @submit="renameSubmit($event)"></actionRename>
   <!-- 删除 -->
-  <action-remove v-model:show="remove.show" :data="remove.data" @submit="removeSubmit($event)"></action-remove>
+  <actionRemove v-model:show="remove.show" :data="remove.data" @submit="removeSubmit($event)"></actionRemove>
   <!-- 下载 -->
-  <action-down v-model:show="down.show" :data="down.data" @submit="downSubmit($event)"></action-down>
+  <actionDown v-model:show="down.show" :data="down.data" @submit="downSubmit($event)"></actionDown>
   <!-- 上传 -->
-  <action-upload v-model:show="upload.show" :data="upload.data" @submit="uploadSubmit($event)"></action-upload>
+  <actionUpload v-model:show="upload.show" :data="upload.data" @submit="uploadSubmit($event)"></actionUpload>
   <!-- 图片预览 -->
   <wmImgView v-model:show="imgView.show" :index="imgView.index" :options="imgView.imgs"></wmImgView>
 
@@ -125,18 +125,18 @@
 import { ref, onMounted, onActivated } from 'vue';
 import { useStore } from 'vuex';
 /* JS组件 */
-import Ui from '../../../library/ui'
-import Request from '../../../library/request'
+import Ui from '../../../library/ui';
+import Request from '../../../library/request';
 /* 组件 */
-import wmButton from '../../../components/form/button/index.vue'
-import wmImgView from '../../../components/image/view.vue'
+import wmButton from '../../../components/form/button/index.vue';
+import wmImgView from '../../../components/image/view.vue';
 /* 动作 */
-import wmTotal from '../../tools/Total.vue'
-import actionMkdir from './mkdir.vue'
-import actionRename from './rename.vue'
-import actionRemove from './remove.vue'
-import actionDown from './down.vue'
-import actionUpload from './upload.vue'
+import wmTotal from '../../tools/Total.vue';
+import actionMkdir from './mkdir.vue';
+import actionRename from './rename.vue';
+import actionRemove from './remove.vue';
+import actionDown from './down.vue';
+import actionUpload from './upload.vue';
 
 // 是否加载
 const isLoad = ref(false);

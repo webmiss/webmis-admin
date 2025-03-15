@@ -12,7 +12,7 @@
 <script setup lang="ts">
 import { ref, onMounted, watch } from 'vue';
 import Env from '../../config/Env';
-import Editor from '@tinymce/tinymce-vue'
+import Editor from '@tinymce/tinymce-vue';
 
 /* 参数 */
 const props = defineProps({

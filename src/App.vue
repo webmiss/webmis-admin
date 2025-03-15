@@ -196,17 +196,17 @@ import { useStore } from 'vuex';
 import { useRouter } from 'vue-router'; 
 /* UI组件 */
 import Env from './config/Env';
-import Request from './library/request'
-import Storage from './library/storage'
-import Ui from './library/ui'
-import Files from './library/files'
+import Request from './library/request';
+import Storage from './library/storage';
+import Ui from './library/ui';
+import Files from './library/files';
 /* 组件 */
-import wmPopup from './components/popup/index.vue'
+import wmPopup from './components/popup/index.vue';
 /* Tools */
 import Login from './views/tools/UserLogin.vue';
-import Uinfo from './views/tools/Uinfo.vue'
-import Passwd from './views/tools/Passwd.vue'
-import Msg from './views/tools/Msg.vue'
+import Uinfo from './views/tools/Uinfo.vue';
+import Passwd from './views/tools/Passwd.vue';
+import Msg from './views/tools/Msg.vue';
 
 const { proxy } = getCurrentInstance() as any ;
 const emit = defineEmits(['update:show', 'close']);
@@ -272,11 +272,11 @@ onMounted(()=>{
 const MenusList = (): void => {
   // 请求
   Request.Post('sys_menus/get_menus_perm', {token: state.token}, (res:any)=>{
-    const d: any = res.data;
-    if(d.code==0) {
-      menus.value.list = d.data;
+    const {code, msg, data}: any = res.data;
+    if(code==0) {
+      menus.value.list = data;
     }else{
-      Ui.Toast(d.msg);
+      Ui.Toast(msg);
     }
   });
 }
@@ -433,7 +433,7 @@ const userUpImg = (): void => {
           const d = res.data;
           if(d.code==0){
             // 更新用户信息
-            proxy.$refs.Login.verifyToken(true);
+            userLogin.value.verifyToken(true);
           }
           return Ui.Toast(d.msg);
         });

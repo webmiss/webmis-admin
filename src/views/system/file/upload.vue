@@ -1,10 +1,10 @@
 <template>
   <div class="file_up" :style="{visibility:infoShow?'inherit':'hidden'}">
-    <wm-popup height="100%" width="320px" v-model:show="infoShow" position="right" bgColor="#F2F4F8" @close="close()">
+    <wmPopup height="100%" width="320px" v-model:show="infoShow" position="right" bgColor="#F2F4F8" @close="close()">
       <div class="file_up_top flex_center">
-        <wm-button effect="text" type="primary" padding="0 8px" @click="selectFile()">{{ langs.sys_file_select_file }}</wm-button>
+        <wmButton effect="text" type="primary" padding="0 8px" @click="selectFile()">{{ langs.sys_file_select_file }}</wmButton>
         <span>|</span>
-        <wm-button effect="text" type="danger" padding="0 8px" @click="removeAll()" :disabled="listData.length==0">{{ langs.clear }}</wm-button>
+        <wmButton effect="text" type="danger" padding="0 8px" @click="removeAll()" :disabled="listData.length==0">{{ langs.clear }}</wmButton>
       </div>
       <div class="file_up_body scrollbar">
         <ul class="file_up_list" v-if="listData.length>0">
@@ -20,7 +20,7 @@
         </ul>
         <div class="null" v-else></div>
       </div>
-    </wm-popup>
+    </wmPopup>
   </div>
 </template>
 
@@ -45,12 +45,12 @@
 import { ref, watch } from 'vue';
 import { useStore } from 'vuex';
 /* UI组件 */
-import Ui from '../../../library/ui'
-import Request from '../../../library/request'
-import Files from '../../../library/files'
+import Ui from '../../../library/ui';
+import Request from '../../../library/request';
+import Files from '../../../library/files';
 /* 组件 */
-import wmPopup from '../../../components/popup/index.vue'
-import wmButton from '../../../components/form/button/index.vue'
+import wmPopup from '../../../components/popup/index.vue';
+import wmButton from '../../../components/form/button/index.vue';
 
 /* 参数 */
 const props = defineProps({

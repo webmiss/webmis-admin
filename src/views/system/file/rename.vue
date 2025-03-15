@@ -1,19 +1,19 @@
 <template>
-  <wm-dialog v-model:show="infoShow" :title="title || langs.rename" width="420px" bottom="40px" @close="close()">
-    <wm-main lineHeight="60px">
-      <wm-table-form>
+  <wmDialog v-model:show="infoShow" :title="title || langs.rename" width="420px" bottom="40px" @close="close()">
+    <wmMain lineHeight="60px">
+      <wmTableForm>
         <tr>
           <td class="label">{{ langs.name }}</td>
           <td>
-            <wm-input v-model:value="data.name" maxlength="32"></wm-input>
+            <wmInput v-model:value="data.name" maxlength="32"></wmInput>
           </td>
         </tr>
-      </wm-table-form>
-    </wm-main>
+      </wmTableForm>
+    </wmMain>
     <template #bottom>
-      <wm-button height="40px" padding="0 32px" @click="submit()">{{ langs.confirm }}</wm-button>
+      <wmButton height="40px" padding="0 32px" @click="submit()">{{ langs.confirm }}</wmButton>
     </template>
-  </wm-dialog>
+  </wmDialog>
 </template>
 
 <style lang="less" scoped>
@@ -23,14 +23,14 @@
 import { ref, watch, getCurrentInstance } from 'vue';
 import { useStore } from 'vuex';
 /* UI组件 */
-import Ui from '../../../library/ui'
-import Request from '../../../library/request'
+import Ui from '../../../library/ui';
+import Request from '../../../library/request';
 /* 组件 */
-import wmMain from '../../../components/container/main.vue'
-import wmDialog from '../../../components/dialog/index.vue'
-import wmButton from '../../../components/form/button/index.vue'
-import wmTableForm from '../../../components/table/form.vue'
-import wmInput from '../../../components/form/input/index.vue'
+import wmMain from '../../../components/container/main.vue';
+import wmDialog from '../../../components/dialog/index.vue';
+import wmButton from '../../../components/form/button/index.vue';
+import wmTableForm from '../../../components/table/form.vue';
+import wmInput from '../../../components/form/input/index.vue';
 
 /* 参数 */
 const props = defineProps({

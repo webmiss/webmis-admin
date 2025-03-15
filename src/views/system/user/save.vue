@@ -1,24 +1,24 @@
 <template>
-  <wm-dialog v-model:show="infoShow" :title="title" width="720px" bottom="40px" :overflow="tabIndex=='perm'?'hidden auto':'hidden'" @close="close()">
-    <wm-main paddingY="0">
-      <wm-tabs v-model:value="tabIndex" :columns="tabs">
+  <wmDialog v-model:show="infoShow" :title="title" width="720px" bottom="40px" :overflow="tabIndex=='perm'?'hidden auto':'hidden'" @close="close()">
+    <wmMain paddingY="0">
+      <wmTabs v-model:value="tabIndex" :columns="tabs">
         <!-- 帐号信息 -->
         <template #base>
-          <wm-table-form>
+          <wmTableForm>
             <tr>
               <td class="label">{{ langs.status }}</td>
               <td colspan="3">
-                <wm-switch v-model:value="form.status"></wm-switch>
+                <wmSwitch v-model:value="form.status"></wmSwitch>
               </td>
             </tr>
             <tr>
               <td class="label">{{ langs.sys_user_uname }}</td>
               <td>
-                <wm-input v-model:value="form.uname" :placeholder="langs.sys_user_uname_placeholder" maxlength="16"></wm-input>
+                <wmInput v-model:value="form.uname" :placeholder="langs.sys_user_uname_placeholder" maxlength="16"></wmInput>
               </td>
               <td class="label">{{ langs.sys_user_passwd }}</td>
               <td>
-                <wm-input v-model:value="form.passwd" :placeholder="langs.sys_user_passwd_placeholder" maxlength="32"></wm-input>
+                <wmInput v-model:value="form.passwd" :placeholder="langs.sys_user_passwd_placeholder" maxlength="32"></wmInput>
               </td>
             </tr>
             <tr>
@@ -27,54 +27,54 @@
             <tr>
               <td class="label">{{ langs.sys_user_type }}</td>
               <td colspan="3">
-                <wm-select v-model:value="form.type" :options="selectAll.type"></wm-select>
+                <wmSelect v-model:value="form.type" :options="selectAll.type_name"></wmSelect>
               </td>
             </tr>
             <tr>
               <td class="label">{{ langs.sys_user_nickname }}</td>
               <td>
-                <wm-input v-model:value="form.nickname" maxlength="16"></wm-input>
+                <wmInput v-model:value="form.nickname" maxlength="16"></wmInput>
               </td>
               <td class="label">{{ langs.sys_user_name }}</td>
               <td>
-                <wm-input v-model:value="form.name" maxlength="16"></wm-input>
+                <wmInput v-model:value="form.name" maxlength="16"></wmInput>
               </td>
             </tr>
             <tr>
               <td class="label">{{ langs.sys_user_department }}</td>
               <td>
-                <wm-input v-model:value="form.department" maxlength="16"></wm-input>
+                <wmInput v-model:value="form.department" maxlength="16"></wmInput>
               </td>
               <td class="label">{{ langs.sys_user_position }}</td>
               <td>
-                <wm-input v-model:value="form.position" maxlength="16"></wm-input>
+                <wmInput v-model:value="form.position" maxlength="16"></wmInput>
               </td>
             </tr>
             <tr>
               <td class="label">{{ langs.remark }}</td>
               <td colspan="3">
-                <wm-input v-model:value="form.remark" type="textarea" :height="'120px'" maxlength="32"></wm-input>
+                <wmInput v-model:value="form.remark" type="textarea" :height="'120px'" maxlength="32"></wmInput>
               </td>
             </tr>
-          </wm-table-form>
+          </wmTableForm>
         </template>
         <!-- 帐号信息 End -->
         <!-- 系统角色 -->
         <template #sole>
-          <wm-radio v-model:value="form.role" :options="selectAll.role"></wm-radio>
+          <wmRadio v-model:value="form.role" :options="selectAll.role_name"></wmRadio>
         </template>
         <!-- 系统角色 End -->
          <!-- 私有权限 -->
         <template #perm>
-          <wm-tree @update:value="updatePerm" :options="selectAll.perm"></wm-tree>
+          <wmTree @update:value="updatePerm" :options="selectAll.perm"></wmTree>
         </template>
         <!-- 私有权限 End -->
-      </wm-tabs>
-    </wm-main>
+      </wmTabs>
+    </wmMain>
     <template #bottom>
-      <wm-button height="40px" padding="0 32px" @click="submit()">{{ langs.confirm }}</wm-button>
+      <wmButton height="40px" padding="0 32px" @click="submit()">{{ langs.confirm }}</wmButton>
     </template>
-  </wm-dialog>
+  </wmDialog>
 </template>
 
 <style lang="less" scoped>
@@ -83,23 +83,23 @@
 </style>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { ref, watch, nextTick } from 'vue';
 import { useStore } from 'vuex';
 /* UI组件 */
-import Ui from '../../../library/ui'
-import Request from '../../../library/request'
+import Ui from '../../../library/ui';
+import Request from '../../../library/request';
 import Safety from '../../../library/safety';
 /* 组件 */
-import wmMain from '../../../components/container/main.vue'
-import wmDialog from '../../../components/dialog/index.vue'
-import wmInput from '../../../components/form/input/index.vue'
-import wmButton from '../../../components/form/button/index.vue'
-import wmSelect from '../../../components/form/select/index.vue'
-import wmRadio from '../../../components/form/radio/index.vue'
-import wmSwitch from '../../../components/form/switch/index.vue'
-import wmTableForm from '../../../components/table/form.vue'
-import wmTabs from '../../../components/tabs/index.vue'
-import wmTree from '../../../components/tree/index.vue'
+import wmMain from '../../../components/container/main.vue';
+import wmDialog from '../../../components/dialog/index.vue';
+import wmInput from '../../../components/form/input/index.vue';
+import wmButton from '../../../components/form/button/index.vue';
+import wmSelect from '../../../components/form/select/index.vue';
+import wmRadio from '../../../components/form/radio/index.vue';
+import wmSwitch from '../../../components/form/switch/index.vue';
+import wmTableForm from '../../../components/table/form.vue';
+import wmTabs from '../../../components/tabs/index.vue';
+import wmTree from '../../../components/tree/index.vue';
 
 /* 参数 */
 const props = defineProps({
@@ -122,9 +122,12 @@ const tabs = ref([
   {label: langs.sys_user_perm, value: 'perm', slot: 'perm'},
 ]);
 // 数据
-const form = ref({id: 0, status: true, uname: '', passwd: '', type: <any>[], nickname: '', name: '', department: '', position: '', remark: '', role: '', perm: ''});
+const form = ref({
+  id: 0, status: true, uname: '', passwd: '', type: <any>'', role: <any>'', nickname: '', name: '', department: '', position: '', remark: '',
+  perm: '',
+});
 // 全部分类
-const selectAll = ref({type: <any>[], role: <any>[], perm: <any>[]});
+const selectAll = ref({type_name: <any>[], role_name: <any>[], perm: <any>[]});
 
 /* 监听 */
 watch(()=>props.show, (val: boolean)=>{
@@ -156,16 +159,16 @@ const getSelect = (): void => {
   Request.Post('sys_user/get_select?lang='+state.lang, {
     token: state.token,
   }, (res:any)=>{
-    const d: any = res.data;
-    if(d.code==0) {
-      selectAll.value.type = d.data.type;
-      selectAll.value.role = d.data.role;
+    const {code, msg, data}: any = res.data;
+    if(code==0) {
+      selectAll.value.type_name = data.type_name;
+      selectAll.value.role_name = data.role_name;
       // 默认值
-      setTimeout(()=>{
+      nextTick(()=>{
         form.value.type = typeof props.data.type!='undefined'?[parseInt(props.data.type)]:[];
         form.value.role = props.data.role || '';
-      }, 300);
-    } else Ui.Toast(d.msg);
+      });
+    } else Ui.Toast(msg);
   });
 }
 
@@ -175,8 +178,8 @@ const getPerm = (): void => {
     token: state.token,
     perm: form.value.perm,
   }, (res:any)=>{
-    const d: any = res.data;
-    if(d.code==0) selectAll.value.perm = d.data;
+    const {code, data}: any = res.data;
+    if(code==0) selectAll.value.perm = data;
   });
 }
 /* 私有权限-合成 */
@@ -218,9 +221,9 @@ const submit = (): void => {
     data: data,
   }, (res:any)=>{
     load.clear();
-    const d: any = res.data;
-    Ui.Toast(d.msg);
-    emit('submit', d.code==0);
+    const {code, msg}: any = res.data;
+    Ui.Toast(msg);
+    emit('submit', code==0);
   });
 }
 

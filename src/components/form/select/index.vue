@@ -85,12 +85,11 @@
 <script setup lang="ts">
 import { ref, onMounted, watch, getCurrentInstance } from 'vue';
 import { useStore } from 'vuex';
-import wmInput from '../../../components/form/input/index.vue'
-
+import wmInput from '../../../components/form/input/index.vue';
 
 /* 参数 */
 const props = defineProps({
-    value: {default: ''},                                   // 默认值
+    value: {type: [Array, String], default: ''},            // 默认值
     options: {type: Array, default: []},                    // 数据: [{label:'男', value:'男', checked: true},{label:'女', value:'女'}]
     multiple: {type: Boolean, default: false},              // 是否多选
     width: {type: String, default: '100%'},                 // 宽
@@ -125,6 +124,7 @@ watch(()=>props.value, (val: any)=>{
     for(let i in seaList.value) {
       seaList.value[i].checked = val.includes(seaList.value[i].value);
     }
+    if(seaList.value.length>0) selectData(false);
   } else {
     clear();
   }

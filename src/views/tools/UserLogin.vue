@@ -88,17 +88,17 @@
 import { ref, onMounted, watch, getCurrentInstance, nextTick } from 'vue';
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router'; 
-import wmPopup from '../../components/popup/index.vue'
+import wmPopup from '../../components/popup/index.vue';
 /* UI组件 */
 import Env from '../../config/Env';
-import Ui from '../../library/ui'
-import Storage from '../../library/storage'
-import Request from '../../library/request'
+import Ui from '../../library/ui';
+import Storage from '../../library/storage';
+import Request from '../../library/request';
 /* JS组件 */
-import Time from '../../library/time'
+import Time from '../../library/time';
 /* 语言包 */
-import { en_US } from '../../config/langs/en_US'
-import { zh_CN } from '../../config/langs/zh_CN'
+import { en_US } from '../../config/langs/en_US';
+import { zh_CN } from '../../config/langs/zh_CN';
 
 /* 参数 */
 const props = defineProps({
@@ -265,33 +265,32 @@ const clickLogin = (): void => {
   const load: any = Ui.Loading();
   Request.Post('user/login?lang='+state.lang, {uname: uname, passwd: passwd, vcode:login.value.vcode}, (res:any)=>{
     load.clear();
-    const d: any = res.data;
-    if(d.code==0){
+    const {code, msg, data, vcode_url}: any = res.data;
+    if(code==0){
       login.value.is_passwd = true;
       login.value.is_safety = false;
       login.value.passwd = '';
       login.value.vcode = '';
-      login.value.img = d.data.uinfo.img;
+      login.value.img = data.uinfo.img;
       // 缓存信息
       state.isLogin = true;
-      state.token = d.data.token;
-      state.uinfo = d.data.uinfo;
-      Storage.setItem('token', d.data.token);
-      Storage.setItem('uname', d.data.uinfo.uname);
-      Storage.setItem('uinfo', JSON.stringify(d.data.uinfo));
-      Storage.setItem('user_img', d.data.uinfo.img);
+      state.token = data.token;
+      state.uinfo = data.uinfo;
+      Storage.setItem('token', data.token);
+      Storage.setItem('uname', data.uinfo.uname);
+      Storage.setItem('uinfo', JSON.stringify(data.uinfo));
+      Storage.setItem('user_img', data.uinfo.img);
     }else{
       // 验证
       login.value.vcode = '';
-      const vcode_url: string = d.vcode_url || '';
-      if(vcode_url && d.code==4001){
+      if(vcode_url && code==4001){
         // 开启验证
         login.value.is_safety = true;
         login.value.vcode_url = vcode_url;
         nextTick(()=>{
           (proxy.$refs.loginVcode as any).focus();
         });
-      }else if(vcode_url && d.code==4002){
+      }else if(vcode_url && code==4002){
         // 验证码错误
         changeVcode();
       }else{
@@ -304,7 +303,7 @@ const clickLogin = (): void => {
           (proxy.$refs.loginPasswd as any).focus();
         });
       }
-      return Ui.Toast(d.msg);
+      return Ui.Toast(msg);
     }
   },()=>{
     if(load) load.clear();
@@ -320,20 +319,20 @@ const verifyToken = (uinfo: boolean=false): void => {
   // 请求
   Request.Post('user/token?lang='+state.lang, {token: state.token, uinfo: uinfo}, (res:any)=>{
     if(load) load.clear();
-    const d: any = res.data;
-    if(d.code==0 && d.data.token_time>0) {
+    const {code, msg, data}: any = res.data;
+    if(code==0 && data.token_time>0) {
       state.isLogin = true;
       // 修改密码
-      if(!state.isPasswd && state.lang) state.isPasswd = d.data.isPasswd;
+      if(!state.isPasswd && state.lang) state.isPasswd = data.isPasswd;
       // 用户信息
-      if(Object.keys(d.data.uinfo).length!=0) {
-        state.uinfo = d.data.uinfo;
-        Storage.setItem('uname', d.data.uinfo.uname);
-        Storage.setItem('uinfo', JSON.stringify(d.data.uinfo));
-        Storage.setItem('user_img', d.data.uinfo.img);
+      if(Object.keys(data.uinfo).length!=0) {
+        state.uinfo = data.uinfo;
+        Storage.setItem('uname', data.uinfo.uname);
+        Storage.setItem('uinfo', JSON.stringify(data.uinfo));
+        Storage.setItem('user_img', data.uinfo.img);
       }
     } else {
-      Ui.Toast(d.msg);
+      Ui.Toast(msg);
       logout();
     }
   },()=>{
@@ -361,6 +360,7 @@ const logout = (): void => {
 /* 外部函数 */
 defineExpose({  
   logout,
+  verifyToken,
 });
 
 </script>

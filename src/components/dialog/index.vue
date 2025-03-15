@@ -43,7 +43,7 @@
   
 <script setup lang="ts">
 import { ref, watch } from 'vue';
-import wmPopup from '../../components/popup/index.vue'
+import wmPopup from '../../components/popup/index.vue';
 
 /* 参数 */
 const props = defineProps({

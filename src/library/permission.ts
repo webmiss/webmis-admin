@@ -1,4 +1,4 @@
-import { useStore } from "vuex"
+import { useStore } from "vuex";
 
 /*校验权限 */
 export default class Permission {

@@ -78,7 +78,6 @@
 <script setup lang="ts">
 import { ref, watch, onMounted, getCurrentInstance } from 'vue';
 import { useStore } from 'vuex';
-import wmInput from '../../form/input/index.vue'
 
 /* 参数 */
 const props = defineProps({

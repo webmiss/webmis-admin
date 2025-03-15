@@ -1,5 +1,5 @@
-import axios from 'axios'
-import type { AxiosRequestConfig } from 'axios'
+import axios from 'axios';
+import type { AxiosRequestConfig } from 'axios';
 import Env from '../config/Env';
 
 /* 请求 */
@@ -21,14 +21,14 @@ export default class Request {
   * Post请求
   * url: string 请求地址
   */
-  public static Post(url: string, data: any={}, success?: any, fail?: any, config?: any): void {
+  public static Post(url: string, data: any={}, success?: any, fail?: any, config?: any) {
     // 参数
     url = Request.getUrl(url);
     const cfg: AxiosRequestConfig = Request.getConfig(config);
     // 进度
     if(config && config.onUploadProgress) cfg.onUploadProgress = config.onUploadProgress;
     // 请求
-    axios.post(url, data, cfg).then(success).catch(fail);
+    return axios.post(url, data, cfg).then(success).catch(fail);
   }
 
   /* Put请求 */

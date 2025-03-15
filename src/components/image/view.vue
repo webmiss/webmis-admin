@@ -70,7 +70,7 @@
 <script setup lang="ts">
 import { ref, watch, getCurrentInstance, nextTick } from 'vue';
 import { useStore } from 'vuex';
-import Ui from '../../library/ui'
+import Ui from '../../library/ui';
 
 /* 参数 */
 const props = defineProps({

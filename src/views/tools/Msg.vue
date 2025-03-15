@@ -195,16 +195,16 @@
 </style>
 
 <script setup lang="ts">
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted, watch, nextTick } from 'vue';
 import { useStore } from 'vuex';
 /* UI组件 */
 import Env from '../../config/Env';
-import Ui from '../../library/ui'
-import Request from '../../library/request'
-import Time from '../../library/time'
+import Ui from '../../library/ui';
+import Request from '../../library/request';
+import Time from '../../library/time';
 /* 组件 */
-import wmPopup from '../../components/popup/index.vue'
-import wmButton from '../../components/form/button/index.vue'
+import wmPopup from '../../components/popup/index.vue';
+import wmButton from '../../components/form/button/index.vue';
 
 /* 参数 */
 const props = defineProps({
@@ -336,10 +336,10 @@ const msgData = (d: any): void =>{
 /* 消息-列表 */
 const msgList = (): void => {
   Request.Post('msg/list?lang='+state.lang, {token: state.token}, (res:any)=>{
-    const d: any = res.data;
-    if(d.code==0) {
-      if(state.msg.list.length==0) state.msg.list = d.data.list;
-      state.msg.num = d.data.num;
+    const {code, data}: any = res.data;
+    if(code==0) {
+      if(state.msg.list.length==0) state.msg.list = data.list;
+      state.msg.num = data.num;
     }
   },()=>{
     Ui.Toast(state.langs.network_err);
@@ -380,9 +380,9 @@ const msgToTop = (v: any) => {
 }
 /* 消息-调转底部 */
 const msgToBottom = (): void => {
-  setTimeout(()=>{
+  nextTick(()=>{
     document.querySelector('#msgBottom')?.scrollIntoView(true);
-  }, 300);
+  });
 }
 /* 消息-换行 */
 const msgCtrlEnter = (): void => {
@@ -446,8 +446,8 @@ const msgRead = (ids: any=[]): void => {
     token: state.token,
     ids: ids,
   }, (res:any)=>{
-    const d: any = res.data;
-    if(d.code==0) {
+    const {code}: any = res.data;
+    if(code==0) {
       state.msg.num -= ids.length;
     }
   });

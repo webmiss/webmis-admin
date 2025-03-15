@@ -23,13 +23,13 @@
 import { ref, watch, getCurrentInstance } from 'vue';
 import { useStore } from 'vuex';
 /* UI组件 */
-import Ui from '../../../library/ui'
-import Request from '../../../library/request'
+import Ui from '../../../library/ui';
+import Request from '../../../library/request';
 /* 组件 */
-import wmMain from '../../../components/container/main.vue'
-import wmDialog from '../../../components/dialog/index.vue'
-import wmTableForm from '../../../components/table/form.vue'
-import wmInput from '../../../components/form/input/index.vue'
+import wmMain from '../../../components/container/main.vue';
+import wmDialog from '../../../components/dialog/index.vue';
+import wmTableForm from '../../../components/table/form.vue';
+import wmInput from '../../../components/form/input/index.vue';
 
 /* 参数 */
 const props = defineProps({

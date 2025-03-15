@@ -60,6 +60,12 @@ const init = (): void => {
     .style('radius', 4)
     .style('inset', 1)
     .animate('enter', { type: 'waveIn', duration: 600 })
+    .tooltip({
+      title: 'label',
+      items: [
+        { field: 'value', name: '数量' }
+      ]
+    })
     .legend(false);
     // 显示
     chart.render();

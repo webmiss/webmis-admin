@@ -1,12 +1,12 @@
 <template>
-  <wm-dialog v-model:show="infoShow" :title="title || langs.download" width="420px" bottom="40px" @close="close()">
-    <wm-main lineHeight="60px">
+  <wmDialog v-model:show="infoShow" :title="title || langs.download" width="420px" bottom="40px" @close="close()">
+    <wmMain lineHeight="60px">
       <b>{{ data.filename }}</b>
-    </wm-main>
+    </wmMain>
     <template #bottom>
-      <wm-button height="40px" padding="0 32px" @click="submit()">{{ langs.confirm }}</wm-button>
+      <wmButton height="40px" padding="0 32px" @click="submit()">{{ langs.confirm }}</wmButton>
     </template>
-  </wm-dialog>
+  </wmDialog>
 </template>
 
 <style lang="less" scoped>
@@ -16,13 +16,13 @@
 import { ref, watch } from 'vue';
 import { useStore } from 'vuex';
 /* UI组件 */
-import Ui from '../../../library/ui'
-import Request from '../../../library/request'
-import Files from '../../../library/files'
+import Ui from '../../../library/ui';
+import Request from '../../../library/request';
+import Files from '../../../library/files';
 /* 组件 */
-import wmMain from '../../../components/container/main.vue'
-import wmDialog from '../../../components/dialog/index.vue'
-import wmButton from '../../../components/form/button/index.vue'
+import wmMain from '../../../components/container/main.vue';
+import wmDialog from '../../../components/dialog/index.vue';
+import wmButton from '../../../components/form/button/index.vue';
 
 /* 参数 */
 const props = defineProps({

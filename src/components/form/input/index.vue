@@ -90,7 +90,7 @@
 </style>
 
 <script setup lang="ts">
-import { ref, onMounted, watch, getCurrentInstance, nextTick } from 'vue';
+import { ref, watch, getCurrentInstance } from 'vue';
 import { useStore } from 'vuex';
 
 /* 参数 */

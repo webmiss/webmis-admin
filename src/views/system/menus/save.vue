@@ -1,115 +1,115 @@
 <template>
-  <wm-dialog v-model:show="infoShow" :title="title" width="720px" bottom="40px" :overflow="tabIndex=='action'||tabIndex=='langs'?'hidden auto':'hidden'" @close="close()">
-    <wm-main>
-      <wm-tabs v-model:value="tabIndex" :columns="tabs">
+  <wmDialog v-model:show="infoShow" :title="title" width="720px" bottom="40px" :overflow="tabIndex=='action'||tabIndex=='langs'?'hidden auto':'hidden'" @close="close()">
+    <wmMain>
+      <wmTabs v-model:value="tabIndex" :columns="tabs">
         <!-- 基本信息 -->
         <template #base>
-          <wm-table-form>
+          <wmTableForm>
             <tr>
               <td class="label">{{ langs.status }}</td>
               <td colspan="3">
-                <wm-switch v-model:value="form.status"></wm-switch>
+                <wmSwitch v-model:value="form.status"></wmSwitch>
               </td>
             </tr>
             <tr>
               <td class="label">{{ langs.sys_menus_fid }}</td>
               <td colspan="3">
-                <wm-cascader v-model:value="form.fid" :options="menusAll" clearable></wm-cascader>
+                <wmCascader v-model:value="form.fid" :options="menusAll" clearable></wmCascader>
               </td>
             </tr>
             <tr>
               <td class="label">{{ langs.sys_menus_title }}</td>
               <td>
-                <wm-input v-model:value="form.title" maxlength="16"></wm-input>
+                <wmInput v-model:value="form.title" maxlength="16"></wmInput>
               </td>
               <td class="label">{{ langs.sys_menus_en }}</td>
               <td>
-                <wm-input v-model:value="form.en" maxlength="16"></wm-input>
+                <wmInput v-model:value="form.en" maxlength="16"></wmInput>
               </td>
             </tr>
             <tr>
               <td class="label">{{ langs.sys_menus_url }}</td>
               <td colspan="3">
-                <wm-input v-model:value="form.url" maxlength="32"></wm-input>
+                <wmInput v-model:value="form.url" maxlength="32"></wmInput>
               </td>
             </tr>
             <tr>
               <td class="label">{{ langs.sys_menus_controller }}</td>
               <td colspan="3">
-                <wm-input v-model:value="form.controller" maxlength="32"></wm-input>
+                <wmInput v-model:value="form.controller" maxlength="32"></wmInput>
               </td>
             </tr>
             <tr>
               <td class="label">{{ langs.sys_menus_ico }}</td>
               <td>
-                <wm-input v-model:value="form.ico" maxlength="32"></wm-input>
+                <wmInput v-model:value="form.ico" maxlength="32"></wmInput>
               </td>
               <td class="label">{{ langs.sys_menus_sort }}</td>
               <td>
-                <wm-input v-model:value="form.sort" :placeholder="langs.sys_menus_sort_placeholder" maxlength="32"></wm-input>
+                <wmInput v-model:value="form.sort" :placeholder="langs.sys_menus_sort_placeholder" maxlength="32"></wmInput>
               </td>
             </tr>
             <tr>
               <td class="label">{{ langs.remark }}</td>
               <td colspan="3">
-                <wm-input v-model:value="form.remark" type="textarea" :height="'80px'" maxlength="32"></wm-input>
+                <wmInput v-model:value="form.remark" type="textarea" :height="'80px'" maxlength="32"></wmInput>
               </td>
             </tr>
-          </wm-table-form>
+          </wmTableForm>
         </template>
         <!-- 基本信息 End -->
         <!-- 动作菜单 -->
         <template #action>
-          <wm-table-form>
+          <wmTableForm>
             <tr class="title">
               <td>{{ langs.name }}</td>
               <td>{{ langs.action }}</td>
               <td>{{ langs.sys_menus_perm }}</td>
               <td class="action">
-                <wm-button effect="text" type="primary" @click="actionAdd()">{{ langs.add }}</wm-button>
+                <wmButton effect="text" type="primary" @click="actionAdd()">{{ langs.add }}</wmButton>
               </td>
             </tr>
             <tr v-for="(v,k) in form.action" :key="k">
               <td>
-                <wm-input v-model:value="v.name" maxlength="32"></wm-input>
+                <wmInput v-model:value="v.name" maxlength="32"></wmInput>
               </td>
               <td>
-                <wm-input v-model:value="v.action" maxlength="32"></wm-input>
+                <wmInput v-model:value="v.action" maxlength="32"></wmInput>
               </td>
               <td>
-                <wm-input v-model:value="v.perm" maxlength="32"></wm-input>
+                <wmInput v-model:value="v.perm" maxlength="32"></wmInput>
               </td>
               <td class="action">
-                <wm-button effect="text" type="danger" @click="actionRemove(k)">{{ langs.remove }}</wm-button>
+                <wmButton effect="text" type="danger" @click="actionRemove(k)">{{ langs.remove }}</wmButton>
               </td>
             </tr>
-          </wm-table-form>
+          </wmTableForm>
         </template>
         <!-- 动作菜单 End -->
         <!-- 语言包 -->
         <template #langs>
-          <wm-table-form>
+          <wmTableForm>
             <tr>
               <td class="label">{{ langs.sys_menus_en_us }}</td>
               <td>
-                <wm-input v-model:value="form.en_US" maxlength="32"></wm-input>
+                <wmInput v-model:value="form.en_US" maxlength="32"></wmInput>
               </td>
             </tr>
             <tr>
               <td class="label">{{ langs.sys_menus_zh_cn }}</td>
               <td>
-                <wm-input v-model:value="form.zh_CN" maxlength="32"></wm-input>
+                <wmInput v-model:value="form.zh_CN" maxlength="32"></wmInput>
               </td>
             </tr>
-          </wm-table-form>
+          </wmTableForm>
         </template>
         <!-- 语言包 End -->
-      </wm-tabs>
-    </wm-main>
+      </wmTabs>
+    </wmMain>
     <template #bottom>
-      <wm-button height="40px" padding="0 32px" @click="submit()">{{ langs.confirm }}</wm-button>
+      <wmButton height="40px" padding="0 32px" @click="submit()">{{ langs.confirm }}</wmButton>
     </template>
-  </wm-dialog>
+  </wmDialog>
 </template>
 
 <style lang="less" scoped>
@@ -121,17 +121,17 @@
 import { ref, watch, onMounted } from 'vue';
 import { useStore } from 'vuex';
 /* UI组件 */
-import Ui from '../../../library/ui'
-import Request from '../../../library/request'
+import Ui from '../../../library/ui';
+import Request from '../../../library/request';
 /* 组件 */
-import wmMain from '../../../components/container/main.vue'
-import wmDialog from '../../../components/dialog/index.vue'
-import wmInput from '../../../components/form/input/index.vue'
-import wmButton from '../../../components/form/button/index.vue'
-import wmSwitch from '../../../components/form/switch/index.vue'
-import wmCascader from '../../../components/form/cascader/index.vue'
-import wmTableForm from '../../../components/table/form.vue'
-import wmTabs from '../../../components/tabs/index.vue'
+import wmMain from '../../../components/container/main.vue';
+import wmDialog from '../../../components/dialog/index.vue';
+import wmInput from '../../../components/form/input/index.vue';
+import wmButton from '../../../components/form/button/index.vue';
+import wmSwitch from '../../../components/form/switch/index.vue';
+import wmCascader from '../../../components/form/cascader/index.vue';
+import wmTableForm from '../../../components/table/form.vue';
+import wmTabs from '../../../components/tabs/index.vue';
 
 /* 参数 */
 const props = defineProps({
@@ -244,10 +244,10 @@ const submit = (): void => {
     data: data,
   }, (res:any)=>{
     load.clear();
-    const d: any = res.data;
-    Ui.Toast(d.msg);
-    if(d.code==0) getMenus();
-    emit('submit', d.code==0);
+    const {code, msg}: any = res.data;
+    Ui.Toast(msg);
+    if(code==0) getMenus();
+    emit('submit', code==0);
   });
 }
 
@@ -256,9 +256,9 @@ const getMenus = (): void => {
   Request.Post('sys_menus/get_menus_all?lang='+state.lang, {
     token: state.token,
   }, (res:any)=>{
-    const d: any = res.data;
-    if(d.code==0) menusAll.value = d.data;
-    else Ui.Toast(d.msg);
+    const {code, msg, data}: any = res.data;
+    if(code==0) menusAll.value = data;
+    else Ui.Toast(msg);
   });
 }
 

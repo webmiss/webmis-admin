@@ -1,1 +1,0 @@
-import{_ as n,d as s}from"./index-CPJf41Zr.js";const a=s({beforeRouteEnter(r,e,t){t(o=>{o.$router.replace(e.path)})},mounted(){}});function c(r,e,t,o,p,f){return null}const u=n(a,[["render",c]]);export{u as default};

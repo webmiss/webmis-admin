@@ -191,9 +191,9 @@
 </style>
 
 <script setup lang="ts">
-import { ref, watch, onMounted, getCurrentInstance } from 'vue';
+import { ref, watch, onMounted } from 'vue';
 import { useStore } from 'vuex';
-import { useRouter } from 'vue-router'; 
+import { useRoute, useRouter } from 'vue-router'; 
 /* UI组件 */
 import Env from './config/Env';
 import Request from './library/request';
@@ -208,12 +208,12 @@ import Uinfo from './views/tools/Uinfo.vue';
 import Passwd from './views/tools/Passwd.vue';
 import Msg from './views/tools/Msg.vue';
 
-const { proxy } = getCurrentInstance() as any ;
 const emit = defineEmits(['update:show', 'close']);
 const userLogin = ref();
 // 变量
 const store = useStore();
 const state = store.state;
+const route = useRoute();
 const router = useRouter();
 // 配置
 const cfg: any = new Env();
@@ -231,17 +231,23 @@ const menus = ref({
 });
 const is_menus = ref(true);
 
-
 /* 监听 */
-watch(()=>proxy.$route, (to: any, from: any)=>{
+watch(()=>route, (to: any, from: any)=>{
   tabs.value.active = to.path;
 },{ deep: true });
 watch(()=>state.isLogin, (val: boolean)=>{
   if(val) MenusList();
 },{ deep: true });
 watch(()=>menus.value.list, (val: Array<any>)=>{
+  // 导航
+  const tmp: any = Storage.getItem('MenusTabs') || '';
+  tabs.value.list = tmp?JSON.parse(tmp):[];
+  // 最近访问
+  const menusTmp: any = Storage.getItem('MenusTmp');
+  menus.value.tmpList.value = menusTmp?JSON.parse(menusTmp):[];
+  // 点击当前页
   let title: string = '';
-  const url: string = proxy.$route.path;
+  const url: string = route.path;
   for(let v1 of val) {
     if(!v1.children) continue;
     for(let v2 of v1.children) {
@@ -253,19 +259,13 @@ watch(()=>menus.value.list, (val: Array<any>)=>{
       }
     }
   }
-  // 点击当前页
   if(title && url) MenusClick(title, url);
 },{ deep: true });
 
 /* 加载完成 */
 onMounted(()=>{
-  // 菜单导航
+  // 左侧菜单
   is_menus.value = Storage.getItem('IsMenus')?true:false;
-  const tmp: any = Storage.getItem('MenusTabs') || '';
-  tabs.value.list = tmp?JSON.parse(tmp):[];
-  // 最近访问
-  const menusTmp: any = Storage.getItem('MenusTmp');
-  menus.value.tmpList.value = menusTmp?JSON.parse(menusTmp):[];
 });
 
 /* 获取菜单 */
@@ -385,14 +385,14 @@ const MenusClick = (name: string, url: string, isShow: boolean=false): void => {
   }
   // 最近访问
   if(data) {
-    let menus: any = Storage.getItem('MenusTmp');
-    menus = menus?JSON.parse(menus):[];
-    for(let i in menus) {
-      if(menus[i].url==url || parseInt(i)>=9) menus.splice(i, 1);
+    tmp = Storage.getItem('MenusTmp');
+    tmp = tmp?JSON.parse(tmp):[];
+    for(let i in tmp) {
+      if(tmp[i].url==url || parseInt(i)>=9) tmp.splice(i, 1);
     }
-    menus.unshift(data);
-    menus.tmpList = menus;
-    Storage.setItem('MenusTmp', JSON.stringify(menus));
+    tmp.unshift(data);
+    menus.value.tmpList = tmp;
+    Storage.setItem('MenusTmp', JSON.stringify(tmp));
   }
   // 动作菜单
   if(action) {

@@ -80,38 +80,38 @@ const selectClick = (val: string, level: string, pos: Array<number>, isStatus: b
   // 层级
   if(level=='1') {
     // 选中
-    d1 = listData[pos[0]];
+    d1 = listData.value[pos[0]];
     d1.checked = val?true:false;
     // 勾选下级
     if(d1.children) nextChecked(d1.children, val?true:false);
   } else if(level=='2') {
     // 选中
-    d2 = listData[pos[0]].children[pos[1]];
+    d2 = listData.value[pos[0]].children[pos[1]];
     d2.checked = val?true:false;
     // 勾选下级
     if(d2.children) nextChecked(d2.children, val?true:false);
     // 勾选上级
-    d1 = listData[pos[0]];
+    d1 = listData.value[pos[0]];
     prevChecked(d1);
   } else if(level=='3') {
     // 选中
-    d3 = listData[pos[0]].children[pos[1]].children[pos[2]];
+    d3 = listData.value[pos[0]].children[pos[1]].children[pos[2]];
     d3.checked = val?true:false;
     // 勾选下级
     if(d3.children) nextChecked(d3.children, val?true:false);
     // 勾选上级
-    d1 = listData[pos[0]];
-    d2 = listData[pos[0]].children[pos[1]];
+    d1 = listData.value[pos[0]];
+    d2 = listData.value[pos[0]].children[pos[1]];
     prevChecked(d2);
     prevChecked(d1);
   } else if(level=='4') {
     // 选中、
-    d4 = listData[pos[0]].children[pos[1]].children[pos[2]].children[pos[3]];
+    d4 = listData.value[pos[0]].children[pos[1]].children[pos[2]].children[pos[3]];
     d4.checked = val?true:false;
     // 勾选上级
-    d1 = listData[pos[0]];
-    d2 = listData[pos[0]].children[pos[1]];
-    d3 = listData[pos[0]].children[pos[1]].children[pos[2]];
+    d1 = listData.value[pos[0]];
+    d2 = listData.value[pos[0]].children[pos[1]];
+    d3 = listData.value[pos[0]].children[pos[1]].children[pos[2]];
     prevChecked(d3);
     prevChecked(d2);
     prevChecked(d1);
@@ -121,7 +121,7 @@ const selectClick = (val: string, level: string, pos: Array<number>, isStatus: b
   // 事件
   if(isStatus) {
     emit('update:value', getData());
-    emit('data', listData);
+    emit('data', listData.value);
   }
 }
 /* 勾选上级 */

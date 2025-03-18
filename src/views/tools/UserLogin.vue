@@ -10,7 +10,16 @@
           </ul>
         </div>
       </div>
-      <div class="wm-login_bg" :class="loginBG" v-show="loginShow"></div>
+      <div class="wm-login_bg bg0" :style="{visibility:loginBG=='bg0'?'inherit':'hidden', opacity:loginBG=='bg0'?'1':'0'}"></div>
+      <div class="wm-login_bg bg1" :style="{visibility:loginBG=='bg1'?'inherit':'hidden', opacity:loginBG=='bg1'?'1':'0'}"></div>
+      <div class="wm-login_bg bg2" :style="{visibility:loginBG=='bg2'?'inherit':'hidden', opacity:loginBG=='bg2'?'1':'0'}"></div>
+      <div class="wm-login_bg bg3" :style="{visibility:loginBG=='bg3'?'inherit':'hidden', opacity:loginBG=='bg3'?'1':'0'}"></div>
+      <div class="wm-login_bg bg4" :style="{visibility:loginBG=='bg4'?'inherit':'hidden', opacity:loginBG=='bg4'?'1':'0'}"></div>
+      <div class="wm-login_bg bg5" :style="{visibility:loginBG=='bg5'?'inherit':'hidden', opacity:loginBG=='bg5'?'1':'0'}"></div>
+      <div class="wm-login_bg bg6" :style="{visibility:loginBG=='bg6'?'inherit':'hidden', opacity:loginBG=='bg6'?'1':'0'}"></div>
+      <div class="wm-login_bg bg7" :style="{visibility:loginBG=='bg7'?'inherit':'hidden', opacity:loginBG=='bg7'?'1':'0'}"></div>
+      <div class="wm-login_bg bg8" :style="{visibility:loginBG=='bg8'?'inherit':'hidden', opacity:loginBG=='bg8'?'1':'0'}"></div>
+      <div class="wm-login_bg bg9" :style="{visibility:loginBG=='bg9'?'inherit':'hidden', opacity:loginBG=='bg9'?'1':'0'}"></div>
       <div class="wm-login_mask"></div>
       <div class="wm-login_body">
         <div class="wm-login_ct">
@@ -55,8 +64,8 @@
 .wm-langs_list li:hover{color: @Minor;}
 .wm-langs_list .active{color: @Minor;}
 /* Login */
-.wm-login_popup{position: fixed; z-index: 9999; width: calc(100% + 1px); height: calc(100% + 1px); left: 0; top: 0;}
-.wm-login_bg{position: absolute; z-index: 1; width: 100%; height: 100%; background-color: #323438; background-position: center; background-size: cover; background-repeat: no-repeat; transition: All 3s ease-in-out;}
+.wm-login_popup{position: fixed; z-index: 9999; width: calc(100% + 1px); height: calc(100% + 1px); left: 0; top: 0; background-color: #323438;}
+.wm-login_bg{position: absolute; z-index: 1; width: 100%; height: 100%; background-position: center; background-size: cover; background-repeat: no-repeat; transition: All 5s ease-in-out;}
 .wm-login_bg.bg0{background-image: url('/bg/0.jpg');}
 .wm-login_bg.bg1{background-image: url('/bg/1.jpg');}
 .wm-login_bg.bg2{background-image: url('/bg/2.jpg');}
@@ -183,9 +192,6 @@ const getLangs = (langs: any): void => {
   state.lang = langs.value;
   if(langs.value=='en_US') state.langs = en_US();
   else if(langs.value=='zh_CN') state.langs = zh_CN();
-  // 清理菜单
-  Storage.removeItem('MenusTabs');
-  Storage.removeItem('MenusTmp');
 }
 
 /* 切换语言 */

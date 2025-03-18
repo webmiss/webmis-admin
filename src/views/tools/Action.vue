@@ -25,6 +25,7 @@ const state = store.state;
 /* 是否有权限 */
 const isAction = (action: string): boolean => {
   const list: Array<any> = state.menusAction;
+  if(list.length==0) return false;
   for(let v of list) {
     if(v['action']==action) return true;
   }

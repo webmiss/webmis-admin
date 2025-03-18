@@ -191,7 +191,7 @@
 </style>
 
 <script setup lang="ts">
-import { ref, watch, onMounted } from 'vue';
+import { ref, watch, onMounted, nextTick } from 'vue';
 import { useStore } from 'vuex';
 import { useRoute, useRouter } from 'vue-router'; 
 /* UI组件 */
@@ -274,7 +274,7 @@ const MenusList = (): void => {
   Request.Post('sys_menus/get_menus_perm', {token: state.token}, (res:any)=>{
     const {code, msg, data}: any = res.data;
     if(code==0) {
-      menus.value.list = data;
+      nextTick(()=>{ menus.value.list = data; });
     }else{
       Ui.Toast(msg);
     }

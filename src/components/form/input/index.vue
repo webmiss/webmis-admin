@@ -62,6 +62,7 @@
         height: height,
         padding: padding,
         lineHeight: lineHeight,
+        textAlign: inputAlign as any,
       }"
       @input="input"
       @focus="inputFocus"
@@ -107,6 +108,7 @@ const props = defineProps({
   disabled: {type: Boolean, default: false},          // 是否禁用
   readonly: {type: Boolean, default: false},          // 是否读写
   clearable: {type: Boolean, default: false},         // 一键清空
+  inputAlign: {type: String, default: ''},            // 对齐方式: left、center、right
   icon: {type: String, default: ''},                  // 图标
   iconSize: {type: String, default: '20px'},          // 图标-大小
   iconAlign: {type: String, default: 'left'},         // 图标-对齐方式: left、right

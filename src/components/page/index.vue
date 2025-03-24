@@ -4,7 +4,7 @@
       <div v-html="state.langs.page_total(total, pageNum, num)"></div>
       <div class="wm-page_num flex">
         <!-- Prev -->
-        <span class="disabled" v-if="pageNum<=1" :style="{borderRadius: radius}"><i class="ui ui_arrow_left"></i></span>
+        <span class="disabled" v-if="total==0 || pageNum<=1" :style="{borderRadius: radius}"><i class="ui ui_arrow_left"></i></span>
         <span v-else @click="toPage(1)" :style="{borderRadius: radius}"><i class="ui ui_arrow_left"></i></span>
         <!-- Page -->
          <template v-if="total>0">
@@ -14,13 +14,13 @@
         </template>
         <span v-else class="disabled">{{ total }}</span>
         <!-- Next -->
-        <span class="disabled" v-if="pageNum>=num" :style="{borderRadius: radius}"><i class="ui ui_arrow_right"></i></span>
+        <span class="disabled" v-if="total==0 || pageNum>=num" :style="{borderRadius: radius}"><i class="ui ui_arrow_right"></i></span>
         <span v-else @click="toPage(num)" :style="{borderRadius: radius}"><i class="ui ui_arrow_right"></i></span>
       </div>
       <div class="wm-page_tools flex">
         <span>{{ state.langs.page_limit }}</span>
         <span>
-          <wmSelect :value="selectVal" @update:value="selectChange($event)" width="80px" height="28px" position="top" :options="limitList"></wmSelect>
+          <wmSelect :value="[limit]" @update:value="selectChange($event)" width="80px" height="28px" position="top" :options="limitList"></wmSelect>
         </span>
       </div>
     </div>
@@ -71,18 +71,16 @@ const state = store.state;
 const num = ref(0);
 const pageNum = ref(0);
 const list = ref(<any>[]);
-const selectVal = ref(<any>[]);
 
 /* 监听 */
 watch(()=>props.total, (val: number)=>{
-  if(val) init();
+  if(val>=0) init();
 },{ deep: true });
 
 /* 初始化 */
 const init = (): void => {
   // 默认值
   pageNum.value = props.page;
-  selectVal.value = [props.limit];
   // 分页
   num.value = Math.ceil(props.total/props.limit);
   toPage(props.page, false);

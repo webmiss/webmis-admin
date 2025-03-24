@@ -138,11 +138,17 @@
 </style>
 
 <script setup lang="ts">
-import { ref, onActivated } from 'vue';
+import { ref, onMounted, onActivated } from 'vue';
+import { useStore } from 'vuex';
 /* UI组件 */
 import wmChartPie from '../components/chart/pie.vue';
 import wmChartInterval from '../components/chart/interval.vue';
 
+// 是否加载
+const isLoad = ref(false);
+// 状态
+const store = useStore();
+const state = store.state;
 // 全屏
 const full_screen = ref(false);
 // 图表
@@ -150,9 +156,12 @@ const chartActive = ref('c1');
 const chartPie = ref([{}]);
 const chartInterval = ref([]);
 
+/* 创建完成 */
+onMounted(()=>{
+  if(state.token) isLoad.value = true;
+});
 onActivated(()=>{
-  chickChart('c2');
-  loadData();
+  if(isLoad) loadData();
 });
 
 /* 加载数据 */

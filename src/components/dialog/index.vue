@@ -1,12 +1,12 @@
 <template>
   <div class="wm-dialog_body" :style="{visibility:cfg.show?'inherit':'hidden'}">
     <wmPopup ref="Popup" v-model:show="cfg.show" width="100%" height="100%" position="top" :time="600">
-      <div class="wm-dialog_bg" @click="close(isClose)"></div>
+      <div class="wm-dialog_bg" @click="close(bgClose?true:false)"></div>
       <div class="wm-dialog" :style="{width:width, maxWidth:maxWidth, height:height, borderRadius:borderRadius}">
         <!-- Title -->
         <div class="wm-dialog_title">
           <span>{{ title }}</span>
-          <div class="wm-dialog_close" @click="close(true)"></div>
+          <div class="wm-dialog_close" @click="close(bgClose?true:false)"></div>
         </div>
         <!-- Top -->
         <div class="wm-dialog_top" v-if="top" :style="{height:top+'', lineHeight:top+''}">
@@ -56,7 +56,7 @@ const props = defineProps({
   borderRadius: {type: String, default: '4px'},   // 圆角
   top: {type: String, default: '0px'},            // 顶部高度
   bottom: {type: String, default: ''},            // 底部高度
-  isClose: {type: Boolean, default: false},       // 点击关闭
+  bgClose: {type: Boolean, default: true},        // 点击关闭
 });
 const emit = defineEmits(['update:show', 'close']);
 // 变量
@@ -91,4 +91,3 @@ const close = (isTrue: Boolean): void => {
 }
 
 </script>
-  

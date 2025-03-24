@@ -191,7 +191,7 @@
 </style>
 
 <script setup lang="ts">
-import { ref, watch, onMounted, nextTick } from 'vue';
+import { ref, watch, onMounted } from 'vue';
 import { useStore } from 'vuex';
 import { useRoute, useRouter } from 'vue-router'; 
 /* UI组件 */
@@ -232,34 +232,9 @@ const menus = ref({
 const is_menus = ref(true);
 
 /* 监听 */
-watch(()=>route, (to: any, from: any)=>{
-  tabs.value.active = to.path;
-},{ deep: true });
-watch(()=>state.isLogin, (val: boolean)=>{
-  if(val) MenusList();
-},{ deep: true });
-watch(()=>menus.value.list, (val: Array<any>)=>{
-  // 导航
-  const tmp: any = Storage.getItem('MenusTabs') || '';
-  tabs.value.list = tmp?JSON.parse(tmp):[];
-  // 最近访问
-  const menusTmp: any = Storage.getItem('MenusTmp');
-  menus.value.tmpList.value = menusTmp?JSON.parse(menusTmp):[];
-  // 点击当前页
-  let title: string = '';
-  const url: string = route.path;
-  for(let v1 of val) {
-    if(!v1.children) continue;
-    for(let v2 of v1.children) {
-      if(!v2.children) continue;
-      for(let v3 of v2.children) {
-        if(v3.value.url==url) {
-          title=v3.langs[state.lang]; break;
-        }
-      }
-    }
-  }
-  if(title && url) MenusClick(title, url);
+watch([()=>state.isLogin, ()=>route.path], ([isLogin, path])=>{
+  tabs.value.active = path;
+  if(isLogin) MenusList();
 },{ deep: true });
 
 /* 加载完成 */
@@ -274,7 +249,27 @@ const MenusList = (): void => {
   Request.Post('sys_menus/get_menus_perm', {token: state.token}, (res:any)=>{
     const {code, msg, data}: any = res.data;
     if(code==0) {
-      nextTick(()=>{ menus.value.list = data; });
+      menus.value.list = data;
+      // 导航
+      const tmp: any = Storage.getItem('MenusTabs') || '';
+      tabs.value.list = tmp?JSON.parse(tmp):[];
+      // 最近访问
+      const menusTmp: any = Storage.getItem('MenusTmp');
+      menus.value.tmpList.value = menusTmp?JSON.parse(menusTmp):[];
+      // 点击当前页
+      let title: string = '';
+      for(let v1 of data) {
+        if(!v1.children) continue;
+        for(let v2 of v1.children) {
+          if(!v2.children) continue;
+          for(let v3 of v2.children) {
+            if(v3.value.url==tabs.value.active) {
+              title=v3.langs[state.lang]; break;
+            }
+          }
+        }
+      }
+      if(title && tabs.value.active) MenusClick(title, tabs.value.active);
     }else{
       Ui.Toast(msg);
     }
@@ -399,7 +394,9 @@ const MenusClick = (name: string, url: string, isShow: boolean=false): void => {
     state.menusAction = action;
   }
   // 跳转
-  router.push({path: url});
+  const resolved = router.resolve(url);
+  if(resolved.matched.length>0) router.push({path: url});
+  else return Ui.Toast('该页面不存在!');
 }
 /* 菜单-关闭 */
 const MenusClose = (url: string): void => {

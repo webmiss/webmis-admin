@@ -38,7 +38,7 @@
 .wm-dialog_close::before{transform: rotate(-45deg); margin-left: -16%;}
 .wm-dialog_top{position: relative; overflow: hidden;}
 .wm-dialog_content{width: 100%; height: 100%;}
-.wm-dialog_bottom{position: relative; padding: 4px 0 16px; text-align: center;}
+.wm-dialog_bottom{position: relative; padding: 16px 0; text-align: center;}
 </style>
   
 <script setup lang="ts">

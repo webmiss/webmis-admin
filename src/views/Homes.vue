@@ -138,7 +138,7 @@
 </style>
 
 <script setup lang="ts">
-import { ref, onMounted, onActivated } from 'vue';
+import { ref, watch, onMounted, onActivated } from 'vue';
 import { useStore } from 'vuex';
 /* UI组件 */
 import wmChartPie from '../components/chart/pie.vue';
@@ -155,6 +155,11 @@ const full_screen = ref(false);
 const chartActive = ref('c1');
 const chartPie = ref([{}]);
 const chartInterval = ref([]);
+
+/* 监听 */
+watch(()=>state.isLogin, (isLogin: boolean)=>{
+  if(isLogin) loadData();
+},{ deep: true });
 
 /* 创建完成 */
 onMounted(()=>{

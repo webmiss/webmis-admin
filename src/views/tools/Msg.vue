@@ -219,18 +219,18 @@ const msgShow = ref(false);
 const more = ref(false);
 const sea = ref({show: false, key:'', list:<any>[]});
 // 发送内容
-let sendGid: number | string = '';
-let sendFid: number | string = '';
-let sendTitle: string = '';
-let sendContent: string = '';
-let sendImg: string = '';
-let sendList: Array<any> = [];
+let sendGid = ref<number | string>('');
+let sendFid = ref<number | string>('');
+let sendTitle = ref('');
+let sendContent = ref('');
+let sendImg = ref('');
+let sendList = ref(<any>[]);
 // Socket
 let socketCfg: any = new Env().socket();
-let socketInterval: any = null;
-let heartbeatInterval: any = null;
+let socketInterval = ref<any>(null);
+let heartbeatInterval = ref<any>(null);
 // 消息间隔时间
-let msgTime: number = 600;
+let msgTime = ref(600);
 
 /* 监听 */
 watch(()=>props.show, (val: boolean)=>{
@@ -289,7 +289,7 @@ const msgData = (d: any): void =>{
   for(let v of state.msg.list) {
     if(v.gid==d.gid && v.fid==d.fid) {
       // 是否新信息
-      if(d.gid==sendGid && d.fid==sendFid) {
+      if(d.gid==sendGid.value && d.fid==sendFid.value) {
         v.num += 0;
         row.is_new = false;
         msgRead([row.id]);
@@ -347,12 +347,12 @@ const msgList = (): void => {
 }
 /* 消息-点击 */
 const msgClick = (row: any): void => {
-  sendGid = row.gid;
-  sendFid = row.fid;
-  sendTitle = row.title;
-  sendContent = row.sendContent || '';
-  sendImg = row.img;
-  sendList = row.list;
+  sendGid.value = row.gid;
+  sendFid.value = row.fid;
+  sendTitle.value = row.title;
+  sendContent.value = row.sendContent || '';
+  sendImg.value = row.img;
+  sendList.value = row.list;
   msgToBottom();
   // 标记阅读
   let ids: any = [];
@@ -367,9 +367,9 @@ const msgClick = (row: any): void => {
 }
 /* 消息-内容 */
 const msgInput = (): void => {
-  if(!sendTitle) return;
+  if(!sendTitle.value) return;
   for(let v of state.msg.list) {
-    if(v.gid==sendGid && v.fid==sendFid) v.sendContent = sendContent;
+    if(v.gid==sendGid.value && v.fid==sendFid.value) v.sendContent = sendContent.value;
   }
 }
 /* 消息-调转顶部 */
@@ -386,34 +386,32 @@ const msgToBottom = (): void => {
 }
 /* 消息-换行 */
 const msgCtrlEnter = (): void => {
-  sendContent += '\n';
+  sendContent.value += '\n';
 }
 /* 消息-发送 */
 const msgSend = (event: any=null): void => {
   // 禁止换行
   if(event) event.preventDefault();
-  if(!sendTitle || sendContent.trim()=='') return ;
+  if(!sendTitle.value || sendContent.value.trim()=='') return ;
   // 参数
-  const gid: number|string = sendGid;
-  const fid: number|string = sendFid;
   const uid: number|string = state.uinfo.uid;
   const title: string = state.uinfo.nickname;
-  const content: string = sendContent.trim();
+  const content: string = sendContent.value.trim();
   const img: string = state.uinfo.img;
   // 追加
   let row: any = {};
   for(let v of state.msg.list) {
-    if(v.gid==gid && v.fid==fid) {
+    if(v.gid==sendGid.value && v.fid==sendFid.value) {
       row = v;
       // 时间
       const time: string = Time.Date('Y-m-d H:i:s');
-      const tmp: any = {gid:gid, fid:uid, uid:fid, format:0, is_new: false, title:title, time:time, img:img, content:content, loading: gid==1?false:true};
+      const tmp: any = {gid:sendGid.value, fid:uid, uid:sendFid.value, format:0, is_new: false, title:title, time:time, img:img, content:content, loading: sendGid.value==1?false:true};
       // 预发送
       v.time = time;
       v.content = content;
       v.list.push(tmp);
       // 系统消息
-      if(gid==1) v.list.push({gid:gid, fid:0, uid:uid, format:0, is_new: false, title:title, time:time, img:sendImg, content:'...', loading: true});
+      if(sendGid.value==1) v.list.push({gid:sendGid.value, fid:0, uid:uid, format:0, is_new: false, title:title, time:time, img:sendImg.value, content:'...', loading: true});
       // 调换位置
       msgToTop(v);
       // 调转底部
@@ -424,8 +422,8 @@ const msgSend = (event: any=null): void => {
   // 数据
   const msg: string = JSON.stringify({
     type: 'msg',
-    gid: gid,
-    uid: fid || uid,
+    gid: sendGid.value,
+    uid: sendFid.value || uid,
     data: {
       format: 0,
       title: state.uinfo.name,
@@ -436,7 +434,7 @@ const msgSend = (event: any=null): void => {
   // 发送
   state.socket.send(msg);
   // 清空内容
-  sendContent = '';
+  sendContent.value = '';
   row.sendContent = '';
 }
 /* 消息-标记阅读 */
@@ -464,7 +462,7 @@ const getMsgDate = (d: string): string => {
 /* 时间转换 */
 const getMsgTime = (t1: string, t2: string): string => {
   if(t1==t2) return Time.FormatTime(t1);
-  return Time.TimeSize(t1, t2)>msgTime?Time.FormatTime(t2):'';
+  return Time.TimeSize(t1, t2)>msgTime.value?Time.FormatTime(t2):'';
 }
 
 /* 关闭 */
@@ -480,8 +478,8 @@ const router = (d: any): void => {
 
 /* Socket-启动 */
 const socketStart = (): void => {
-  clearInterval(socketInterval);
-  socketInterval = setInterval(()=>{
+  clearInterval(socketInterval.value);
+  socketInterval.value = setInterval(()=>{
     if(state.isLogin && (!state.socket || state.socket.readyState!=1)) socketOpen();
   }, socketCfg.time);
 }
@@ -493,8 +491,8 @@ const socketOpen = (): void => {
   // 链接
   state.socket.onopen = ()=>{
     // 心跳包
-    clearInterval(heartbeatInterval);
-    heartbeatInterval = setInterval(()=>{
+    clearInterval(heartbeatInterval.value);
+    heartbeatInterval.value = setInterval(()=>{
       try{
         state.socket.send(JSON.stringify({type:''}));
       }catch(e){

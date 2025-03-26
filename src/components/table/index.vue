@@ -154,8 +154,13 @@ const partially = (): void => {
 /* 获取数据 */
 const getData = (): Array<any> => {
   let data: Array<any> = [];
+  let tmp: Object = {};
   for(let i in props.options) {
-    if(props.options[i].checked) data.push(props.options[i]);
+    if(props.options[i].checked){
+      tmp = props.options[i];
+      tmp['index'] = parseInt(i);
+      data.push(tmp);
+    }
   }
   return data;
 }

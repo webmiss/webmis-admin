@@ -232,13 +232,19 @@ const menus = ref({
 const is_menus = ref(true);
 
 /* 监听 */
-watch([()=>state.isLogin, ()=>route.path], ([isLogin, path])=>{
-  tabs.value.active = path;
+watch(()=>state.isLogin, (isLogin: boolean)=>{
   if(isLogin) MenusList();
+},{ deep: true });
+watch(()=>route.path, (path: string)=>{
+  if(state.isLogin) {
+    tabs.value.active = path;
+    MenusList();
+  }
 },{ deep: true });
 
 /* 加载完成 */
 onMounted(()=>{
+  tabs.value.active = route.path;
   // 左侧菜单
   is_menus.value = Storage.getItem('IsMenus')?true:false;
 });

@@ -216,8 +216,7 @@ const state = store.state;
 const route = useRoute();
 const router = useRouter();
 // 配置
-const cfg: any = new Env();
-const title: string = cfg.title+' '+cfg.version;
+const title: string = Env.title+' '+Env.version;
 const copy: string = Env.copy;
 // 用户、消息
 const uinfoShow = ref(false);

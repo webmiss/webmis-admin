@@ -12,9 +12,9 @@
       width: width,
       height: height,
       padding: paddingY+' '+paddingX,
-      overflowX: overflowX,
-      overflowY: overflowY,
-      textAlign: textAlign,
+      overflowX: overflowX as any,
+      overflowY: overflowY as any,
+      textAlign: textAlign as any,
     }">
       <slot></slot>
     </div>

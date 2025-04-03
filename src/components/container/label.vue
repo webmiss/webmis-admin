@@ -1,13 +1,13 @@
 <template>
   <span class="wm-label_body">
     <span class="wm-label_ct" :style="{
-      color: color,
-      backgroundColor: bgColor,
-      fontSize: fontSize,
-      padding: padding,
-      zoom: zoom,
+      color: options.color || color,
+      backgroundColor: options.bgColor || bgColor,
+      fontSize: options.fontSize || fontSize,
+      padding: options.padding || padding,
+      zoom: options.zoom || zoom,
     }">
-      {{ content }}
+      {{ options.content?options.content:content }}
     </span>
     <slot></slot>
   </span>
@@ -22,6 +22,7 @@
 
 /* 参数 */
 const props = defineProps({
+  options: {type: Object, default: {}},          // 配置
   content: {type: String, default: ''},          // 内容
   color: {type: String, default: '#FFF'},        // 文本颜色
   bgColor: {type: String, default: '#000'},      // 背景颜色

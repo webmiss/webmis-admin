@@ -120,7 +120,7 @@ const state = store.state;
 const router = useRouter();
 const copy = Env.copy;
 /* 变量 */
-const animationTime = ref(10000);       // 动画切换间隔时间
+const animationTime = ref(20000);       // 动画切换间隔时间
 const verifyTokenTime = ref(30000);     // Token验证间隔时间
 // 语言
 const langs = ref(<any>{});
@@ -206,7 +206,7 @@ const changeLangs = (v: any): void => {
 /* 背景动画 */
 const bgAnimation = (): void => {
   const n: number = Math.floor(Math.random()*10);
-  loginBG.value = !loginBG.value?bg_class[0]:bg_class[n];
+  loginBG.value = bg_class[n];
 }
 
 /* 用户-显示 */

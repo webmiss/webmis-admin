@@ -1,6 +1,6 @@
 <template>
   <!-- Login -->
-  <Login ref="userLogin" :show="true"></Login>
+  <Login ref="userLogin" :show="!state.isLogin"></Login>
   <!-- Uinfo -->
   <uinfo v-model:show="state.isUinfo" v-if="state.isLogin"></uinfo>
   <!-- Passwd -->

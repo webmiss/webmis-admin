@@ -81,7 +81,7 @@ import { useStore } from 'vuex';
 
 /* 参数 */
 const props = defineProps({
-    value: {type: Array<any>, default: ''},                 // 默认值
+    value: {type: Array<any>, default: []},                 // 默认值
     options: {type: Array<any>, default: []},               // 数据: [{label:'一级菜单', value:'m1', children: []}]
     multiple: {type: Boolean, default: false},              // 是否多选
     width: {type: String, default: '100%'},                 // 宽
@@ -248,7 +248,7 @@ const clear = (): void => {
   k3.value= -1;
   k4.value= -1;
   labelName.value = '';
-  emit('update:value', '');
+  if(props.value.length>0) emit('update:value', []);
   selectClear(listData.value);
 }
 

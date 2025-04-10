@@ -127,7 +127,7 @@ onMounted(()=>{
   isLoad.value = true;
 });
 onActivated(()=>{
-  if(isLoad) loadData();
+  if(isLoad && state.isLogin) loadData();
 });
 
 /* 加载数据 */

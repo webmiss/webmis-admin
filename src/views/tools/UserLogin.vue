@@ -349,17 +349,20 @@ const verifyToken = (uinfo: boolean=false): void => {
 
 /* 退出登录 */
 const logout = (): void => {
-  // 缓存信息
-  state.isLogin = false;
-  state.token = '';
-  Storage.removeItem('token');
-  Storage.removeItem('uinfo');
-  Storage.removeItem('MenusTabs');
-  Storage.removeItem('MenusTmp');
-  // 激活密码框
-  nextTick(()=>{
-    if(proxy.$refs.loginUname) proxy.$refs.loginUname.focus();
-    else proxy.$refs.loginPasswd.focus();
+  // 跳转首页
+  router.push({path: '/'}).then(()=>{
+    // 缓存信息
+    state.isLogin = false;
+    state.token = '';
+    Storage.removeItem('token');
+    Storage.removeItem('uinfo');
+    Storage.removeItem('MenusTabs');
+    Storage.removeItem('MenusTmp');
+    // 激活密码框
+    setTimeout(()=>{
+      if(proxy.$refs.loginUname) proxy.$refs.loginUname.focus();
+      else proxy.$refs.loginPasswd.focus();
+    }, 3000);
   });
 }
 

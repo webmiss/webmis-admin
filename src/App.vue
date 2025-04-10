@@ -454,7 +454,6 @@ const logout = (): void => {
   uinfoShow.value = false;
   menusShow.value = false;
   // 清除
-  MenusClick(state.langs.home, '/');
   tabs.value.list = [];
   userLogin.value.logout();
 }

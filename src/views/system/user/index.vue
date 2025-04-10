@@ -193,7 +193,7 @@ onMounted(()=>{
   if(state.token) getSelect();
 });
 onActivated(()=>{
-  if(isLoad) loadData();
+  if(isLoad && state.isLogin) loadData();
 });
 
 /* 加载数据 */

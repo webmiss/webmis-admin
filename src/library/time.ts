@@ -49,7 +49,7 @@ export default class Time {
       case 'year': d.setFullYear(d.getFullYear()+n); break;
     }
     let now: number = d.getTime();
-    now = Math.round(now/1000)+n;
+    now = Math.round(now/1000);
     return now>0?now:0;
   }
 

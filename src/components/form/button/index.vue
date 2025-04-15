@@ -75,7 +75,7 @@ const props = defineProps({
   width: {type: String, default: 'max-content'},    // 宽度
   height: {type: String, default: '32px'},          // 高度
   padding: {type: String, default: '0 16px'},       // 内部间距
-  margin: {type: String, default: '0 auto'},        // 外部间距
+  margin: {type: String, default: '0 4px'},         // 外部间距
   radius: {type: String, default: '4px'},           // 圆角
   fontSize: {type: String, default: '14px'},        // 文字大小
   icon: {type: String, default: ''},                // 图标

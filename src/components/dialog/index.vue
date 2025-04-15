@@ -17,7 +17,7 @@
           <slot></slot>
         </div>
         <!-- Bottom -->
-        <div class="wm-dialog_bottom" v-if="bottom" :style="{height:bottom+'', lineHeight:bottom+''}">
+        <div class="wm-dialog_bottom flex_center" v-if="bottom" :style="{height:bottom+'', lineHeight:bottom+''}">
           <slot name="bottom"></slot>
         </div>
       </div>

@@ -29,7 +29,7 @@
         <template v-if="options.length>0">
           <tr v-for="(d, k) in options" :key="k">
             <td class="checkbox" v-if="isCheckbox" :class="d.checked?'active':''">
-              <wm-checkBox :options="{label:'', value:d.id, checked:d.checked, disabled:d.disabled}" margin="0" @checkbox="Checkbox"></wm-checkBox>
+              <wmCheckBox :options="{label:'', value:d.id, checked:d.checked, disabled:d.disabled}" margin="0" @checkbox="Checkbox"></wmCheckBox>
             </td>
             <template v-if="typeof d.display=='undefined' || d.display">
               <td v-for="(v, n) in columns" :key="n" :title="d[v.index]" :class="[d.checked?'active':'', v.class?v.class: '']">
@@ -100,8 +100,6 @@ const checkbox = ref({checked: false, partially: false, value:'', data:{label:''
 watch(()=>props.columns, (val: Array<any>)=>{
   partially();
 },{ deep: true });
-
-
 
 /* 全选、全不选 */
 const checkboxAll = (status: boolean | string = ''): void => {
@@ -175,9 +173,6 @@ const OrderBy = (k:number, index: string, order: string): void => {
 }
 
 /* 外部函数 */
-defineExpose({  
-  checkboxAll,
-  getData,
-});
+defineExpose({checkboxAll, getData});
 
 </script>

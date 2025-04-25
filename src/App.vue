@@ -125,7 +125,7 @@
     <div class="app_right" :style="{width: is_menus?'calc(100% - 240px)':'calc(100% - 56px)'}">
       <!-- UserInfo -->
       <div class="app_user_info_body" :style="{visibility:uinfoShow&&state.isLogin?'inherit':'hidden'}">
-        <wmPopup height="100%" width="320px" v-model:show="uinfoShow" position="right" bgColor="#FFF">
+        <wmPopup height="100%" width="360px" v-model:show="uinfoShow" position="right" bgColor="#FFF">
           <div class="app_user_info scrollbar">
             <div class="img" :style="{backgroundImage: state.uinfo.img?'url('+state.uinfo.img+')':'none'}" @click="userUpImg()">
               <div class="img_load">{{ state.langs.uinfo_img }}</div>

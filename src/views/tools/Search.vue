@@ -65,7 +65,7 @@ const props = defineProps({
   keys: {type: String, default: ''},                  // 关键字
   columns: {type: Array<any>, default: []},           // 字段: [{label: '名称', value: '', slot: 'name'}]
   title: {type: String, default: ''},                 // 标题
-  width: {type: String, default: '360px'},            // 宽
+  width: {type: String, default: '420px'},            // 宽
   placeholder: {type: String, default: ''},           // 提示
 });
 const emit = defineEmits(['update:show', 'update:keys', 'search', 'reset']);

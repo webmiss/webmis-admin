@@ -8,7 +8,7 @@
       <span class="label" v-if="options.label">{{ options.label }}</span>
     </li>
     <li v-else :style="{margin:margin, padding:padding}" @click.stop="clickCheckbox()">
-      <span class="checkbox" :class="options.checked||value==options.value?'active':''">
+      <span class="checkbox" :class="options.checked||value===options.value?'active':''">
         <i class="partially" v-if="partially"></i>
         <i class="all" v-else></i>
       </span>

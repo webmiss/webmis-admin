@@ -3,11 +3,17 @@
     <template v-for="(v,k) in list" :key="k">
       <li class="flex disabled" v-if="v.disabled">
         <span class="checked"></span>
-        <span class="label">{{ v.label }}</span>
+        <span class="label">
+          <span v-if="v.label">{{ v.label }}</span>
+          <slot v-else></slot>
+        </span>
       </li>
       <li class="enabled" v-else @click.stop="clickRadio(k)">
         <span class="checked" :class="v.value==value?'active':''"></span>
-        <span class="label">{{ v.label }}</span>
+        <span class="label">
+          <span v-if="v.label">{{ v.label }}</span>
+          <slot v-else></slot>
+        </span>
       </li>
     </template>
   </ul>

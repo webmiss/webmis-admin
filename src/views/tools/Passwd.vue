@@ -35,9 +35,9 @@
       </wmTableForm>
     </wmMain>
     <template #bottom>
-      <wmButton effect="plain" type="primary" padding="0 32px" v-if="!form.is_vcode" @click="submitPwd()">{{ state.langs.next }}</wmButton>
-      <wmButton effect="plain" type="primary" padding="0 32px" v-if="form.is_vcode" @click="form.is_vcode=false">{{ state.langs.prev }}</wmButton>
-      <wmButton effect="dark" type="primary" padding="0 32px"  v-if="form.is_vcode" @click="submitPwd()">{{ state.langs.confirm }}</wmButton>
+      <wmButton effect="plain" type="primary" height="40px" padding="0 32px" v-if="!form.is_vcode" @click="submitPwd()">{{ state.langs.next }}</wmButton>
+      <wmButton effect="plain" type="primary" height="40px" padding="0 32px" v-if="form.is_vcode" @click="form.is_vcode=false">{{ state.langs.prev }}</wmButton>
+      <wmButton effect="dark" type="primary" height="40px" padding="0 32px"  v-if="form.is_vcode" @click="submitPwd()">{{ state.langs.confirm }}</wmButton>
     </template>
   </wmDialog>
 </template>

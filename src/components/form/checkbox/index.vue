@@ -5,27 +5,23 @@
         <i class="partially" v-if="partially"></i>
         <i class="all" v-else></i>
       </span>
-      <span class="label">
-        <span v-if="options.label">{{ options.label }}</span>
-        <slot v-else></slot>
-      </span>
+      <span v-if="options.label" class="label">{{ options.label }}</span>
+      <slot v-else></slot>
     </li>
     <li v-else :style="{margin:margin, padding:padding}" @click.stop="clickCheckbox()">
       <span class="checkbox" :class="options.checked||value==options.value?'active':''">
         <i class="partially" v-if="partially"></i>
         <i class="all" v-else></i>
       </span>
-      <span class="label">
-        <span v-if="options.label">{{ options.label }}</span>
-        <slot v-else></slot>
-      </span>
+      <span v-if="options.label" class="label">{{ options.label }}</span>
+      <slot v-else></slot>
     </li>
   </ul>
 </template>
 
 <style lang="less" scoped>
 .wm-checkbox{white-space: nowrap; height: 24px; line-height: 24px; font-weight: normal; color: rgba(0,0,0,0.7);}
-.wm-checkbox li{display: inline-block; cursor: pointer; padding: 5px; margin: 0 4px; line-height: 16px;}
+.wm-checkbox li{display: flex; justify-content: flex-start; align-items: center; cursor: pointer; padding: 5px; margin: 0 4px; line-height: 16px;}
 .wm-checkbox li:hover .checkbox{border-color: @Primary;}
 .wm-checkbox li:hover .label{color: #000;}
 .wm-checkbox span{float: left;}
@@ -48,7 +44,7 @@ const props = defineProps({
   value: {type: String, default: ''},           // 默认值
   options: {type: Object, default: {}},         // 数据: {label:'北京市', value:1, disabled: true}
   partially: {type: Boolean, default: false},   // 局部选中
-  margin: {type: String, default: '0 4px'},     // 外部间距
+  margin: {type: String, default: '4px 4px'},   // 外部间距
   padding: {type: String, default: '4px'},      // 内部间距
 });
 const emit = defineEmits(['update:value', 'checkbox']);

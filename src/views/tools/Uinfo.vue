@@ -38,7 +38,7 @@
       </wmTableForm>
     </wmMain>
     <template #bottom>
-      <wmButton padding="0 32px" @click="subUinfo()">{{ state.langs.confirm }}</wmButton>
+      <wmButton height="40px" padding="0 32px" @click="subUinfo()">{{ state.langs.confirm }}</wmButton>
     </template>
   </wmDialog>
 </template>

@@ -35,10 +35,10 @@ import wmPopup from '../popup/index.vue';
 /* 参数 */
 const props = defineProps({
   show: {type: Boolean, default: false},                  // 是否显示
-  title: {type: String, default: '标题'},                 // 高
+  title: {type: String, default: ''},                     // 标题
   height: {type: String, default: 'calc(100% - 90px)'},   // 高
   position: {type: String, default: 'bottom'},            // 位置: let、right、top、bottom
-  bgColor: {type: String, default: '#F2F2F2'},            // 背景颜色
+  bgColor: {type: String, default: '#F8F8F8'},            // 背景颜色
   bottomHeight: {type: String, default: '50px'},          // 底部高度
 });
 const emit = defineEmits(['update:show', 'close']);

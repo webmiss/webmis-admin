@@ -176,4 +176,15 @@ export default class Files {
     window.URL.revokeObjectURL(blobURL);
   }
 
+  /* 分享 */
+  public static async ShareFile(url: string, filename: string='down.txt', title: string='', text: string=''): Promise<boolean> {
+    const file = await fetch(url+filename).then(r => r.blob()).then(blob => new File([blob], filename));
+    if(navigator.canShare?.({ files: [file] })) {
+      navigator.share({files: [file], title: title, text: text}).catch(console.error);
+      return true;
+    } else {
+      return false;
+    }
+  }
+
 }

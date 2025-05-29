@@ -66,9 +66,9 @@ export default class Request {
   /* 公共配置 */
   private static getConfig(config: any): AxiosRequestConfig {
     const cfg: AxiosRequestConfig = <AxiosRequestConfig>{
-      headers: config&&config.headers?config.headers:Request.cfg.request.headers,
-      responseType: config&&config.responseType?config.responseType:Request.cfg.request.responseType,
-      timeout: Request.cfg.request.timeout,
+      headers: config&&config.headers?config.headers:Request.cfg.request().headers,
+      responseType: config&&config.responseType?config.responseType:Request.cfg.request().responseType,
+      timeout: Request.cfg.request().timeout,
     };
     return cfg;
   }

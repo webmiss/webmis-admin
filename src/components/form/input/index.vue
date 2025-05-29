@@ -44,6 +44,7 @@
         height: height,
         padding: padding,
         lineHeight: lineHeight,
+        borderRadius: radius,
       }"
       @input="input"
       @focus="inputFocus"
@@ -62,6 +63,7 @@
         height: height,
         padding: padding,
         lineHeight: lineHeight,
+        borderRadius: radius,
         textAlign: inputAlign as any,
       }"
       @input="input"
@@ -96,7 +98,7 @@ import { useStore } from 'vuex';
 
 /* 参数 */
 const props = defineProps({
-  value: {default: ''},                               // 值
+  value: {type: [String, Number], default: ''},       // 值
   type: {type: String, default: 'text'},              // 类型: textarea, text
   width: {type: String, default: '100%'},             // 宽
   height: {type: String, default: '40px'},            // 高
@@ -105,6 +107,7 @@ const props = defineProps({
   maxlength: {type: String, default: ''},             // 最大长度
   padding: {type: String, default: '0 10px'},         // 内部间距
   margin: {type: String, default: '0'},               // 外部间距
+  radius: {type: String, default: '4px'},             // 圆角
   disabled: {type: Boolean, default: false},          // 是否禁用
   readonly: {type: Boolean, default: false},          // 是否读写
   clearable: {type: Boolean, default: false},         // 一键清空

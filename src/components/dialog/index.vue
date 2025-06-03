@@ -1,7 +1,7 @@
 <template>
   <div class="wm-dialog_body" :style="{visibility:cfg.show?'inherit':'hidden'}">
     <wmPopup ref="Popup" v-model:show="cfg.show" width="100%" height="100%" position="top" :time="600">
-      <div class="wm-dialog_bg" @click="close(bgClose?true:false)"></div>
+      <div class="wm-dialog_bg" @click="bgClose?close(true):''"></div>
       <div class="wm-dialog" :style="{width:width, maxWidth:maxWidth, height:height, borderRadius:borderRadius}">
         <!-- Title -->
         <div class="wm-dialog_title">

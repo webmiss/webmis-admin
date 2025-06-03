@@ -40,6 +40,7 @@
       :maxlength="maxlength"
       :disabled="disabled"
       :readonly="readonly"
+      :enterkeyhint="enterkeyhint"
       :style="{
         height: height,
         padding: padding,
@@ -59,6 +60,7 @@
       :maxlength="maxlength"
       :disabled="disabled"
       :readonly="readonly"
+      :enterkeyhint="enterkeyhint"
       :style="{
         height: height,
         padding: padding,
@@ -125,6 +127,7 @@ const props = defineProps({
   textBgcolor: {type: String, default: ''},           // 文本-背景颜色
   textRadius: {type: String, default: '0 4px 4px 0'}, // 文本-圆角
   textLen: {type: Boolean, default: false},           // 是否统计长度
+  enterkeyhint: {type: String, default: 'enter'},     // 键盘动作: enter、go、search、send、next、done
 });
 const { proxy } = getCurrentInstance() as any ;
 const emit = defineEmits(['update:value', 'update:focus', 'update:blur', 'iconClick', 'textClick', 'clear', 'close']);

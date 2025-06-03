@@ -20,7 +20,7 @@
 </template>
 
 <style lang="less" scoped>
-.wm-checkbox{white-space: nowrap; height: 24px; line-height: 24px; font-weight: normal; color: rgba(0,0,0,0.7);}
+.wm-checkbox{display: flex; white-space: nowrap; height: 24px; line-height: 24px; font-weight: normal; color: rgba(0,0,0,0.7);}
 .wm-checkbox li{display: flex; justify-content: flex-start; align-items: center; cursor: pointer; padding: 5px; margin: 0 4px; line-height: 16px;}
 .wm-checkbox li:hover .checkbox{border-color: @Primary;}
 .wm-checkbox li:hover .label{color: #000;}

@@ -1,6 +1,8 @@
 <template>
   <!-- Login -->
   <Login ref="userLogin" :show="!state.isLogin"></Login>
+  <!-- Socket -->
+  <Socket v-if="state.isLogin"></Socket>
   <!-- Uinfo -->
   <uinfo v-model:show="state.isUinfo" v-if="state.isLogin"></uinfo>
   <!-- Passwd -->
@@ -204,6 +206,7 @@ import Files from './library/files';
 import wmPopup from './components/popup/index.vue';
 /* Tools */
 import Login from './views/tools/UserLogin.vue';
+import Socket from './views/tools/Socket.vue';
 import Uinfo from './views/tools/Uinfo.vue';
 import Passwd from './views/tools/Passwd.vue';
 import Msg from './views/tools/Msg.vue';

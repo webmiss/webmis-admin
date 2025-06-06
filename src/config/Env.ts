@@ -2,6 +2,7 @@
 export default class Env {
 
   public static mode: string = '';              // 模式: 开发(dev)
+  public static isSocket: boolean = true;       // Socket开启
   public static title: string = 'WebMIS';       // 项目名称
   public static version: string = '3.0.0';      // 版本
   public static lang: string = 'zh_CN'          // 语言
@@ -37,7 +38,7 @@ export default class Env {
   /* Socket */
   public socket(): object {
     return {
-      start: true,              // 启动
+      start: Env.isSocket,      // 启动
       server: this.socketUrl,   // 服务器
       channel: 'admin',         // 频道
       time: 3000,               // 重连时间

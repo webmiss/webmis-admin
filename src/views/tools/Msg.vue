@@ -24,7 +24,7 @@
           <!-- Search -->
           <div class="wm-msg_search">
             <i class="sea ui ui_search"></i>
-            <input type="text" v-model="sea.key" :placeholder="state.langs.msg_seach" @input="search()" />
+            <input type="text" v-model="sea.key" :placeholder="state.langs.msg_seach" @input="serachVal()" />
             <div class="user_list_body" v-if="sea.show">
               <div class="arrow arrow_up"></div>
               <ul class="user_list">
@@ -42,8 +42,8 @@
           </div>
           <!-- List -->
           <div class="wm-msg_left_ct scrollbar">
-            <ul class="wm-msg_list" v-if="state.msg.list.length>0">
-              <li class="flex" v-for="(v,k) in state.msg.list" :key="k" :class="v.gid==sendGid&&v.fid==sendFid?'active':''" @click="msgClick(v)">
+            <ul class="wm-msg_list" v-if="state.msg.group.length>0">
+              <li class="flex" v-for="v in state.msg.group" :class="v.gid===state.msg.gid && v.fid===state.msg.fid ?'active':''" @click="msgClick(v)">
                 <div class="img" :style="{backgroundImage: v.img?'url('+v.img+')':''}">
                   <span class="redNum" v-if="v.num>0">{{ v.num }}</span>
                   <i class="ui ui_image" v-if="!v.img"></i>
@@ -53,7 +53,8 @@
                     <div class="title nowrap">{{ v.title }}</div>
                     <div class="time">{{ getMsgDate(v.time) }}</div>
                   </div>
-                  <div class="text nowrap">{{ v.content }}</div>
+                  <div class="text nowrap" v-if="v.sendContent">[草稿]{{ v.sendContent }}</div>
+                  <div class="text nowrap" v-else>{{ v.content }}</div>
                 </div>
               </li>
             </ul>
@@ -63,13 +64,14 @@
         </div>
         <div class="wm-msg_right">
           <!-- Title -->
-          <div class="wm-msg_title">{{ sendTitle}}</div>
+          <div class="wm-msg_title">{{ state.msg.title }}</div>
           <!-- Msg -->
           <div class="wm-msg_ct scrollbar">
-            <template v-if="sendList.length>0">
-              <template v-for="(v,k) in sendList" :key="k">
+            <template v-if="state.msg.list.length>0">
+              <div class="history" v-if="!scroll.finished" @click="onLoad()">历史消息</div>
+              <template v-for="(v,k) in state.msg.list" :key="k">
                 <!-- Time -->
-                <div class="time">{{ getMsgTime(sendList[k-1]?sendList[k-1].time:v.time, v.time) }}</div>
+                <div class="time">{{ getMsgTime(state.msg.list[k-1]?state.msg.list[k-1].time:v.time, v.time) }}</div>
                 <!-- Msg Left -->
                 <div class="msg_left flex_left" v-if="v.fid!=state.uinfo.uid">
                   <div class="img" :style="{backgroundImage: v.img?'url('+v.img+')':''}">
@@ -106,7 +108,7 @@
           <ul class="wm-msg_tools flex_flex">
             <li><i class="ui ui_folder"></i></li>
           </ul>
-          <textarea class="wm-msg_area scrollbar" v-model="sendContent" @input="msgInput()" @keyup.ctrl.enter="msgCtrlEnter()" @keydown.enter.exact="msgSend"></textarea>
+          <textarea class="wm-msg_area scrollbar" v-model="msgData.content" @input="msgInput()" @keyup.ctrl.enter="msgCtrlEnter()" @keydown.enter.exact="msgSend" :disabled="!state.msg.title" enterkeyhint="send"></textarea>
           <div class="wm-msg_action flex_right">
             <span>按下Ctrl+Enter换行</span>
             <wmButton padding="0 32px" @click="msgSend()">发送</wmButton>
@@ -165,6 +167,8 @@
 .wm-msg_title{height: 56px; line-height: 56px; text-align: center; font-size: 16px;}
 /* Msg */
 .wm-msg_ct{scroll-behavior: smooth; position: relative; overflow-y: scroll; padding: 10px 16px; height: calc(100% - 20px - 56px - 40px - 84px - 54px); border: #DADCDF 1px solid; border-left: none; border-right: none;}
+.wm-msg_ct .history{cursor: pointer; line-height: 48px; text-align: center; color: @Primary; border-radius: 8px;}
+.wm-msg_ct .history:hover{background-color: #FFF;}
 .wm-msg_ct .time{line-height: 48px; color: #999; text-align: center; font-size: 12px;}
 .wm-msg_ct .img{width: 48px; height: 48px; line-height: 48px; text-align: center; background-color: #FFF; border-radius: 4px;}
 .wm-msg_ct .img i{font-size: 24px; color: @BaseBorder;}
@@ -198,7 +202,6 @@
 import { ref, onMounted, watch, nextTick } from 'vue';
 import { useStore } from 'vuex';
 /* UI组件 */
-import Env from '../../config/Env';
 import Ui from '../../library/ui';
 import Request from '../../library/request';
 import Time from '../../library/time';
@@ -215,54 +218,55 @@ const emit = defineEmits(['update:show']);
 const store = useStore();
 const state = store.state;
 // 变量
+const scroll = ref({refreshing: false, loading: false, finished: false});
 const msgShow = ref(false);
 const more = ref(false);
-const sea = ref({show: false, key:'', list:<any>[]});
-// 发送内容
-let sendGid = ref<number | string>('');
-let sendFid = ref<number | string>('');
-let sendTitle = ref('');
-let sendContent = ref('');
-let sendImg = ref('');
-let sendList = ref(<any>[]);
-// Socket
-let socketCfg: any = new Env().socket();
-let socketInterval = ref<any>(null);
-let heartbeatInterval = ref<any>(null);
-// 消息间隔时间
+// 消息
+const sea = ref({show:false, key:'', list:<any>[]});
+const page = ref({num:1, limit:12});
+const msgData = ref({content:''});
+// 间隔时间
 let msgTime = ref(600);
 
 /* 监听 */
 watch(()=>props.show, (val: boolean)=>{
   msgShow.value = val;
+  if(val) loadData();
+},{ deep: true });
+/* 监听-新信息 */
+watch(()=>state.msg.readId, (val: number)=>{
+  if(val>0) msgRead([val], false);
+  msgToBottom();
+  state.msg.readId = 0;
 },{ deep: true });
 
 /* 创建完成 */
 onMounted(()=>{
-  if(socketCfg.start) socketStart();
+  loadData();
 });
 
 /* 搜索 */
-const search = (): void => {
+const serachVal = (): void => {
   const key: string = sea.value.key.trim();
-  if(key.length>0) {
+  if(key) {
     sea.value.show = true;
     Request.Post('msg/sea?lang='+state.lang, {
       token: state.token,
       key: key,
     }, (res:any)=>{
       const d = res.data;
-      if(d.code==0) sea.value.list=d.data;
+      if(d.code==0) sea.value.list = d.data;
     });
   } else {
     sea.value.show = false;
+    sea.value.list = [];
   }
 }
 /* 搜索-点击 */
 const searchClick = (row: any): void => {
   sea.value.show = false;
   // 已存在
-  for(let v of state.msg.list) {
+  for(let v of state.msg.group) {
     if(v.gid==row.gid && v.fid==row.fid) {
       return msgClick(v);
     }
@@ -275,180 +279,174 @@ const searchClick = (row: any): void => {
     content: '',
     img: row.img,
     time: Time.Date('Y-m-d H:i:s'),
-    list: [],
+    num: 0,
   }
-  state.msg.list.unshift(data);
+  state.msg.group.unshift(data);
   return msgClick(data);
 }
 
-/* 消息 */
-const msgData = (d: any): void =>{
-  if(d.code!=0) return Ui.Toast(d.msg);
-  const row: any = d.data;
-  // 已存在列表
-  for(let v of state.msg.list) {
-    if(v.gid==d.gid && v.fid==d.fid) {
-      // 是否新信息
-      if(d.gid==sendGid.value && d.fid==sendFid.value) {
-        v.num += 0;
-        row.is_new = false;
-        msgRead([row.id]);
-      } else {
-        v.num += 1;
-        row.is_new = true;
-        state.msg.num += 1;
-      }
-      // 是否提示
-      if(!msgShow) Ui.Toast(row.content);
-      // 加载中
-      let n: number = v.list.length;
-      if(n>0 && v.list[n-1].loading) v.list.splice(n-1, 1);
-      // 追加数据
-      v.time = row.time;
-      v.content = row.content;
-      v.img = row.img;
-      v.list.push(row);
-      // 调换位置
-      msgToTop(v);
-      // 调转底部
-      msgToBottom();
-      return ;
-    }
+/* 下拉刷新 */
+const onRefresh = (): void => {
+  page.value.num = 1;
+  scroll.value.finished = false;
+  state.msg.list = [];
+  loadMsg();
+}
+/* 上拉加载 */
+const onLoad = (): void => {
+  if(scroll.value.finished ) {
+    if(state.msg.list.length>0) return Ui.Toast('已无历史消息!');
+    return;
   }
-  // 追加
-  row.is_new = true;
-  const data: any = {
-    type: d.type,
-    gid: row.gid,
-    fid: row.fid,
-    num: 1,
-    time: row.time,
-    title: row.title,
-    content: row.content,
-    img: row.img,
-    list: [row],
-  }
-  state.msg.num += 1;
-  state.msg.list.unshift(data);
-  Ui.Toast(row.content);
+  page.value.num += 1;
+  loadMsg();
 }
 
-/* 消息-列表 */
-const msgList = (): void => {
-  Request.Post('msg/list?lang='+state.lang, {token: state.token}, (res:any)=>{
-    const {code, data}: any = res.data;
-    if(code==0) {
-      if(state.msg.list.length==0) state.msg.list = data.list;
+/* 加载数据 */
+const loadData = (): void => {
+  // 请求
+  Request.Post('msg/list', {token: state.token}, (res:any)=>{
+    const {code, msg, data} = res.data;
+    if(code===0) {
+      state.msg.group = data.list;
       state.msg.num = data.num;
     }
-  },()=>{
-    Ui.Toast(state.langs.network_err);
   });
 }
+/* 加载消息 */
+const loadMsg = (): void => {
+  // 请求
+  Request.Post('msg/show', {
+    token: state.token,
+    gid: state.msg.gid,
+    fid: state.msg.fid,
+    page: page.value.num,
+    limit: page.value.limit,
+  }, (res:any)=>{
+    const {code, msg, data} = res.data;
+    if(code===0) {
+      // 数据
+      if(data.length>0) {
+        state.msg.list.unshift(...data);
+        // 标记已读
+        let ids: Array<any> = [];
+        for(let v of data) {
+          if(v.is_new) ids.push(v.id);
+        }
+        msgRead(ids);
+      } else {
+        scroll.value.finished = true;
+        onLoad();
+      }
+      // 底部
+      if(page.value.num===1) msgToBottom();
+    } else return Ui.Toast(msg);
+  });
+}
+
 /* 消息-点击 */
 const msgClick = (row: any): void => {
-  sendGid.value = row.gid;
-  sendFid.value = row.fid;
-  sendTitle.value = row.title;
-  sendContent.value = row.sendContent || '';
-  sendImg.value = row.img;
-  sendList.value = row.list;
-  msgToBottom();
-  // 标记阅读
-  let ids: any = [];
-  for(let v of row.list) {
-    if(v.is_new){
-        v.is_new = false;
-        ids.push(v.id);
-      }
-  }
-  row.num = 0;
-  msgRead(ids);
-}
-/* 消息-内容 */
-const msgInput = (): void => {
-  if(!sendTitle.value) return;
-  for(let v of state.msg.list) {
-    if(v.gid==sendGid.value && v.fid==sendFid.value) v.sendContent = sendContent.value;
-  }
-}
-/* 消息-调转顶部 */
-const msgToTop = (v: any) => {
-  let k: number = state.msg.list.indexOf(v);
-  state.msg.list.unshift(v);
-  state.msg.list.splice(k+1, 1);
+  state.msg.gid = row.gid;
+  state.msg.fid = row.fid;
+  state.msg.title = row.title;
+  state.msg.img = row.img;
+  // 缓存
+  msgData.value.content = row.sendContent || '';
+  // 刷新
+  onRefresh();
 }
 /* 消息-调转底部 */
 const msgToBottom = (): void => {
   nextTick(()=>{
     document.querySelector('#msgBottom')?.scrollIntoView(true);
+    state.msg.isBottom = false;
   });
+}
+/* 消息-标记已读 */
+const msgRead = (ids: any=[], isNum: boolean=true): void => {
+  if(ids.length==0) return;
+  // 扣减数量
+  if(isNum) {
+    state.msg.num -= ids.length;
+    for(let v of state.msg.group) {
+      if(v.gid===state.msg.gid && v.fid===state.msg.fid) {
+        v.num -= ids.length;
+        if(v.num<0) v.num = 0;
+      }
+    }
+  }
+  // 提交
+  Request.Post('msg/read?lang='+state.lang, {
+    token: state.token,
+    ids: ids,
+  }, (res:any)=>{
+    const {code, msg}: any = res.data;
+    if(code!==0) Ui.Toast(msg);
+  });
+}
+
+/* 消息-输入 */
+const msgInput = (): void => {
+  // 缓存消息
+  for(let v of state.msg.group) {
+    if(v.gid===state.msg.gid && v.fid===state.msg.fid) v.sendContent = msgData.value.content;
+  }
 }
 /* 消息-换行 */
 const msgCtrlEnter = (): void => {
-  sendContent.value += '\n';
+  msgData.value.content += '\n';
 }
 /* 消息-发送 */
 const msgSend = (event: any=null): void => {
   // 禁止换行
   if(event) event.preventDefault();
-  if(!sendTitle.value || sendContent.value.trim()=='') return ;
-  // 参数
-  const uid: number|string = state.uinfo.uid;
-  const title: string = state.uinfo.nickname;
-  const content: string = sendContent.value.trim();
-  const img: string = state.uinfo.img;
-  // 追加
-  let row: any = {};
-  for(let v of state.msg.list) {
-    if(v.gid==sendGid.value && v.fid==sendFid.value) {
-      row = v;
-      // 时间
-      const time: string = Time.Date('Y-m-d H:i:s');
-      const tmp: any = {gid:sendGid.value, fid:uid, uid:sendFid.value, format:0, is_new: false, title:title, time:time, img:img, content:content, loading: sendGid.value==1?false:true};
-      // 预发送
-      v.time = time;
-      v.content = content;
-      v.list.push(tmp);
-      // 系统消息
-      if(sendGid.value==1) v.list.push({gid:sendGid.value, fid:0, uid:uid, format:0, is_new: false, title:title, time:time, img:sendImg.value, content:'...', loading: true});
-      // 调换位置
-      msgToTop(v);
-      // 调转底部
-      msgToBottom();
-      break;
-    }
-  }
-  // 数据
-  const msg: string = JSON.stringify({
-    type: 'msg',
-    gid: sendGid.value,
-    uid: sendFid.value || uid,
-    data: {
-      format: 0,
-      title: state.uinfo.name,
-      content: content,
-      img: img,
-    }
-  });
+  if(!state.msg.title || msgData.value.content.trim()=='') return ;
+  // 本地
+  const loading: number = Time.TimeMicro();
+  const time: string = Time.Date('Y-m-d H:i:s');
+  const data: any = {
+    gid: state.msg.gid,
+    fid: parseInt(state.uinfo.uid),
+    uid: state.msg.fid,
+    is_new: false,
+    time: time,
+    format: 0,
+    title: state.uinfo.name,
+    img: state.uinfo.img,
+    content: msgData.value.content.trim(),
+    loading: loading,
+  };
+  state.msg.list.push(data);
   // 发送
-  state.socket.send(msg);
-  // 清空内容
-  sendContent.value = '';
-  row.sendContent = '';
+  if(state.socket) {
+    data['type'] = 'msg';
+    state.socket.send(JSON.stringify(data));
+  }
+  // AI助理
+  if(state.msg.gid===1) {
+    state.msg.list.push({
+      fid: state.msg.fid,
+      uid: 0,
+      format: 0,
+      is_new: false,
+      time: time,
+      title: state.msg.title,
+      img: state.msg.img,
+      content: '...',
+      loading: loading+1,
+    });
+  }
+  // 底部
+  msgToBottom();
+  // 清空
+  msgClear();
 }
-/* 消息-标记阅读 */
-const msgRead = (ids: any=[]): void => {
-  if(ids.length==0) return;
-  Request.Post('msg/read?lang='+state.lang, {
-    token: state.token,
-    ids: ids,
-  }, (res:any)=>{
-    const {code}: any = res.data;
-    if(code==0) {
-      state.msg.num -= ids.length;
-    }
-  });
+/* 消息-清空 */
+const msgClear = (): void => {
+  msgData.value.content = '';
+  for(let v of state.msg.group) {
+    if(v.gid===state.msg.gid && v.fid===state.msg.fid) v.sendContent = '';
+  }
 }
 
 /* 日期转换 */
@@ -461,63 +459,13 @@ const getMsgDate = (d: string): string => {
 }
 /* 时间转换 */
 const getMsgTime = (t1: string, t2: string): string => {
-  if(t1==t2) return Time.FormatTime(t1);
+  if(t1===t2 || !t1) return Time.FormatTime(t2);
   return Time.TimeSize(t1, t2)>msgTime.value?Time.FormatTime(t2):'';
 }
 
 /* 关闭 */
 const close = (): void => {
   emit('update:show', false);
-}
-
-/* 路由 */
-const router = (d: any): void => {
-  if(d.type=='msg') msgData(d);
-  if(d.type=='online') console.log('online', d);
-}
-
-/* Socket-启动 */
-const socketStart = (): void => {
-  clearInterval(socketInterval.value);
-  socketInterval.value = setInterval(()=>{
-    if(state.isLogin && (!state.socket || state.socket.readyState!=1)) socketOpen();
-  }, socketCfg.time);
-}
-
-/* Socket-连接 */
-const socketOpen = (): void => {
-  const url: string = socketCfg.server+'?lang='+state.lang+'&channel='+socketCfg.channel+'&token='+state.token;
-  state.socket = new WebSocket(url);
-  // 链接
-  state.socket.onopen = ()=>{
-    // 心跳包
-    clearInterval(heartbeatInterval.value);
-    heartbeatInterval.value = setInterval(()=>{
-      try{
-        state.socket.send(JSON.stringify({type:''}));
-      }catch(e){
-        socketClose();
-      }
-    }, socketCfg.heartbeat);
-    // 消息列表
-    msgList();
-  }
-  // 接收
-  state.socket.onmessage = (res: any)=>{
-    const d = JSON.parse(res.data);
-    router(d);
-  }
-  // 关闭
-  state.socket.onclose = ()=>{
-    socketClose();
-  }
-}
-
-/* Socket-关闭 */
-const socketClose = (): void => {
-  if(!state.socket) return;
-  state.socket.close();
-  state.socket = null;
 }
 
 </script>

@@ -11,7 +11,7 @@ export default createStore({
     uinfo: {},           // 用户信息
     menusAction: [],     // 动作菜单
     socket: null,        // Socket
-    msg: {gid:'', fid:'', num: 0, list: []},     // Msg
+    msg: {gid: '', fid: '', title: '', img: '', num: 0, group: [], list: [], readId: 0},    // Msg
   },
   getters: {
   },

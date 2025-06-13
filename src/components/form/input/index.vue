@@ -95,7 +95,7 @@
 </style>
 
 <script setup lang="ts">
-import { ref, watch, getCurrentInstance } from 'vue';
+import { ref, watch, getCurrentInstance, nextTick } from 'vue';
 import { useStore } from 'vuex';
 
 /* 参数 */
@@ -173,5 +173,19 @@ const Clear = (): void => {
     proxy.$refs.wmInput.focus();
   }
 }
+
+/* 激活输入框 */
+const focus = (): void => {
+  nextTick(()=>{
+    if(props.type=='textarea') {
+      proxy.$refs.wmTextarea.focus();
+    }else{
+      proxy.$refs.wmInput.focus();
+    }
+  });
+}
+
+/* 外部函数 */
+defineExpose({focus});
 
 </script>

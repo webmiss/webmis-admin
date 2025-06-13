@@ -2,11 +2,16 @@
 /* 请求 */
 export default class Time {
 
-  /* 当前时间戳 */
+  /* 时间戳 */
   public static Time(data: string=''): number {
     const t: any = data?new Date(data):new Date();
     const now: number = t.getTime();
     return Math.round(now/1000);
+  }
+  /* 时间戳-毫秒 */
+  public static TimeMicro(data: string=''): number {
+    const t: any = data?new Date(data):new Date();
+    return t.getTime();
   }
 
   /* 日期格式 */
@@ -130,6 +135,58 @@ export default class Time {
   public static FormatHourDecode(time: string): number {
     let arr: any = time.split(':')
     return parseInt(arr[0])*3600 + parseInt(arr[1])*60 + parseInt(arr[2]);
+  }
+
+  /* 获取指定月份天数 */
+  public static daysInMonth(year: number, month: number): number {
+    return new Date(year, month + 1, 0).getDate();
+  }
+
+  /* 获取日期范围 */
+  public static daysLimit(start: string, end: string): Array<any> {
+    let data: Array<any> = [];
+    const arr1 = start.split('-');
+    const arr2 = end.split('-');
+    if(arr1.length!==3 || arr2.length!==3) return data;
+    // 年、月、日
+    const y1 = parseInt(arr1[0]);
+    const m1 = parseInt(arr1[1]);
+    const d1 = parseInt(arr1[2]);
+    const y2 = parseInt(arr2[0]);
+    const m2 = parseInt(arr2[1]);
+    const d2 = parseInt(arr2[2]);
+    // 数据
+    let n: number, s: string, obj: any;
+    let c1: Array<any>=[], c2: Array<any>=[];
+    for(let y=y2; y>=y1; y--) {
+      c1 = [];
+      for(let m=1; m<=12; m++) {
+        // 限制
+        if(y===y1 && m<m1) continue;
+        if(y===y2 && m>m2) continue;
+        c2 = [];
+        n = this.daysInMonth(y, m);
+        for(let d=1; d<=n; d++) {
+          // 限制
+          if(m===m1 && d<d1) continue;
+          if(m===m2 && d>d2) continue;
+          // 日
+          s = d<10?'0'+d:d.toString();
+          c2.push({label: s+'日', value: s});
+        }
+        // 月
+        s = m<10?'0'+m:m.toString();
+        obj = {label: s+'月', value: s};
+        if(c2.length) obj.children = c2;
+        c1.push(obj);
+      }
+      // 年
+      s = y.toString();
+      obj = {label: s+'年', value: s};
+      if(c1.length) obj.children = c1;
+      data.push(obj);
+    }
+    return data;
   }
 
 }

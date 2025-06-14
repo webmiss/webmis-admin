@@ -98,13 +98,13 @@ const upFile = (k: number, fileObj: any): void => {
   Request.Post('sys_file/upload?lang='+state.lang, form, (res: any)=>{
     const {code}: any = res.data;
     if(code==0) {
-      listData[k].state = 1;
+      listData.value[k].state = 1;
       emit('submit', true);
     } else {
-      listData[k].state = 2;
+      listData.value[k].state = 2;
       emit('submit', false);
     }
-  }, ()=>{
+  }, (e:any)=>{
     Ui.Toast(langs.network_err);
   }, {
     headers: {
@@ -112,7 +112,7 @@ const upFile = (k: number, fileObj: any): void => {
     },
     onUploadProgress:(event: any) => {
       let complete = (event.loaded/event.total*100 | 0);
-      listData[k].load = complete;
+      listData.value[k].load = complete;
     }
   });
 }

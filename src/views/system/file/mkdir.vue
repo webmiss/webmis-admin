@@ -11,7 +11,7 @@
       </wmTableForm>
     </wmMain>
     <template #bottom>
-      <wmDialog height="40px" padding="0 32px" @click="submit()">{{ langs.confirm }}</wmDialog>
+      <wmButton height="40px" padding="0 32px" @click="submit()">{{ langs.confirm }}</wmButton>
     </template>
   </wmDialog>
 </template>
@@ -28,6 +28,7 @@ import Request from '../../../library/request';
 /* 组件 */
 import wmMain from '../../../components/container/main.vue';
 import wmDialog from '../../../components/dialog/index.vue';
+import wmButton from '../../../components/form/button/index.vue';
 import wmTableForm from '../../../components/table/form.vue';
 import wmInput from '../../../components/form/input/index.vue';
 

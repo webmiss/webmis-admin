@@ -33,11 +33,9 @@ const router = (d: any): void => {
 /* 消息 */
 const msgData = (d: any): void => {
   if(d.code!=0) return Ui.Toast(d.msg);
-  // 加载状态(我的)
-  let isUser: boolean = false;
+  // 内容
   for(let v of state.msg.list) {
     if(v.loading===d.loading) {
-      isUser = true;
       v.id = d.id;
       v.loading = 0;
       v.content = d.content;
@@ -45,34 +43,26 @@ const msgData = (d: any): void => {
       break;
     }
   }
-  // 追加消息(他人)
-  let num: number = 0;
-  if(!isUser) {
-    if(state.msg.gid===d.gid && state.msg.fid===d.fid) {
-      const id: number = d.id || 0;
-      state.msg.list.push({id: id, gid: d.gid, fid: d.fid, uid: d.uid, is_new: false, time: d.time, format: d.format, title: d.title, img: d.img, content: d.content});
-      if(id) state.msg.readId = id;
-    } else {
-      num = 1;
-      state.msg.num += 1;
-    }
-  }
   // 列表
-  const data: any = {gid: d.gid, fid: d.fid, num: d.num, time: d.time, format: d.format, title: d.title, img: d.img, content: d.content};
+  const id: number = d.id || 0;
+  const gid: number = d.gid;
+  const fid: number = d.fid==state.uinfo.uid?d.uid:d.fid;
+  const data: any = {gid: gid, fid: fid, num: 1, time: d.time, format: d.format, title: d.title, img: d.img, content: d.content};
   for(let k in state.msg.group) {
-    // 自己
-    if(state.msg.group[k].gid==d.gid && state.msg.group[k].fid==d.uid) {
-      data.fid = d.uid;
+    if(state.msg.group[k].gid===gid && state.msg.group[k].fid===fid) {
       data.title = state.msg.group[k].title;
       data.img = state.msg.group[k].img;
-      data.num = state.msg.group[k].num + num;
+      // 数量
+      if(gid===state.msg.gid && fid===state.msg.fid) {
+        data.num = 0;
+        if(id) state.msg.readId = id;
+      } else {
+        data.num = state.msg.group[k].num + 1;
+        state.msg.num += 1;
+      }
       // 移除
       state.msg.group.splice(k, 1);
-    } else if(state.msg.group[k].gid==d.gid && state.msg.group[k].fid==d.uid) {
-      // 他人
-      data.num = state.msg.group[k].num + num;
-      // 移除
-      state.msg.group.splice(k, 1);
+      break;
     }
   }
   // 追加

@@ -355,4 +355,7 @@ const isExist = (name: string): boolean => {
   return false;
 }
 
+/* 外部函数 */
+defineExpose({isExist});
+
 </script>

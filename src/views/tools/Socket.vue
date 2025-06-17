@@ -34,12 +34,14 @@ const router = (d: any): void => {
 const msgData = (d: any): void => {
   if(d.code!=0) return Ui.Toast(d.msg);
   // 内容
+  let isNull: boolean = false;
   for(let v of state.msg.list) {
     if(v.loading===d.loading) {
       v.id = d.id;
       v.loading = 0;
       v.content = d.content;
       state.msg.readId = -1;
+      isNull = true;
       break;
     }
   }
@@ -55,6 +57,9 @@ const msgData = (d: any): void => {
       // 数量
       if(gid===state.msg.gid && fid===state.msg.fid) {
         data.num = 0;
+        // 追加
+        d.loading = 0;
+        if(!isNull) state.msg.list.push(d);
         if(id) state.msg.readId = id;
       } else {
         data.num = state.msg.group[k].num + 1;

@@ -9,6 +9,14 @@ export default class Format {
     return Math.floor(price*m)/m;
   }
 
+  /* 文件大小 */
+  public static FileSize(size: number): string {
+    if(size/1024 < 1024) return (size/1024).toFixed(2)+'KB';
+    else if(size/1024/1024 < 1024) return (size/1024/1024).toFixed(2)+'MB';
+    else if(size/1024/1024/1024 < 1024) return (size/1024/1024/1024).toFixed(2)+'GB';
+    else return (size/1024/1024/1024/1024).toFixed(2)+'TB';
+  }
+
   /* 金额 */
   public static priceEncode(price: string, fixed: number=2): string {
     return (parseFloat(price).toFixed(fixed).toString()).replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g,'$&,');

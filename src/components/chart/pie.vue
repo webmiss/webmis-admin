@@ -21,6 +21,7 @@ const props = defineProps({
   height: {type: Number, default: 0},           // 高度
   html: {type: String, default: ''},            // Html
 });
+/* 公共 */
 const { proxy } = getCurrentInstance() as any ;
 
 /* 监听 */

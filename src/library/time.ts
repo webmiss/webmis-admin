@@ -39,11 +39,11 @@ export default class Time {
   }
 
   /* 时间戳转换 */
-  public static StrToTime(datetime: string=''): number {
+  public static StrToTime(datetime: string='', baseTimes: string=''): number {
     const arr = datetime.split(' ');
     const n: number = parseInt(arr[0]);
     let d: any = new Date(datetime);
-    if(d=='Invalid Date') d = new Date();
+    if(d=='Invalid Date') d = baseTimes?new Date(baseTimes):new Date();
     switch (arr[1]) {
       case 'second': d.setSeconds(d.getSeconds()+n); break;
       case 'minute': d.setMinutes(d.getMinutes()+n); break;

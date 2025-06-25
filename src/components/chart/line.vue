@@ -1,9 +1,9 @@
 <template>
-  <div ref="chart" class="wm-interval_body"></div>
+  <div ref="chart" class="wm-line_body"></div>
 </template>
 
 <style scoped>
-.wm-interval_body{width: 100%; height: 100%;}
+.wm-line_body{width: 100%; height: 100%;}
 </style>
 
 <script setup lang="ts">
@@ -12,9 +12,9 @@ import { Chart } from '@antv/g2';
 
 /* 参数 */
 const props = defineProps({
-  value: Array<any>,                             // 数据: [{label: 'n1', value: 0.4}, {label: 'n2', value: 0.6}]
+  value: Array<any>,                             // 数据: [{type: 'n', label: 'n1', value: 0.4}, {type: 'n', label: 'n2', value: 0.6}]
   theme: {type: String, default: 'classic'},     // 主题: classic、academy、classicDark
-  color: {type: String, default: 'label'},       // 分组数据
+  color: {type: String, default: 'type'},        // 分组数据
   height: {type: Number, default: 0},            // 高
   unit: {type: String, default: ''},             // 单位
 });
@@ -49,13 +49,12 @@ const init = (): void => {
     if(props.height) config.height=props.height;
     const chart = new Chart(config);
     // 配置
-    chart.interval().data(props.value)
+    chart.data(props.value)
     .encode('color', props.color)
     .encode('x', (d: any)=>d.label)
     .encode('y', (d: any)=>d.value)
-    .style('radiusTopLeft', 4)
-    .style('radiusTopRight', 4)
-    .style('maxWidth', 80);
+    chart.line().encode('shape', 'smooth');
+    chart.point().encode('shape', 'point').tooltip(false);
     // 显示
     chart.render();
   });

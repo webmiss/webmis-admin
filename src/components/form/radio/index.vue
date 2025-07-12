@@ -7,7 +7,7 @@
         <slot v-else></slot>
       </li>
       <li class="enabled" v-else @click.stop="clickRadio(k)" :style="{margin:margin, padding:padding}">
-        <span class="wm-radio_checked" :class="v.value===value?'active':''"></span>
+        <span class="wm-radio_checked" :class="v.value==value?'active':''"></span>
         <span v-if="v.label" class="wm-radio_label">{{ v.label }}</span>
         <slot v-else></slot>
       </li>

@@ -24,23 +24,56 @@
       </thead>
       <tbody class="wm-table_list">
         <template v-if="options.length>0">
-          <tr v-for="(d, k) in options" :key="k">
-            <td class="checkbox" v-if="isCheckbox" :class="d.checked?'active':''">
-              <wm-checkBox :options="{label:'', value:d.id, checked:d.checked, disabled:d.disabled}" margin="0" @checkbox="Checkbox"></wm-checkBox>
-            </td>
-            <template v-if="typeof d.display=='undefined' || d.display">
-              <td v-for="(v, n) in columns" :key="n" :title="d[v.index]" :class="[d.checked?'active':'', v.class?v.class: '']">
-                <slot v-if="v.slot" v-bind="d" :name="v.slot" :index="k"></slot>
-                <span v-else>{{ d[v.index] || '-' }}</span>
-              </td>
+          <template v-for="(d, k) in options" :key="k">
+            <!-- 分段 -->
+            <template v-if="maxLen>0">
+              <tr v-if="k<maxLen">
+                <td class="checkbox" v-if="isCheckbox" :class="d.checked?'active':''">
+                  <wm-checkBox :options="{label:'', value:d.id, checked:d.checked, disabled:d.disabled}" margin="0" @checkbox="Checkbox"></wm-checkBox>
+                </td>
+                <template v-if="typeof d.display=='undefined' || d.display">
+                  <td v-for="(v, n) in columns" :key="n" :title="d[v.index]" :class="[d.checked?'active':'', v.class?v.class: '']">
+                    <slot v-if="v.slot" v-bind="d" :name="v.slot" :index="k"></slot>
+                    <span v-else>{{ d[v.index] || '-' }}</span>
+                  </td>
+                </template>
+              </tr>
+              <tr v-else-if="isShow">
+                <td class="checkbox" v-if="isCheckbox" :class="d.checked?'active':''">
+                  <wm-checkBox :options="{label:'', value:d.id, checked:d.checked, disabled:d.disabled}" margin="0" @checkbox="Checkbox"></wm-checkBox>
+                </td>
+                <template v-if="typeof d.display=='undefined' || d.display">
+                  <td v-for="(v, n) in columns" :key="n" :title="d[v.index]" :class="[d.checked?'active':'', v.class?v.class: '']">
+                    <slot v-if="v.slot" v-bind="d" :name="v.slot" :index="k"></slot>
+                    <span v-else>{{ d[v.index] || '-' }}</span>
+                  </td>
+                </template>
+              </tr>
             </template>
-          </tr>
+            <!-- 全部 -->
+            <tr v-else>
+              <td class="checkbox" v-if="isCheckbox" :class="d.checked?'active':''">
+                <wm-checkBox :options="{label:'', value:d.id, checked:d.checked, disabled:d.disabled}" margin="0" @checkbox="Checkbox"></wm-checkBox>
+              </td>
+              <template v-if="typeof d.display=='undefined' || d.display">
+                <td v-for="(v, n) in columns" :key="n" :title="d[v.index]" :class="[d.checked?'active':'', v.class?v.class: '']">
+                  <slot v-if="v.slot" v-bind="d" :name="v.slot" :index="k"></slot>
+                  <span v-else>{{ d[v.index] || '-' }}</span>
+                </td>
+              </template>
+            </tr>
+          </template>
         </template>
         <slot v-else-if="options.length==0&&isSlot"></slot>
         <tr v-else-if="!isBottom">
           <td class="null" :colspan="columns.length+(isCheckbox?1:0)"></td>
         </tr>
       </tbody>
+      <tr v-if="maxLen&&(options.length-maxLen>0)">
+        <td class="wm-table_show" :colspan="columns.length+(isCheckbox?1:0)" style="padding: 0;">
+          <span @click="isShow=!isShow">{{ isShow?'隐藏':'显示剩余' }}( {{ options.length-maxLen }} )</span>
+        </td>
+      </tr>
       <tr v-if="isBottom">
         <td :colspan="columns.length+(isCheckbox?1:0)" style="padding: 0;">
           <slot name="bottom"></slot>
@@ -72,6 +105,9 @@
 .wm-table_list tr:last-child td{border-bottom-color: #F4F6F8;}
 .wm-table_list tr td.active{background: #D7E3EE;}
 .wm-table_list .null{height: 160px;}
+.wm-table_show{text-align: center; background-color: @Primary6; color: @Primary;}
+.wm-table_show span{cursor: pointer; padding: 10px 32px;}
+.wm-table_show span:hover{color: #FF6600;}
 </style>
 
 <script setup lang="ts">
@@ -80,25 +116,25 @@ import wmCheckBox from '../form/checkbox/index.vue';
 
 /* 参数 */
 const props = defineProps({
-    columns: {type: Array<any>, default: []},       // 字段: [{title: '名称', index: 'title', slot: 'title', width: '40px', minWidth: '30px', maxWidth: '120px', textAlign: 'right'}]
-    options: {type: Array<any>, default: []},       // 数据: [{id: 1, title: '系统', remark: '', checked:true, }]
-    width: {type: String, default: '100%'},         // 宽
-    height: {type: String, default: '100%'},        // 高
-    overflow: {type: String, default: ''},          // 滚动条
-    isCheckbox: {type: Boolean, default: true},     // 是否多选
-    isSlot: {type: Boolean, default: false},        // 是否自定义表体
-    isBottom: {type: Boolean, default: false},      // 是否底部内容
-  });
+  columns: {type: Array<any>, default: []},       // 字段: [{title: '名称', index: 'title', slot: 'title', width: '40px', minWidth: '30px', maxWidth: '120px', textAlign: 'right'}]
+  options: {type: Array<any>, default: []},       // 数据: [{id: 1, title: '系统', remark: '', checked:true, }]
+  width: {type: String, default: '100%'},         // 宽
+  height: {type: String, default: '100%'},        // 高
+  overflow: {type: String, default: ''},          // 滚动条
+  isCheckbox: {type: Boolean, default: true},     // 是否多选
+  isSlot: {type: Boolean, default: false},        // 是否自定义表体
+  isBottom: {type: Boolean, default: false},      // 是否底部内容
+  maxLen: {type: Number, default: 0},             // 最大显示长度
+});
 const emit = defineEmits(['partially', 'orderBy']);
 // 变量
+const isShow = ref(false);
 const checkbox = ref({checked: false, partially: false, value:'', data:{label:'', value:'all', checked:false}});
 
 /* 监听 */
 watch(()=>props.columns, (val: Array<any>)=>{
   partially();
 },{ deep: true });
-
-
 
 /* 全选、全不选 */
 const checkboxAll = (status: boolean | string = ''): void => {

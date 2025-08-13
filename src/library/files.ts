@@ -131,10 +131,18 @@ export default class Files {
         }
       }
       // 画板高宽
-      canvas.width = param.width;
-      canvas.height = param.height;
-      dst_x = Math.round(param.width-w)/2;
-      dst_y = Math.round(param.height-h)/2;
+      if(param.cut && self.width<=param.width && self.height<=param.height) {
+        canvas.width = self.width;
+        canvas.height = self.height;
+        dst_x = 0;
+        dst_y = 0;
+      } else {
+        canvas.width = param.width;
+        canvas.height = param.height;
+        dst_x = Math.round(param.width-w)/2;
+        dst_y = Math.round(param.height-h)/2;
+      }
+      // 获取Base64
       context.drawImage(this, dst_x, dst_y, w, h);
       let data = canvas.toDataURL(param.type, param.quality);
       return success(data);

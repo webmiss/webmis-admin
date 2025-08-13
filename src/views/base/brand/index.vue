@@ -1,7 +1,7 @@
 <template>
   <!-- Total -->
   <wmTotal :time="total.time" @refresh="loadData()">
-    <span v-html="langs.sys_menus_total(page.total)"></span>
+    <span v-html="langs.sys_role_total(page.total)"></span>
   </wmTotal>
   <!-- Action -->
   <div class="app_action flex">
@@ -29,8 +29,8 @@
     <div class="app_action_search flex">
       <!-- Search -->
       <wmSearch v-model:show="sea.show" v-model:keys="sea.key" :columns="sea.columns" @keyup.enter="page.num=1;loadData()" @search="page.num=1;loadData()" @reset="resetData()">
-        <template #time="d">
-          <wmDatePicker v-model:value="sea.time" range :maxDate="sea.maxDate" :placeholder="d.label"></wmDatePicker>
+        <template #class="d">
+          <wm-select v-model:value="sea.class" :options="selectAll.class_name" :placeholder="d.label" clearable multiple></wm-select>
         </template>
       </wmSearch>
       <!-- Search End -->
@@ -44,36 +44,33 @@
       <template #id="d">
         <div class="tCenter">{{ d.id }}</div>
       </template>
-      <template #fid="d">
-        <div class="tCenter">{{ d.fid }}</div>
-      </template>
-      <template #ico="d">
-        <div class="tCenter icon">
-          <i v-if="d.ico" :class="d.ico"></i>
-          <span v-else>-</span>
-        </div>
-      </template>
-      <template #title="d">
-        {{ d[state.lang] }}
-      </template>
-      <template #action="d">
-        <div class="tCenter">
-          <wmButton v-if="isAction('save')" @click="saveData('edit', d)">{{ langs.edit }}</wmButton>
-          <span class="c_info" v-else><i class="ui ui_safety"></i></span>
-        </div>
-      </template>
-      <template #status="d">
-        <div class="tCenter">
-          <span :class="d.status?'c_success':'c_danger'">{{ d.status?langs.enable:langs.disable }}</span>
-        </div>
-      </template>
       <template #date="d">
         <div class="tCenter">
           <wmTag :title="'创建: '+d.ctime+'\n更新: '+d.utime">{{ d.utime.substr(0, 10) }}</wmTag>
         </div>
       </template>
+      <template #class="d">
+        <div class="tCenter">{{ d.class }}</div>
+      </template>
       <template #sort="d">
         <div class="tCenter">{{ d.sort }}</div>
+      </template>
+      <template #state="d">
+        <div class="tCenter">
+          <span :class="d.state?'c_success':'c_danger'">{{ d.state?langs.enable:langs.disable }}</span>
+        </div>
+      </template>
+      <template #action="d">
+        <div class="tCenter">
+          <wmButton v-if="isAction('save')" @click="saveData('edit', d)">{{ langs.edit }}</wmButton>
+          <span v-else>-</span>
+        </div>
+      </template>
+      <template #creator_name="d">
+        <div class="tCenter">{{ d.creator_name }}</div>
+      </template>
+      <template #operator_name="d">
+        <div class="tCenter">{{ d.operator_name }}</div>
       </template>
     </wmTable>
     <!-- List End -->
@@ -101,13 +98,12 @@ import { useStore } from 'vuex';
 import Ui from '../../../library/ui';
 import Request from '../../../library/request';
 import Permission from '../../../library/permission';
-import Time from '../../../library/time';
 /* 组件 */
 import wmButton from '../../../components/form/button/index.vue';
 import wmTable from '../../../components/table/index.vue';
 import wmTag from '../../../components/tag/index.vue';
 import wmPage from '../../../components/page/index.vue';
-import wmDatePicker from '../../../components/datepicker/index.vue';
+import wmSelect from '../../../components/form/select/index.vue';
 /* 统计、动作、搜索、更新、删除、导出 */
 import wmTotal from '../../tools/Total.vue';
 import wmAction from '../../tools/Action.vue';
@@ -126,41 +122,43 @@ const langs: any = state.langs;
 const isAction = Permission.isAction;
 // 搜索
 const sea = ref({
-  show: false, key: '', placeholder:'Fid、名称、接口等',
-  time: <any>[Time.Date('Y/m/d', Time.StrToTime('-3 year')), Time.Date('Y/m/d')], maxDate: Time.Date('Y/m/d'),
-  columns:[
-    {label: langs.select, value: '', slot: 'time'},
-    {label: langs.sys_menus_title, value: '', name: 'title'},
-    {label: langs.sys_menus_en, value: '', name: 'en'},
-    {label: langs.sys_menus_url, value: '', name: 'url'},
-    {label: langs.sys_menus_controller, value: '', name: 'controller'},
+  show: false, key: '', placeholder: '名称、备注',
+  columns: [
+    {label: '分类', value: '', slot: 'class'},
+    {label: langs.name, value: '', name: 'name'},
+    {label: '制单员', value: '', name: 'creator_name'},
+    {label: '操作员', value: '', name: 'operator_name'},
+    {label: langs.remark, value: '', name: 'remark'},
   ],
+  class: '',
 });
 // 列表
 const total = ref({time: '', list: {}});
 const list = ref({columns: [
   {title: 'ID', index: 'id', slot: 'id', order: '', width: '80px', minWidth: '60px', textAlign: 'center'},
-  {title: 'FID', index: 'fid', slot: 'fid', order: '', width: '80px', minWidth: '60px', textAlign: 'center'},
-  {title: langs.sys_menus_ico, index: 'ico', slot: 'ico', width: '40px'},
-  {title: langs.sys_menus_title, index: 'title', slot: 'title', order: '', width: '160px'},
-  {title: langs.action, slot: 'action', textAlign: 'center', width: '40px'},
-  {title: langs.status, index: 'status', slot: 'status', width: '60px', textAlign: 'center'},
-  {title: langs.date, index: 'date', slot: 'date', width: '120px', minWidth: '110px', textAlign: 'center'},
-  {title: langs.sys_menus_en, index: 'en', order: '', width: '160px'},
-  {title: langs.sys_menus_sort, index: 'sort', slot: 'sort', order: '', width: '60px', minWidth: '60px', textAlign: 'center'},
-  {title: langs.sys_menus_url, index: 'url', order: '', width: '200px', minWidth: '160px'},
-  {title: langs.sys_menus_controller, index: 'controller', order: '', width: '200px', minWidth: '160px'},
+  {title: langs.date, slot: 'date', textAlign: 'center', width: '120px', minWidth: '110px'},
+  {title: '分类', slot: 'class', index: 'class', order: '', textAlign: 'center', width: '60px', minWidth: '60px'},
+  {title: '品牌', index: 'name', order: '', width: '80px', minWidth: '80px'},
+  {title: '值', index: 'value', order: '', width: '120px', minWidth: '80px'},
+  {title: '排序', slot: 'sort', textAlign: 'center', width: '60px', minWidth: '60px'},
+  {title: langs.status, index: 'state', slot: 'state', width: '60px', textAlign: 'center'},
+  {title: langs.action, slot: 'action', textAlign: 'center', width: '90px'},
+  {title: '制单员', slot: 'creator_name', textAlign: 'center', width: '90px'},
+  {title: '操作员', slot: 'operator_name', textAlign: 'center', width: '90px'},
+  {title: '编码正则', index: 'rule', textAlign: 'center', width: '120px'},
   {title: langs.remark, index: 'remark'},
-], data: <any>[], num: 0, total: 0, order: ''});
+], data: [], num: 0, total: 0, order: ''});
 const page = ref({total: 0, num: 1, limit: 100});
-// 添加&编辑、删除、导出
-const save = ref({show: false, type: '', title: '添加/编辑', data: {}});
+// 动作
+const save = ref({show: false, title: '添加/编辑', data: {}});
 const del = ref({show: false, title: '删除', data: <any>[]});
 const exp = ref({show: false, title: '导出', num: 0});
+// 全部分类
+const selectAll = ref({class_name: <any>[]});
 
 /* 创建完成 */
 onMounted(()=>{
-  isLoad.value = true;
+  if(state.token) getSelect();
 });
 onActivated(()=>{
   if(isLoad && state.isLogin) loadData();
@@ -172,7 +170,7 @@ const loadData = (): void => {
   // 列表
   list.value.data = [];
   const load: any = Ui.Loading();
-  Request.Post('sys_menus/list?lang=' + state.lang, {
+  Request.Post('erp_base_brand/list?lang=' + state.lang, {
     token: state.token,
     data: getWhere(),
     page: page.value.num,
@@ -180,7 +178,7 @@ const loadData = (): void => {
     order: list.value.order,
   }, (res: any) => {
     load.clear();
-    const {code, msg, time, data}: any = res.data;
+    const { code, msg, time, data }: any = res.data;
     if (code === 0) {
       total.value.time = time;
       list.value.data = data;
@@ -189,12 +187,12 @@ const loadData = (): void => {
   });
   // 统计
   page.value.total = 0;
-  Request.Post('sys_menus/total?lang='+state.lang, {
+  Request.Post('erp_base_brand/total?lang=' + state.lang, {
     token: state.token,
     data: getWhere(),
-  }, (res:any)=>{
-    const {code, msg, time, data}: any = res.data;
-    if(code==0) {
+  }, (res: any) => {
+    const { code, msg, time, data }: any = res.data;
+    if (code == 0) {
       total.value.time = time;
       page.value.total = data.total;
     } else Ui.Toast(msg);
@@ -204,14 +202,13 @@ const loadData = (): void => {
 const getWhere = (): object => {
   const data: any = {
     key: sea.value.key,
-    stime: typeof sea.value.time[0]=='string'?sea.value.time[0]:Time.Date('Y/m/d', sea.value.time[0]),
-    etime: typeof sea.value.time[1]=='string'?sea.value.time[1]:Time.Date('Y/m/d', sea.value.time[1]),
+    class: sea.value.class,
   };
-  for(let v of sea.value.columns) if(v.name) data[v.name] = v.value;
+  for (let v of sea.value.columns) if (v.name) data[v.name] = v.value;
   return data;
 }
 /* 选中状态 */
-const selectState = (n:number, t:number): void => {
+const selectState = (n: number, t: number): void => {
   list.value.num = n;
   list.value.total = t;
 }
@@ -222,11 +219,10 @@ const orderBy = (val: string): void => {
 }
 /* 重置条件 */
 const resetData = (): void => {
-  // 时间
-  sea.value.time = [Time.Date('Y/m/d', Time.StrToTime('-3 year')), Time.Date('Y/m/d')];
   // 条件
   sea.value.key = '';
-  for(let v of sea.value.columns) v.value='';
+  sea.value.class = '';
+  for (let v of sea.value.columns) v.value = '';
   // 其它
   list.value.order = '';
   page.value.num = 1;
@@ -236,25 +232,24 @@ const resetData = (): void => {
 /* 清除勾选 */
 const clearSelect = (): void => {
   nextTick(()=>{
+    list.value.num = 0;
     tableList.value.checkboxAll(false);
   });
 }
 
 /* 添加&编辑 */
-const saveData = (type: string, data?: any): void => {
+const saveData = (type: string, data: any = {}): void => {
   save.value.show = true;
-  save.value.type = type;
-  if(type=='add') {
+  save.value.data = data;
+  if (type == 'add') {
     save.value.title = langs.add;
-    save.value.data = {};
-  } else if(type=='edit') {
-    save.value.title = langs.edit+'( '+data.title+' )';
-    save.value.data = data;
+  } else if (type == 'edit') {
+    save.value.title = langs.edit + '( ' + data.name + ' )';
   }
 }
 /* 添加&编辑-回调 */
 const saveSubmit = (val: boolean): void => {
-  if(!val) return;
+  if (!val) return;
   save.value.show = false;
   loadData();
 }
@@ -284,6 +279,20 @@ const exportSubmit = (val: boolean): void => {
   if(!val) return;
   exp.value.show = false;
   clearSelect();
+}
+
+/* 选项 */
+const getSelect = (): void => {
+  Request.Post('erp_base_brand/get_select?lang=' + state.lang, {
+    token: state.token,
+  }, (res: any) => {
+    const { code, msg, data }: any = res.data;
+    if (code == 0) {
+      selectAll.value.class_name = data.class_name;
+      // 加载
+      isLoad.value = true;
+    } else Ui.Toast(msg);
+  });
 }
 
 </script>

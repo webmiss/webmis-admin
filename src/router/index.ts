@@ -18,6 +18,10 @@ const routes: Array<RouteRecordRaw> = [
   { path: '/BaseBrand', name: 'BaseBrand', component: () => import('../views/base/brand/index.vue') },
   { path: '/BaseCategory', name: 'BaseCategory', component: () => import('../views/base/category/index.vue') },
   { path: '/BaseSupplier', name: 'BaseSupplier', component: () => import('../views/base/supplier/index.vue') },
+  // 商品管理
+  { path: '/GoodsInfo', name: 'GoodsInfo', component: () => import('../views/goods/info/index.vue') },
+  { path: '/GoodsLog', name: 'GoodsLog', component: () => import('../views/goods/log/index.vue') },
+  { path: '/GoodsStock', name: 'GoodsStock', component: () => import('../views/goods/stock/index.vue') },
 ]
 /* 创建 */
 export default createRouter({

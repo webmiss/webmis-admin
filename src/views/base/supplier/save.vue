@@ -25,7 +25,7 @@
         <tr>
           <td class="label">状态</td>
           <td colspan="3">
-            <wmSwitch v-model:value="form.state"></wmSwitch>
+            <wmSwitch v-model:value="form.status"></wmSwitch>
           </td>
         </tr>
         <tr>
@@ -98,7 +98,7 @@ const langs: any = state.langs;
 // 变量
 const infoShow = ref(false);
 const form = ref({
-  type: '', id: '', city:<any>'', tel: '', supplier_id: '', name: '', state: false,
+  type: '', id: '', city:<any>'', tel: '', supplier_id: '', name: '', status: false,
   depositbank: '', bankacount: '', acountnumber: '',
   alipay_name: '', alipay_id: '', remark: '',
 });
@@ -114,7 +114,7 @@ watch(()=>props.show, (val: boolean)=>{
     form.value.tel = props.data.tel || '';
     form.value.supplier_id = props.data.supplier_id || '';
     form.value.name = props.data.name || '';
-    form.value.state = typeof props.data.state!='undefined'?props.data.state:true;
+    form.value.status = typeof props.data.status!='undefined'?props.data.status:true;
     form.value.depositbank = props.data.depositbank || '';
     form.value.bankacount = props.data.bankacount || '';
     form.value.acountnumber = props.data.acountnumber || '';

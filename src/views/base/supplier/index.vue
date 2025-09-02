@@ -40,8 +40,8 @@
         <template #city="d">
           <wmSelect v-model:value="sea.city" :options="selectAll.city_name" :placeholder="d.label" clearable multiple></wmSelect>
         </template>
-        <template #state="d">
-          <wmSelect v-model:value="sea.state" :options="selectAll.state_name" :placeholder="d.label" clearable></wmSelect>
+        <template #status="d">
+          <wmSelect v-model:value="sea.status" :options="selectAll.status_name" :placeholder="d.label" clearable></wmSelect>
         </template>
         <template #istrue="d">
           <wmSelect v-model:value="sea.istrue" :options="selectAll.pay_info" :placeholder="d.label" clearable></wmSelect>
@@ -63,9 +63,9 @@
           <wmTag :title="'创建: '+d.ctime+'\n更新: '+d.utime+'\n操作员: '+d.operator_name">{{ d.utime.substr(0, 10) }}</wmTag>
         </div>
       </template>
-      <template #state="d">
+      <template #status="d">
         <div class="tCenter">
-          <span class="c_primary" v-if="d.state">正常</span>
+          <span class="c_primary" v-if="d.status">正常</span>
           <span class="c_danger" v-else>禁用</span>
         </div>
       </template>
@@ -149,7 +149,7 @@ const sea = ref({
     { label: '', value: '', slot: 'customTime' },
     { label: langs.select, value: '', slot: 'time' },
     { label: '区域', value: '', slot: 'city' },
-    { label: '状态', value: '', slot: 'state' },
+    { label: '状态', value: '', slot: 'status' },
     { label: '收款信息', value: '', slot: 'istrue' },
     { label: '供应商ID, 多条空格分离', value: '', name: 'supplier_id' },
     { label: '供应商名称', value: '', name: 'name' },
@@ -161,7 +161,7 @@ const sea = ref({
     { label: '支付宝账号', value: '', name: 'alipay_id' },
     { label: '备注', value: '', name: 'remark' },
   ],
-  city: '', state: '', istrue: '',
+  city: '', status: '', istrue: '',
 });
 // 列表
 const total = ref({ time: '', list: { num: 0 } });
@@ -170,7 +170,7 @@ const list = ref({ columns: [
   { title: langs.date, index: 'date', slot: 'date', width: '90px', textAlign: 'center' },
   { title: '供应商ID', index: 'supplier_id', order: '', width: '80px' },
   { title: '供应商名称', index: 'name', order: '', width: '120px' },
-  { title: langs.state, slot: 'state', textAlign: 'center', width: '60px', minWidth: '60px' },
+  { title: langs.status, slot: 'status', textAlign: 'center', width: '60px', minWidth: '60px' },
   { title: langs.action, slot: 'action', textAlign: 'center', width: '60px', minWidth: '60px' },
   { title: '手机号码', index: 'tel', slot: 'tel' },
   { title: '区域', slot: 'city', textAlign: 'center', width: '60px' },
@@ -187,7 +187,7 @@ const save = ref({ show: false, title: '添加/编辑', data: <any>{} });
 const del = ref({ show: false, title: '删除', data: <any>[] });
 const exp = ref({ show: false, title: '导出', num: 0 });
 // 全部分类
-const selectAll = ref({ city_name: [], state_name: [], pay_info: [{ label: '有', value: '1' }, { label: '无', value: '2' }] });
+const selectAll = ref({ city_name: [], status_name: [], pay_info: [{ label: '有', value: '1' }, { label: '无', value: '2' }] });
 
 /* 创建完成 */
 onMounted(()=>{
@@ -240,7 +240,7 @@ const getWhere = (): object => {
     stime: typeof sea.value.time[0] == 'string' ? sea.value.time[0] : Time.Date('Y/m/d', sea.value.time[0]),
     etime: typeof sea.value.time[1] == 'string' ? sea.value.time[1] : Time.Date('Y/m/d', sea.value.time[1]),
     city: sea.value.city,
-    state: sea.value.state,
+    status: sea.value.status,
     istrue: sea.value.istrue,
   };
   for (let v of sea.value.columns) if (v.name) data[v.name] = v.value;
@@ -264,7 +264,7 @@ const resetData = (): void => {
   // 条件
   sea.value.key = '';
   sea.value.city = '';
-  sea.value.state = '';
+  sea.value.status = '';
   sea.value.istrue = '';
   for (let v of sea.value.columns) v.value = '';
   // 其它
@@ -353,7 +353,7 @@ const getSelect = (): void => {
     const {code, msg, data}: any = res.data;
     if (code == 0) {
       selectAll.value.city_name = data.city_name;
-      selectAll.value.state_name = data.state_name;
+      selectAll.value.status_name = data.status_name;
       // 加载
       isLoad.value = true;
     } else Ui.Toast(msg);

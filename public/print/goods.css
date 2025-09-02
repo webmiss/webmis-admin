@@ -1,0 +1,19 @@
+*{margin: 0; padding: 0;}
+/* 商品信息 */
+.print_goods{overflow: hidden; padding: 16px 0; font-size: 14px; zoom: 0.6;}
+.print_goods .ct{text-align: center;}
+.print_goods .other{line-height: 40px; color: #666; text-align: center;}
+.print_goods .title{line-height: 40px; padding-top: 20px; font-size: 21px; font-weight: bold; text-align: center;}
+.print_goods .info{line-height: 32px; display: flex; justify-content: space-between; flex-wrap: wrap;}
+.print_goods .total{overflow: hidden; width: 100%; border-collapse: collapse; box-sizing: border-box; border-radius: 4px;}
+.print_goods .total td{line-height: 24px; padding: 8px; border: #DADCDF 1px solid;}
+.print_goods .total .label{text-align: right; color: #666;}
+.print_goods .list{overflow: hidden; width: 100%; border-collapse: collapse; box-sizing: border-box; border-radius: 4px;}
+.print_goods .list td{line-height: 24px; padding: 4px 8px; border: #DADCDF 1px solid;}
+.print_goods .columns{background-color: #F2F2F2; text-align: center; font-weight: bold; white-space: nowrap;}
+.print_goods tbody tr:nth-child(odd) td{background-color: #FFF;}
+.print_goods tbody tr:nth-child(even) td{background-color: #F2F4F6;}
+/* 字段 */
+.print_field{overflow: hidden; padding: 16px 10px;}
+.print_field li{padding: 4px 0;}
+.print_field li:hover{background-color: #F2F4F6;}

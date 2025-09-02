@@ -58,8 +58,8 @@
           <wmButton type="primary" effect="text" padding="0 4px" @click="state.goods.show=true;state.goods.sku_id=d.sku_id">{{ langs.goods_flow }}</wmButton>
         </div>
       </template>
-      <template #operator="d">
-        <div>{{ d.operator_name }}({{ d.operator_id }})</div>
+      <template #operator_id="d">
+        <div class="tCenter">{{ d.operator_id }}</div>
       </template>
     </wmTable>
     <!-- List End -->
@@ -131,7 +131,8 @@ const list = ref({columns: [
   {title: langs.date, slot: 'date', width: '150px', textAlign: 'center'},
   {title: langs.goods_sku_id, slot: 'sku_id', index: 'sku_id', order: '', width: '150px', textAlign: 'center'},
   {title: langs.view, slot: 'view', textAlign: 'center', width: '40px'},
-  {title: '操作员', slot: 'operator', width: '100px', textAlign: 'center'},
+  {title: 'UID', slot: 'operator_id', width: '60px', textAlign: 'center'},
+  {title: '操作员名称', index: 'operator_name', width: '100px'},
   {title: '内容', index: 'content'},
 ], data: [], num: 0, total: 0, order: ''});
 const page = ref({total: 0, num: 1, limit: 100});

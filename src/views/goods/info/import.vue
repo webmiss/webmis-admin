@@ -4,12 +4,13 @@
       <!-- 工具栏 -->
       <div class="goods_info flex">
         <ul class="goods_info_tools flex">
-          <li><wmInput v-model:value="goods.key" @input="goodsSearch()" @iconClick="goodsSearch()" :placeholder="state.langs.sku_id" maxlength="32" icon="ui ui_search" iconAlign="right" padding="0 40px 0 10px"></wmInput></li>
+          <li><wmInput v-model:value="goods.key" @keyup.enter="goodsSearch()" @iconClick="goodsSearch()" :placeholder="state.langs.sku_id" maxlength="32" icon="ui ui_search" iconAlign="right" padding="0 40px 0 10px"></wmInput></li>
           <li><wmCheckbox :options="goods.price"></wmCheckbox></li>
           <li>|</li>
           <li><wmButton type="primary" effect="text" padding="0 4px" @click="add.show = true">添加</wmButton></li>
           <li><wmButton type="primary" effect="text" padding="0 4px" @click="goodsImp()">导入</wmButton></li>
-          <li><wmButton type="danger" effect="text" padding="0 4px" @click="goodsRemove('all')">清空</wmButton></li>
+          <li>|</li>
+          <li><wmButton type="danger" effect="text" padding="0 4px" @click="goodsRemove('part')">移除</wmButton></li>
           <li>|</li>
           <li><wmButton type="primary" effect="text" padding="0 4px" @click="goodsPrint()">打印标签</wmButton></li>
         </ul>
@@ -25,9 +26,14 @@
     </template>
     <wmMain paddingY="4px">
       <!-- 商品资料 -->
-      <wmTable ref="tableList" :columns="goods.columns" :options="goods.list" :isCheckbox="false">
+      <wmTable ref="tableList" :columns="goods.columns" :options="goods.list" :maxLen="100">
         <template #index="d">
           <div class="tCenter">{{ d.index + 1 }}</div>
+        </template>
+        <template #sku_id="d">
+          <div class="copy c_primary">
+            {{ d.sku_id }}<span @click="goodsCopy('sku_id', d.sku_id)">复</span>
+          </div>
         </template>
         <template #short_name="d">
           <div class="tCenter">{{ d.short_name || '-' }}</div>
@@ -116,7 +122,7 @@
           </td>
         </tr>
         <tr>
-          <td class="label">颜色及规格</td>
+          <td class="label"><span class="red_dot">颜色及规格</span></td>
           <td><wmInput v-model:value="add.properties_value" /></td>
           <td class="label"><span class="red_dot">品牌</span></td>
           <td><wmSelect v-model:value="add.brand" :options="selectAll.brand" /></td>
@@ -188,7 +194,7 @@
 <style lang="less" scoped></style>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue';
+import { ref, watch, nextTick } from 'vue';
 import { useStore } from 'vuex';
 /* UI组件 */
 import Ui from '../../../library/ui';
@@ -216,6 +222,7 @@ const props = defineProps({
     data: { type: Object, default: {} }
   });
 const emit = defineEmits(['update:show', 'submit']);
+const tableList = ref();
 // 状态
 const store = useStore();
 const state = store.state;
@@ -227,7 +234,7 @@ const infoShow = ref(false);
 const goods = ref({
   key: '', columns: [
     {title: '序号', slot: 'index', width: '40px', minWidth: '30px', textAlign: 'center'},
-    {title: '商品编码', index: 'sku_id', width: '160px'},
+    {title: '商品编码', slot: 'sku_id', width: '160px'},
     {title: '暗码', slot: 'short_name', textAlign: 'center'},
     {title: '款式编码', slot: 'i_id', textAlign: 'center'},
     {title: '商品名称', index: 'name'},
@@ -251,21 +258,19 @@ const goods = ref({
   price: { label: '调整价格', value: 'price', checked: false },
   cost_price: 0, sale_price: 0, purchase_price: 0, market_price: 0
 });
-// 添加
+// 添加、移除、导入
 const add = ref({
   show: false, title: '新增商品',
   cost_price: '0.00', supply_price: '0.00', sale_price: '0.00', purchase_price: '0.00', supplier_price: '0.00', market_price: '0.00', weight: '0.00', unit: '个',
   sku_id: '', labels: '', name: '', category: '', properties_value: '', brand: '', short_name: '', i_id: '', owner: '', supplier_name: '',
 });
-// 移除
-const remove = ref({show: false, type: '', title: '移除', info: '', index: 0});
-// 导入
+const remove = ref({show: false, type: '', title: '移除', info: '', data: <any>[]});
 const imp = ref({show: false, refresh: false, title: '上传资料', s0: 0, s1: 0, s2: 0, s3: 0, s4: 0});
 // 全部分类
 const selectAll = ref({labels: [], category: [], brand: []});
 
 /* 监听 */
-watch(()=>props.show, (val: boolean)=>{
+watch(()=>props.show,(val: boolean)=>{
   infoShow.value = val;
   if(val) {
     // 是否刷新
@@ -276,12 +281,12 @@ watch(()=>props.show, (val: boolean)=>{
 },{ deep: true });
 
 /* 选项 */
-const getSelect = (): void => {
+const getSelect =(): void => {
   Request.Post('erp_goods_info/get_select?lang=' + state.lang, {
     token: state.token,
-  }, (res: any) => {
+  },(res: any) => {
     const {code, msg, data}: any = res.data;
-    if (code == 0) {
+    if(code == 0) {
       // 标签、分类、品牌
       selectAll.value.labels = data.labels;
       selectAll.value.category = data.category;
@@ -291,35 +296,43 @@ const getSelect = (): void => {
 }
 
 /* 搜索 */
-const goodsSearch = (): void => {
-  if (goods.value.list.length == 0) return;
+const goodsSearch =(): void => {
   const key: string = goods.value.key;
-  const reg = new RegExp(key.toUpperCase());
+  const reg = new RegExp(key.trim().toUpperCase());
+  goods.value.key = '';
   const list: any = goods.value.list;
-  for (let v of list) v.display = reg.test(v.sku_id);
+  for(let v of list) v.display = reg.test(v.sku_id);
 }
 
 /* 商品资料-添加 */
-const goodsAdd = (): void => {
+const goodsAdd =(): void => {
   const d: any = add.value;
   // 是否存在
-  if (!d.sku_id) return Ui.Toast('请输入商品编码');
+  if(!d.sku_id) return Ui.Toast('请输入商品编码');
   const sku_id: any = Util.Trim(d.sku_id).toUpperCase();
-  for (let v of goods.value.list) {
-    if (sku_id == v.sku_id) return Ui.Toast('[ ' + sku_id + ' ]已存在!');
+  for(let v of goods.value.list) {
+    if(sku_id == v.sku_id) return Ui.Toast('[ ' + sku_id + ' ]已存在!');
   }
   // 验证
-  if (!d.name) return Ui.Toast('请输入商品名称');
-  if (!d.labels || d.labels.length == 0) return Ui.Toast('请选择标签');
-  if (!d.category || d.category.length == 0) return Ui.Toast('请选择分类');
-  if (!d.brand || d.brand.length == 0) return Ui.Toast('请选择品牌');
-  if (!d.cost_price || isNaN(parseFloat(d.cost_price))) return Ui.Toast('请输入成本价');
-  if (!d.sale_price || isNaN(parseFloat(d.sale_price))) return Ui.Toast('请输入标签价');
-  if (!d.owner) return Ui.Toast('采购员');
-  if (!d.supplier_name) return Ui.Toast('供应商');
+  if(!d.name) return Ui.Toast('请输入商品名称');
+  if(!d.labels || d.labels.length == 0) return Ui.Toast('请选择标签');
+  if(!d.category || d.category.length == 0) return Ui.Toast('请选择分类');
+  if(!d.brand || d.brand.length == 0) return Ui.Toast('请选择品牌');
+  if(!d.properties_value || d.properties_value.length<2) return Ui.Toast('请输入颜色及规格');
+  if(!d.cost_price || isNaN(parseFloat(d.cost_price))) return Ui.Toast('请输入成本价');
+  if(!d.sale_price || isNaN(parseFloat(d.sale_price))) return Ui.Toast('请输入标签价');
+  if(!d.owner) return Ui.Toast('采购员');
+  if(!d.supplier_name) return Ui.Toast('供应商');
   // 追加
   add.value.show = false;
+  let id: string = 'id_1';
+  if(goods.value.list.length>0) {
+    const tmp: any = goods.value.list.at(-1);
+    const arr: any = tmp.id.split('_');
+    if(arr.length===2) id='id_'+(parseInt(arr[1])+1);
+  }
   goods.value.list.push({
+    id: id,
     sku_id: sku_id,
     i_id: d.i_id,
     name: d.name,
@@ -348,31 +361,34 @@ const goodsAdd = (): void => {
 }
 
 /* 商品资料-导入 */
-const goodsImp = (): void => {
-  Files.Select({ mimeType: [] }, (fileObj: any) => {
-    Files.FileToBase64(fileObj, (base64: any) => {
+const goodsImp =(): void => {
+  Files.Select({ mimeType: [] },(fileObj: any) => {
+    Files.FileToBase64(fileObj,(base64: any) => {
       const workbook: any = xlsxRead(base64, { type: 'binary' });
       const name: string = workbook.SheetNames[0];
       const arr: any = xlsxUtils.sheet_to_json(workbook.Sheets[name], { raw: false });
-      if (arr.length > 3000) return Ui.Toast('不能超过3000条');
+      if(arr.length > 3000) return Ui.Toast('不能超过3000条');
       // 商品资料
       goods.value.list = [];
+      let id: number = 0;
       let sku_id: string = '';
       let sku: Array<string> = [];
-      for (let v of arr) {
-        if (!v['商品编码'] || !v['款式编码'] || !v['品牌']) continue;
+      for(let v of arr) {
+        if(!v['商品编码'] || !v['款式编码'] || !v['品牌']) continue;
         // 调整价格
         let sale_price: string = v['基本售价'] || v['标签价'] || 0;
         let price: number = sale_price?goodsPrice(parseFloat(sale_price)):0;
         // 数据
+        id++;
         sku_id = Util.Trim(v['商品编码']).toUpperCase();
         sku.push(sku_id);
         goods.value.list.push({
+          id: 'id_'+id,
           sku_id: sku_id,
           i_id: v['款式编码'],
-          name: v['商品名'] || v['商品名称'] || '',
+          name: v['商品名称'] || '',
           properties_value: v['颜色及规格'] || '',
-          short_name: v['暗码'] || v['原始编码'] || v['约货暗码'] || '',
+          short_name: v['暗码'] || '',
           cost_price: v['成本价'] || 0,
           supply_price: v['供应链价'] || 0,
           sale_price: sale_price,
@@ -385,8 +401,8 @@ const goodsImp = (): void => {
           labels: v['商品标签'] || v['标签'] || '',
           category: v['分类'] || '',
           brand: v['品牌'] || '',
-          supplier_name: v['供应商名'] || v['供应商名称'] || v['供应商'] || '',
-          owner: v['备注'] || v['采购员'] || '',
+          supplier_name: v['供应商名称'] || v['供应商'] || '',
+          owner: v['采购员'] || '',
           status: '0',
           display: true,
         });
@@ -399,45 +415,17 @@ const goodsImp = (): void => {
   });
 }
 /* 商品资料-价格调整 */
-const goodsPrice = (price: number): number => {
+const goodsPrice =(price: number): number => {
   return Math.round(price/10)*10;
-  let tmp: Array<string> = [];
-  switch (true) {
-    case price >= 10 && price < 100:
-      tmp = (price / 10).toString().split('.');
-      if (parseFloat('0.' + tmp[1]) >= 0.5) price = parseInt(tmp[0] + '0') + 10;
-      else if (parseFloat('0.' + tmp[1]) > 0) price = parseInt(tmp[0] + '5');
-      else price = parseInt(tmp[0] + '0');
-      break;
-    case price >= 100 && price < 1000:
-      tmp = (price / 10).toString().split('.');
-      if (parseFloat('0.' + tmp[1]) >= 0.5) price = parseInt(tmp[0] + '0') + 10;
-      else if (parseFloat('0.' + tmp[1]) > 0) price = parseInt(tmp[0] + '5');
-      else price = parseInt(tmp[0] + '0');
-      break;
-    case price >= 1000 && price < 10000:
-      tmp = (price / 100).toString().split('.');
-      if (parseFloat('0.' + tmp[1]) >= 0.5) price = parseInt(tmp[0] + '00') + 100;
-      else if (parseFloat('0.' + tmp[1]) > 0) price = parseInt(tmp[0] + '50');
-      else price = parseInt(tmp[0] + '00');
-      break;
-    case price >= 10000:
-      tmp = (price / 1000).toString().split('.');
-      if (parseFloat('0.' + tmp[1]) >= 0.5) price = parseInt(tmp[0] + '000') + 1000;
-      else if (parseFloat('0.' + tmp[1]) > 0) price = parseInt(tmp[0] + '500');
-      else price = parseInt(tmp[0] + '000');
-      break;
-  }
-  return price;
 }
 /* 商品资料-统计 */
-const goodsTotal = (): void => {
+const goodsTotal =(): void => {
   const list: Array<any> = goods.value.list;
   goods.value.cost_price = 0;
   goods.value.sale_price = 0;
   goods.value.purchase_price = 0;
   goods.value.market_price = 0;
-  for (let v of list) {
+  for(let v of list) {
     goods.value.cost_price += parseFloat(v.cost_price);
     goods.value.sale_price += parseFloat(v.sale_price);
     goods.value.purchase_price += parseFloat(v.purchase_price);
@@ -445,21 +433,21 @@ const goodsTotal = (): void => {
   }
 }
 /* 商品资料-状态 */
-const goodsStatus = (sku: Array<string>): void => {
-  if (sku.length == 0) return;
+const goodsStatus =(sku: Array<string>): void => {
+  if(sku.length == 0) return;
   // 请求
   const load: any = Ui.Loading();
   Request.Post('erp_goods_info/status?lang=' + state.lang, {
     token: state.token,
     sku: sku,
-  }, (res: any) => {
+  },(res: any) => {
     load.clear();
     const {code, msg, data}: any = res.data;
-    if (code == 0) {
+    if(code == 0) {
       const list: Array<any> = goods.value.list;
-      for (let k in data) {
-        for (let v of list) {
-          if (v.sku_id == k) v.status = data[k];
+      for(let k in data) {
+        for(let v of list) {
+          if(v.sku_id == k) v.status = data[k];
         }
       }
     } else Ui.Toast(msg);
@@ -467,68 +455,79 @@ const goodsStatus = (sku: Array<string>): void => {
 }
 
 /* 商品资料-移除 */
-const goodsRemove = (type: string, index: number = 0): void => {
-  if (goods.value.list.length == 0) return Ui.Toast('无商品资料!');
-  remove.value.show = true;
+const goodsRemove =(type: string, index: number = 0): void => {
   remove.value.type = type;
-  if (type == 'all') {
+  remove.value.data = [];
+  if(type==='part') {
+    const list: Array<any> = tableList.value.getData();
+    if(list.length==0) return Ui.Toast('请选择数据');
+    remove.value.show = true;
     remove.value.title = '清空';
-    remove.value.info = '移除全部资料';
-  } else if (type = 'one') {
+    remove.value.info = '是否移除选中数据?';
+    for(let v of list) {
+      remove.value.data.unshift({ index: v.index });
+    }
+  } else if(type = 'one') {
+    remove.value.show = true;
     remove.value.title = '移除';
     remove.value.info = goods.value.list[index].sku_id;
-    remove.value.index = index;
+    remove.value.data.unshift({ index: index });
   }
 }
 /* 商品资料-移除确认 */
-const goodsRemoveSub = (): void => {
+const goodsRemoveSub =(): void => {
   remove.value.show = false;
-  if (remove.value.type == 'all') goods.value.list = [];
-  else if (remove.value.type == 'one') goods.value.list.splice(remove.value.index, 1);
+  // 数据
+  const list = goods.value.list;
+  const data = remove.value.data;
+  for(let v of data) list.splice(v.index, 1);
+  // 清除
+  clearSelect();
+  remove.value.data = [];
   // 统计价格
   goodsTotal();
 }
 
 /* 商品资料-打印标签 */
-const goodsPrint = (): void => {
+const goodsPrint =(): void => {
   let list: Array<any> = goods.value.list;
   let sku: Array<any> = [];
-  for (let v of list) {
-    if (v.status === 0 || v.status === 1) return Ui.Toast('请先上传商品资料!');
+  for(let v of list) {
+    if(v.status === 0 || v.status === 1) return Ui.Toast('请先上传商品资料!');
     sku.push({ sku_id: v.sku_id });
   }
-  if (sku.length == 0) return Ui.Toast('请添加或导入商品资料!');
+  if(sku.length == 0) return Ui.Toast('请添加或导入商品资料!');
   state.print.sku = sku;
   state.print.show = true;
 }
 
 /* 商品资料-上传 */
-const goodsUpload = () => {
-  if (goods.value.list.length == 0) return Ui.Toast('请添加或导入商品资料!');
+const goodsUpload =() => {
+  if(goods.value.list.length == 0) return Ui.Toast('请添加或导入商品资料!');
   // 状态
   imp.value.s0 = imp.value.s1 = imp.value.s2 = imp.value.s3 = imp.value.s4 = 0;
   let list: Array<any> = goods.value.list;
-  for (let v of list) {
-    if (v.status === 0) imp.value.s0++;
-    else if (v.status === 1) imp.value.s1++;
-    else if (v.status === 2) imp.value.s2++;
-    else if (v.status === 3) imp.value.s3++;
-    else if (v.status === 4) imp.value.s4++;
+  for(let v of list) {
+    if(v.status === 0) imp.value.s0++;
+    else if(v.status === 1) imp.value.s1++;
+    else if(v.status === 2) imp.value.s2++;
+    else if(v.status === 3) imp.value.s3++;
+    else if(v.status === 4) imp.value.s4++;
   }
   // 验证
-  if (imp.value.s0 > 0) return Ui.Toast('该状态不可用!');
+  if(imp.value.s0 > 0) return Ui.Toast('该状态不可用!');
   imp.value.show = true;
 }
 
 /* 提交 */
-const submit = (): void => {
+const submit =(): void => {
   // 商品资料
   let data: Array<any> = [];
   let list: Array<any> = goods.value.list;
-  for (let v of list) {
-    if (v.status != 3 && v.status != 4) data.push(v);
+  for(let v of list) {
+    if(v.status != 3 && v.status != 4) data.push(v);
   }
-  if (data.length == 0) return Ui.Toast('无可上传商品资料!');
+  if(data.length == 0) return Ui.Toast('无可上传商品资料!');
   // 请求
   imp.value.show = false;
   imp.value.refresh = true;
@@ -537,20 +536,36 @@ const submit = (): void => {
     token: state.token,
     data: data,
     price: goods.value.price.checked,
-  }, (res: any) => {
+  },(res: any) => {
     load.clear();
     const {code, msg}: any = res.data;
     Ui.Toast(msg);
-    if (code == 0) {
+    if(code == 0) {
       let sku: Array<string> = [];
-      for (let v of data) sku.push(v.sku_id);
+      for(let v of data) sku.push(v.sku_id);
       goodsStatus(sku);
     }
   });
 }
 
+/* 商品-复制 */
+const goodsCopy = (name: string, val: string) => {
+  const list: Array<any> = tableList.value.getData();
+  let sku_id: string = '';
+  for(let i in list) sku_id += list[i][name] + ' ';
+  if(sku_id) Util.CopyText(sku_id);
+  else Util.CopyText(val);
+}
+
+/* 清除勾选 */
+const clearSelect = (): void => {
+  nextTick(()=>{
+    tableList.value.checkboxAll(false);
+  });
+}
+
 /* 关闭 */
-const close = (): void => {
+const close =(): void => {
   emit('update:show', false);
   emit('submit', imp.value.refresh);
 }

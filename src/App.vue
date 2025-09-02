@@ -9,6 +9,9 @@
   <passwd v-model:show="state.isPasswd" v-if="state.isLogin"></passwd>
   <!-- Msg -->
   <msg v-model:show="msgShow" v-if="state.isLogin"></msg>
+  <!-- Tools -->
+  <Goods v-model:show="state.goods.show" v-if="state.isLogin"></Goods>
+  <Print v-model:show="state.print.show" v-if="state.isLogin"></Print>
 
   <!-- Main -->
   <div class="app_main flex">
@@ -99,7 +102,7 @@
           <!-- LeftMenus -->
           <template v-for="(v1,k1) in menus.list" :key="k1">
             <div class="m" v-if="!is_menus">
-              <i :class="v1.icon" :title="v1.langs[state.lang]" @click="MenusShow()"></i>
+              <i :class="v1.icon" :title="v1.langs[state.lang]" @click="menusShow=!menusShow;uinfoShow=false"></i>
             </div>
             <template v-if="v1.children&&is_menus">
               <template v-for="(v2,k2) in v1.children" :key="k2">
@@ -157,6 +160,12 @@
           </li>
         </ul>
         <ul class="app_tools flex">
+          <li class="goods" title="货品查询" @click="state.goods.show=true">
+            <i class="icons icon_stock1"></i>
+          </li>
+          <li class="print" title="打印标签" @click="state.print.show=true">
+            <i class="icons icon_print"></i>
+          </li>
           <li class="msg" title="消息" @click="msgShow=true;menusShow=false;uinfoShow=false">
             <span class="redNum" v-if="state.msg.num>0">{{ state.msg.num }}</span>
             <i class="ui ui_message"></i>
@@ -210,6 +219,8 @@ import Socket from './views/tools/Socket.vue';
 import Uinfo from './views/tools/Uinfo.vue';
 import Passwd from './views/tools/Passwd.vue';
 import Msg from './views/tools/Msg.vue';
+import Goods from './views/tools/Goods.vue';
+import Print from './views/tools/Prints.vue';
 
 const emit = defineEmits(['update:show', 'close']);
 const userLogin = ref();

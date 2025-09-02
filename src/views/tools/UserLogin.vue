@@ -290,7 +290,10 @@ const clickLogin = (): void => {
       Storage.setItem('uinfo', JSON.stringify(data.uinfo));
       Storage.setItem('user_img', data.uinfo.img);
       // 刷新浏览器
-      setTimeout(()=>{ location.reload(); }, 1000);
+      setTimeout(()=>{
+        Storage.setItem('IsMenus', '');
+        location.reload();
+      }, 1000);
     }else{
       // 验证
       login.value.vcode = '';

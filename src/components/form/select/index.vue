@@ -44,7 +44,9 @@
     <!-- Icon -->
     <i class="wm-select_arrow ui ui_arrow_down" :style="{transform: show?'rotate(180deg)':'rotate(0deg)'}"></i>
     <!-- Value -->
-    <div class="wm-select_value" :class="labelName?'':'none'">{{ labelName || placeholder || state.langs.select }}</div>
+    <div class="wm-select_value" :class="labelName?'':'none'">
+      <div class="nowrap">{{ labelName || placeholder || state.langs.select }}</div>
+    </div>
   </div>
 </template>
 
@@ -52,10 +54,11 @@
 .wm-select{cursor: pointer; position: relative;}
 .wm-select_arrow{position: absolute; z-index: 2; width: 32px; height: 100%; top: 0; right: 0; text-align: center; font-size: 12px; transition: @Transition;}
 .wm-select.show .wm-select_value{border-color: @Primary;}
-.wm-select_value{overflow: hidden; position: relative; width: 100%; height: 100%; padding: 0 32px 0 10px; text-align: left; box-sizing: border-box; border: @BaseBorder 1px solid; border-radius: 4px; background-color: #FFF;}
+.wm-select_value{position: relative; width: 100%; height: 100%; padding: 0 32px 0 10px; text-align: left; box-sizing: border-box; border: @BaseBorder 1px solid; border-radius: 4px; background-color: #FFF;}
 .wm-select_value::after{content: ''; position: absolute; z-index: 1; top: 0; right: 0; width: 32px; height: 100%; background-color: #FFF;}
 .wm-select_value:hover{border-color: @Primary;}
 .wm-select_value.none{color: @SecondaryText;}
+.wm-select_value .nowrap{position: absolute; max-width: calc(100% - 42px);}
 .wm-select_body{position: absolute; z-index: 999; min-width: 80px; left: 50%; transform: translateX(-50%); background-color: #FFF; box-shadow: 0 0 12px rgba(0,0,0,0.2); border-radius: 4px; transition: @Transition;}
 .wm-select_body .top_arrow{position: absolute; bottom: 5px; left: calc(50% - 5px); transform: translateX(-50%);}
 .wm-select_body .top_arrow::before{content: ''; position: absolute; width: 10px; height: 10px; border: @BorderColor 1px solid; border-left-color: transparent; border-top-color: transparent; background-color: #FFF; transform: rotate(45deg); box-sizing: border-box;}
@@ -89,7 +92,7 @@ import wmInput from '../../../components/form/input/index.vue';
 
 /* 参数 */
 const props = defineProps({
-    value: {type: [Array, String], default: ''},            // 默认值
+    value: {type: [Array, String, Number], default: ''},    // 默认值
     options: {type: Array, default: []},                    // 数据: [{label:'男', value:'男', checked: true},{label:'女', value:'女'}]
     multiple: {type: Boolean, default: false},              // 是否多选
     width: {type: String, default: '100%'},                 // 宽

@@ -26,41 +26,35 @@
         <template v-if="options.length>0">
           <template v-for="(d, k) in options" :key="k">
             <!-- 分段 -->
-            <template v-if="maxLen>0">
+            <template v-if="maxLen>0 && (typeof d.display=='undefined' || d.display)">
               <tr v-if="k<maxLen">
                 <td class="checkbox" v-if="isCheckbox" :class="d.checked?'active':''">
                   <wm-checkBox :options="{label:'', value:d.id, checked:d.checked, disabled:d.disabled}" margin="0" @checkbox="Checkbox"></wm-checkBox>
                 </td>
-                <template v-if="typeof d.display=='undefined' || d.display">
-                  <td v-for="(v, n) in columns" :key="n" :title="d[v.index]" :class="[d.checked?'active':'', v.class?v.class: '']">
-                    <slot v-if="v.slot" v-bind="d" :name="v.slot" :index="k"></slot>
-                    <span v-else>{{ d[v.index] || '-' }}</span>
-                  </td>
-                </template>
-              </tr>
-              <tr v-else-if="isShow">
-                <td class="checkbox" v-if="isCheckbox" :class="d.checked?'active':''">
-                  <wm-checkBox :options="{label:'', value:d.id, checked:d.checked, disabled:d.disabled}" margin="0" @checkbox="Checkbox"></wm-checkBox>
-                </td>
-                <template v-if="typeof d.display=='undefined' || d.display">
-                  <td v-for="(v, n) in columns" :key="n" :title="d[v.index]" :class="[d.checked?'active':'', v.class?v.class: '']">
-                    <slot v-if="v.slot" v-bind="d" :name="v.slot" :index="k"></slot>
-                    <span v-else>{{ d[v.index] || '-' }}</span>
-                  </td>
-                </template>
-              </tr>
-            </template>
-            <!-- 全部 -->
-            <tr v-else>
-              <td class="checkbox" v-if="isCheckbox" :class="d.checked?'active':''">
-                <wm-checkBox :options="{label:'', value:d.id, checked:d.checked, disabled:d.disabled}" margin="0" @checkbox="Checkbox"></wm-checkBox>
-              </td>
-              <template v-if="typeof d.display=='undefined' || d.display">
                 <td v-for="(v, n) in columns" :key="n" :title="d[v.index]" :class="[d.checked?'active':'', v.class?v.class: '']">
                   <slot v-if="v.slot" v-bind="d" :name="v.slot" :index="k"></slot>
                   <span v-else>{{ d[v.index] || '-' }}</span>
                 </td>
-              </template>
+              </tr>
+              <tr v-else-if="isShow && (typeof d.display=='undefined' || d.display)">
+                <td class="checkbox" v-if="isCheckbox" :class="d.checked?'active':''">
+                  <wm-checkBox :options="{label:'', value:d.id, checked:d.checked, disabled:d.disabled}" margin="0" @checkbox="Checkbox"></wm-checkBox>
+                </td>
+                <td v-for="(v, n) in columns" :key="n" :title="d[v.index]" :class="[d.checked?'active':'', v.class?v.class: '']">
+                  <slot v-if="v.slot" v-bind="d" :name="v.slot" :index="k"></slot>
+                  <span v-else>{{ d[v.index] || '-' }}</span>
+                </td>
+              </tr>
+            </template>
+            <!-- 全部 -->
+            <tr v-else-if="typeof d.display=='undefined' || d.display">
+              <td class="checkbox" v-if="isCheckbox" :class="d.checked?'active':''">
+                <wm-checkBox :options="{label:'', value:d.id, checked:d.checked, disabled:d.disabled}" margin="0" @checkbox="Checkbox"></wm-checkBox>
+              </td>
+              <td v-for="(v, n) in columns" :key="n" :title="d[v.index]" :class="[d.checked?'active':'', v.class?v.class: '']">
+                <slot v-if="v.slot" v-bind="d" :name="v.slot" :index="k"></slot>
+                <span v-else>{{ d[v.index] || '-' }}</span>
+              </td>
             </tr>
           </template>
         </template>

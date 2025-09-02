@@ -77,7 +77,7 @@
           </ul>
         </div>
         <div class="index_chart bg line_top line_bottom c4">
-          <wmChartInterval type="dodge" theme="classicDark" :value="chartInterval"></wmChartInterval>
+          <!-- <wmChartInterval type="dodge" theme="classicDark" :value="chartInterval"></wmChartInterval> -->
         </div>
       </div>
     </div>

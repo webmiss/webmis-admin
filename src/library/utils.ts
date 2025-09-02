@@ -8,6 +8,14 @@ export default class Util {
     const reg = new RegExp('(^'+glue+'*)|('+glue+'*$)', 'gi');
     return str.toString().replace(reg, '');
   }
+  public static LTrim(str: any, glue: string='\\s'): string {
+    const reg = new RegExp('(^'+glue+'*)', 'gi');
+    return str.toString().replace(reg, '');
+  }
+  public static RTrim(str: any, glue: string='\\s'): string {
+    const reg = new RegExp('('+glue+'*$)', 'gi');
+    return str.toString().replace(reg, '');
+  }
 
   /* CopyText */
   public static CopyText(text: string): void {
@@ -44,6 +52,11 @@ export default class Util {
       oInput.style.display = 'none';
       Ui.Toast('复制成功');
     }
+  }
+
+  /* 随机数 */
+  public static getRandomInt(min: number, max: number): number {
+    return Math.floor(Math.random()*(max-min+1))+min;
   }
 
 }

@@ -1,0 +1,32 @@
+*{margin: 0; padding: 0;}
+.flex{display: flex; justify-content: space-between; flex-wrap: wrap;}
+.flex_in{display: flex; justify-content: center; align-items:center;}
+/* 打印标签 */
+.print_body .none,.print_item .select{display: none;}
+.print_box{page-break-inside: avoid; margin: 0 auto; border: #FFF 1px solid; background-color: #FFF; text-align: center;}
+.print_box .body{position: relative;}
+
+/* 瑞丽市场部(手镯) */
+.rlscb_sz{position: relative; text-align: center;}
+.rlscb_sz .body{left: 2mm; width: calc(100% - 2mm); height: 100%;}
+.rlscb_sz .body div{position: absolute; width: 100%; left: 50%; transform: translate(-50%, -50%);}
+.rlscb_sz .barcode{height: 40px; top: calc(50% - 6px);}
+.rlscb_sz .sku_id{top: calc(50% + 20px); font-size: 13px;}
+.rlscb_sz .properties_value{top: calc(50% + 40px); font-size: 12px; zoom: 0.9;}
+.rlscb_sz .sale_price{top: calc(50% + 50px); font-size: 14px; font-weight: bold;}
+/* 瑞丽市场部(挂件) */
+.rlscb_gj{position: relative; text-align: center;}
+.rlscb_gj .body{left: 2mm; width: calc(100% - 2mm); height: 100%;}
+.rlscb_gj .body div{position: absolute; width: 100%; left: 50%; transform: translate(-50%, -50%);}
+.rlscb_gj .barcode{height: 32px; top: calc(50% - 10px);}
+.rlscb_gj .sku_id{top: calc(50% + 16px); font-size: 13px;}
+.rlscb_gj .properties_value{top: calc(50% + 35px); font-size: 12px; zoom: 0.9;}
+.rlscb_gj .sale_price{top: calc(50% + 50px); font-size: 16px; font-weight: bold;}
+/* 平洲市场部(标签) */
+.pzscb_sz{position: relative; text-align: center;}
+.pzscb_sz .body{left: 2mm; width: calc(100% - 2mm); height: 100%;}
+.pzscb_sz .body div{position: absolute; width: 100%; left: 50%; transform: translate(-50%, -50%);}
+.pzscb_sz .barcode{height: 32px; top: calc(50% - 6px);}
+.pzscb_sz .sku_id{top: calc(50% + 20px); font-size: 13px;}
+.pzscb_sz .properties_value{top: calc(50% + 40px); font-size: 12px; zoom: 0.9;}
+.pzscb_sz .sale_price{top: calc(50% + 50px); font-size: 16px; font-weight: bold;}

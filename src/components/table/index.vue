@@ -33,7 +33,7 @@
                 </td>
                 <td v-for="(v, n) in columns" :key="n" :title="d[v.index]" :class="[d.checked?'active':'', v.class?v.class: '']">
                   <slot v-if="v.slot" v-bind="d" :name="v.slot" :index="k"></slot>
-                  <span v-else>{{ d[v.index] || '-' }}</span>
+                  <span v-else>{{ typeof d[v.index]==='undefined'?'-':d[v.index] }}</span>
                 </td>
               </tr>
               <tr v-else-if="isShow && (typeof d.display=='undefined' || d.display)">
@@ -42,7 +42,7 @@
                 </td>
                 <td v-for="(v, n) in columns" :key="n" :title="d[v.index]" :class="[d.checked?'active':'', v.class?v.class: '']">
                   <slot v-if="v.slot" v-bind="d" :name="v.slot" :index="k"></slot>
-                  <span v-else>{{ d[v.index] || '-' }}</span>
+                  <span v-else>{{ typeof d[v.index]==='undefined'?'-':d[v.index] }}</span>
                 </td>
               </tr>
             </template>
@@ -53,7 +53,7 @@
               </td>
               <td v-for="(v, n) in columns" :key="n" :title="d[v.index]" :class="[d.checked?'active':'', v.class?v.class: '']">
                 <slot v-if="v.slot" v-bind="d" :name="v.slot" :index="k"></slot>
-                <span v-else>{{ d[v.index] || '-' }}</span>
+                <span v-else>{{ typeof d[v.index]==='undefined'?'-':d[v.index] }}</span>
               </td>
             </tr>
           </template>

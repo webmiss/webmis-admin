@@ -195,4 +195,27 @@ export default class Files {
     }
   }
 
+  /* 导入Excel */
+  public static ExportExcel(content: string, cfg: Object): void {
+    // 参数
+    const param: any = {
+      filename: 'down.xlsx',    // 文件名
+      borderColor: '#E2E4E8',   // 边框颜色
+      titleColor: '#020408',    // 标题颜色
+      titleBgColor: '#F2F4F8',  // 标题背景
+      ...cfg
+    }
+    // 内容
+    let html = '<html>';
+    html += '<style type="text/css">';
+    html += 'table{font-family:Microsoft YaHei,微软雅黑,SimHei,helvetica,arial,verdana,tahoma,sans-serif;}';
+    html += 'table td{height: 32px; padding: 10px; text-align: center; border: '+param['borderColor']+' 1px solid;}';
+    html += '.title{background-color: '+param['titleBgColor']+'; color: '+param['titleColor']+'; font-weight: bold;}';
+    html += '</style>';
+    html += content;
+    html += '</html>';
+    // 下载
+    this.DownBlob(html, param['filename']);
+  }
+
 }

@@ -12,6 +12,7 @@
         { action: 'del', slot: 'del', is_action: true },
         { action: 'line', slot: 'line' },
         { action: 'export', slot: 'export', is_action: true },
+        { action: 'export', slot: 'export_part', is_action: true },
       ]">
         <template #add>
           <wmButton effect="dark" type="primary" icon="ui ui_add" padding="0 16px 0 8px" @click="saveData('add')">{{ langs.add }}</wmButton>
@@ -27,6 +28,9 @@
         </template>
         <template #export>
           <wmButton effect="plain" icon="ui ui_export" padding="0 16px 0 8px" :disabled="!page.total" @click="exportData(page.total)">{{ langs.export }}({{ page.total }})</wmButton>
+        </template>
+        <template #export_part>
+          <wmButton effect="plain" icon="ui ui_export" padding="0 16px 0 8px" :disabled="exp_part.num==0" @click="exportPartData()">导出选择({{ exp_part.num }})</wmButton>
         </template>
       </wmAction>
     </div>
@@ -122,6 +126,7 @@
   <actionSave v-model:show="save.show" :title="save.title" :data="save.data" @submit="saveSubmit($event)"></actionSave>
   <actionDel v-model:show="del.show" :data="del.data" @submit="delSubmit($event)"></actionDel>
   <actionExport v-model:show="exp.show" :data="getWhere()" :order="list.order" :num="exp.num" @submit="exportSubmit($event)"></actionExport>
+  <actionPartExport v-model:show="exp_part.show" :data="exp_part.data" :num="exp_part.num" @submit="exportPartSubmit($event)"></actionPartExport>
 </template>
 
 <style lang="less" scoped></style>
@@ -151,6 +156,7 @@ import wmSearch from '../../tools/Search.vue';
 import actionSave from './save.vue';
 import actionDel from './del.vue';
 import actionExport from './export.vue';
+import actionPartExport from './export_part.vue';
 
 // 是否加载
 const isLoad = ref(false);
@@ -208,6 +214,7 @@ const page = ref({ total: 0, num: 1, limit: 100 });
 const save = ref({ show: false, title: '添加/编辑', data: <any>{} });
 const del = ref({ show: false, title: '删除', data: <any>[] });
 const exp = ref({ show: false, title: '导出', num: 0 });
+const exp_part = ref({ show: false, title: '导出选择', num: 0, data: <any>[], ids: <any>[] });
 const is_service = ref({ label: '全部客服仓', value: 'is_sku', checked: false });
 // 全部分类
 const selectAll = ref({ category: [], partner_name: [] });
@@ -276,6 +283,13 @@ const getWhere = (): object => {
 const selectState = (n: number, t: number): void => {
   list.value.num = n;
   list.value.total = t;
+  // 导出部分
+  exp_part.value.ids = [];
+  exp_part.value.num = n;
+  const data: Array<any> = tableList.value.getData();
+  for (let v of data) {
+    exp_part.value.ids.push(v.id);
+  }
 }
 /* 排序 */
 const orderBy = (val: string): void => {
@@ -384,6 +398,18 @@ const exportData = (num: number): void => {
 const exportSubmit = (val: boolean): void => {
   if (!val) return;
   exp.value.show = false;
+  clearSelect();
+}
+/* 导出部分 */
+const exportPartData = (): void => {
+  exp_part.value.show = true;
+  exp_part.value.data = getWhere();
+  exp_part.value.data.ids = exp_part.value.ids;
+}
+/* 导出部分-回调 */
+const exportPartSubmit = (val: boolean): void => {
+  if (!val) return;
+  exp_part.value.show = false;
   clearSelect();
 }
 

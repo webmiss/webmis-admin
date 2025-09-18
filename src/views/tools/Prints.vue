@@ -125,7 +125,7 @@
 .rlscb_sz .body div{position: absolute; width: 100%; left: 50%; transform: translate(-50%, -50%);}
 .rlscb_sz .barcode{height: 40px; top: calc(50% - 6px);}
 .rlscb_sz .sku_id{top: calc(50% + 20px); font-size: 13px;}
-.rlscb_sz .properties_value{top: calc(50% + 40px); font-size: 12px; zoom: 0.9;}
+.rlscb_sz .properties_value{top: calc(50% + 40px); font-size: 12px; zoom: 0.9; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;}
 .rlscb_sz .sale_price{top: calc(50% + 50px); font-size: 14px; font-weight: bold;}
 /* 瑞丽市场部(挂件) */
 .rlscb_gj{position: relative; text-align: center;}
@@ -133,7 +133,7 @@
 .rlscb_gj .body div{position: absolute; width: 100%; left: 50%; transform: translate(-50%, -50%);}
 .rlscb_gj .barcode{height: 32px; top: calc(50% - 10px);}
 .rlscb_gj .sku_id{top: calc(50% + 16px); font-size: 13px;}
-.rlscb_gj .properties_value{top: calc(50% + 35px); font-size: 12px; zoom: 0.9;}
+.rlscb_gj .properties_value{top: calc(50% + 35px); font-size: 12px; zoom: 0.9; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;}
 .rlscb_gj .sale_price{top: calc(50% + 50px); font-size: 16px; font-weight: bold;}
 /* 平洲市场部(标签) */
 .pzscb_sz{position: relative; text-align: center;}
@@ -141,7 +141,7 @@
 .pzscb_sz .body div{position: absolute; width: 100%; left: 50%; transform: translate(-50%, -50%);}
 .pzscb_sz .barcode{height: 32px; top: calc(50% - 6px);}
 .pzscb_sz .sku_id{top: calc(50% + 20px); font-size: 13px;}
-.pzscb_sz .properties_value{top: calc(50% + 40px); font-size: 12px; zoom: 0.9;}
+.pzscb_sz .properties_value{top: calc(50% + 40px); font-size: 12px; zoom: 0.9; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;}
 .pzscb_sz .sale_price{top: calc(50% + 50px); font-size: 16px; font-weight: bold;}
 </style>
 

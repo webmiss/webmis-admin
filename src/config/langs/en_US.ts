@@ -106,9 +106,7 @@ export function en_US(): any {
     sys_file_verify_name: 'Name 2-32 characters',
     sys_file_verify_name_exist: 'The name already exists',
     /* SysUser */
-    sys_user_total: (num: number)=>{
-      return 'There are a total of <b>'+(num || 0)+'</b> items';
-    },
+    sys_user_total: (num: number) => `There are a total of <b>${num || 0}</b> items`,
     sys_user_image: 'Image',
     sys_user_type: 'Type',
     sys_user_role: 'Role',
@@ -127,15 +125,11 @@ export function en_US(): any {
     sys_user_verify_uname: 'Please enter Uname, PhoneNumber, OR Email',
     sys_user_verify_passwd: 'Password 6-16 characters',
     /* SysRole */
-    sys_role_total: (num: number)=>{
-      return 'There are a total of <b>'+(num || 0)+'</b> items';
-    },
+    sys_role_total: (num: number) => `There are a total of <b>${num || 0}</b> items`,
     sys_role_perm: 'Permissions',
     sys_role_verify_name: 'Role name 2-16 characters',
     /* SysMenus */
-    sys_menus_total: (num: number)=>{
-      return 'There are a total of <b>'+(num || 0)+'</b> items';
-    },
+    sys_menus_total: (num: number) => `There are a total of <b>${num || 0}</b> items`,
     sys_menus_lang: 'Language',
     sys_menus_en_us: 'English',
     sys_menus_zh_cn: '简体中文',
@@ -150,13 +144,13 @@ export function en_US(): any {
     sys_menus_sort_placeholder: 'Sort, such as: 0, 1, 2',
     sys_menus_verify_title: 'The title must be 2-32 characters long',
     /* WebHtml */
-    web_html_total: (num: number)=>{
-      return 'There are a total of <b>'+(num || 0)+'</b> items';
-    },
+    web_html_total: (num: number) => `There are a total of <b>${num || 0}</b> items`,
     web_html_type: 'Type',
     web_html_title: 'Title',
     web_html_name: 'Name',
     web_html_verify_title: 'The title must be 2-32 characters long',
     web_html_verify_name: 'The name must be 2-16 characters long',
+    /* GoodsStock */
+    goods_stock_total: (num: number) => `<b>${num}</b> pieces in stock`,
   }
 }

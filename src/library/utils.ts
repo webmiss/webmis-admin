@@ -59,4 +59,24 @@ export default class Util {
     return Math.floor(Math.random()*(max-min+1))+min;
   }
 
+  /* 二维对象数组排序 */
+  public static sort2DArray(arr: Array<any>, fields: any, asc: Boolean=true): Array<any> {
+    const result = JSON.parse(JSON.stringify(arr));
+    const sortFields = Array.isArray(fields)?fields:[fields];
+    return result.sort((a: any, b: any) => {
+      for (const field of sortFields) {
+        const valueA = field.split('.').reduce((o: any, k: any) => o?.[k], a);
+        const valueB = field.split('.').reduce((o: any, k: any) => o?.[k], b);
+        if (valueA !== valueB) {
+          const compareResult = 
+            typeof valueA === 'string' 
+              ? valueA.localeCompare(valueB)
+              : valueA - valueB;
+          return asc ? compareResult : -compareResult;
+        }
+      }
+      return 0;
+    });
+  }
+
 }

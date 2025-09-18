@@ -18,10 +18,15 @@ const routes: Array<RouteRecordRaw> = [
   { path: '/BaseBrand', name: 'BaseBrand', component: () => import('../views/base/brand/index.vue') },
   { path: '/BaseCategory', name: 'BaseCategory', component: () => import('../views/base/category/index.vue') },
   { path: '/BaseSupplier', name: 'BaseSupplier', component: () => import('../views/base/supplier/index.vue') },
-  // 商品管理
+  // 商品
   { path: '/GoodsInfo', name: 'GoodsInfo', component: () => import('../views/goods/info/index.vue') },
   { path: '/GoodsLog', name: 'GoodsLog', component: () => import('../views/goods/log/index.vue') },
   { path: '/GoodsStock', name: 'GoodsStock', component: () => import('../views/goods/stock/index.vue') },
+  // 库存
+  { path: '/PurchaseIn', name: 'PurchaseIn', component: () => import('../views/inventory/purchase_in/index.vue') },
+  { path: '/PurchaseInPush', name: 'PurchaseInPush', component: () => import('../views/inventory/purchase_in_push/index.vue') },
+  { path: '/PurchaseOut', name: 'PurchaseOut', component: () => import('../views/inventory/purchase_out/index.vue') },
+  { path: '/PurchaseOutPush', name: 'PurchaseOutPush', component: () => import('../views/inventory/purchase_out_push/index.vue') },
 ]
 /* 创建 */
 export default createRouter({

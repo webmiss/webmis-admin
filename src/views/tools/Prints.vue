@@ -49,10 +49,13 @@
                 <div class="sale_price">￥{{ v.sale_price?Math.round(v.sale_price*100)/100:'0.00' }}</div>
               </div>
             </div>
-            <!-- 瑞丽市场部(挂件) -->
-            <div v-if="list.active == 'rlscb_gj'" :class="list.active" class="print_box" :style="{width: list.template[list.active].width, height: list.template[list.active].height}">
+            <!-- 瑞丽市场部(二维码) -->
+            <div v-if="list.active == 'rlscb_qr'" :class="list.active" class="print_box" :style="{width: list.template[list.active].width, height: list.template[list.active].height}">
               <div class="select" :class="v.checked ? 'checked' : ''"></div>
               <div class="body">
+                <div class="qrcode" :style="{ backgroundColor: !v.qrcode ? '#F2F4F8' : '' }">
+                  <img v-if="v.qrcode" :src="v.qrcode" :alt="v.sku_id" style="height: 36px;" />
+                </div>
                 <div class="barcode" :style="{ backgroundColor: !v.barcode ? '#F2F4F8' : '' }">
                   <img v-if="v.barcode" :src="v.barcode" :alt="v.sku_id" style="height: 32px;" />
                 </div>
@@ -127,14 +130,15 @@
 .rlscb_sz .sku_id{top: calc(50% + 20px); font-size: 13px;}
 .rlscb_sz .properties_value{top: calc(50% + 40px); font-size: 12px; zoom: 0.9; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;}
 .rlscb_sz .sale_price{top: calc(50% + 50px); font-size: 14px; font-weight: bold;}
-/* 瑞丽市场部(挂件) */
-.rlscb_gj{position: relative; text-align: center;}
-.rlscb_gj .body{left: 2mm; width: calc(100% - 2mm); height: 100%;}
-.rlscb_gj .body div{position: absolute; width: 100%; left: 50%; transform: translate(-50%, -50%);}
-.rlscb_gj .barcode{height: 32px; top: calc(50% - 10px);}
-.rlscb_gj .sku_id{top: calc(50% + 16px); font-size: 13px;}
-.rlscb_gj .properties_value{top: calc(50% + 35px); font-size: 12px; zoom: 0.9; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;}
-.rlscb_gj .sale_price{top: calc(50% + 50px); font-size: 16px; font-weight: bold;}
+/* 瑞丽市场部(二维码) */
+.rlscb_qr{position: relative; text-align: center;}
+.rlscb_qr .body{left: 2mm; width: calc(100% - 2mm); height: 100%;}
+.rlscb_qr .body div{position: absolute; width: 100%; left: 50%; transform: translate(-50%, -50%);}
+.rlscb_qr .qrcode{height: 36px; top: calc(50% - 42px);}
+.rlscb_qr .barcode{height: 32px; top: calc(50% - 5px);}
+.rlscb_qr .sku_id{top: calc(50% + 20px); font-size: 13px;}
+.rlscb_qr .properties_value{top: calc(50% + 38px); font-size: 12px; zoom: 0.9; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;}
+.rlscb_qr .sale_price{top: calc(50% + 50px); font-size: 16px; font-weight: bold;}
 /* 平洲市场部(标签) */
 .pzscb_sz{position: relative; text-align: center;}
 .pzscb_sz .body{left: 2mm; width: calc(100% - 2mm); height: 100%;}
@@ -182,7 +186,7 @@ const list = ref({
   sku: <any>[],
   template: {
     rlscb_sz: {display: true, label: "瑞丽市场部(手镯)", info: "3.6cm x 3.6cm", width: "3.4cm", height: "3.4cm"},
-    rlscb_gj: {display: true, label: "瑞丽市场部(挂件)", info: "3.6cm x 3.6cm", width: "3.4cm", height: "3.4cm"},
+    rlscb_qr: {display: true, label: "瑞丽市场部(二维码)", info: "3.6cm x 3.6cm", width: "3.4cm", height: "3.4cm"},
     pzscb_sz: {display: true, label: "平洲市场部(标签)", info: "3.6cm x 3.6cm", width: "3.4cm", height: "3.4cm"},
   },
 });
@@ -275,6 +279,7 @@ const goodsContent = (sku_id: string, d: any): boolean => {
   for (let v of list.value.sku) {
     if (v.sku_id == sku_id) {
       v.barcode = d.barcode;
+      if (!v.qrcode) v.qrcode = d.qrcode;
       if (!v.name) v.name = d.name;
       if (!v.short_name) v.short_name = d.short_name;
       if (!v.properties_value) v.properties_value = d.properties_value;

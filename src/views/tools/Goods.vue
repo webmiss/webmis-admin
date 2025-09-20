@@ -246,6 +246,7 @@
         <!-- 拍照 -->
         <div class="photo_button" @click.stop="photoSave()">拍照上传</div>
         <!-- 视频 -->
+        <video id="GoodsVideo" class="barcode"></video>
         <video id="GoodsPhotoVideo" :style="{width: photo.screen?'100%':'', height: !photo.screen?'100%':'', transform:'translate(-50%, -50%) scaleX('+(photo.camera?1:-1)+')'}" class="center" autoplay></video>
         <canvas id="GoodsPhotoCanvas" class="center"></canvas>
       </div>
@@ -330,11 +331,13 @@
 .wm-goods_photo_body .photo_tools{user-select: none; position: absolute; top: 16px; right: 16px; z-index: 12; padding: 8px 16px; line-height: 32px; background-color: rgba(0, 0, 0, .7); color: #FFF; border-radius: 32px;}
 .wm-goods_photo_body .photo_tools span{cursor: pointer; padding: 0 16px;}
 .wm-goods_photo_body .photo_tools span:hover{color: @Minor;}
+.wm-goods_photo_body .barcode{position: absolute; z-index: 11; left: 10px; top: 10px; width: 160px; border: #000 4px solid; background-color: #000;}
 </style>
 
 <script setup lang="ts">
 import { ref, watch, getCurrentInstance, nextTick } from 'vue';
 import { useStore } from 'vuex';
+import { BrowserMultiFormatReader } from '@zxing/library'
 /* UI组件 */
 import Ui from '../../library/ui';
 import Request from '../../library/request';
@@ -405,10 +408,13 @@ const list = ref({
 });
 // 拍照
 const photo = ref({
-  screen: false,  // 横屏、竖屏
-  camera: true,   // 翻转画面
-  isTrue: false,  // 摄像头
-  video: <any>null, canvas: <any>null, context: <any>null,
+  screen: false,          // 横屏、竖屏
+  camera: true,           // 翻转画面
+  isTrue: false,          // 摄像头
+  video: <any>null,       // 视频
+  canvas: <any>null,      // 画布
+  context: <any>null,     // 内容
+  codeReader: <any>null,  // 扫描
 });
 
 /* 监听 */
@@ -657,17 +663,37 @@ const photoOpen = (): void => {
     if (navigator.mediaDevices === undefined || navigator.mediaDevices.getUserMedia === undefined) return Ui.Toast('浏览器不支持调用摄像头!');
     const getUserMedia: any = (navigator as any).webkitGetUserMedia || (navigator as any).mozGetUserMedia || (navigator as any).getUserMedia;
     if (!getUserMedia) return Ui.Toast('浏览器不支持调用摄像头!');
+    // 启动扫描
+    startScan();
     // 调用摄像头
-    navigator.mediaDevices.getUserMedia({video:true}).then((stream:any)=>{
+    navigator.mediaDevices.getUserMedia({video:
+      {width:{ideal:1920}, height:{ideal:1080}, frameRate:{ideal: 30}}
+    }).then((stream:any)=>{
       photo.value.video.srcObject = stream;
       photo.value.video.onloadedmetadata = ()=>{
-        photo.value.video.play();
+        // photo.value.video.play();
       }
       photo.value.isTrue = true;
     }).catch((err:any)=>{
       photo.value.isTrue = false;
       return Ui.Toast('无法访问摄像头!');
     });
+  });
+}
+
+/* 扫描条码 */
+const startScan = async (): Promise<void> => {
+  photo.value.codeReader = new BrowserMultiFormatReader();
+  const devices: any = await photo.value.codeReader.listVideoInputDevices();
+  const backCamera: any = devices.find((device: any) => 
+    device.label.includes('back') || devices.length === 1
+  );
+  photo.value.codeReader.decodeFromVideoDevice(backCamera.deviceId, 'GoodsVideo', (res: any, err: any)=>{
+    if(res) {
+      console.log(res.text);
+      goodsInfo(res.text);
+      // photo.value.codeReader.reset();
+    }
   });
 }
 
@@ -689,7 +715,9 @@ const photoSave = (): void => {
   const base64: any = photo.value.canvas.toDataURL('image/jpeg');
   // 压缩上传
   Files.ImageCompress(base64, {width:1024, height:1024}, (imgBase64: any)=>{
-    imgUpload(form.value.sku_id, imgBase64, 'image/jpeg');
+    console.log(imgBase64);
+    Ui.Toast('正在开发');
+    // imgUpload(form.value.sku_id, imgBase64, 'image/jpeg');
   });
 }
 
@@ -698,6 +726,7 @@ const photoClose = (): void => {
   if(photo.value.isTrue) {
     photo.value.isTrue = false;
     photo.value.video.srcObject.getTracks()[0].stop();
+    photo.value.codeReader.reset();
   }
   photo.value.video = null;
   photo.value.canvas = null;

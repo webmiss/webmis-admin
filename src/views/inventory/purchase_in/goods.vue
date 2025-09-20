@@ -360,7 +360,7 @@ const goodsAdd = (data: Array<any>, type: string=''): void => {
     time = setTimeout(()=>{
       goodsAddData(timeData);
       timeData = [];
-    }, 1000);
+    }, 800);
   }
 }
 /* 商品-是否存在 */
@@ -373,6 +373,7 @@ const goodsIsSku = (sku_id: string): boolean => {
 }
 /* 商品-添加数据 */
 const goodsAddData = (data: Array<any>): void => {
+  let tmp: any = data;
   Request.Post('erp_purchase_in/goods_add?lang=' + state.lang, {
     token: state.token,
     id: props.data.id,
@@ -380,17 +381,27 @@ const goodsAddData = (data: Array<any>): void => {
     wms_co_id: props.data.wms_co_id,
     data: data,
   }, (res: any) => {
-    const {code, msg, data}: any = res.data;
-    if(code == 0) {
+    const {code, msg, data, err}: any = res.data;
+    if(code===0) {
+      // 全部更新
       goodsUpdate(data);
-      // 统计价格
       goodsTotal(true);
-    } else {
+    } else if(code===5000) {
       Ui.Toast(msg, 5000, 'danger');
-      goodsUpdate(data);
+      // 部分更新
+      if(data && data.length>0) goodsUpdate(data);
+      if(err && err.length>0) {
+        const list: any = goods.value.list;
+        for(let sku_id of err) {
+          for(let i in list) if(sku_id==list[i].sku_id) list[i].loading=1;
+        }
+      }
+    } else {
+      if(msg) Ui.Toast(msg);
+      else goodsUpdate(tmp, true);
     }
   }, () => {
-    goodsUpdate(data, true);
+    goodsUpdate(tmp, true);
   });
 }
 /* 商品-更新数据 */
@@ -402,8 +413,8 @@ const goodsUpdate = (data: Array<any>, isLoad: boolean=false): void => {
     if(data[k].brand!=props.data.brand) Ui.Toast('[ '+data[k].sku_id+' ]品牌为“'+data[k].brand+'”不等于“'+props.data.brand+'”', 5000, 'danger');
     for(let i in list) {
       if(list[i].sku_id == data[k].sku_id) {
-        if(isLoad) list[i].loading = 1;
-        else list[i] = data[k];
+        if(isLoad) list[i].loading=1;
+        else list[i]=data[k];
         continue;
       }
     }

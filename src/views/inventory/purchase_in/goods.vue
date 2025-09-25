@@ -12,9 +12,12 @@
               <wm-checkbox :options="goods.is_sku"></wm-checkbox>
             </li>
             <li v-if="isAction('save')">
+              <wmButton type="primary" effect="text" padding="0 4px" @click="goodsPhoto()">拍照</wmButton>
+            </li>
+            <li v-if="isAction('save')">
               <wmButton type="danger" effect="text" padding="0 4px" @click="goodsRemove('part')">移除</wmButton>
             </li>
-            <li>|</li>
+            <li v-if="isAction('goods_imp')">|</li>
             <li v-if="isAction('goods_imp')">
               <wmButton type="primary" effect="text" padding="0 4px" @click="importData()">导入</wmButton>
             </li>
@@ -256,6 +259,13 @@ watch(()=>props.show, (val: boolean)=>{
     goodsList();
   }
 },{ deep: true });
+/* 监听-拍照 */
+watch(()=>state.goods.photo.refresh, (val: boolean)=>{
+  if(val) {
+    goodsList();
+    goods.value.refresh = val;
+  }
+},{ deep: true });
 
 /* 选中状态 */
 const selectState = (n: number, t: number): void => {
@@ -446,6 +456,24 @@ const goodsNum = (e: any, id: string, sku_id: string): void => {
       goodsTotal(true);
     } else Ui.Toast(msg, 5000, 'danger');
   });
+}
+
+/* 商品-拍照 */
+const goodsPhoto = (): void => {
+  // 数据
+  const list: any = goods.value.list;
+  let data: any = [];
+  for(let v of list) {
+    if(v.id.toString().substring(0, 1) === 's') continue;
+    data.push({id: v.id, sku_id: v.sku_id, properties_value:v.properties_value, sale_price: v.sale_price, market_price: v.market_price, img:v.img});
+  }
+  // 显示
+  state.goods.show = true;
+  state.goods.photo.refresh = false;
+  state.goods.photo.id = props.data.id;
+  state.goods.photo.ctime = props.data.ctime;
+  state.goods.photo.wms_co_id = props.data.wms_co_id;
+  state.goods.photo.list = data;
 }
 
 /* 商品-移除 */

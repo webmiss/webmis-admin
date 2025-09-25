@@ -142,8 +142,8 @@
               <template #sale_price="d">
                 <div class="tRight">
                   <template v-if="d.sale_price>0">
-                    <span v-if="d.ratio!='1.00'">
-                      <del>{{ priceEncode(d.sale_price) }}</del> <b>{{ priceEncode(d.sale_price*d.ratio) }}</b>
+                    <span v-if="d.ratio!='1.00' || d.ratio_sale!='1.00'">
+                      <del>{{ priceEncode(d.sale_price) }}</del> <b>{{ priceEncode(d.sale_price*(d.ratio<1?d.ratio:d.ratio_sale)) }}</b>
                     </span>
                     <b v-else>{{ priceEncode(d.sale_price) }}</b>
                   </template>
@@ -153,8 +153,8 @@
               <template #market_price="d">
                 <div class="tRight">
                   <template v-if="d.market_price>0">
-                    <span v-if="d.ratio!='1.00'">
-                      <del>{{ priceEncode(d.market_price) }}</del> <b>{{ priceEncode(d.market_price*d.ratio) }}</b>
+                    <span v-if="d.ratio!='1.00' || d.ratio_market!='1.00'">
+                      <del>{{ priceEncode(d.market_price) }}</del> <b>{{ priceEncode(d.market_price*(d.ratio<1?d.ratio:d.ratio_market)) }}</b>
                     </span>
                     <b v-else>{{ priceEncode(d.market_price) }}</b>
                   </template>

@@ -37,19 +37,9 @@
           <td>
             <wmInput v-model:value="form.cost_price" :placeholder="form.type=='edits'?'原始':''" />
           </td>
-          <td class="label"><span class="red_dot">标签价(元)</span></td>
+          <td class="label">成本折扣</td>
           <td>
-            <wmInput v-model:value="form.sale_price" :placeholder="form.type=='edits'?'原始':''" />
-          </td>
-        </tr>
-        <tr>
-          <td class="label">采购价(w)</td>
-          <td>
-            <wmInput v-model:value="form.purchase_price" :placeholder="form.type=='edits'?'原始':''" />
-          </td>
-          <td class="label">吊牌价(w)</td>
-          <td>
-            <wmInput v-model:value="form.market_price" :placeholder="form.type=='edits'?'原始':''" />
+            <wmInput v-model:value="form.ratio_cost" :placeholder="form.type=='edits'?'原始':''" />
           </td>
         </tr>
         <tr>
@@ -57,9 +47,49 @@
           <td>
             <wmInput v-model:value="form.supply_price" :placeholder="form.type=='edits'?'原始':''" />
           </td>
+          <td class="label">供应链折扣</td>
+          <td>
+            <wmInput v-model:value="form.ratio_supply" :placeholder="form.type=='edits'?'原始':''" />
+          </td>
+        </tr>
+        <tr>
+          <td class="label"><span class="red_dot">标签价(元)</span></td>
+          <td>
+            <wmInput v-model:value="form.sale_price" :placeholder="form.type=='edits'?'原始':''" />
+          </td>
+          <td class="label">标签折扣</td>
+          <td>
+            <wmInput v-model:value="form.ratio_sale" :placeholder="form.type=='edits'?'原始':''" />
+          </td>
+        </tr>
+        <tr>
+          <td class="label">采购价(元)</td>
+          <td>
+            <wmInput v-model:value="form.purchase_price" :placeholder="form.type=='edits'?'原始':''" />
+          </td>
+          <td class="label">采购折扣</td>
+          <td>
+            <wmInput v-model:value="form.ratio_purchase" :placeholder="form.type=='edits'?'原始':''" />
+          </td>
+        </tr>
+        <tr>
           <td class="label">人民币采购价</td>
           <td>
             <wmInput v-model:value="form.supplier_price" :placeholder="form.type=='edits'?'原始':''" />
+          </td>
+          <td class="label">人民币折扣</td>
+          <td>
+            <wmInput v-model:value="form.ratio_supplier" :placeholder="form.type=='edits'?'原始':''" />
+          </td>
+        </tr>
+        <tr>
+          <td class="label">吊牌价(w)</td>
+          <td>
+            <wmInput v-model:value="form.market_price" :placeholder="form.type=='edits'?'原始':''" />
+          </td>
+          <td class="label">吊牌折扣</td>
+          <td>
+            <wmInput v-model:value="form.ratio_market" :placeholder="form.type=='edits'?'原始':''" />
           </td>
         </tr>
         <tr>
@@ -153,8 +183,9 @@ const langs: any = state.langs;
 const infoShow = ref(false);
 const form = ref({
   type:'', ids:[],
-  sku_id:'', name:'', properties_value:'', short_name:'', unit:'', weight:'', num:'', ratio:'', owner:'', i_id:'', supplier_name:'',
+  sku_id:'', name:'', properties_value:'', short_name:'', unit:'', weight:'', num:'', owner:'', i_id:'', supplier_name:'',
   cost_price:'', supply_price:'', sale_price:'', supplier_price:'', purchase_price:'', market_price:'', other_price:'', other_price1:'',
+  ratio:'', ratio_cost:'', ratio_purchase:'', ratio_supply:'', ratio_supplier:'', ratio_sale:'', ratio_market:'',
   labels:<any>'', category:<any>'', brand:<any>'',
 });
 // 全部分类
@@ -184,6 +215,12 @@ watch(()=>props.show, (val: boolean)=>{
     form.value.weight = props.data.weight || '';
     form.value.num = typeof props.data.num!='undefined'?props.data.num:'';
     form.value.ratio = props.data.ratio || '';
+    form.value.ratio_cost = props.data.ratio_cost || '';
+    form.value.ratio_purchase = props.data.ratio_purchase || '';
+    form.value.ratio_supply = props.data.ratio_supply || '';
+    form.value.ratio_supplier = props.data.ratio_supplier || '';
+    form.value.ratio_sale = props.data.ratio_sale || '';
+    form.value.ratio_market = props.data.ratio_market || '';
     form.value.brand = props.data.brand || '';
     form.value.owner = props.data.owner || '';
     form.value.i_id = props.data.i_id || '';

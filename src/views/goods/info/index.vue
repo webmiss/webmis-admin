@@ -143,26 +143,53 @@
       <template #cost_price="d">
         <div class="tRight">
           <b v-if="d.cost_price==='-'">***</b>
+          <span v-else-if="d.ratio!='1.00' || d.ratio_cost!='1.00'">
+            <del>{{ priceEncode(d.cost_price) }}</del> <b>{{ priceEncode(d.cost_price*(d.ratio<1?d.ratio:d.ratio_cost)) }}</b>
+          </span>
           <b v-else>{{ d.cost_price>0?priceEncode(d.cost_price):'-' }}</b>
         </div>
       </template>
       <template #supply_price="d">
-        <div class="tRight">{{ d.supply_price>0?priceEncode(d.supply_price):'-' }}</div>
+        <div class="tRight">
+          <b v-if="d.supply_price==='-'">***</b>
+          <span v-else-if="d.ratio!='1.00' || d.ratio_supply!='1.00'">
+            <del>{{ priceEncode(d.supply_price) }}</del> <b>{{ priceEncode(d.supply_price*(d.ratio<1?d.ratio:d.ratio_supply)) }}</b>
+          </span>
+          <b v-else>{{ d.supply_price>0?priceEncode(d.supply_price):'-' }}</b>
+        </div>
       </template>
       <template #sale_price="d">
-        <div class="tRight">{{ d.sale_price>0?priceEncode(d.sale_price):'-' }}</div>
+        <div class="tRight">
+          <span v-if="d.ratio!='1.00' || d.ratio_sale!='1.00'">
+            <del>{{ priceEncode(d.sale_price) }}</del> <b>{{ priceEncode(d.sale_price*(d.ratio<1?d.ratio:d.ratio_sale)) }}</b>
+          </span>
+          <b v-else>{{ d.sale_price>0?priceEncode(d.sale_price):'-' }}</b>
+        </div>
       </template>
       <template #purchase_price="d">
         <div class="tRight">
           <b v-if="d.purchase_price==='-'">***</b>
+          <span v-else-if="d.ratio!='1.00' || d.ratio_purchase!='1.00'">
+            <del>{{ priceEncode(d.purchase_price) }}</del> <b>{{ priceEncode(d.purchase_price*(d.ratio<1?d.ratio:d.ratio_purchase)) }}</b>
+          </span>
           <b v-else>{{ d.purchase_price>0?priceEncode(d.purchase_price):'-' }}</b>
         </div>
       </template>
       <template #supplier_price="d">
-        <div class="tRight">{{ d.supplier_price>0?priceEncode(d.supplier_price):'-' }}</div>
+        <div class="tRight">
+          <span v-if="d.ratio!='1.00' || d.ratio_supplier!='1.00'">
+            <del>{{ priceEncode(d.supplier_price) }}</del> <b>{{ priceEncode(d.supplier_price*(d.ratio<1?d.ratio:d.ratio_supplier)) }}</b>
+          </span>
+          <b v-else>{{ d.supplier_price>0?priceEncode(d.supplier_price):'-' }}</b>
+        </div>
       </template>
       <template #market_price="d">
-        <div class="tRight">{{ d.market_price>0?priceEncode(d.market_price):'-' }}</div>
+        <div class="tRight">
+          <span v-if="d.ratio!='1.00' || d.ratio_market!='1.00'">
+            <del>{{ priceEncode(d.market_price) }}</del> <b>{{ priceEncode(d.market_price*(d.ratio<1?d.ratio:d.ratio_market)) }}</b>
+          </span>
+          <b v-else>{{ d.market_price>0?priceEncode(d.market_price):'-' }}</b>
+        </div>
       </template>
       <template #other_price="d">
         <div class="tRight">{{ d.other_price>0?priceEncode(d.other_price):'-' }}</div>

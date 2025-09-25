@@ -11,9 +11,12 @@ export default createStore({
     uinfo: {},                            // 用户信息
     menusAction: [],                      // 动作菜单
     socket: null,                         // Socket
-    msg: {gid: '', fid: '', title: '', img: '', num: 0, group: [], list: [], readId: 0},    // Msg
-    print: {show: false, sku: []},        // 打印标签
-    goods: {show: false, sku_id: ''},     // 货品信息
+    // Msg
+    msg: {gid: '', fid: '', title: '', img: '', num: 0, group: [], list: [], readId: 0},
+    // 打印
+    print: {show: false, sku: []},
+    // 货品
+    goods: {show: false, sku_id: '', photo: {refresh: false, id:'', ctime:'', wms_co_id:'', list:<any>[]}},
   },
   getters: {
   },

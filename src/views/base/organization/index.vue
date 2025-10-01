@@ -52,9 +52,9 @@
       <template #sort="d">
         <div class="tCenter">{{ d.sort }}</div>
       </template>
-      <template #state="d">
+      <template #status="d">
         <div class="tCenter">
-          <span :class="d.state?'c_success':'c_danger'">{{ d.state?langs.enable:langs.disable }}</span>
+          <span :class="d.status?'c_success':'c_danger'">{{ d.status?langs.enable:langs.disable }}</span>
         </div>
       </template>
       <template #action="d">
@@ -134,7 +134,7 @@ const list = ref({columns: [
   {title: langs.date, slot: 'date', textAlign: 'center', width: '120px', minWidth: '110px'},
   {title: langs.name, index: 'name', order: '', width: '120px', minWidth: '80px'},
   {title: '排序', slot: 'sort', textAlign: 'center', width: '60px', minWidth: '60px'},
-  {title: langs.status, index: 'state', slot: 'state', width: '60px', textAlign: 'center'},
+  {title: langs.status, index: 'status', slot: 'status', width: '60px', textAlign: 'center'},
   {title: langs.action, slot: 'action', textAlign: 'center', width: '90px'},
   {title: '制单员', slot: 'creator_name', textAlign: 'center', width: '90px'},
   {title: '操作员', slot: 'operator_name', textAlign: 'center', width: '90px'},

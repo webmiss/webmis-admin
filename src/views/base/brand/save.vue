@@ -6,7 +6,7 @@
         <tr>
           <td class="label"><span class="red_dot">{{ langs.status }}</span></td>
           <td colspan="3">
-            <wmSwitch v-model:value="form.state"></wmSwitch>
+            <wmSwitch v-model:value="form.status"></wmSwitch>
           </td>
         </tr>
         <tr>
@@ -86,7 +86,7 @@ const langs: any = state.langs;
 // 变量
 const infoShow = ref(false);
 // 数据
-const form = ref({id: 0, state: true, class:<any>'', sort:'0', name: '', value: '', rule: '', remark: ''});
+const form = ref({id: 0, status: true, class:<any>'', sort:'0', name: '', value: '', rule: '', remark: ''});
 // 全部分类
 const selectAll = ref({city_name: <any>[], class_name: <any>[]});
 
@@ -96,7 +96,7 @@ watch(()=>props.show, (val: boolean)=>{
   if(val){
     // 默认值
     form.value.id = props.data.id || 0;
-    form.value.state = typeof props.data.state!='undefined'?props.data.state:true;
+    form.value.status = typeof props.data.status!='undefined'?props.data.status:true;
     form.value.sort = props.data.sort || '0';
     form.value.name = props.data.name || '';
     form.value.value = props.data.value || '';

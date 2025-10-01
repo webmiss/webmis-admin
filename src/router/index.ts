@@ -27,6 +27,10 @@ const routes: Array<RouteRecordRaw> = [
   { path: '/PurchaseInPush', name: 'PurchaseInPush', component: () => import('../views/inventory/purchase_in_push/index.vue') },
   { path: '/PurchaseOut', name: 'PurchaseOut', component: () => import('../views/inventory/purchase_out/index.vue') },
   { path: '/PurchaseOutPush', name: 'PurchaseOutPush', component: () => import('../views/inventory/purchase_out_push/index.vue') },
+  { path: '/AllocateOut', name: 'AllocateOut', component: () => import('../views/inventory/allocate_out/index.vue') },
+  { path: '/AllocateIn', name: 'AllocateIn', component: () => import('../views/inventory/allocate_in/index.vue') },
+  // 订单
+  { path: '/OrderInout', name: 'OrderInout', component: () => import('../views/order/inout/index.vue') },
 ]
 /* 创建 */
 export default createRouter({

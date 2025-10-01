@@ -10,8 +10,6 @@
         {action: 'save', slot: 'add', is_action: true},
         {action: 'del', slot: 'del', is_action: true},
         {action: 'line', slot: 'line1'},
-        {action: 'save', slot: 'down', is_action: true},
-        {action: 'line', slot: 'line2'},
         {action: 'export', slot: 'export', is_action: true},
       ]">
         <template #add>
@@ -21,12 +19,6 @@
           <wmButton effect="plain" type="danger" icon="ui ui_del" padding="0 16px 0 8px" :disabled="list.num==0" @click="delData()">{{ langs.del }}({{ list.num }})</wmButton>
         </template>
         <template #line1>
-          <span class="line">|</span>
-        </template>
-        <template #down>
-          <wmButton effect="plain" type="primary" @click="subPull()">同步聚水潭店铺</wmButton>
-        </template>
-        <template #line2>
           <span class="line">|</span>
         </template>
         <template #export>
@@ -59,7 +51,7 @@
         <div class="tCenter">{{ d.id }}</div>
       </template>
       <template #type="d">
-        <div class="tCenter" :class="d.type=='0'?'c_danger':'c_info'">{{ d.type_name }}</div>
+        <div class="tCenter" :class="d.type=='0'?'c_primary':'c_info'">{{ d.type_name }}</div>
       </template>
       <template #date="d">
         <div class="tCenter">
@@ -75,9 +67,9 @@
       <template #sort="d">
         <div class="tCenter">{{ d.sort }}</div>
       </template>
-      <template #state="d">
+      <template #status="d">
         <div class="tCenter">
-          <span :class="d.state?'c_success':'c_danger'">{{ d.state?langs.enable:langs.disable }}</span>
+          <span :class="d.status?'c_success':'c_danger'">{{ d.status?langs.enable:langs.disable }}</span>
         </div>
       </template>
       <template #action="d">
@@ -164,7 +156,7 @@ const list = ref({columns: [
   {title: '分仓ID', slot: 'wms_co_id', index: 'wms_co_id', order: '', width: '100px', minWidth: '100px'},
   {title: langs.name, index: 'name', order: '', width: '120px', minWidth: '80px'},
   {title: '排序', slot: 'sort', textAlign: 'center', width: '60px', minWidth: '60px'},
-  {title: langs.status, index: 'state', slot: 'state', width: '60px', textAlign: 'center'},
+  {title: langs.status, index: 'status', slot: 'status', width: '60px', textAlign: 'center'},
   {title: langs.action, slot: 'action', textAlign: 'center', width: '90px'},
   {title: '制单员', slot: 'creator_name', textAlign: 'center', width: '90px'},
   {title: '操作员', slot: 'operator_name', textAlign: 'center', width: '90px'},
@@ -305,18 +297,6 @@ const exportSubmit = (val: boolean): void => {
   if(!val) return;
   exp.value.show = false;
   clearSelect();
-}
-
-/* 同步聚水潭 */
-const subPull = (): void => {
-  const load: any = Ui.Loading();
-  Request.Post('erp_base_partner/pull?lang=' + state.lang, {
-    token: state.token,
-  }, (res: any) => {
-    load.clear();
-    const { msg }: any = res.data;
-    Ui.Toast(msg);
-  });
 }
 
 /* 选项 */

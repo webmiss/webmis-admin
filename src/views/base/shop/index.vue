@@ -10,8 +10,6 @@
         {action: 'save', slot: 'add', is_action: true},
         {action: 'del', slot: 'del', is_action: true},
         {action: 'line', slot: 'line1'},
-        {action: 'save', slot: 'down', is_action: true},
-        {action: 'line', slot: 'line2'},
         {action: 'export', slot: 'export', is_action: true},
       ]">
         <template #add>
@@ -21,12 +19,6 @@
           <wmButton effect="plain" type="danger" icon="ui ui_del" padding="0 16px 0 8px" :disabled="list.num==0" @click="delData()">{{ langs.del }}({{ list.num }})</wmButton>
         </template>
         <template #line1>
-          <span class="line">|</span>
-        </template>
-        <template #down>
-          <wmButton effect="plain" type="primary" @click="subPull()">同步聚水潭店铺</wmButton>
-        </template>
-        <template #line2>
           <span class="line">|</span>
         </template>
         <template #export>
@@ -46,8 +38,8 @@
         <template #fid="d">
           <wmSelect v-model:value="sea.fid" :options="selectAll.org_name" :placeholder="d.label" clearable multiple></wmSelect>
         </template>
-        <template #state="d">
-          <wmSelect v-model:value="sea.state" :options="selectAll.state_name" :placeholder="d.label" clearable></wmSelect>
+        <template #status="d">
+          <wmSelect v-model:value="sea.status" :options="selectAll.status_name" :placeholder="d.label" clearable></wmSelect>
         </template>
       </wmSearch>
       <!-- Search End -->
@@ -81,9 +73,9 @@
       <template #sort="d">
         <div class="tCenter">{{ d.sort }}</div>
       </template>
-      <template #state="d">
+      <template #status="d">
         <div class="tCenter">
-          <span :class="d.state?'c_success':'c_danger'">{{ d.state?langs.enable:langs.disable }}</span>
+          <span :class="d.status?'c_success':'c_danger'">{{ d.status?langs.enable:langs.disable }}</span>
         </div>
       </template>
       <template #action="d">
@@ -153,13 +145,13 @@ const sea = ref({
     {label: '城市', value: '', slot: 'city'},
     {label: '分类', value: '', slot: 'class'},
     {label: '事业部', value: '', slot: 'fid'},
-    {label: '状态', value: '', slot: 'state'},
+    {label: '状态', value: '', slot: 'status'},
     {label: langs.name, value: '', name: 'name'},
     {label: '制单员', value: '', name: 'creator_name'},
     {label: '操作员', value: '', name: 'operator_name'},
     {label: langs.remark, value: '', name: 'remark'},
   ],
-  city: '', class: '', fid: '', state: '',
+  city: '', class: '', fid: '', status: '',
 });
 // 列表
 const total = ref({time: '', list: {}});
@@ -172,7 +164,7 @@ const list = ref({columns: [
   {title: langs.name, index: 'name', order: '', width: '120px', minWidth: '80px'},
   {title: '所属', index: 'fid', slot: 'fid', order: '', textAlign: 'center', width: '80px', minWidth: '60px'},
   {title: '排序', slot: 'sort', textAlign: 'center', width: '60px', minWidth: '60px'},
-  {title: langs.status, index: 'state', slot: 'state', width: '60px', textAlign: 'center'},
+  {title: langs.status, index: 'status', slot: 'status', width: '60px', textAlign: 'center'},
   {title: langs.action, slot: 'action', textAlign: 'center', width: '90px'},
   {title: '制单员', slot: 'creator_name', textAlign: 'center', width: '90px'},
   {title: '操作员', slot: 'operator_name', textAlign: 'center', width: '90px'},
@@ -184,7 +176,7 @@ const save = ref({show: false, title: '添加/编辑', data: {}});
 const del = ref({show: false, title: '删除', data: <any>[]});
 const exp = ref({show: false, title: '导出', num: 0});
 // 全部分类
-const selectAll = ref({city_name: <any>[], class_name: <any>[], org_name: <any>[], state_name: <any>[]});
+const selectAll = ref({city_name: <any>[], class_name: <any>[], org_name: <any>[], status_name: <any>[]});
 
 /* 创建完成 */
 onMounted(()=>{
@@ -235,7 +227,7 @@ const getWhere = (): object => {
     city: sea.value.city,
     class: sea.value.class,
     fid: sea.value.fid,
-    state: sea.value.state,
+    status: sea.value.status,
   };
   for (let v of sea.value.columns) if (v.name) data[v.name] = v.value;
   return data;
@@ -257,7 +249,7 @@ const resetData = (): void => {
   sea.value.city = '';
   sea.value.class = '';
   sea.value.fid = '';
-  sea.value.state = '';
+  sea.value.status = '';
   for (let v of sea.value.columns) v.value = '';
   // 其它
   list.value.order = '';
@@ -317,18 +309,6 @@ const exportSubmit = (val: boolean): void => {
   clearSelect();
 }
 
-/* 同步聚水潭 */
-const subPull = (): void => {
-  const load: any = Ui.Loading();
-  Request.Post('erp_base_shop/pull?lang=' + state.lang, {
-    token: state.token,
-  }, (res: any) => {
-    load.clear();
-    const { msg }: any = res.data;
-    Ui.Toast(msg);
-  });
-}
-
 /* 选项 */
 const getSelect = (): void => {
   Request.Post('erp_base_shop/get_select?lang=' + state.lang, {
@@ -339,7 +319,7 @@ const getSelect = (): void => {
       selectAll.value.city_name = data.city_name;
       selectAll.value.class_name = data.class_name;
       selectAll.value.org_name = data.org_name;
-      selectAll.value.state_name = data.state_name;
+      selectAll.value.status_name = data.status_name;
       // 加载
       isLoad.value = true;
     } else Ui.Toast(msg);

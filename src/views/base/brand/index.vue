@@ -32,6 +32,9 @@
         <template #class="d">
           <wm-select v-model:value="sea.class" :options="selectAll.class_name" :placeholder="d.label" clearable multiple></wm-select>
         </template>
+        <template #status="d">
+          <wmSelect v-model:value="sea.status" :options="selectAll.status_name" :placeholder="d.label" clearable multiple></wmSelect>
+        </template>
       </wmSearch>
       <!-- Search End -->
     </div>
@@ -55,9 +58,9 @@
       <template #sort="d">
         <div class="tCenter">{{ d.sort }}</div>
       </template>
-      <template #state="d">
+      <template #status="d">
         <div class="tCenter">
-          <span :class="d.state?'c_success':'c_danger'">{{ d.state?langs.enable:langs.disable }}</span>
+          <span :class="d.status?'c_success':'c_danger'">{{ d.status?langs.enable:langs.disable }}</span>
         </div>
       </template>
       <template #action="d">
@@ -125,12 +128,13 @@ const sea = ref({
   show: false, key: '', placeholder: '名称、备注',
   columns: [
     {label: '分类', value: '', slot: 'class'},
+    {label: '状态', value: '', slot: 'status'},
     {label: langs.name, value: '', name: 'name'},
     {label: '制单员', value: '', name: 'creator_name'},
     {label: '操作员', value: '', name: 'operator_name'},
     {label: langs.remark, value: '', name: 'remark'},
   ],
-  class: '',
+  class: '', status: '',
 });
 // 列表
 const total = ref({time: '', list: {}});
@@ -141,7 +145,7 @@ const list = ref({columns: [
   {title: '品牌', index: 'name', order: '', width: '80px', minWidth: '80px'},
   {title: '值', index: 'value', order: '', width: '120px', minWidth: '80px'},
   {title: '排序', slot: 'sort', textAlign: 'center', width: '60px', minWidth: '60px'},
-  {title: langs.status, index: 'state', slot: 'state', width: '60px', textAlign: 'center'},
+  {title: langs.status, index: 'status', slot: 'status', width: '60px', textAlign: 'center'},
   {title: langs.action, slot: 'action', textAlign: 'center', width: '90px'},
   {title: '制单员', slot: 'creator_name', textAlign: 'center', width: '90px'},
   {title: '操作员', slot: 'operator_name', textAlign: 'center', width: '90px'},
@@ -154,7 +158,7 @@ const save = ref({show: false, title: '添加/编辑', data: {}});
 const del = ref({show: false, title: '删除', data: <any>[]});
 const exp = ref({show: false, title: '导出', num: 0});
 // 全部分类
-const selectAll = ref({class_name: <any>[]});
+const selectAll = ref({class_name: <any>[], status_name: <any>[]});
 
 /* 创建完成 */
 onMounted(()=>{
@@ -203,6 +207,7 @@ const getWhere = (): object => {
   const data: any = {
     key: sea.value.key,
     class: sea.value.class,
+    status: sea.value.status,
   };
   for (let v of sea.value.columns) if (v.name) data[v.name] = v.value;
   return data;
@@ -222,6 +227,7 @@ const resetData = (): void => {
   // 条件
   sea.value.key = '';
   sea.value.class = '';
+  sea.value.status = '';
   for (let v of sea.value.columns) v.value = '';
   // 其它
   list.value.order = '';
@@ -289,6 +295,7 @@ const getSelect = (): void => {
     const { code, msg, data }: any = res.data;
     if (code == 0) {
       selectAll.value.class_name = data.class_name;
+      selectAll.value.status_name = data.status_name;
       // 加载
       isLoad.value = true;
     } else Ui.Toast(msg);

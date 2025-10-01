@@ -103,7 +103,7 @@ const form = ref({
   alipay_name: '', alipay_id: '', remark: '',
 });
 // 全部分类
-const selectAll = ref({city_name:[], state_name:[]});
+const selectAll = ref({city_name:[], status_name:[]});
 
 /* 监听 */
 watch(()=>props.show, (val: boolean)=>{

@@ -29,7 +29,7 @@
         </template>
         <template #view="d">
           <div class="flex_center">
-            <wmButton type="primary" effect="text" padding="0 4px" @click="state.goods.show=true;state.goods.sku_id=d.sku_id">{{ langs.goods_flow }}</wmButton>
+            <wmButton type="primary" effect="text" padding="0 4px" @click="state.goods.show=true;state.goods.sku_id=d.sku_id">{{ langs.flow }}</wmButton>
           </div>
         </template>
         <template #status="d">

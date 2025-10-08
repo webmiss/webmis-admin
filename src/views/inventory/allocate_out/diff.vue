@@ -75,13 +75,13 @@
         </template>
         <template #action="d">
           <div class="tCenter">
-            <span v-if="d.state==0" class="c_danger">进行中</span>
-            <span v-else-if="d.state==1" class="c_success">完成</span>
+            <span v-if="d.status==0" class="c_danger">进行中</span>
+            <span v-else-if="d.status==1" class="c_success">完成</span>
           </div>
         </template>
         <template #view="d">
           <div class="tCenter">
-            <wmButton type="primary" effect="text" padding="0 4px" @click="state.goods.show=true;state.goods.sku_id=d.sku_id">{{ langs.goods_flow }}</wmButton>
+            <wmButton type="primary" effect="text" padding="0 4px" @click="state.goods.show=true;state.goods.sku_id=d.sku_id">{{ langs.flow }}</wmButton>
           </div>
         </template>
         <template #type_name="d">
@@ -143,11 +143,11 @@
         <template #total="d">
           <div class="tCenter">{{ d.total }}</div>
         </template>
-        <template #state="d">
-          <div v-if="d.state=='0'" class="flex_center state0">{{ d.state_name }}</div>
-          <div v-else-if="d.state=='1'" class="flex_center state1">{{ d.state_name }}</div>
-          <div v-else-if="d.state=='2'" class="flex_center state2">{{ d.state_name }}</div>
-          <div v-else class="tCenter">{{ d.state_name }}</div>
+        <template #status="d">
+          <div v-if="d.status=='0'" class="flex_center status0">{{ d.status_name }}</div>
+          <div v-else-if="d.status=='1'" class="flex_center status1">{{ d.status_name }}</div>
+          <div v-else-if="d.status=='2'" class="flex_center status2">{{ d.status_name }}</div>
+          <div v-else class="tCenter">{{ d.status_name }}</div>
         </template>
       </wmTable>
       <!-- List End -->
@@ -159,10 +159,10 @@
 </template>
 
 <style lang="less" scoped>
-.state0,.state1,.state2{padding: 0 10px; border-radius: 2px;}
-.state0{background-color: @Info6; color: @Info;}
-.state1{background-color: @Warning6; color: @Warning;}
-.state2{background-color: @Minor; color: #FFF;}
+.status0,.status1,.status2{padding: 0 10px; border-radius: 2px;}
+.status0{background-color: @Info6; color: @Info;}
+.status1{background-color: @Warning6; color: @Warning;}
+.status2{background-color: @Minor; color: #FFF;}
 /* 类型 */
 .type span{display: block; padding: 0 8px; line-height: 26px; border: #FFF 1px solid; border-radius: 2px;}
 .type_primary{background-color: #FFF; color: @Primary;}
@@ -220,7 +220,7 @@ const goods = ref({
     { title: '单位', slot: 'unit', textAlign: 'center', width: '60px' },
     { title: '重量', slot: 'weight', index: 'weight', textAlign: 'center', width: '60px' },
     { title: '数量', slot: 'num', index: 'num', textAlign: 'center', width: '60px', minWidth: '60px' },
-    { title: '状态', slot: 'action', index: 'state', textAlign: 'center', width: '60px', minWidth: '60px' },
+    { title: '状态', slot: 'action', index: 'status', textAlign: 'center', width: '60px', minWidth: '60px' },
     { title: '查看', slot: 'view', textAlign: 'center', width: '60px', minWidth: '60px' },
     { title: '类型', slot: 'type_name', textAlign: 'center', width: '60px' },
     { title: '采购员', slot: 'owner', textAlign: 'center', width: '60px' },
@@ -238,7 +238,7 @@ const form = ref({
     { title: '调入仓', index: 'link_co_name' },
     { title: '数量', slot: 'num', textAlign: 'center' },
     { title: '条数', slot: 'total', textAlign: 'center' },
-    { title: '状态', slot: 'state', width: '80px', minWidth: '80px', textAlign: 'center' },
+    { title: '状态', slot: 'status', width: '80px', minWidth: '80px', textAlign: 'center' },
     { title: '制单员', index: 'creater_name', textAlign: 'center' },
     { title: '备注', index: 'remark' },
   ], list: <any>[], total: 0, num: 0,

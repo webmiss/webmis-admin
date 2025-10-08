@@ -29,13 +29,13 @@
         </template>
         <template #view="d">
           <div class="flex_center">
-            <wmButton type="primary" effect="text" padding="0 4px" @click="state.goods.show=true;state.goods.sku_id=d.sku_id">{{ langs.goods_flow }}</wmButton>
+            <wmButton type="primary" effect="text" padding="0 4px" @click="state.goods.show=true;state.goods.sku_id=d.sku_id">{{ langs.flow }}</wmButton>
           </div>
         </template>
-        <template #state="d">
+        <template #status="d">
           <div class="flex_center">
-            <span v-if="d.state===true" class="c_success">可用</span>
-            <span v-else-if="d.state===false" class="c_info">{{ d.state_name }}</span>
+            <span v-if="d.status===true" class="c_success">可用</span>
+            <span v-else-if="d.status===false" class="c_danger">{{ d.status_name }}</span>
             <span v-else class="c_info">-</span>
           </div>
         </template>
@@ -93,7 +93,7 @@ const goods = ref({
     {title: '数量', slot: 'num', textAlign: 'center', width: '80px', minWidth: '80px'},
     {title: '操作', slot: 'action', textAlign: 'center', width: '80px', minWidth: '80px'},
     {title: '查看', slot: 'view', textAlign: 'center', width: '60px', minWidth: '60px'},
-    {title: '状态', slot: 'state', textAlign: 'center', width: '80px'},
+    {title: '状态', slot: 'status', textAlign: 'center', width: '80px'},
   ], list: <any>[], num: 0,
 });
 // 添加

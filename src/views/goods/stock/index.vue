@@ -104,12 +104,12 @@
       </template>
       <template #action="d">
         <div class="tCenter">
-          <wmButton v-if="isAction('edit')" @click="saveData('edit', d)">{{ langs.edit }}</wmButton>
+          <wmButton v-if="isAction('save')" @click="saveData('edit', d)">{{ langs.edit }}</wmButton>
         </div>
       </template>
       <template #view="d">
         <div class="tCenter">
-          <wmButton type="primary" effect="text" padding="0 4px" @click="state.goods.show=true; state.goods.sku_id=d.sku_id">{{ langs.goods_flow }}</wmButton>
+          <wmButton type="primary" effect="text" padding="0 4px" @click="state.goods.show=true; state.goods.sku_id=d.sku_id">{{ langs.flow }}</wmButton>
         </div>
       </template>
       <template #wms_co_id="d">

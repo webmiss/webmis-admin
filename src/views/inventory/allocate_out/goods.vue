@@ -7,7 +7,7 @@
           <li>
             <wmInput v-model:value="goods.key" @keyup.enter="goodsSearch()" @iconClick="goodsSearch()" :placeholder="state.langs.sku_id" maxlength="32" icon="ui ui_search" iconAlign="right" padding="0 40px 0 10px"></wmInput>
           </li>
-          <template v-if="data.state==0">
+          <template v-if="data.status==0">
             <li>
               <wmCheckbox :options="goods.is_sku"></wmCheckbox>
             </li>
@@ -93,14 +93,8 @@
         </template>
         <template #num="d">
           <div class="tCenter">
-            <wmInput v-if="data.state==0&&d.loading!=0" v-model:value="d.num"  @update:blur="goodsNum($event, 'num', d.id, d.sku_id)" inputAlign="center"></wmInput>
+            <wmInput v-if="data.status==0&&d.loading!=0" v-model:value="d.num"  @update:blur="goodsNum($event, 'num', d.id, d.sku_id)" inputAlign="center"></wmInput>
             <span v-else><b>{{ d.num || '-' }}</b></span>
-          </div>
-        </template>
-        <template #ratio="d">
-          <div class="tCenter">
-            <wmInput v-if="data.state==0&&d.loading!=0&&data.link_co_id=='14377940'&&data.level=='24'" v-model:value="d.ratio"  @update:blur="goodsNum($event, 'ratio', d.id, d.sku_id)" inputAlign="center"></wmInput>
-            <span v-else><b>{{ d.ratio || '-' }}</b></span>
           </div>
         </template>
         <template #labels="d">
@@ -114,19 +108,19 @@
         </template>
         <template #view="d">
           <div class="tCenter">
-            <wmButton type="primary" effect="text" padding="0 4px" @click="state.goods.show=true;state.goods.sku_id=d.sku_id">{{ langs.goods_flow }}</wmButton>
+            <wmButton type="primary" effect="text" padding="0 4px" @click="state.goods.show=true;state.goods.sku_id=d.sku_id">{{ langs.flow }}</wmButton>
           </div>
         </template>
         <template #action="d">
           <div class="flex_center">
-            <template v-if="data.state==0">
+            <template v-if="data.status==0">
               <wmButton type="warning" effect="text" padding="0 4px" v-if="d.loading==0">加载中</wmButton>
               <wmButton type="success" effect="text" padding="0 4px" v-else-if="d.loading==1" @click="goodsAddData([{id:d.id, sku_id:d.sku_id, num:d.num}])">刷新</wmButton>
               <wmButton type="danger" effect="text" padding="0 4px" v-if="d.loading!=0" @click="goodsRemove('one', d)">移除</wmButton>
             </template>
             <template v-else>
-              <span v-if="d.state==0" class="c_danger">调拨中</span>
-              <span v-else-if="d.state==1" class="c_success">完成</span>
+              <span v-if="d.status==0" class="c_danger">调拨中</span>
+              <span v-else-if="d.status==1" class="c_success">完成</span>
             </template>
           </div>
         </template>
@@ -156,10 +150,6 @@
 </template>
 
 <style lang="less" scoped>
-.state0,.state1,.state2{padding: 0 10px; border-radius: 2px;}
-.state0{background-color: @Info6; color: @Info;}
-.state1{background-color: @Warning6; color: @Warning;}
-.state2{background-color: @Danger; color: #FFF;}
 </style>
 
 <script setup lang="ts">
@@ -220,7 +210,7 @@ const goods = ref({
     { title: '分类', slot: 'category', index: 'category', order: '', textAlign: 'center', width: '80px' },
     { title: '采购员', slot: 'owner', index: 'owner', order: '', textAlign: 'center', width: '80px' },
     { title: '查看', slot: 'view', textAlign: 'center', width: '60px', minWidth: '60px' },
-    { title: '状态', slot: 'action', index: 'state', order: '', textAlign: 'center', width: '60px', minWidth: '60px' },
+    { title: '状态', slot: 'action', index: 'statue', order: '', textAlign: 'center', width: '60px', minWidth: '60px' },
     {title: '时间', slot: 'utime', index: 'utime', order: '', textAlign: 'center', width: '60px', minWidth: '60px'},
     {title: '操作员', slot: 'operator_name', index: 'operator_name', order: '', textAlign: 'center', width: '60px', minWidth: '60px'},
   ], list: <any>[],
@@ -287,7 +277,7 @@ const orderBy = (val: string): void => {
 const goodsSearch = (): void => {
   const key: string = Util.LTrim(goods.value.key.trim().toUpperCase(), '0');
   goods.value.key = '';
-  if(props.data.state == 0) {
+  if(props.data.status == 0) {
     if(key.length == 0) return;
     goodsAdd([{ sku_id: key, num: 1 }]);
   } else {

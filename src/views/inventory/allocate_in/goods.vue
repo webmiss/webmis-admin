@@ -95,13 +95,13 @@
         </template>
         <template #view="d">
           <div class="tCenter">
-            <wmButton type="primary" effect="text" padding="0 4px" @click="state.goods.show=true;state.goods.sku_id=d.sku_id">{{ langs.goods_flow }}</wmButton>
+            <wmButton type="primary" effect="text" padding="0 4px" @click="state.goods.show=true;state.goods.sku_id=d.sku_id">{{ langs.flow }}</wmButton>
           </div>
         </template>
         <template #action="d">
           <div class="tCenter">
-            <span v-if="d.state==0" class="c_danger">调拨中</span>
-            <span v-else-if="d.state==1" class="c_success">完成</span>
+            <span v-if="d.status==0" class="c_danger">调拨中</span>
+            <span v-else-if="d.status==1" class="c_success">完成</span>
           </div>
         </template>
         <template #utime="d">
@@ -173,7 +173,7 @@ const goods = ref({
     { title: '分类', slot: 'category', index: 'category', order: '', textAlign: 'center', width: '80px' },
     { title: '采购员', slot: 'owner', index: 'owner', order: '', textAlign: 'center', width: '80px' },
     { title: '查看', slot: 'view', textAlign: 'center', width: '60px', minWidth: '60px' },
-    { title: '状态', slot: 'action', index: 'state', order: '', textAlign: 'center', width: '60px', minWidth: '60px' },
+    { title: '状态', slot: 'action', index: 'status', order: '', textAlign: 'center', width: '60px', minWidth: '60px' },
     {title: '时间', slot: 'utime', index: 'utime', order: '', textAlign: 'center', width: '60px', minWidth: '60px'},
     {title: '操作员', slot: 'operator_name', index: 'operator_name', order: '', textAlign: 'center', width: '60px', minWidth: '60px'},
   ], list: <any>[],

@@ -168,10 +168,10 @@
                   <span v-else>{{ d.ratio }}</span>
                 </div>
               </template>
-              <template #state="d">
+              <template #status="d">
                 <div class="tCenter">
-                  <span v-if="d.state=='0'" class="c_danger">进行中</span>
-                  <span v-else-if="d.state=='1'" class="c_success">完成</span>
+                  <span v-if="d.status=='0'" class="c_danger">进行中</span>
+                  <span v-else-if="d.status=='1'" class="c_success">完成</span>
                 </div>
               </template>
             </wmTable>
@@ -457,7 +457,7 @@ const list = ref({
     {title: '折扣', index: 'ratio', slot: 'ratio', textAlign: 'center', class: 'tCenter'},
     {title: '品牌', index: 'brand', textAlign: 'center', class: 'tCenter'},
     {title: '采购员', index: 'owner', textAlign: 'center', class: 'tCenter'},
-    {title: '状态', index: 'state', slot: 'state', textAlign: 'center'},
+    {title: '状态', index: 'status', slot: 'status', textAlign: 'center'},
     {title: '备注', index: 'remark'},
   ], total:<any>{}, data: []},
   // 分仓库存
@@ -493,7 +493,7 @@ const photo = ref({
   maxLen: 100,            // 最大显示长度
   isShow: false,          // 是否显示剩余
   isTrue: false,          // 拍照
-  time: 800,              // 拍照-延迟时间
+  time: 0,                // 拍照-延迟时间
   width: 240,             // 拍照-宽
   height: 240,            // 拍照-高
 });
@@ -572,7 +572,7 @@ const goodsInfo = (sku_id: any, type: string=''): void => {
   list.value.logs.data = [];
   // 资料
   const load: any = Ui.Loading();
-  Request.Post('goods/info?lang='+state.lang, {
+  Request.Post('erp_goods/info?lang='+state.lang, {
     token: state.token,
     sku_id: sku_id,
   }, (res: any)=>{
@@ -601,7 +601,7 @@ const goodsDirect = (): void => {
   if(!form.value.sku_id) return Ui.Toast(state.langs.sku_id);
   // 流向
   const load: any = Ui.Loading();
-  Request.Post('goods/direct?lang='+state.lang, {
+  Request.Post('erp_goods/direct?lang='+state.lang, {
     token: state.token,
     sku_id: form.value.sku_id,
     time: form.value.times,
@@ -616,7 +616,7 @@ const goodsDirect = (): void => {
     }
   });
   // 分仓
-  Request.Post('goods/stock?lang='+state.lang, {
+  Request.Post('erp_goods/stock?lang='+state.lang, {
     token: state.token,
     sku_id: form.value.sku_id,
   }, (res: any)=>{
@@ -628,7 +628,7 @@ const goodsDirect = (): void => {
     }
   });
   // 日志
-  Request.Post('goods/logs?lang='+state.lang, {
+  Request.Post('erp_goods/logs?lang='+state.lang, {
     token: state.token,
     sku_id: form.value.sku_id,
     time: form.value.times,
@@ -645,7 +645,7 @@ const goodsDirect = (): void => {
 const goodsDirectExport = (): void => {
   // 请求
   const load: any = Ui.Loading();
-  Request.Post('goods/direct_export?lang='+state.lang, {
+  Request.Post('erp_goods/direct_export?lang='+state.lang, {
     token: state.token,
     sku_id: form.value.sku_id,
     time: form.value.times,
@@ -711,7 +711,7 @@ const imgUpload = (sku_id: string, imgBase64: string, type: string, mode: string
     form.append('token', state.token);
     form.append('sku_id', sku_id);
     form.append('file', file);
-    Request.Post('goods/up_img?lang='+state.lang, form, (res: any)=>{
+    Request.Post('erp_goods/up_img?lang='+state.lang, form, (res: any)=>{
       const {code, data, msg} = res.data;
       if(code===0) {
         // 图片
@@ -742,7 +742,7 @@ const imgUpload = (sku_id: string, imgBase64: string, type: string, mode: string
 }
 /* 封面图-删除 */
 const imgRemove = (sku_id: any): void => {
-  Request.Post('goods/remove_img?lang='+state.lang, {
+  Request.Post('erp_goods/remove_img?lang='+state.lang, {
     token: state.token,
     sku_id: sku_id,
   }, (res: any)=>{
@@ -767,7 +767,7 @@ const photoOpen = (): void => {
     // return ;
     // 调用摄像头
     navigator.mediaDevices.getUserMedia({video:
-      {width:{ideal:1920}, height:{ideal:1080}, frameRate:{ideal: 30}}
+      {width:{ideal:3840}, height:{ideal:2160}, frameRate:{ideal: 30}}
     }).then((stream:any)=>{
       photo.value.video.srcObject = stream;
       photo.value.video.onloadedmetadata = ()=>{
@@ -815,7 +815,7 @@ const setPhotoList = (sku_id: string, data: any={}): void => {
 /* 摄像头-添加商品 */
 const addGoods = (sku_id: string): void => {
   if(!state.goods.photo.id) return;
-  Request.Post('erp_purchases_in/goods_add?lang=' + state.lang, {
+  Request.Post('erp_purchase_in/goods_add?lang=' + state.lang, {
     token: state.token,
     id: state.goods.photo.id,
     ctime: state.goods.photo.ctime,
@@ -835,7 +835,7 @@ const removeGoods = (k: number, d: any={}): void => {
   photo.value.list.splice(k, 1);
   // 移除
   if(d.id) {
-    Request.Post('erp_purchases_in/goods_remove?lang=' + state.lang, {
+    Request.Post('erp_purchase_in/goods_remove?lang=' + state.lang, {
       token: state.token,
       id: state.goods.photo.id,
       ctime: state.goods.photo.ctime,

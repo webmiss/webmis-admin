@@ -49,8 +49,8 @@
         <template #go_co_id="d">
           <wmSelect v-model:value="sea.go_co_id" :options="selectAll.go_co_name" :placeholder="d.label" clearable multiple></wmSelect>
         </template>
-        <template #state="d">
-          <wmSelect v-model:value="sea.state" :options="selectAll.state_name" :placeholder="d.label" clearable></wmSelect>
+        <template #status="d">
+          <wmSelect v-model:value="sea.status" :options="selectAll.status_name" :placeholder="d.label" clearable></wmSelect>
         </template>
       </wmSearch>
       <!-- Search End -->
@@ -84,15 +84,15 @@
       <template #total="d">
         <div class="tCenter">{{ d.total }}</div>
       </template>
-      <template #state="d">
-        <div v-if="d.state=='0'" class="flex_center state0">{{ d.state_name }}</div>
-        <div v-else-if="d.state=='1'" class="flex_center state1">{{ d.state_name }}</div>
-        <div v-else-if="d.state=='2'" class="flex_center state2">{{ d.state_name }}</div>
-        <div v-else class="tCenter">{{ d.state_name }}</div>
+      <template #status="d">
+        <div v-if="d.status=='0'" class="flex_center status0">{{ d.status_name }}</div>
+        <div v-else-if="d.status=='1'" class="flex_center status1">{{ d.status_name }}</div>
+        <div v-else-if="d.status=='2'" class="flex_center status2">{{ d.status_name }}</div>
+        <div v-else class="tCenter">{{ d.status_name }}</div>
       </template>
       <template #action="d">
         <div class="tCenter">
-          <wmButton type="danger" effect="text" @click="revokeData(d.id, d.go_co_name, d.link_co_name, d.num)" v-if="isAction('revoke')&&d.state=='1'">撤回</wmButton>
+          <wmButton type="danger" effect="text" @click="revokeData(d.id, d.go_co_name, d.link_co_name, d.num)" v-if="isAction('revoke')&&d.status=='1'">撤回</wmButton>
           <span class="c_info" v-else><i class="ui ui_safety"></i></span>
         </div>
       </template>
@@ -123,10 +123,10 @@
 </template>
 
 <style lang="less" scoped>
-.state0,.state1,.state2{padding: 0 10px; border-radius: 2px;}
-.state0{background-color: @Info6; color: @Info;}
-.state1{background-color: @Warning6; color: @Warning;}
-.state2{background-color: @Minor; color: #FFF;}
+.status0,.status1,.status2{padding: 0 10px; border-radius: 2px;}
+.status0{background-color: @Info6; color: @Info;}
+.status1{background-color: @Warning6; color: @Warning;}
+.status2{background-color: @Minor; color: #FFF;}
 </style>
 
 <script setup lang="ts">
@@ -181,14 +181,14 @@ const sea = ref({
     { label: '类型', value: '', slot: 'type' },
     { label: '调入仓', value: '', slot: 'link_co_id' },
     { label: '调出仓', value: '', slot: 'go_co_id' },
-    { label: '状态', value: '', slot: 'state' },
+    { label: '状态', value: '', slot: 'status' },
     { label: '单号, 多条空格分离', value: '', name: 'id' },
     { label: '商品编码, 多条空格分离', value: '', name: 'sku_id' },
     { label: '制单员', value: '', name: 'creater_name' },
     { label: '操作员', value: '', name: 'operator_name' },
     { label: '备注', value: '', name: 'remark' },
   ],
-  type: '', go_co_id: '', link_co_id: '', state: '',
+  type: '', go_co_id: '', link_co_id: '', status: '',
 });
 // 列表
 const total = ref({ time: '', list: { num: 0, sale_price: 0, market_price: 0, operator:<any>'' } });
@@ -202,7 +202,7 @@ const list = ref({ columns: [
   { title: '吊牌总额(W)', slot: 'market_price', textAlign: 'center' },
   { title: '数量', slot: 'num', textAlign: 'center' },
   { title: '条数', slot: 'total', textAlign: 'center' },
-  { title: '状态', slot: 'state', width: '80px', minWidth: '80px', textAlign: 'center' },
+  { title: '状态', slot: 'status', width: '80px', minWidth: '80px', textAlign: 'center' },
   { title: langs.action, slot: 'action', textAlign: 'center', width: '40px' },
   { title: '商品', slot: 'goods', textAlign: 'center', width: '40px' },
   { title: langs.review, slot: 'print', textAlign: 'center', width: '40px' },
@@ -219,7 +219,7 @@ const diff = ref({ show: false, title: '对比', num: 0, data: <any>[] });
 const goods = ref({ show: false, title: '商品', data: <any>{} });
 const print = ref({ show: false, title: '调拨单', info: {}, columns:<any>[], data: <any>[] });
 // 全部分类
-const selectAll = ref({ type_name: [], go_co_name: [], link_co_name: [], state_name: [] });
+const selectAll = ref({ type_name: [], go_co_name: [], link_co_name: [], status_name: [] });
 
 /* 创建完成 */
 onMounted(()=>{
@@ -280,7 +280,7 @@ const getWhere = (): object => {
     type: sea.value.type,
     go_co_id: sea.value.go_co_id,
     link_co_id: sea.value.link_co_id,
-    state: sea.value.state,
+    status: sea.value.status,
   };
   for (let v of sea.value.columns) if (v.name) data[v.name] = v.value;
   return data;
@@ -298,7 +298,7 @@ const selectState = (n: number, t: number): void => {
   diff.value.data = [];
   diff.value.num = 0;
   for (let v of data) {
-    if (v.state == 1) {
+    if (v.status == 1) {
       push.value.data.push(v.id);
       push.value.num += parseInt(v.num);
     }
@@ -323,7 +323,7 @@ const resetData = (): void => {
   sea.value.type = '';
   sea.value.go_co_id = '';
   sea.value.link_co_id = '';
-  sea.value.state = '';
+  sea.value.status = '';
   for (let v of sea.value.columns) v.value = '';
   // 其它
   list.value.order = '';
@@ -466,7 +466,7 @@ const getSelect = (): void => {
       selectAll.value.type_name = data.type_name;
       selectAll.value.go_co_name = data.go_co_name;
       selectAll.value.link_co_name = data.link_co_name;
-      selectAll.value.state_name = data.state_name;
+      selectAll.value.status_name = data.status_name;
       // 加载
       isLoad.value = true;
     } else Ui.Toast(msg);

@@ -126,18 +126,14 @@ const labelName = ref('');
 /* 监听 */
 watch(()=>props.value, (val: any)=>{
   if(val) {
-    if(seaList.value.length === 0 && props.options.length > 0) {
-      seaList.value = props.options;
-    }
     for(let i in seaList.value) {
       seaList.value[i].checked = val.includes(seaList.value[i].value);
     }
     if(seaList.value.length>0) selectData(false);
   } else {
     clear();
-    emit('change');
   }
-},{ deep: true, immediate: true });
+},{ deep: true });
 /* 监听 */
 watch(()=>props.options, (val: any)=>{
   seaList.value = val || [];

@@ -19,6 +19,7 @@ export default class Format {
 
   /* 金额 */
   public static priceEncode(price: string, fixed: number=2): string {
+    if(isNaN(parseFloat(price))) price='0';
     return (parseFloat(price).toFixed(fixed).toString()).replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g,'$&,');
   }
   public static priceDecode(price: string, fixed: number=2): string {

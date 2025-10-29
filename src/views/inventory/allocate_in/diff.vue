@@ -214,7 +214,7 @@ const goods = ref({
     { title: '序号', slot: 'index', width: '40px', minWidth: '30px', textAlign: 'center' },
     { title: langs.img, slot: 'img', width: '60px', textAlign: 'center' },
     { title: '商品编码', slot: 'sku_id', index: 'sku_id', width: '120px', minWidth: '120px' },
-    {title: '款式编码', slot: 'i_id', index: 'i_id', textAlign: 'center', width: '80px'},
+    { title: '款式编码', slot: 'i_id', index: 'i_id', textAlign: 'center', width: '80px' },
     { title: '标签价(元)', slot: 'sale_price', index: 'sale_price', textAlign: 'center', width: '100px' },
     { title: '吊牌价(W)', slot: 'market_price', index: 'market_price', textAlign: 'center', width: '100px' },
     { title: '单位', slot: 'unit', textAlign: 'center', width: '60px' },

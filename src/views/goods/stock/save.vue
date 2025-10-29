@@ -15,13 +15,13 @@
           </td>
         </tr>
         <tr>
-          <td class="label">库存</td>
+          <td class="label"><span class="red_dot">库存</span></td>
           <td>
             <wmInput v-model:value="form.num" placeholder="库存数量" />
           </td>
         </tr>
         <tr>
-          <td class="label">备注</td>
+          <td class="label"><span class="red_dot">备注</span></td>
           <td>
             <wmInput v-model:value="form.remark" placeholder="日志备注" />
           </td>
@@ -62,7 +62,7 @@ const state = store.state;
 const langs: any = state.langs;
 // 变量
 const infoShow = ref(false);
-const form = ref({type: '', ids: [], wms_co_id: '', sku_id: '', num: '0', remark: ''});
+const form = ref({type: '', ids: [], wms_co_id: '', sku_id: '', num: '', remark: ''});
 // 全部分类
 const selectAll = ref({partner_name:[]});
 
@@ -100,6 +100,7 @@ const verify = (form: any): any => {
   if(form.type=='add' && form.wms_co_id.length==0) return Ui.Toast('请选择分仓');
   if(!form.sku_id) return Ui.Toast('请输入商品编码');
   if(isNaN(form.num) || form.num<0) return Ui.Toast('请输入库存');
+  if(form.remark.trim().length=='') return Ui.Toast('请输入备注');
   return form;
 }
 

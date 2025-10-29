@@ -30,7 +30,9 @@
               display: v.display||typeof v.display=='undefined'?'block':'none',
           }">
             <span class="label">{{ v.label }}</span>
-            <span class="info" v-if="v.info">{{ v.info }}</span>
+            <span class="info" v-if="typeof v.info!=='undefined'" :class="typeof v.info==='string'?'c_info':(v.info?'c_success':'c_danger')">
+              {{ typeof v.info==='string'?v.info:(v.info?state.langs.enable:state.langs.disable) }}
+            </span>
           </li>
         </template>
         <li class="null" v-else></li>
@@ -71,7 +73,7 @@
 .wm-select_list li:hover .label{color: @Primary;}
 .wm-select_list li:hover .info{background-color: #F4F6F8;}
 .wm-select_list .label{text-align: left; width: auto; max-width: none; float: left; color: @Text; padding: 0 16px;}
-.wm-select_list .info{float: right; position: absolute; right: 0; height: 100%; padding: 0 10px; font-size: 12px; color: @RegularText; background-color: #FFF;}
+.wm-select_list .info{float: right; position: absolute; right: 0; height: 100%; padding: 0 10px; font-size: 12px; background-color: #FFF;}
 .wm-select_list .null{height: 120px; line-height: 120px;}
 .wm-select_list .null:hover{cursor: default; background-color: #FFF;}
 .wm-select_list .active{background-color: #F4F6F8;}
@@ -124,14 +126,18 @@ const labelName = ref('');
 /* 监听 */
 watch(()=>props.value, (val: any)=>{
   if(val) {
+    if(seaList.value.length === 0 && props.options.length > 0) {
+      seaList.value = props.options;
+    }
     for(let i in seaList.value) {
       seaList.value[i].checked = val.includes(seaList.value[i].value);
     }
     if(seaList.value.length>0) selectData(false);
   } else {
     clear();
+    emit('change');
   }
-},{ deep: true });
+},{ deep: true, immediate: true });
 /* 监听 */
 watch(()=>props.options, (val: any)=>{
   seaList.value = val || [];

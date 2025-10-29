@@ -60,6 +60,11 @@ h3{font-size: 16px; font-weight: 500;}
 .scrollbar::-webkit-scrollbar-thumb{border-radius: 5px; background: rgba(60,60,60,.2);}
 .scrollbar:hover::-webkit-scrollbar-thumb{background: rgba(60,60,60,.4);}
 .scrollbar:hover::-webkit-scrollbar-track{background: rgba(60,60,60,.08);}
+/* 提示 */
+.tooltip:hover::after{content: attr(data-title); padding: 5px 10px; line-height: 22px; margin-top: 32px; white-space: pre; visibility: visible; position: absolute; z-index: 9999; background-color: rgba(0,0,0,0.9); color: #FFF; border: #000 1px solid; text-align: left; border-radius: 4px;}
+.tooltip.l:hover::after{left: 5px;}
+.tooltip.r:hover::after{right: 5px;}
+.tooltip.c:hover::after{left: 50%; transform: translateX(-50%);}
 /* 布局 */
 .flex{display: flex; justify-content: space-between; flex-wrap: wrap;}
 .flex.center{align-items: center;}

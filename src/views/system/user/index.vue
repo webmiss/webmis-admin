@@ -29,12 +29,16 @@
     <div class="app_action_search flex">
       <!-- Search -->
       <wmSearch v-model:show="sea.show" v-model:keys="sea.key" :columns="sea.columns" @keyup.enter="page.num=1;loadData()" @search="page.num=1;loadData()" @reset="resetData()">
+        <template #customTime="d">
+          <ul class="custom_time flex_center">
+            <li v-for="v in sea.customTime.list" :key="v.value" @click="setCustomTime(v.value)" :class="{active: sea.customTime.active===v.value}">{{ v.label }}</li>
+          </ul>
+        </template>
         <template #time="d">
           <wmDatePicker v-model:value="sea.time" range :maxDate="sea.maxDate" :placeholder="d.label"></wmDatePicker>
         </template>
         <template #type="d">
-          <!-- <wmSelect v-model:value="sea.type" :options="selectAll.type_name" :placeholder="d.label" clearable></wmSelect> -->
-           {{ selectAll.type_name || '123' }}
+          <wmSelect v-model:value="sea.type" :options="selectAll.type_name" :placeholder="d.label" clearable></wmSelect>
         </template>
         <template #role="d">
           <wmSelect v-model:value="sea.role" :options="selectAll.role_name" :placeholder="d.label" clearable></wmSelect>
@@ -92,6 +96,18 @@
       <template #gender="d">
         <div class="tCenter">{{ d.gender || '-' }}</div>
       </template>
+      <template #brand="d">
+        <div class="nowrap" style="max-width: 160px;">{{ d.brand || '-' }}</div>
+      </template>
+      <template #shop="d">
+        <div class="nowrap" style="max-width: 160px;">{{ d.shop || '-' }}</div>
+      </template>
+      <template #partner="d">
+        <div class="nowrap" style="max-width: 160px;">{{ d.partner || '-' }}</div>
+      </template>
+      <template #partner_in="d">
+        <div class="nowrap" style="max-width: 160px;">{{ d.partner_in || '-' }}</div>
+      </template>
     </wmTable>
     <!-- List End -->
   </div>
@@ -147,7 +163,14 @@ const isAction = Permission.isAction;
 const sea = ref({
   show: false, key: '', placeholder:'Fid、名称、接口等',
   time: <any>[Time.Date('Y/m/d', Time.StrToTime('-1 year')), Time.Date('Y/m/d')], maxDate: Time.Date('Y/m/d'),
+  customTime: {active:'', list:[
+    { label: '今天', value: 'today' },
+    { label: '昨天', value: 'yesterday' },
+    { label: '3个月', value: 'month' },
+    { label: '近1年', value: 'year' },
+  ]},
   columns:[
+    {label: '', value: '', slot: 'customTime'},
     {label: langs.select, value: '', slot: 'time'},
     {label: langs.sys_user_type, value: '', slot: 'type'},
     {label: langs.sys_user_role, value: '', slot: 'role'},
@@ -178,6 +201,10 @@ const list = ref({columns: [
   {title: langs.sys_user_name, index: 'name'},
   {title: langs.sys_user_gender, index: 'gender', slot: 'gender', textAlign: 'center'},
   {title: langs.sys_user_birthday, index: 'birthday'},
+  {title: '品牌', index: 'brand', slot: 'brand'},
+  {title: '店铺', index: 'shop', slot: 'shop'},
+  {title: '仓库', index: 'partner', slot: 'partner'},
+  {title: '调入仓', index: 'partner_in', slot: 'partner_in'},
   {title: langs.remark, index: 'remark'},
 ], data: [], num: 0, total: 0, order: ''});
 const page = ref({total: 0, num:1, limit: 100});
@@ -257,6 +284,7 @@ const orderBy = (val: string): void => {
 const resetData = (): void => {
   // 时间
   sea.value.time = [Time.Date('Y/m/d', Time.StrToTime('-3 year')), Time.Date('Y/m/d')];
+  sea.value.customTime.active = '';
   // 条件
   sea.value.key = '';
   sea.value.type = '';
@@ -274,6 +302,16 @@ const clearSelect = (): void => {
   nextTick(()=>{
     tableList.value.checkboxAll(false);
   });
+}
+/* 自定义时间 */
+const setCustomTime = (type: string): void => {
+  sea.value.customTime.active = type;
+  switch(type) {
+    case 'today': sea.value.time = [Time.Date('Y/m/d'), Time.Date('Y/m/d')]; break;
+    case 'yesterday': sea.value.time = [Time.Date('Y/m/d', Time.StrToTime('-1 day')), Time.Date('Y/m/d', Time.StrToTime('-1 day'))]; break;
+    case 'month': sea.value.time = [Time.Date('Y/m/d', Time.StrToTime('-3 month')), Time.Date('Y/m/d')]; break;
+    case 'year': sea.value.time = [Time.Date('Y/m/d', Time.StrToTime('-1 year')), Time.Date('Y/m/d')]; break;
+  }
 }
 
 /* 添加&编辑 */
@@ -341,7 +379,6 @@ const getSelect = (): void => {
       selectAll.value.status_name = data.status_name;
       // 加载
       isLoad.value = true;
-      loadData();
     } else Ui.Toast(msg);
   });
 }

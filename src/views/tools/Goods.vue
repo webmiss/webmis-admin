@@ -1,17 +1,24 @@
 <template>
   <div ref="GoodsDirect" class="wm-goods_body flex" :style="{visibility:show?'inherit':'hidden'}">
     <div class="wm-goods_left scrollbar">
+      <!-- 搜索 -->
       <div class="search">
         <wmInput v-model:value="seaKey" @keyup.enter="search()" @iconClick="search()" :placeholder="state.langs.sku_id" maxlength="32" icon="ui ui_search" iconAlign="right" padding="0 40px 0 10px" margin="0 5px 0 0"></wmInput>
       </div>
-      <div class="img"
+      <!-- 商品图片 -->
+      <div
+        v-if="!list.qrcode.show && list.info.img" class="img"
         :style="{backgroundImage: list.info.img?'url('+list.info.img+'&x-oss-process=image/resize,h_260)':''}"
         @click="list.info.img?imgView([{label:list.info.sku_id, value:list.info.img, other:{'颜色及规格':list.info.properties_value, '标签价':list.info.sale_price+'元', '吊牌价':list.info.market_price+'W'}}]):''"
         :title="list.info.img?'预览图片':'请上传封面图'"
       >
-        <i class="ui ui_image" v-if="!list.info.img"></i>
-        <div class="close" v-if="list.info.img" @click.stop="imgRemove(list.info.sku_id)" title="删除封面图"><i class="ui ui_close"></i></div>
+        <i class="ui ui_qrcode" title="查看二维码" @click.stop="list.qrcode.show=!list.qrcode.show"></i>
       </div>
+      <!-- 二维码 -->
+      <div v-else class="img" :style="{backgroundImage: 'url('+list.qrcode.url+')'}">
+        <i class="ui ui_image" :title="list.info.img?'查看图片':'暂无图片'" :style="{backgroundImage: list.info.img?'url('+list.info.img+'&x-oss-process=image/resize,h_260)':''}" @click.stop="list.qrcode.show=!list.qrcode.show"></i>
+      </div>
+      <!-- 商品信息 -->
       <ul class="info">
         <li class="flex">
           <span class="name">商品编码</span>
@@ -318,18 +325,17 @@
 .type_danger{background-color: #FFF; color: @Danger;}
 /* 内容 */
 .wm-goods_body{position: fixed; z-index: 1000; width: 100%; height: 100%; background-color: #F2F4F8; opacity: 0; transition: @Transition;}
-.wm-goods_body .img{position: relative; cursor: pointer; background-position: center; background-repeat: no-repeat; background-size: cover;}
-.wm-goods_left{overflow-y: auto; padding: 0 16px; width: 280px; height: 100%; background-color: #FFF; border-right: #F2F4F8 1px solid; box-sizing: border-box;}
+.wm-goods_body .img{position: relative; background-position: center; background-repeat: no-repeat; background-size: cover;}
+.wm-goods_left{padding: 0 16px; width: 280px; height: 100%; background-color: #FFF; border-right: #F2F4F8 1px solid; box-sizing: border-box;}
+.wm-goods_left:hover{overflow-y: auto;}
 .wm-goods_left .search{padding: 8px 0; line-height: 40px;}
 .wm-goods_left .img{width: 100%; height: 250px; line-height: 250px; text-align: center; background-color: #F8F8F8; border-radius: 4px;}
-.wm-goods_left .img i{font-size: 48px; color: @IconColor;}
-.wm-goods_left .img:hover .close{display: block;}
+.wm-goods_left .img i{cursor: pointer; padding: 16px; font-size: 32px; color: #FFF; border: #FFF 2px solid; background-color: @IconColor; border-radius: 50%; background-position: center; background-repeat: no-repeat; background-size: cover;}
+.wm-goods_left .img i:hover{color: @Minor; background-color: #FFF; box-shadow: 0 0 16px rgba(0, 0, 0, 0.4);}
 .wm-goods_left .info{overflow: hidden; padding: 8px 0;}
 .wm-goods_left .info li{padding: 4px 0; line-height: 24px;}
 .wm-goods_left .info .name{color: @SecondaryText; font-size: 13px;}
 .wm-goods_left .info .value{color: @BrandText; font-size: 15px;}
-.wm-goods_left .close{display: none; position: absolute; top: -8px; right: -8px; width: 20px; height: 20px; line-height: 20px; border-radius: 50%; background-color: @Danger; text-align: center;}
-.wm-goods_left .close i{font-size: 14px; color: #FFF;}
 .wm-goods_right{width: calc(100% - 280px); height: 100%;}
 .wm-goods_right_top{position: relative; padding: 8px 10px; height: 40px; line-height: 40px; background-color: #FFF;}
 .wm-goods_right_top::before{content: ''; position: absolute; bottom: 0; margin-left: -10px; width: 100%; height: 2px; background-color: rgba(0, 0, 0, 0.1);}
@@ -411,6 +417,7 @@
 import { ref, watch, getCurrentInstance, nextTick } from 'vue';
 import { useStore } from 'vuex';
 import { BrowserMultiFormatReader } from '@zxing/library'
+import QRCode from 'qrcode'
 /* UI组件 */
 import Ui from '../../library/ui';
 import Request from '../../library/request';
@@ -442,6 +449,8 @@ const priceEncode: Function = Format.priceEncode;
 /* 数据 */
 const form = ref({times: '24', sku_id: ''});
 const list = ref({
+  // 二维码
+  qrcode: {show:true, url:''},
   // 货品信息
   info: <any>{},
   // 货品流向
@@ -565,6 +574,7 @@ const changeDay = (val: string): void => {
 /* 货品信息 */
 const goodsInfo = (sku_id: any, type: string=''): void => {
   // 重置
+  list.value.qrcode.url = '';
   list.value.info = {};
   list.value.direct.total = {};
   list.value.direct.data = [];
@@ -581,8 +591,15 @@ const goodsInfo = (sku_id: any, type: string=''): void => {
     if (code == 0) {
       list.value.info = data;
       form.value.sku_id = data.sku_id;
+      // 二维码
+      QRCode.toDataURL('https://m.webmis.vip/?sku_id='+data.sku_id, {margin: 4, width: 240}).then((url: any)=>{
+        list.value.qrcode.url = url;
+      });
+      // 封面图
       list.value.imgs[data.sku_id] = {loaded:'0%', state:data.img?1:0, img:data.img};
+      // 流向
       goodsDirect();
+      // 拍照
       if(type==='photo') {
         setPhotoList(sku_id, {properties_value: data.properties_value, sale_price: data.sale_price, market_price: data.market_price});
         addGoods(sku_id);

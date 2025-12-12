@@ -115,19 +115,19 @@ watch(()=>props.value, (val: Array<any>)=>{
   let k4: number = -1;
   // 一级
   listData.value.forEach((v1: any, i1: number)=>{
-    if(val[0]==v1.value) { level='1'; k1=i1; }
+    if(val[0]==v1.value){ level='1'; k1=i1; }
     // 二级
-    if(v1.children) {
+    if(v1.children){
       v1.children.forEach((v2: any, i2: number)=>{
-        if(val[1]==v2.value) { level='2'; k2=i2; }
+        if(val[1]==v2.value){ level='2'; k2=i2; }
         // 三级
-        if(v2.children) {
+        if(v2.children){
           v2.children.forEach((v3: any, i3: number)=>{
-            if(val[2]==v3.value) { level='3'; k3=i3; }
+            if(val[2]==v3.value){ level='3'; k3=i3; }
             // 四级
-            if(v3.children) {
+            if(v3.children){
               v3.children.forEach((v4: any, i4: number)=>{
-                if(val[3]==v4.value) { level='4'; k4=i4; }
+                if(val[3]==v4.value){ level='4'; k4=i4; }
               });
             }
           });
@@ -166,14 +166,14 @@ const selectClick = (level: string, pos: Array<number>, isStatus: boolean=true):
   k3.value = pos[2];
   k4.value = pos[3];
   // 层级
-  if(level=='1') {
+  if(level=='1'){
     // 清除、选中
     selectClear(listData.value);
     listData.value[k1.value].checked = true;
     // 数据
     labels = [listData.value[k1.value].label];
     values = [listData.value[k1.value].value];
-  } else if(level=='2') {
+  } else if(level=='2'){
     // 清除、选中
     selectClear(listData.value[k1.value].children);
     listData.value[k1.value].checked = true;
@@ -187,7 +187,7 @@ const selectClick = (level: string, pos: Array<number>, isStatus: boolean=true):
       listData.value[k1.value].value,
       listData.value[k1.value].children[k2.value].value,
     ];
-  } else if(level=='3') {
+  } else if(level=='3'){
     // 清除、选中
     selectClear(listData.value[k1.value].children[k2.value].children);
     listData.value[k1.value].checked = true;
@@ -204,7 +204,7 @@ const selectClick = (level: string, pos: Array<number>, isStatus: boolean=true):
       listData.value[k1.value].children[k2.value].value,
       listData.value[k1.value].children[k2.value].children[k3.value].value,
     ];
-  } else if(level=='4') {
+  } else if(level=='4'){
     // 清除、选中
     selectClear(listData.value[k1.value].children[k2.value].children[k3.value].children);
     listData.value[k1.value].checked = true;

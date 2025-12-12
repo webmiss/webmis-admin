@@ -75,7 +75,7 @@ const form = ref({show: false, uname: '', passwd1: '', passwd2: '', is_vcode: fa
 /* 监听 */
 watch(()=>props.show, (val: boolean)=>{
   form.value.show = val;
-  if(val) {
+  if(val){
     // 获取验证码
     form.value.text = state.langs.passwd_code_get;
     // 帐号
@@ -98,10 +98,10 @@ const getVcode = (): void => {
   Request.Post('user/get_vcode?lang='+state.lang, {type: type, uname:form.value.uname}, (res:any)=>{
     load.clear();
     const {code, msg, data}: any = res.data;
-    if(code==0) {
+    if(code==0){
       vcodeTime();
       form.value.vcode = data.toString();
-    }else if(code==4001) {
+    }else if(code==4001){
       form.value.num = data;
       vcodeTime();
     }
@@ -114,7 +114,7 @@ const vcodeTime = (): void => {
   time = setInterval(()=>{
     form.value.num--;
     form.value.text = state.langs.passwd_code_time(form.value.num);
-    if(form.value.num<=0) {
+    if(form.value.num<=0){
       clearInterval(time);
       form.value.num = 60;
       form.value.text = state.langs.passwd_code_resend;

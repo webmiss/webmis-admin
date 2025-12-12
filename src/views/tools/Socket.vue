@@ -35,8 +35,8 @@ const msgData = (d: any): void => {
   if(d.code!=0) return Ui.Toast(d.msg);
   // 内容
   let isNull: boolean = false;
-  for(let v of state.msg.list) {
-    if(v.loading===d.loading) {
+  for(let v of state.msg.list){
+    if(v.loading===d.loading){
       v.id = d.id;
       v.loading = 0;
       v.content = d.content;
@@ -50,12 +50,12 @@ const msgData = (d: any): void => {
   const gid: number = d.gid;
   const fid: number = d.fid==state.uinfo.uid?d.uid:d.fid;
   const data: any = {gid: gid, fid: fid, num: 1, time: d.time, format: d.format, title: d.title, img: d.img, content: d.content};
-  for(let k in state.msg.group) {
-    if(state.msg.group[k].gid===gid && state.msg.group[k].fid===fid) {
+  for(let k in state.msg.group){
+    if(state.msg.group[k].gid===gid && state.msg.group[k].fid===fid){
       data.title = state.msg.group[k].title;
       data.img = state.msg.group[k].img;
       // 数量
-      if(gid===state.msg.gid && fid===state.msg.fid) {
+      if(gid===state.msg.gid && fid===state.msg.fid){
         data.num = 0;
         // 追加
         d.loading = 0;

@@ -77,7 +77,7 @@ watch(()=>props.show, (val: boolean)=>{
 const selectFile = (): void => {
   let k: number = 0;
   Files.Select({multiple:true, mimeType:[]}, (res: any)=>{
-    for(let v of res) {
+    for(let v of res){
       if(!isExist(v.name)){
         k = listData.value.length;
         listData.value.push({path: props.data.path, name: v.name, state: 0, load:0});
@@ -97,7 +97,7 @@ const upFile = (k: number, fileObj: any): void => {
   // 请求
   Request.Post('sys_file/upload?lang='+state.lang, form, (res: any)=>{
     const {code}: any = res.data;
-    if(code==0) {
+    if(code==0){
       listData.value[k].state = 1;
       emit('submit', true);
     } else {

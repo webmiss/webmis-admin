@@ -212,7 +212,7 @@ const loadData = (): void => {
   }, (res: any) => {
     load.clear();
     const {code, msg, data, time}: any = res.data;
-    if (code == 0) {
+    if(code===0){
       total.value.time = time;
       list.value.data = data;
       clearSelect();
@@ -226,7 +226,7 @@ const loadData = (): void => {
     data: getWhere(),
   }, (res: any) => {
     const {code, msg, data, time}: any = res.data;
-    if (code == 0) {
+    if(code===0){
       total.value.time = time;
       page.value.total = data.total;
       total.value.list.num = data.total;
@@ -237,13 +237,13 @@ const loadData = (): void => {
 const getWhere = (): object => {
   const data: any = {
     key: sea.value.key,
-    stime: typeof sea.value.time[0] == 'string' ? sea.value.time[0] : Time.Date('Y/m/d', sea.value.time[0]),
-    etime: typeof sea.value.time[1] == 'string' ? sea.value.time[1] : Time.Date('Y/m/d', sea.value.time[1]),
+    stime: typeof sea.value.time[0]==='string'?sea.value.time[0]:Time.Date('Y/m/d', sea.value.time[0]),
+    etime: typeof sea.value.time[1]==='string'?sea.value.time[1]:Time.Date('Y/m/d', sea.value.time[1]),
     city: sea.value.city,
     status: sea.value.status,
     istrue: sea.value.istrue,
   };
-  for (let v of sea.value.columns) if (v.name) data[v.name] = v.value;
+  for(let v of sea.value.columns) if(v.name) data[v.name] = v.value;
   return data;
 }
 /* 选中状态 */
@@ -266,7 +266,7 @@ const resetData = (): void => {
   sea.value.city = '';
   sea.value.status = '';
   sea.value.istrue = '';
-  for (let v of sea.value.columns) v.value = '';
+  for(let v of sea.value.columns) v.value = '';
   // 其它
   list.value.order = '';
   page.value.num = 1;
@@ -283,7 +283,7 @@ const clearSelect = (): void => {
 /* 自定义时间 */
 const setCustomTime = (type: string): void => {
   sea.value.customTime.active = type;
-  switch(type) {
+  switch(type){
     case 'today': sea.value.time = [Time.Date('Y/m/d'), Time.Date('Y/m/d')]; break;
     case 'yesterday': sea.value.time = [Time.Date('Y/m/d', Time.StrToTime('-1 day')), Time.Date('Y/m/d', Time.StrToTime('-1 day'))]; break;
     case 'month': sea.value.time = [Time.Date('Y/m/d', Time.StrToTime('-3 month')), Time.Date('Y/m/d')]; break;
@@ -296,15 +296,15 @@ const saveData = (type: string, data: any = {}): void => {
   save.value.show = true;
   save.value.data = data;
   save.value.data.type = type;
-  if (type == 'add') {
+  if(type==='add'){
     save.value.title = langs.add;
-  } else if (type == 'edit') {
+  } else if(type==='edit'){
     save.value.title = langs.edit + '( ' + data.id + ' )';
   }
 }
 /* 添加&编辑-回调 */
 const saveSubmit = (val: boolean): void => {
-  if (!val) return;
+  if(!val) return;
   save.value.show = false;
   loadData();
 }
@@ -314,12 +314,12 @@ const delData = (): void => {
   del.value.show = true;
   const data: Array<any> = tableList.value.getData();
   let ids: Array<number> = [];
-  for (let v of data) ids.push(v.id);
+  for(let v of data) ids.push(v.id);
   del.value.data = ids;
 }
 /* 删除-回调 */
 const delSubmit = (val: boolean): void => {
-  if (!val) return;
+  if(!val) return;
   del.value.show = false;
   loadData();
 }
@@ -331,7 +331,7 @@ const exportData = (num: number): void => {
 }
 /* 导出-回调 */
 const exportSubmit = (val: boolean): void => {
-  if (!val) return;
+  if(!val) return;
   exp.value.show = false;
   clearSelect();
 }
@@ -340,8 +340,8 @@ const exportSubmit = (val: boolean): void => {
 const Copy = (name: string, val: string) => {
   const data: any = tableList.value.getData();
   let sku_id: string = '';
-  for (let i in data) sku_id += data[i][name] + ' ';
-  if (sku_id) Util.CopyText(sku_id);
+  for(let i in data) sku_id += data[i][name] + ' ';
+  if(sku_id) Util.CopyText(sku_id);
   else Util.CopyText(val);
 }
 
@@ -351,7 +351,7 @@ const getSelect = (): void => {
     token: state.token,
   }, (res: any) => {
     const {code, msg, data}: any = res.data;
-    if (code == 0) {
+    if(code===0){
       selectAll.value.city_name = data.city_name;
       selectAll.value.status_name = data.status_name;
       // 加载

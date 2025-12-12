@@ -65,7 +65,7 @@ const cfg = ref({show: false, width:0, height:0});
 /* 监听 */
 watch(()=>props.show, (val: boolean)=>{
   cfg.value.show = val;
-  if(val) {
+  if(val){
     cfg.value.width =  window.innerWidth;
     cfg.value.height =  window.innerHeight;
     // 事件
@@ -76,7 +76,7 @@ watch(()=>props.show, (val: boolean)=>{
 /* 键盘事件 */
 const keydownFun = (event: any): void => {
   const keyCode: any = event.keyCode || event.which;
-  switch (keyCode) {
+  switch (keyCode){
     case 27: close(true); break;
   }
 }

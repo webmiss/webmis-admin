@@ -167,7 +167,7 @@ const textClick = (): void => {
 const Clear = (): void => {
   emit('clear');
   emit('update:value', '');
-  if(props.type=='textarea') {
+  if(props.type=='textarea'){
     proxy.$refs.wmTextarea.focus();
   }else{
     proxy.$refs.wmInput.focus();
@@ -177,7 +177,7 @@ const Clear = (): void => {
 /* 激活输入框 */
 const focus = (): void => {
   nextTick(()=>{
-    if(props.type=='textarea') {
+    if(props.type=='textarea'){
       proxy.$refs.wmTextarea.focus();
     }else{
       proxy.$refs.wmInput.focus();

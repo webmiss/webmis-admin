@@ -236,7 +236,7 @@ const getSelect = (): void => {
     token: state.token,
   }, (res:any)=>{
     const {code, msg, data}: any = res.data;
-    if(code==0) {
+    if(code==0){
       // 标签、分类
       selectAll.value.labels = data.labels;
       selectAll.value.category = data.category;

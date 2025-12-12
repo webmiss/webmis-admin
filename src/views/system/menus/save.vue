@@ -194,20 +194,20 @@ onMounted(()=>{
 /* 获取Fid */
 const getFid = (fid: number): void => {
   // 一级
-  for(let v1 of menusAll.value) {
-    if(v1.value==fid) { form.value.fid = [v1.value]; break; }
+  for(let v1 of menusAll.value){
+    if(v1.value==fid){ form.value.fid = [v1.value]; break; }
     if(!v1.children) continue;
     // 二级
-    for(let v2 of v1.children) {
-      if(v2.value==fid) { form.value.fid = [v1.value, v2.value]; break; }
+    for(let v2 of v1.children){
+      if(v2.value==fid){ form.value.fid = [v1.value, v2.value]; break; }
       if(!v2.children) continue;
       // 三级
-      for(let v3 of v2.children) {
-        if(v3.value==fid) { form.value.fid = [v1.value, v2.value, v3.value]; break; }
+      for(let v3 of v2.children){
+        if(v3.value==fid){ form.value.fid = [v1.value, v2.value, v3.value]; break; }
         if(!v3.children) continue;
         // 四级
-        for(let v4 of v3.children) {
-          if(v4.value==fid) { form.value.fid = [v1.value, v2.value, v3.value, v4.value]; break; }
+        for(let v4 of v3.children){
+          if(v4.value==fid){ form.value.fid = [v1.value, v2.value, v3.value, v4.value]; break; }
         }
       }
     }

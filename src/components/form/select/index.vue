@@ -125,8 +125,8 @@ const labelName = ref('');
 
 /* 监听 */
 watch(()=>props.value, (val: any)=>{
-  if(val) {
-    for(let i in seaList.value) {
+  if(val){
+    for(let i in seaList.value){
       seaList.value[i].checked = val.includes(seaList.value[i].value);
     }
     if(seaList.value.length>0) selectData(false);
@@ -175,12 +175,12 @@ const seaKey = (key: any): void => {
 /* 选择-点击 */
 const selectClick = (k: any): void => {
   // 多选
-  if(props.multiple) {
+  if(props.multiple){
     // 选择
     seaList.value[k].checked = seaList.value[k].checked?false:true;
   } else {
     // 单选
-    for(let i in seaList.value) {
+    for(let i in seaList.value){
       if(i==k) seaList.value[i].checked = seaList.value[k].checked?false:true;
       else seaList.value[i].checked = false;
     }
@@ -199,8 +199,8 @@ const selectData = (isStatus: boolean=true): void => {
   let vals: Array<any> = [];
   let data: Array<any> = [];
   // 数据
-  for(let i in seaList.value) {
-    if(seaList.value[i].checked) {
+  for(let i in seaList.value){
+    if(seaList.value[i].checked){
       labs.push(seaList.value[i].label);
       vals.push(seaList.value[i].value);
       data.push(seaList.value[i]);
@@ -208,7 +208,7 @@ const selectData = (isStatus: boolean=true): void => {
   }
   // 事件
   labelName.value = labs.join(',');
-  if(isStatus) {
+  if(isStatus){
     emit('update:value', vals);
     emit('data', data);
   }

@@ -251,18 +251,18 @@ const imgData = ref([]);
 /* 监听 */
 watch(()=>props.show, (val: boolean)=>{
   infoShow.value = val;
-  if(val) {
+  if(val){
     // 列表数据
     diffList.value = [];
-    for(let id of props.data) {
+    for(let id of props.data){
       Request.Post('erp_purchase_allocate_out/goods_list?lang=' + state.lang, {
       token: state.token,
       id: id,
     }, (res: any) => {
       const {code, msg, data}: any = res.data;
-      if (code == 0) {
+      if(code===0){
         // 是否存在
-        for(let v of data) {
+        for(let v of data){
           diffList.value.push(v);
         }
       } else Ui.Toast(msg);
@@ -289,7 +289,7 @@ const goodsList = (key: string): void => {
   goods.value.out_num = 0;
   // 查询
   const ids: Array<string> = key.split(' ');
-  for(let id of ids) {
+  for(let id of ids){
     const load: any = Ui.Loading();
     Request.Post('erp_purchase_allocate_out/goods_list?lang=' + state.lang, {
       token: state.token,
@@ -297,11 +297,11 @@ const goodsList = (key: string): void => {
     }, (res: any) => {
       load.clear();
       const {code, msg, data}: any = res.data;
-      if (code == 0) {
+      if(code===0){
         // 是否存在
-        for(let v of data) {
+        for(let v of data){
           goods.value.out_num += v.num;
-          if(!inArray(v.sku_id)) {
+          if(!inArray(v.sku_id)){
             // 商品
             goods.value.list.push({'sku_id': v.sku_id});
             // 流向
@@ -314,7 +314,7 @@ const goodsList = (key: string): void => {
 }
 /* 是否存在 */
 const inArray = (sku_id: string=''): boolean => {
-  for(let v of diffList.value as any) {
+  for(let v of diffList.value as any){
     if(sku_id===v.sku_id) return true;
   }
   return false;
@@ -327,10 +327,10 @@ const goodsDirect = (sku_id: string): void => {
     time: 24,
   }, (res: any)=>{
     const {code, msg, data} = res.data;
-    if (code == 0) {
+    if(code===0){
       if(data.list.length===0) return;
-      for(let i in goods.value.list) {
-        if(goods.value.list[i].sku_id==data.list[0].sku_id) {
+      for(let i in goods.value.list){
+        if(goods.value.list[i].sku_id==data.list[0].sku_id){
           goods.value.list[i]=data.list[0];
           // 统计
           getTotal();
@@ -346,7 +346,7 @@ const getTotal = (): void => {
   goods.value.sale_price = 0;
   goods.value.market_price = 0;
   goods.value.num = 0;
-  for(let v of goods.value.list) {
+  for(let v of goods.value.list){
     goods.value.sale_price += v.sale_price*v.num;
     goods.value.market_price += v.market_price*v.num;
     goods.value.num += v.num;
@@ -375,7 +375,7 @@ const formData = (key: string): void => {
   }, (res: any) => {
     load.clear();
     const {code, msg, data, time}: any = res.data;
-    if (code == 0) {
+    if(code===0){
       form.value.list = data;
       nextTick(()=>{
         formList.value.checkboxAll(false);
@@ -388,7 +388,7 @@ const selectState = (n: number, t: number): void => {
   form.value.total = n;
   form.value.num = 0;
   const data: Array<any> = formList.value.getData();
-    for (let v of data) {
+    for(let v of data){
       form.value.num += parseInt(v.num);
     }
 }
@@ -407,9 +407,9 @@ const formSubmit = (): void => {
 const goodsView = (img: string): void => {
   let data: any = [];
   let i: number = 0;
-  for (let v of goods.value.list) {
-    if (!v.img) continue;
-    if (v.img == img) imgIndex.value = i;
+  for(let v of goods.value.list){
+    if(!v.img) continue;
+    if(v.img===img) imgIndex.value = i;
     data.push({ label: v.sku_id, value: v.img, other: { '颜色及规格': v.properties_value, '标签价': v.sale_price + '元', '吊牌价': v.market_price + 'W' } });
     i++;
   }
@@ -421,8 +421,8 @@ const goodsView = (img: string): void => {
 const goodsCopy = (name: string, val: string) => {
   const list: Array<any> = tableList.value.getData();
   let sku_id: string = '';
-  for (let i in list) sku_id += list[i][name] + ' ';
-  if (sku_id) Util.CopyText(sku_id);
+  for(let i in list) sku_id += list[i][name] + ' ';
+  if(sku_id) Util.CopyText(sku_id);
   else Util.CopyText(val);
 }
 

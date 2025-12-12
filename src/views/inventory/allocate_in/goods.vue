@@ -213,7 +213,7 @@ const diff = ref({ show: false, title: '对比调拨单' });
 /* 监听 */
 watch(()=>props.show, (val: boolean)=>{
   infoShow.value = val;
-  if(val) {
+  if(val){
     // 列表
     goodsList();
   }
@@ -252,7 +252,7 @@ const goodsList = (key: string=''): void => {
   }, (res: any) => {
     load.clear();
     const {code, msg, data}: any = res.data;
-    if (code == 0) {
+    if(code===0){
       goods.value.list = data;
       clearSelect();
       // 统计价格
@@ -270,7 +270,7 @@ const goodsTotal = (): void => {
   let ratio: number = 0;
   level.value = {};
   let tmp: any = {};
-  for (let v of list) {
+  for(let v of list){
     num = parseInt(v.num);
     ratio = parseFloat(v.ratio);
     goods.value.sale_price += parseFloat(v.sale_price) * num * ratio;
@@ -278,17 +278,17 @@ const goodsTotal = (): void => {
     goods.value.num += num;
     // 层级
     tmp = {};
-    if(levelData.value[v.go_co_id] && levelData.value[v.go_co_id][v.category]) {
+    if(levelData.value[v.go_co_id] && levelData.value[v.go_co_id][v.category]){
       tmp = levelData.value[v.go_co_id][v.category];
     }else if(levelData.value[v.link_co_id] && levelData.value[v.link_co_id][v.category]){
       tmp = levelData.value[v.link_co_id][v.category];
     }
     let n: number = 0;
     const price: number = parseFloat(v.sale_price);
-    for (let k in tmp) {
-      if (typeof tmp[k] == 'object') n = price >= tmp[k][0] && price < tmp[k][1] ? num : 0;
-      else n = price >= tmp[k] ? num : 0;
-      level.value[k] = level.value[k] ? level.value[k] + n : n;
+    for(let k in tmp){
+      if(typeof tmp[k]==='object') n = price>=tmp[k][0] && price < tmp[k][1]?num:0;
+      else n = price>=tmp[k]?num:0;
+      level.value[k] = level.value[k]?level.value[k] + n:n;
     }
   }
 }
@@ -297,9 +297,9 @@ const goodsTotal = (): void => {
 const goodsView = (img: string): void => {
   let data: any = [];
   let i: number = 0;
-  for (let v of goods.value.list) {
-    if (!v.img) continue;
-    if (v.img == img) imgIndex.value = i;
+  for(let v of goods.value.list){
+    if(!v.img) continue;
+    if(v.img===img) imgIndex.value = i;
     data.push({ label: v.sku_id, value: v.img, other: { '颜色及规格': v.properties_value, '标签价': v.sale_price + '元', '吊牌价': v.market_price + 'W' } });
     i++;
   }
@@ -311,20 +311,20 @@ const goodsView = (img: string): void => {
 const goodsCopy = (name: string, val: string) => {
   const list: Array<any> = tableList.value.getData();
   let sku_id: string = '';
-  for (let i in list) sku_id += list[i][name] + ' ';
-  if (sku_id) Util.CopyText(sku_id);
+  for(let i in list) sku_id += list[i][name] + ' ';
+  if(sku_id) Util.CopyText(sku_id);
   else Util.CopyText(val);
 }
 
 /* 商品-打印标签 */
 const goodsPrint = (): void => {
-  if (goods.value.print <= 0) return Ui.Toast('请选择!');
+  if(goods.value.print<=0) return Ui.Toast('请选择!');
   const list: Array<any> = tableList.value.getData();
   let sku: Array<any> = [];
-  for (let v of list) {
+  for(let v of list){
     sku.push({ sku_id: v.sku_id });
   }
-  if (sku.length == 0) return Ui.Toast('请选择!');
+  if(sku.length===0) return Ui.Toast('请选择!');
   state.print.sku = sku;
   state.print.show = true;
 }

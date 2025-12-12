@@ -380,7 +380,7 @@ const loadData = (): void => {
   }, (res: any) => {
     load.clear();
     const {code, msg, data, time}: any = res.data;
-    if (code == 0) {
+    if(code===0){
       total.value.time = time;
       list.value.data = data;
       nextTick(() => clearSelect())
@@ -398,7 +398,7 @@ const loadData = (): void => {
     data: getWhere(),
   }, (res: any) => {
     const {code, msg, data, time}: any = res.data;
-    if (code == 0) {
+    if(code===0){
       total.value.time = time;
       page.value.total = data.total;
       total.value.list.cost_price = data.cost_price;
@@ -413,8 +413,8 @@ const loadData = (): void => {
 const getWhere = (): object => {
   const data: any = {
     key: sea.value.key,
-    stime: typeof sea.value.time[0] == 'string' ? sea.value.time[0] : Time.Date('Y/m/d', sea.value.time[0]),
-    etime: typeof sea.value.time[1] == 'string' ? sea.value.time[1] : Time.Date('Y/m/d', sea.value.time[1]),
+    stime: typeof sea.value.time[0]==='string'?sea.value.time[0]:Time.Date('Y/m/d', sea.value.time[0]),
+    etime: typeof sea.value.time[1]==='string'?sea.value.time[1]:Time.Date('Y/m/d', sea.value.time[1]),
     labels: sea.value.labels,
     category: sea.value.category,
     num1: sea.value.num1,
@@ -434,7 +434,7 @@ const getWhere = (): object => {
     weight1: sea.value.weight1,
     weight2: sea.value.weight2,
   };
-  for (let v of sea.value.columns) if (v.name) data[v.name] = v.value;
+  for(let v of sea.value.columns) if(v.name) data[v.name] = v.value;
   return data;
 }
 /* 选中状态 */
@@ -472,7 +472,7 @@ const resetData = (): void => {
   sea.value.market_price2 = '';
   sea.value.weight1 = '';
   sea.value.weight2 = '';
-  for (let v of sea.value.columns) v.value = '';
+  for(let v of sea.value.columns) v.value = '';
   // 其它
   list.value.order = '';
   page.value.num = 1;
@@ -482,13 +482,14 @@ const resetData = (): void => {
 /* 清除勾选 */
 const clearSelect = (): void => {
   nextTick(()=>{
+    list.value.num = 0;
     tableList.value.checkboxAll(false);
   });
 }
 /* 自定义时间 */
 const setCustomTime = (type: string): void => {
   sea.value.customTime.active = type;
-  switch(type) {
+  switch(type){
     case 'today': sea.value.time = [Time.Date('Y/m/d'), Time.Date('Y/m/d')]; break;
     case 'yesterday': sea.value.time = [Time.Date('Y/m/d', Time.StrToTime('-1 day')), Time.Date('Y/m/d', Time.StrToTime('-1 day'))]; break;
     case 'month': sea.value.time = [Time.Date('Y/m/d', Time.StrToTime('-3 month')), Time.Date('Y/m/d')]; break;
@@ -501,15 +502,15 @@ const saveData = (type: string, data: any = {}): void => {
   save.value.show = true;
   save.value.data = data;
   save.value.data.type = type;
-  if (type == 'edit') {
+  if(type==='edit'){
     save.value.title = langs.edit + '( ' + data.sku_id + ' )';
     save.value.data.ids = [data.id];
-  } else if (type == 'edits') {
+  } else if(type==='edits'){
     // ID
     const data: Array<any> = tableList.value.getData();
     let ids: Array<number> = [];
     let sku: Array<number> = [];
-    for (let v of data) {
+    for(let v of data){
       ids.push(v.id);
       sku.push(v.sku_id);
     }
@@ -521,7 +522,7 @@ const saveData = (type: string, data: any = {}): void => {
 }
 /* 添加&编辑-回调 */
 const saveSubmit = (val: boolean): void => {
-  if (!val) return;
+  if(!val) return;
   save.value.show = false;
   loadData();
 }
@@ -560,7 +561,7 @@ const importData = (): void => {
 }
 /* 导入-回调 */
 const importSubmit = (val: boolean): void => {
-  if (!val) return;
+  if(!val) return;
   loadData();
 }
 
@@ -570,7 +571,7 @@ const exchangeData = (): void => {
 }
 /* 汇率换算-回调 */
 const exchangeSubmit = (val: boolean): void => {
-  if (!val) return;
+  if(!val) return;
   exc.value.show = false;
   loadData();
 }
@@ -579,9 +580,9 @@ const exchangeSubmit = (val: boolean): void => {
 const goodsView = (img: string): void => {
   let data: any = [];
   let i: number = 0;
-  for (let v of list.value.data) {
-    if (!v.img) continue;
-    if (v.img == img) imgView.value.index = i;
+  for(let v of list.value.data){
+    if(!v.img) continue;
+    if(v.img===img) imgView.value.index = i;
     data.push({label: v.sku_id, value: v.img, other: { '颜色及规格': v.properties_value, '标签价': v.sale_price + '元', '吊牌价': v.market_price + 'W' } });
     i++;
   }
@@ -593,10 +594,10 @@ const goodsView = (img: string): void => {
 const Copy = (name: string, val: string): void => {
   const data: any = tableList.value.getData();
   let sku_id: string = '';
-  for (let i in data) {
+  for(let i in data){
     sku_id += data[i][name] + ' ';
   }
-  if (sku_id) Util.CopyText(sku_id);
+  if(sku_id) Util.CopyText(sku_id);
   else Util.CopyText(val);
 }
 
@@ -606,7 +607,7 @@ const getSelect = (): void => {
     token: state.token,
   }, (res: any) => {
     const {code, msg, data}: any = res.data;
-    if (code == 0) {
+    if(code===0){
       selectAll.value.labels = data.labels;
       selectAll.value.category = data.category;
       // 加载

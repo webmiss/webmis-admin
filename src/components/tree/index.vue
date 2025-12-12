@@ -78,13 +78,13 @@ watch(()=>props.options, (val: Array<any>)=>{
 const selectClick = (val: string, level: string, pos: Array<number>, isStatus: boolean=true): void => {
   let d1: any, d2: any, d3: any, d4: any;
   // 层级
-  if(level=='1') {
+  if(level=='1'){
     // 选中
     d1 = listData.value[pos[0]];
     d1.checked = val?true:false;
     // 勾选下级
     if(d1.children) nextChecked(d1.children, val?true:false);
-  } else if(level=='2') {
+  } else if(level=='2'){
     // 选中
     d2 = listData.value[pos[0]].children[pos[1]];
     d2.checked = val?true:false;
@@ -93,7 +93,7 @@ const selectClick = (val: string, level: string, pos: Array<number>, isStatus: b
     // 勾选上级
     d1 = listData.value[pos[0]];
     prevChecked(d1);
-  } else if(level=='3') {
+  } else if(level=='3'){
     // 选中
     d3 = listData.value[pos[0]].children[pos[1]].children[pos[2]];
     d3.checked = val?true:false;
@@ -104,7 +104,7 @@ const selectClick = (val: string, level: string, pos: Array<number>, isStatus: b
     d2 = listData.value[pos[0]].children[pos[1]];
     prevChecked(d2);
     prevChecked(d1);
-  } else if(level=='4') {
+  } else if(level=='4'){
     // 选中、
     d4 = listData.value[pos[0]].children[pos[1]].children[pos[2]].children[pos[3]];
     d4.checked = val?true:false;
@@ -119,7 +119,7 @@ const selectClick = (val: string, level: string, pos: Array<number>, isStatus: b
   // 部分选择
   setPartially();
   // 事件
-  if(isStatus) {
+  if(isStatus){
     emit('update:value', getData());
     emit('data', listData.value);
   }
@@ -148,17 +148,17 @@ const nextChecked = (data: any, checked: boolean): void => {
 const setPartially = (): void => {
   let n1:boolean=false, n2:boolean=false, n3:boolean=false, n4:boolean=false;
   // 一级
-  for(let v1 of listData.value) {
+  for(let v1 of listData.value){
     n1 = v1['children']?isPartially(v1['children']):false;
     v1['partially'] = v1['checked']&&n1?true:false;
     if(!v1['children']) continue;
     // 二级
-    for(let v2 of v1['children']) {
+    for(let v2 of v1['children']){
       n2 = v2['children']?isPartially(v2['children']):false;
       v2['partially'] = v2['checked']&&n2?true:false;
       if(!v2['children']) continue;
       // 三级
-      for(let v3 of v2['children']) {
+      for(let v3 of v2['children']){
         n3 = v3['children']?isPartially(v3['children']):false;
         v3['partially'] = v3['checked']&&n3?true:false;
         if(!v3['children']) continue;
@@ -169,8 +169,8 @@ const setPartially = (): void => {
 /* 是否选择 */
 const isPartially = (d: any): boolean => {
   let res: boolean=false;
-  for(let v of d) {
-    if(v['children']) {
+  for(let v of d){
+    if(v['children']){
       res = isPartially(v['children']);
       if(res) return res;
     } else {
@@ -190,16 +190,16 @@ const checkedNum = (data: any): number => {
 /* 获取数据 */
 const getData = (): Array<string> => {
   let values: Array<string> = [];
-  for(let v1 of listData.value) {
+  for(let v1 of listData.value){
     if(v1.checked) values.push(v1.value);
     if(!v1.children) continue;
-    for(let v2 of v1.children) {
+    for(let v2 of v1.children){
       if(v2.checked) values.push(v2.value);
       if(!v2.children) continue;
-      for(let v3 of v2.children) {
+      for(let v3 of v2.children){
         if(v3.checked) values.push(v3.value);
         if(!v3.children) continue;
-        for(let v4 of v3.children) {
+        for(let v4 of v3.children){
           if(v4.checked) values.push(v4.value);
         }
       }

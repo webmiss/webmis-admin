@@ -84,12 +84,12 @@ const getSelect = (): void => {
     token: state.token,
   }, (res:any)=>{
     const {code, msg, data}: any = res.data;
-    if(code==0) {
+    if(code==0){
       // 类型、分仓
       selectAll.value.type_name = data.type_name;
       selectAll.value.partner_name = data.partner_name;
       selectAll.value.brand_name = data.brand_name;
-      if(props.data.tp=='edit') {
+      if(props.data.tp=='edit'){
         nextTick(()=>{
           form.value.type = [parseInt(props.data.type)];
           form.value.wms_co_id = [parseInt(props.data.wms_co_id)];

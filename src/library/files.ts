@@ -48,7 +48,7 @@ export default class Files {
     const bstr:any = atob(arr[1]);
     let n:number = bstr.length;
     const u8arr:any = new Uint8Array(n);
-    while (n--) {
+    while (n--){
       u8arr[n] = bstr.charCodeAt(n);
     }
     const file = new File([u8arr], fileName, {type: type});
@@ -58,11 +58,11 @@ export default class Files {
 
   /* 获取后缀名 */
   public static GetTypeExt(type: string): string {
-    switch(type) {
+    switch(type){
       case 'image/jpeg': return 'jpg';
       case 'image/png': return 'png';
       case 'image/gif': return 'gif';
-      default : return '';
+      default: return '';
     }
   }
 
@@ -90,7 +90,7 @@ export default class Files {
     const context: any = canvas.getContext('2d');
     const img: HTMLImageElement = new Image();
     img.src = file;
-    img.onload = function () {
+    img.onload = function (){
       const self: any = this;
       src_size = self.width/self.height;
       // 宽、高、不缩放、等比例
@@ -131,7 +131,7 @@ export default class Files {
         }
       }
       // 画板高宽
-      if(param.cut && self.width<=param.width && self.height<=param.height) {
+      if(param.cut && self.width<=param.width && self.height<=param.height){
         canvas.width = self.width;
         canvas.height = self.height;
         dst_x = 0;
@@ -174,7 +174,7 @@ export default class Files {
     dom.style.display = 'none';
     dom.href = blobURL;
     dom.setAttribute('download', filename);
-    if(typeof dom.download === 'undefined'){
+    if(typeof dom.download==='undefined'){
       dom.setAttribute('target', '_blank');
     }
     document.body.appendChild(dom);
@@ -187,7 +187,7 @@ export default class Files {
   /* 分享 */
   public static async ShareFile(file_url: string, filename: string='down.txt', title: string='', text: string=''): Promise<boolean> {
     const file = await fetch(file_url).then(r => r.blob()).then(blob => new File([blob], filename));
-    if(navigator.canShare?.({ files: [file] })) {
+    if(navigator.canShare?.({ files: [file] })){
       navigator.share({files: [file], title: title, text: text}).catch(console.error);
       return true;
     } else {

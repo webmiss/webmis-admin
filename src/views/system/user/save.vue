@@ -160,7 +160,7 @@ const getSelect = (): void => {
     token: state.token,
   }, (res:any)=>{
     const {code, msg, data}: any = res.data;
-    if(code==0) {
+    if(code==0){
       selectAll.value.type_name = data.type_name;
       selectAll.value.role_name = data.role_name;
       // 默认值
@@ -186,7 +186,7 @@ const getPerm = (): void => {
 const updatePerm = (val: any): void => {
   let perm: any = {};
   let arr: Array<string> = [];
-  for(let v of val) {
+  for(let v of val){
     arr = v.split(':');
     if(perm[arr[0]]) perm[arr[0]] += parseInt(arr[1]);
     else perm[arr[0]] = parseInt(arr[1]);
@@ -200,10 +200,10 @@ const updatePerm = (val: any): void => {
 /* 验证 */
 const verify = (form: any): any => {
   // 用户名
-  if(!Safety.IsRight('uname', form.uname) && !Safety.IsRight('tel', form.uname) && !Safety.IsRight('email', form.uname)) {
+  if(!Safety.IsRight('uname', form.uname) && !Safety.IsRight('tel', form.uname) && !Safety.IsRight('email', form.uname)){
     return Ui.Toast(langs.sys_user_verify_uname);
   }
-  if(!form.id || form.passwd) {
+  if(!form.id || form.passwd){
     if(!Safety.IsRight('passwd', form.passwd)) return Ui.Toast(langs.sys_user_verify_passwd);
   }
   return form;

@@ -26,7 +26,7 @@ const state = store.state;
 const isAction = (action: string): boolean => {
   const list: Array<any> = state.menusAction;
   if(list.length==0) return false;
-  for(let v of list) {
+  for(let v of list){
     if(v['action']==action) return true;
   }
   return false;

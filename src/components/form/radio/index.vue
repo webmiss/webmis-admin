@@ -58,7 +58,7 @@ onMounted(()=>{
 
 /* 点击选择 */
 const clickRadio = (k: number): void => {
-  for(let i in list.value) {
+  for(let i in list.value){
     list.value[k].checked = k.toString()==i;
   }
   emit('update:value', list.value[k].value);

@@ -1,5 +1,5 @@
 <template>
-  <div ref="GoodsPrint" class="wm-print_body flex" :style="{ visibility: show ? 'inherit' : 'hidden' }">
+  <div ref="GoodsPrint" class="wm-print_body flex" :style="{ visibility: show?'inherit':'hidden' }">
     <div class="wm-print_left scrollbar">
       <div class="search">
         <wmInput v-model:value="seaKey" @input="templateSearch()" @iconClick="templateSearch()" :placeholder="state.langs.print_template" maxlength="32" icon="ui ui_search" iconAlign="right" padding="0 40px 0 10px" margin="0 5px 0 0"></wmInput>
@@ -38,10 +38,10 @@
         <div ref="printBarcode" class="print_body flex_left">
           <div class="print_item" v-for="(v, k) in list.sku" :key="k" :class="v.checked?'':'none'" @click="v.checked = !v.checked;printNum();">
             <!-- 瑞丽市场部(手镯) -->
-            <div v-if="list.active == 'rlscb_sz'" :class="list.active" class="print_box" :style="{width: list.template[list.active].width, height: list.template[list.active].height}">
-              <div class="select" :class="v.checked ? 'checked' : ''"></div>
+            <div v-if="list.active==='rlscb_sz'" :class="list.active" class="print_box" :style="{width: list.template[list.active].width, height: list.template[list.active].height}">
+              <div class="select" :class="v.checked?'checked':''"></div>
               <div class="body">
-                <div class="barcode" :style="{ backgroundColor: !v.barcode ? '#F2F4F8' : '' }">
+                <div class="barcode" :style="{ backgroundColor: !v.barcode?'#F2F4F8':'' }">
                   <img v-if="v.barcode" :src="v.barcode" :alt="v.sku_id" style="height: 36px;" />
                 </div>
                 <div class="sku_id">{{ v.sku_id }}</div>
@@ -50,13 +50,13 @@
               </div>
             </div>
             <!-- 瑞丽市场部(二维码) -->
-            <div v-if="list.active == 'rlscb_qr'" :class="list.active" class="print_box" :style="{width: list.template[list.active].width, height: list.template[list.active].height}">
-              <div class="select" :class="v.checked ? 'checked' : ''"></div>
+            <div v-if="list.active==='rlscb_qr'" :class="list.active" class="print_box" :style="{width: list.template[list.active].width, height: list.template[list.active].height}">
+              <div class="select" :class="v.checked?'checked':''"></div>
               <div class="body">
-                <div class="qrcode" :style="{ backgroundColor: !v.qrcode ? '#F2F4F8' : '' }">
+                <div class="qrcode" :style="{ backgroundColor: !v.qrcode?'#F2F4F8':'' }">
                   <img v-if="v.qrcode" :src="v.qrcode" :alt="v.sku_id" style="height: 36px;" />
                 </div>
-                <div class="barcode" :style="{ backgroundColor: !v.barcode ? '#F2F4F8' : '' }">
+                <div class="barcode" :style="{ backgroundColor: !v.barcode?'#F2F4F8':'' }">
                   <img v-if="v.barcode" :src="v.barcode" :alt="v.sku_id" style="height: 32px;" />
                 </div>
                 <div class="sku_id">{{ v.sku_id }}</div>
@@ -65,10 +65,10 @@
               </div>
             </div>
             <!-- 平洲市场部(标签) -->
-            <div v-if="list.active == 'pzscb_sz'" :class="list.active" class="print_box" :style="{width: list.template[list.active].width, height: list.template[list.active].height}">
-              <div class="select" :class="v.checked ? 'checked' : ''"></div>
+            <div v-if="list.active==='pzscb_sz'" :class="list.active" class="print_box" :style="{width: list.template[list.active].width, height: list.template[list.active].height}">
+              <div class="select" :class="v.checked?'checked':''"></div>
               <div class="body">
-                <div class="barcode" :style="{ backgroundColor: !v.barcode ? '#F2F4F8' : '' }">
+                <div class="barcode" :style="{ backgroundColor: !v.barcode?'#F2F4F8':'' }">
                   <img v-if="v.barcode" :src="v.barcode" :alt="v.sku_id" style="height: 32px" />
                 </div>
                 <div class="sku_id">{{ v.sku_id }}</div>
@@ -193,12 +193,12 @@ const list = ref({
 
 /* 监听 */
 watch(()=>props.show, (val:Boolean)=>{
-  if(val) {
+  if(val){
     // 显示
     proxy.$refs.GoodsPrint.style.opacity = "1";
     // 默认模板
     const tp: string | null = Storage.getItem("printTemplate");
-    list.value.active = tp ? tp : "pzscb_sz";
+    list.value.active = tp?tp:"pzscb_sz";
     // 监听窗口、内容
     Html.addEvent("resize", printWidht);
     Html.observer(proxy.$refs.printBarcode, (res: any) => {
@@ -206,10 +206,10 @@ watch(()=>props.show, (val:Boolean)=>{
       printWidht();
     });
     // 默认数据
-    if (state.print.sku.length > 0) {
+    if(state.print.sku.length > 0){
       let sku: Array<string> = [];
       list.value.sku = [];
-      for (let v of state.print.sku) {
+      for(let v of state.print.sku){
         v.checked = true;
         v.barcode = "";
         sku.push(v.sku_id);
@@ -228,7 +228,7 @@ watch(()=>props.show, (val:Boolean)=>{
 const templateSearch = (): void => {
   let data = list.value.template;
   const reg = new RegExp(seaKey.value.toLowerCase());
-  for (let k in data) {
+  for(let k in data){
     data[k].display = seaKey.value?reg.test(data[k].label):true;
   }
 }
@@ -242,9 +242,9 @@ const templateChange = (name: any): void => {
 
 /* 搜索 */
 const search = (): void => {
-  if (!sku_id.value) return Ui.Toast(state.langs.sku_id);
+  if(!sku_id.value) return Ui.Toast(state.langs.sku_id);
   const arr: Array<string> = sku_id.value.trim().toUpperCase().split(' ');
-  for(let i in arr) {
+  for(let i in arr){
     arr[i] = Util.LTrim(arr[i], '0');
   }
   goodsInfo(arr);
@@ -254,8 +254,8 @@ const search = (): void => {
 /* 商品-信息 */
 const goodsInfo = (sku: Array<string>): void => {
   // 追加
-  for (let sku_id of sku) {
-    if (inArray(sku_id)) continue;
+  for(let sku_id of sku){
+    if(inArray(sku_id)) continue;
     list.value.sku.push({ checked: false, sku_id: sku_id, barcode: "" });
   }
   // 查询
@@ -264,34 +264,34 @@ const goodsInfo = (sku: Array<string>): void => {
     sku: sku,
   },(res: any) => {
     const {code, msg, data} = res.data;
-    if (code == 0) {
-      for (let sku_id in data) goodsContent(sku_id, data[sku_id]);
+    if(code===0){
+      for(let sku_id in data) goodsContent(sku_id, data[sku_id]);
     } else Ui.Toast(msg);
   });
 }
 /* 是否存在 */
 const inArray = (sku_id: string): boolean => {
-  for (let v of list.value.sku) if (v.sku_id == sku_id) return true;
+  for(let v of list.value.sku) if(v.sku_id===sku_id) return true;
   return false;
 }
 /* 替换内容 */
 const goodsContent = (sku_id: string, d: any): boolean => {
-  for (let v of list.value.sku) {
-    if (v.sku_id == sku_id) {
+  for(let v of list.value.sku){
+    if(v.sku_id===sku_id){
       v.barcode = d.barcode;
-      if (!v.qrcode) v.qrcode = d.qrcode;
-      if (!v.name) v.name = d.name;
-      if (!v.short_name) v.short_name = d.short_name;
-      if (!v.properties_value) v.properties_value = d.properties_value;
-      if (!v.purchase_price) v.purchase_price = d.purchase_price;
-      if (!v.sale_price) v.sale_price = d.sale_price;
-      if (!v.market_price) v.market_price = d.market_price;
-      if (!v.unit) v.unit = d.unit;
-      if (!v.weight) v.weight = d.weight;
-      if (!v.ratio) v.ratio = d.ratio;
-      if (!v.brand) v.brand = d.brand;
-      if (!v.owner) v.owner = d.owner;
-      if (!v.i_id) v.i_id = d.i_id;
+      if(!v.qrcode) v.qrcode = d.qrcode;
+      if(!v.name) v.name = d.name;
+      if(!v.short_name) v.short_name = d.short_name;
+      if(!v.properties_value) v.properties_value = d.properties_value;
+      if(!v.purchase_price) v.purchase_price = d.purchase_price;
+      if(!v.sale_price) v.sale_price = d.sale_price;
+      if(!v.market_price) v.market_price = d.market_price;
+      if(!v.unit) v.unit = d.unit;
+      if(!v.weight) v.weight = d.weight;
+      if(!v.ratio) v.ratio = d.ratio;
+      if(!v.brand) v.brand = d.brand;
+      if(!v.owner) v.owner = d.owner;
+      if(!v.i_id) v.i_id = d.i_id;
       // 是否商品资料
       if(d.is_goods) v.checked = true;
       else {
@@ -316,25 +316,25 @@ const goodsImport = (): void => {
       let tmp: any = {};
       let sku_id: string = '';
       list.value.sku = [];
-      for (let v of arr) {
-        if (!v["商品编码"]) continue;
+      for(let v of arr){
+        if(!v["商品编码"]) continue;
         sku_id = v["商品编码"].trim().toUpperCase();
         sku.push(sku_id);
         tmp = { checked: false, sku_id: sku_id, barcode: "" };
-        if (v["暗码"]) tmp.short_name = v["暗码"];
-        if (v["颜色及规格"]) tmp.short_name = v["颜色及规格"];
-        if (v["基本售价"]) tmp.sale_price = v["基本售价"];
-        if (v["吊牌价"]) tmp.market_price = v["吊牌价"];
+        if(v["暗码"]) tmp.short_name = v["暗码"];
+        if(v["颜色及规格"]) tmp.short_name = v["颜色及规格"];
+        if(v["基本售价"]) tmp.sale_price = v["基本售价"];
+        if(v["吊牌价"]) tmp.market_price = v["吊牌价"];
         list.value.sku.push(tmp);
       }
-      if (sku.length > 0) goodsInfo(sku);
+      if(sku.length > 0) goodsInfo(sku);
     }, "blob");
   });
 }
 
 /* 打印-内容宽度 */
 const printWidht = (): void => {
-  if (list.value.sku.length < 1) return Ui.Toast(state.langs.sku_id);
+  if(list.value.sku.length < 1) return Ui.Toast(state.langs.sku_id);
   let content: any = proxy.$refs.printBarcode;
   let item: any = document.getElementsByClassName("print_item");
   let first: any = document.getElementsByClassName("print_box")[0];
@@ -345,26 +345,26 @@ const printWidht = (): void => {
     Html.getPropertyValue(first, "width").replace("px", "")
   );
   const n: number = Math.ceil(w/w1) - (w<768?1:2);
-  for (let v of item) v.style.width = "calc(100% / " + n + ")";
+  for(let v of item) v.style.width = "calc(100% / " + n + ")";
 }
 
 /* 打印-全选 */
 const printSelect = (): void => {
   const checked: boolean = !list.value.checked;
-  for (let v of list.value.sku) v.checked = checked;
+  for(let v of list.value.sku) v.checked = checked;
   list.value.checked = checked;
 }
 
 /* 打印-数量 */
 const printNum = (): void => {
   let num: number = 0;
-  for (let v of list.value.sku) if (v.checked) num++;
+  for(let v of list.value.sku) if(v.checked) num++;
   list.value.num = num;
 }
 
 /* 打印-确认 */
 const printSubmit = (): void => {
-  if (list.value.num < 1) return Ui.Toast(state.langs.select);
+  if(list.value.num < 1) return Ui.Toast(state.langs.select);
   // 记录
   Request.Post("erp_goods/barcode_print?lang="+state.lang, {
     token: state.token,
@@ -375,7 +375,7 @@ const printSubmit = (): void => {
   });
   // 重置
   let item: any = document.getElementsByClassName("print_item");
-  for (let v of item) v.style.width = "100%";
+  for(let v of item) v.style.width = "100%";
   nextTick(()=>{
     printJS({printable: proxy.$refs.printBarcode, type: "html", scanStyles: false, css: '/print/barcode.css?t='+Time.Time()});
   });

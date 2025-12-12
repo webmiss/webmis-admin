@@ -181,7 +181,7 @@ const loadData = (): void => {
   }, (res: any) => {
     load.clear();
     const {code, msg, time, data}: any = res.data;
-    if (code === 0) {
+    if(code===0){
       total.value.time = time;
       list.value.data = data;
       clearSelect();
@@ -194,7 +194,7 @@ const loadData = (): void => {
     data: getWhere(),
   }, (res:any)=>{
     const {code, msg, time, data}: any = res.data;
-    if(code==0) {
+    if(code==0){
       total.value.time = time;
       page.value.total = data.total;
     } else Ui.Toast(msg);
@@ -236,6 +236,7 @@ const resetData = (): void => {
 /* 清除勾选 */
 const clearSelect = (): void => {
   nextTick(()=>{
+    list.value.num = 0;
     tableList.value.checkboxAll(false);
   });
 }
@@ -244,10 +245,10 @@ const clearSelect = (): void => {
 const saveData = (type: string, data?: any): void => {
   save.value.show = true;
   save.value.type = type;
-  if(type=='add') {
+  if(type=='add'){
     save.value.title = langs.add;
     save.value.data = {};
-  } else if(type=='edit') {
+  } else if(type=='edit'){
     save.value.title = langs.edit+'( '+data.title+' )';
     save.value.data = data;
   }

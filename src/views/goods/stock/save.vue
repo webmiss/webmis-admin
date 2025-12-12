@@ -85,7 +85,7 @@ const getSelect = (): void => {
     token: state.token,
   }, (res:any)=>{
     const {code, msg, data}: any = res.data;
-    if(code==0) {
+    if(code==0){
       // 分仓
       selectAll.value.partner_name = data.partner_name;
       nextTick(()=>{

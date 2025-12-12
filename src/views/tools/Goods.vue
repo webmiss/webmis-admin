@@ -511,14 +511,14 @@ const imgPreview = ref({show: false, index:0, list: <any>[]});
 
 /* 监听 */
 watch(()=>props.show, (val:Boolean)=>{
-  if(val) {
+  if(val){
     // 显示
     proxy.$refs.GoodsDirect.style.opacity = '1';
     // 流向
     if(state.goods.sku_id) goodsInfo(state.goods.sku_id);
     // 监听窗口
     Html.addEvent('resize', imgWidht);
-    if(tabs.value.active=='img') {
+    if(tabs.value.active=='img'){
       imgWidht();
       Html.observer(proxy.$refs.imgContent, (res: any)=>{
         imgWidht();
@@ -526,10 +526,10 @@ watch(()=>props.show, (val:Boolean)=>{
     };
     // 拍照
     if(tabs.value.active=='photo') photoOpen();
-    if(state.goods.photo.id) {
+    if(state.goods.photo.id){
       changeTabs('photo');
       photo.value.list = [];
-      for(let v of state.goods.photo.list) {
+      for(let v of state.goods.photo.list){
         photo.value.list.push(v);
       }
     }
@@ -588,7 +588,7 @@ const goodsInfo = (sku_id: any, type: string=''): void => {
   }, (res: any)=>{
     load.clear();
     const {code, msg, data} = res.data;
-    if (code == 0) {
+    if(code===0){
       list.value.info = data;
       form.value.sku_id = data.sku_id;
       // 二维码
@@ -600,14 +600,14 @@ const goodsInfo = (sku_id: any, type: string=''): void => {
       // 流向
       goodsDirect();
       // 拍照
-      if(type==='photo') {
+      if(type==='photo'){
         setPhotoList(sku_id, {properties_value: data.properties_value, sale_price: data.sale_price, market_price: data.market_price});
         addGoods(sku_id);
         photoSave();
       }
     } else {
       Ui.Toast(msg);
-      if(type==='photo') {
+      if(type==='photo'){
         setPhotoList(sku_id, {loading: 1});
       }
     }
@@ -625,7 +625,7 @@ const goodsDirect = (): void => {
   }, (res: any)=>{
     load.clear();
     const {code, msg, data} = res.data;
-    if (code == 0) {
+    if(code===0){
       list.value.direct.total = data.total;
       list.value.direct.data = data.list;
     } else {
@@ -638,7 +638,7 @@ const goodsDirect = (): void => {
     sku_id: form.value.sku_id,
   }, (res: any)=>{
     const {code, msg, data} = res.data;
-    if (code == 0) {
+    if(code===0){
       list.value.stock.data = data;
     } else {
       Ui.Toast(msg);
@@ -651,7 +651,7 @@ const goodsDirect = (): void => {
     time: form.value.times,
   }, (res: any)=>{
     const {code, msg, data} = res.data;
-    if (code == 0) {
+    if(code===0){
       list.value.logs.data = data;
     } else {
       Ui.Toast(msg);
@@ -669,7 +669,7 @@ const goodsDirectExport = (): void => {
   }, (res: any)=>{
     load.clear();
     const {code, msg, data} = res.data;
-    if (code == 0) {
+    if(code===0){
       Files.Down(data.path+data.filename, data.filename);
     } else {
       Ui.Toast(msg);
@@ -691,7 +691,7 @@ const imgWidht = (): void => {
 const imgFiles = (): void => {
   // 选择文件
   Files.Select({multiple: 'multiple'}, (fileObj:any)=>{
-    for(let i=0; i<fileObj.length; i++) {
+    for(let i=0; i<fileObj.length; i++){
       let obj = fileObj[i];
       let name: string = obj.name;
       let arr: Array<string> = name.split('.');
@@ -730,13 +730,13 @@ const imgUpload = (sku_id: string, imgBase64: string, type: string, mode: string
     form.append('file', file);
     Request.Post('erp_goods/up_img?lang='+state.lang, form, (res: any)=>{
       const {code, data, msg} = res.data;
-      if(code===0) {
+      if(code===0){
         // 图片
         let img: string = data.oss_url+data.file+'?'+Times.Time();
         if(list.value.imgs[sku_id]) list.value.imgs[sku_id].img = img;
         if(list.value.info.sku_id===sku_id) list.value.info.img = img;
         // 拍照
-        if(mode==='photo') {
+        if(mode==='photo'){
           setPhotoList(sku_id, {img: img, loading: 1});
         }
       } else {
@@ -749,7 +749,7 @@ const imgUpload = (sku_id: string, imgBase64: string, type: string, mode: string
         let complete = (event.loaded/event.total*100 | 0);
         if(complete<100){
           list.value.imgs[sku_id].loaded = complete+'%';
-        }else if(event.upload) {
+        }else if(event.upload){
           list.value.imgs[sku_id].state = 1;
           list.value.imgs[sku_id].loaded = '100%';
         }
@@ -764,7 +764,7 @@ const imgRemove = (sku_id: any): void => {
     sku_id: sku_id,
   }, (res: any)=>{
     const d = res.data;
-    if(d.code==0) {
+    if(d.code==0){
       if(list.value.imgs[sku_id]) list.value.imgs[sku_id].img = '';
       if(form.value.sku_id==sku_id) list.value.info.img = '';
     } else Ui.Toast(d.msg);
@@ -778,9 +778,9 @@ const photoOpen = (): void => {
     photo.value.canvas = document.getElementById('GoodsPhotoCanvas');
     photo.value.context = photo.value.canvas.getContext('2d');
     // 检测
-    if (navigator.mediaDevices === undefined || navigator.mediaDevices.getUserMedia === undefined) return Ui.Toast('浏览器不支持调用摄像头!');
+    if(navigator.mediaDevices===undefined || navigator.mediaDevices.getUserMedia===undefined) return Ui.Toast('浏览器不支持调用摄像头!');
     const getUserMedia: any = (navigator as any).webkitGetUserMedia || (navigator as any).mozGetUserMedia || (navigator as any).getUserMedia;
-    if (!getUserMedia) return Ui.Toast('浏览器不支持调用摄像头!');
+    if(!getUserMedia) return Ui.Toast('浏览器不支持调用摄像头!');
     // return ;
     // 调用摄像头
     navigator.mediaDevices.getUserMedia({video:
@@ -812,7 +812,7 @@ const photoSearch = (): void => {
 }
 /* 摄像头-是否存在 */
 const inPhotoList = (sku_id: string): boolean => {
-  for(let v of photo.value.list) {
+  for(let v of photo.value.list){
     if(v.sku_id===sku_id) return true;
   }
   return false;
@@ -820,9 +820,9 @@ const inPhotoList = (sku_id: string): boolean => {
 /* 摄像头-更新商品 */
 const setPhotoList = (sku_id: string, data: any={}): void => {
   const list: any = photo.value.list;
-  for(let i in list) {
-    if(list[i].sku_id===sku_id) {
-      for(let k in data) {
+  for(let i in list){
+    if(list[i].sku_id===sku_id){
+      for(let k in data){
         list[i][k] = data[k];
       }
       break;
@@ -851,7 +851,7 @@ const removeGoods = (k: number, d: any={}): void => {
   // 删除
   photo.value.list.splice(k, 1);
   // 移除
-  if(d.id) {
+  if(d.id){
     Request.Post('erp_purchase_in/goods_remove?lang=' + state.lang, {
       token: state.token,
       id: state.goods.photo.id,
@@ -868,13 +868,13 @@ const removeGoods = (k: number, d: any={}): void => {
 /* 摄像头-扫描条码 */
 const startScan = async (mode: boolean=true): Promise<void> => {
   photo.value.isScan = mode;
-  if(photo.value.isScan) {
+  if(photo.value.isScan){
     // 扫描
     photo.value.codeReader = new BrowserMultiFormatReader();
     const devices: any = await photo.value.codeReader.listVideoInputDevices();
     const constraints: any = {video:{width:{ideal:300}, height:{ideal:300}, focusMode:'continuous'}};
     photo.value.codeReader.decodeFromVideoDevice(devices[0].deviceId, 'GoodsScanVideo', (res: any, err: any)=>{
-      if(res) {
+      if(res){
         // 添加商品
         if(!inPhotoList(res.text)) photo.value.list.unshift({id:'', sku_id:res.text, properties_value:'', loading: 0, img:''});
         else Ui.Toast('[ '+res.text+' ]已存在!');
@@ -923,10 +923,10 @@ const photoSave = (): void => {
 
 /* 摄象头-关闭 */
 const photoClose = (): void => {
-  if(photo.value.isTrue) {
+  if(photo.value.isTrue){
     photo.value.isTrue = false;
     photo.value.video.srcObject.getTracks()[0].stop();
-    if(photo.value.codeReader) {
+    if(photo.value.codeReader){
       photo.value.isScan = false;
       photo.value.codeReader.reset();
     }
@@ -947,8 +947,8 @@ const imgViews = (sku_id: string): void => {
   let i: number = 0;
   let data: any = [];
   const imgs: any = list.value.imgs;
-  for(let index in imgs) {
-    if(imgs[index].img) {
+  for(let index in imgs){
+    if(imgs[index].img){
       data.push({label: index, value: imgs[index].img});
       if(sku_id==index) imgPreview.value.index = i;
       i++;
@@ -962,8 +962,8 @@ const imgViewsPhoto = (sku_id: string): void => {
   let i: number = 0;
   let data: any = [];
   const list: any = photo.value.list;
-  for(let v of list) {
-    if(v.img) {
+  for(let v of list){
+    if(v.img){
       data.push({label: v.sku_id, value: v.img, other:{'颜色及规格':v.properties_value, '标签价':v.sale_price+'元', '吊牌价':v.market_price+'W'}});
       if(sku_id===v.sku_id) imgPreview.value.index = i;
       i++;
@@ -979,7 +979,7 @@ const close = (): void => {
   emit('update:show', false);
   (proxy.$refs.GoodsDirect as any).style.opacity = '0';
   // 入库单
-  if(state.goods.photo.id) {
+  if(state.goods.photo.id){
     state.goods.photo.refresh = true;
     state.goods.photo.id = '';
     state.goods.photo.ctime = '';

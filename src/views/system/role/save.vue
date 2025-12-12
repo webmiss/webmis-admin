@@ -113,7 +113,7 @@ const getPerm = (): void => {
 const updatePerm = (val: any): void => {
   let perm: any = {};
   let arr: Array<string> = [];
-  for(let v of val) {
+  for(let v of val){
     arr = v.split(':');
     if(perm[arr[0]]) perm[arr[0]] += parseInt(arr[1]);
     else perm[arr[0]] = parseInt(arr[1]);

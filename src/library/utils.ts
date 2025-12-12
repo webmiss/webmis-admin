@@ -64,15 +64,13 @@ export default class Util {
     const result = JSON.parse(JSON.stringify(arr));
     const sortFields = Array.isArray(fields)?fields:[fields];
     return result.sort((a: any, b: any) => {
-      for (const field of sortFields) {
+      for(const field of sortFields){
         const valueA = field.split('.').reduce((o: any, k: any) => o?.[k], a);
         const valueB = field.split('.').reduce((o: any, k: any) => o?.[k], b);
-        if (valueA !== valueB) {
+        if(valueA !== valueB){
           const compareResult = 
-            typeof valueA === 'string' 
-              ? valueA.localeCompare(valueB)
-              : valueA - valueB;
-          return asc ? compareResult : -compareResult;
+            typeof valueA==='string'?valueA.localeCompare(valueB):(valueA - valueB);
+          return asc?compareResult:-compareResult;
         }
       }
       return 0;

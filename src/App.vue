@@ -192,7 +192,7 @@
 
 <style lang="less">
 /* 表单缩放问题 */
-@media only screen and (min-device-width : 320px) and (max-device-width : 1024px) {
+@media only screen and (min-device-width:320px) and (max-device-width:1024px){
   select:focus, textarea:focus, input:focus { font-size: 16px !important; }
 }
 /* 样式 */
@@ -249,7 +249,7 @@ watch(()=>state.isLogin, (isLogin: boolean)=>{
   if(isLogin) MenusList();
 },{ deep: true });
 watch(()=>route.path, (path: string)=>{
-  if(state.isLogin) {
+  if(state.isLogin){
     tabs.value.active = path;
     MenusList();
   }
@@ -267,7 +267,7 @@ const MenusList = (): void => {
   // 请求
   Request.Post('sys_menus/get_menus_perm', {token: state.token}, (res:any)=>{
     const {code, msg, data}: any = res.data;
-    if(code==0) {
+    if(code==0){
       menus.value.list = data;
       // 导航
       const tmp: any = Storage.getItem('MenusTabs') || '';
@@ -277,12 +277,12 @@ const MenusList = (): void => {
       menus.value.tmpList.value = menusTmp?JSON.parse(menusTmp):[];
       // 点击当前页
       let title: string = '';
-      for(let v1 of data) {
+      for(let v1 of data){
         if(!v1.children) continue;
-        for(let v2 of v1.children) {
+        for(let v2 of v1.children){
           if(!v2.children) continue;
-          for(let v3 of v2.children) {
-            if(v3.value.url==tabs.value.active) {
+          for(let v3 of v2.children){
+            if(v3.value.url==tabs.value.active){
               title=v3.langs[state.lang]; break;
             }
           }
@@ -314,21 +314,21 @@ const MenusSearch = (): void => {
   let keys: Array<any> = [];
   menus.value.seaList = [];
   // 一级
-  for(const k1 in list) {
+  for(const k1 in list){
     // 二级
     if(!list[k1].children) continue;
-    for(const k2 in list[k1].children) {
+    for(const k2 in list[k1].children){
       // 三级
       if(!list[k1].children[k2].children) continue;
-      for(const k3 in list[k1].children[k2].children) {
+      for(const k3 in list[k1].children[k2].children){
         // 是否显示
-        if(key.length>0) {
+        if(key.length>0){
           tmp = list[k1].children[k2].children[k3];
           label = tmp.langs[state.lang].toLowerCase();
           en = tmp.en.toLowerCase();
           display = reg.test(label) || reg.test(en);
           // 结果
-          if(display) {
+          if(display){
             keys.push([k1, k2]);
             menus.value.seaList.push({label:tmp.langs[state.lang], icon:tmp.icon, url:tmp.value.url});
           }
@@ -343,12 +343,12 @@ const MenusSearch = (): void => {
   }
   // 隐藏二级菜单
   if(!key) return;
-  for(const k1 in list) {
+  for(const k1 in list){
     if(!list[k1].children) continue;
-    for(const k2 in list[k1].children) {
+    for(const k2 in list[k1].children){
       let is_true: boolean = false;
-      for(const i in keys) {
-        if(keys[i][0]==k1&&keys[i][1]==k2) {
+      for(const i in keys){
+        if(keys[i][0]==k1&&keys[i][1]==k2){
           is_true = true;
           continue;
         }
@@ -362,16 +362,16 @@ const MenusClick = (name: string, url: string, isShow: boolean=false): void => {
   // 是加载菜单
   if(menus.value.list.length==0) return;
   // 隐藏菜单
-  if(isShow) {
+  if(isShow){
     menusShow.value = false;
     uinfoShow.value = false;
   }
   // 是否首页
-  if(url!='/') {
+  if(url!='/'){
     // 是否存在
     let inArr: Boolean = false;
     const list: any = tabs.value.list;
-    for (const k in list) {
+    for(const k in list){
       if(list[k].url==url){
         inArr=true; break;
       }
@@ -383,11 +383,11 @@ const MenusClick = (name: string, url: string, isShow: boolean=false): void => {
   // 数据
   const list: any = menus.value.list;
   let tmp: any={}, data: any, action: Array<any> = [];
-  for(const k1 in list) {
+  for(const k1 in list){
     if(!list[k1].children) continue;
-    for(const k2 in list[k1].children) {
+    for(const k2 in list[k1].children){
       if(!list[k1].children[k2].children) continue;
-      for(const k3 in list[k1].children[k2].children) {
+      for(const k3 in list[k1].children[k2].children){
         tmp = list[k1].children[k2].children[k3];
         if(tmp.value.url==url){
           data = {label:tmp.langs[state.lang], icon:tmp.icon, url:tmp.value.url};
@@ -398,10 +398,10 @@ const MenusClick = (name: string, url: string, isShow: boolean=false): void => {
     }
   }
   // 最近访问
-  if(data) {
+  if(data){
     tmp = Storage.getItem('MenusTmp');
     tmp = tmp?JSON.parse(tmp):[];
-    for(let i in tmp) {
+    for(let i in tmp){
       if(tmp[i].url==url || parseInt(i)>=9) tmp.splice(i, 1);
     }
     tmp.unshift(data);
@@ -409,7 +409,7 @@ const MenusClick = (name: string, url: string, isShow: boolean=false): void => {
     Storage.setItem('MenusTmp', JSON.stringify(tmp));
   }
   // 动作菜单
-  if(action) {
+  if(action){
     state.menusAction = action;
   }
   // 跳转
@@ -420,7 +420,7 @@ const MenusClick = (name: string, url: string, isShow: boolean=false): void => {
 /* 菜单-关闭 */
 const MenusClose = (url: string): void => {
   const list: any = tabs.value.list;
-  for (const k in list) {
+  for(const k in list){
     if(list[k].url==url){
       list.splice(k, 1);
       // 跳转

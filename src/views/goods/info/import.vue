@@ -49,17 +49,17 @@
           <div class="tRight">{{ d.supply_price>0?priceEncode(d.supply_price):'-' }}</div>
         </template>
         <template #sale_price="d">
-          <div class="tRight">{{d.sale_price>0?priceEncode(goods.price.checked ? d.price : d.sale_price):'-'}}</div>
+          <div class="tRight">{{d.sale_price>0?priceEncode(goods.price.checked?d.price:d.sale_price):'-'}}</div>
         </template>
         <template #purchase_price="d">
           <div class="tRight" v-if="d.purchase_price>0&&d.status!=1">***</div>
           <div class="tRight" v-else>{{ d.purchase_price>0?priceEncode(d.purchase_price):d.purchase_price }}</div>
         </template>
         <template #supplier_price="d">
-          <div class="tRight">{{ d.supplier_price > 0 ? priceEncode(d.supplier_price) : '-' }}</div>
+          <div class="tRight">{{ d.supplier_price > 0?priceEncode(d.supplier_price):'-' }}</div>
         </template>
         <template #market_price="d">
-          <div class="tRight">{{ d.market_price > 0 ? priceEncode(d.market_price) : '-' }}</div>
+          <div class="tRight">{{ d.market_price > 0?priceEncode(d.market_price):'-' }}</div>
         </template>
         <template #unit="d">
           <div class="tCenter">{{ d.unit || '-' }}</div>
@@ -90,11 +90,11 @@
         </template>
         <template #status="d">
           <div class="tCenter">
-            <span v-if="d.status == 0" class="c_info">检测中</span>
-            <span v-else-if="d.status == 1" class="c_success">可用</span>
-            <span v-else-if="d.status == 2" class="c_danger">存在</span>
-            <span v-else-if="d.status == 3" class="c_warning">已入库</span>
-            <span v-else-if="d.status == 4" class="c_info">已发货</span>
+            <span v-if="d.status==0" class="c_info">检测中</span>
+            <span v-else-if="d.status==1" class="c_success">可用</span>
+            <span v-else-if="d.status==2" class="c_danger">存在</span>
+            <span v-else-if="d.status==3" class="c_warning">已入库</span>
+            <span v-else-if="d.status==4" class="c_info">已发货</span>
           </div>
         </template>
       </wmTable>
@@ -272,7 +272,7 @@ const selectAll = ref({labels: [], category: [], brand: []});
 /* 监听 */
 watch(()=>props.show,(val: boolean)=>{
   infoShow.value = val;
-  if(val) {
+  if(val){
     // 是否刷新
     imp.value.refresh = false;
     // 选项
@@ -286,7 +286,7 @@ const getSelect =(): void => {
     token: state.token,
   },(res: any) => {
     const {code, msg, data}: any = res.data;
-    if(code == 0) {
+    if(code===0){
       // 标签、分类、品牌
       selectAll.value.labels = data.labels;
       selectAll.value.category = data.category;
@@ -310,14 +310,14 @@ const goodsAdd =(): void => {
   // 是否存在
   if(!d.sku_id) return Ui.Toast('请输入商品编码');
   const sku_id: any = Util.Trim(d.sku_id).toUpperCase();
-  for(let v of goods.value.list) {
-    if(sku_id == v.sku_id) return Ui.Toast('[ ' + sku_id + ' ]已存在!');
+  for(let v of goods.value.list){
+    if(sku_id===v.sku_id) return Ui.Toast('[ ' + sku_id + ' ]已存在!');
   }
   // 验证
   if(!d.name) return Ui.Toast('请输入商品名称');
-  if(!d.labels || d.labels.length == 0) return Ui.Toast('请选择标签');
-  if(!d.category || d.category.length == 0) return Ui.Toast('请选择分类');
-  if(!d.brand || d.brand.length == 0) return Ui.Toast('请选择品牌');
+  if(!d.labels || d.labels.length===0) return Ui.Toast('请选择标签');
+  if(!d.category || d.category.length===0) return Ui.Toast('请选择分类');
+  if(!d.brand || d.brand.length===0) return Ui.Toast('请选择品牌');
   if(!d.properties_value || d.properties_value.length<2) return Ui.Toast('请输入颜色及规格');
   if(!d.cost_price || isNaN(parseFloat(d.cost_price))) return Ui.Toast('请输入成本价');
   if(!d.sale_price || isNaN(parseFloat(d.sale_price))) return Ui.Toast('请输入标签价');
@@ -326,7 +326,7 @@ const goodsAdd =(): void => {
   // 追加
   add.value.show = false;
   let id: string = 'id_1';
-  if(goods.value.list.length>0) {
+  if(goods.value.list.length>0){
     const tmp: any = goods.value.list.at(-1);
     const arr: any = tmp.id.split('_');
     if(arr.length===2) id='id_'+(parseInt(arr[1])+1);
@@ -373,7 +373,7 @@ const goodsImp =(): void => {
       let id: number = 0;
       let sku_id: string = '';
       let sku: Array<string> = [];
-      for(let v of arr) {
+      for(let v of arr){
         if(!v['商品编码'] || !v['款式编码'] || !v['品牌']) continue;
         // 调整价格
         let sale_price: string = v['基本售价'] || v['标签价'] || 0;
@@ -425,7 +425,7 @@ const goodsTotal =(): void => {
   goods.value.sale_price = 0;
   goods.value.purchase_price = 0;
   goods.value.market_price = 0;
-  for(let v of list) {
+  for(let v of list){
     goods.value.cost_price += parseFloat(v.cost_price);
     goods.value.sale_price += parseFloat(v.sale_price);
     goods.value.purchase_price += parseFloat(v.purchase_price);
@@ -434,7 +434,7 @@ const goodsTotal =(): void => {
 }
 /* 商品资料-状态 */
 const goodsStatus =(sku: Array<string>): void => {
-  if(sku.length == 0) return;
+  if(sku.length===0) return;
   // 请求
   const load: any = Ui.Loading();
   Request.Post('erp_goods_info/status?lang=' + state.lang, {
@@ -443,11 +443,11 @@ const goodsStatus =(sku: Array<string>): void => {
   },(res: any) => {
     load.clear();
     const {code, msg, data}: any = res.data;
-    if(code == 0) {
+    if(code===0){
       const list: Array<any> = goods.value.list;
-      for(let k in data) {
-        for(let v of list) {
-          if(v.sku_id == k) v.status = data[k];
+      for(let k in data){
+        for(let v of list){
+          if(v.sku_id===k) v.status = data[k];
         }
       }
     } else Ui.Toast(msg);
@@ -458,16 +458,16 @@ const goodsStatus =(sku: Array<string>): void => {
 const goodsRemove =(type: string, index: number = 0): void => {
   remove.value.type = type;
   remove.value.data = [];
-  if(type==='part') {
+  if(type==='part'){
     const list: Array<any> = tableList.value.getData();
     if(list.length==0) return Ui.Toast('请选择数据');
     remove.value.show = true;
     remove.value.title = '清空';
     remove.value.info = '是否移除选中数据?';
-    for(let v of list) {
+    for(let v of list){
       remove.value.data.unshift({ index: v.index });
     }
-  } else if(type = 'one') {
+  } else if(type = 'one'){
     remove.value.show = true;
     remove.value.title = '移除';
     remove.value.info = goods.value.list[index].sku_id;
@@ -492,27 +492,27 @@ const goodsRemoveSub =(): void => {
 const goodsPrint =(): void => {
   let list: Array<any> = goods.value.list;
   let sku: Array<any> = [];
-  for(let v of list) {
-    if(v.status === 0 || v.status === 1) return Ui.Toast('请先上传商品资料!');
+  for(let v of list){
+    if(v.status===0 || v.status===1) return Ui.Toast('请先上传商品资料!');
     sku.push({ sku_id: v.sku_id });
   }
-  if(sku.length == 0) return Ui.Toast('请添加或导入商品资料!');
+  if(sku.length===0) return Ui.Toast('请添加或导入商品资料!');
   state.print.sku = sku;
   state.print.show = true;
 }
 
 /* 商品资料-上传 */
 const goodsUpload =() => {
-  if(goods.value.list.length == 0) return Ui.Toast('请添加或导入商品资料!');
+  if(goods.value.list.length===0) return Ui.Toast('请添加或导入商品资料!');
   // 状态
   imp.value.s0 = imp.value.s1 = imp.value.s2 = imp.value.s3 = imp.value.s4 = 0;
   let list: Array<any> = goods.value.list;
-  for(let v of list) {
-    if(v.status === 0) imp.value.s0++;
-    else if(v.status === 1) imp.value.s1++;
-    else if(v.status === 2) imp.value.s2++;
-    else if(v.status === 3) imp.value.s3++;
-    else if(v.status === 4) imp.value.s4++;
+  for(let v of list){
+    if(v.status===0) imp.value.s0++;
+    else if(v.status===1) imp.value.s1++;
+    else if(v.status===2) imp.value.s2++;
+    else if(v.status===3) imp.value.s3++;
+    else if(v.status===4) imp.value.s4++;
   }
   // 验证
   if(imp.value.s0 > 0) return Ui.Toast('该状态不可用!');
@@ -524,10 +524,10 @@ const submit =(): void => {
   // 商品资料
   let data: Array<any> = [];
   let list: Array<any> = goods.value.list;
-  for(let v of list) {
+  for(let v of list){
     if(v.status != 3 && v.status != 4) data.push(v);
   }
-  if(data.length == 0) return Ui.Toast('无可上传商品资料!');
+  if(data.length===0) return Ui.Toast('无可上传商品资料!');
   // 请求
   imp.value.show = false;
   imp.value.refresh = true;
@@ -540,7 +540,7 @@ const submit =(): void => {
     load.clear();
     const {code, msg}: any = res.data;
     Ui.Toast(msg);
-    if(code == 0) {
+    if(code===0){
       let sku: Array<string> = [];
       for(let v of data) sku.push(v.sku_id);
       goodsStatus(sku);

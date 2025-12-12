@@ -262,7 +262,7 @@ const imgData = ref([]);
 /* 监听 */
 watch(()=>props.show, (val: boolean)=>{
   infoShow.value = val;
-  if(val) {
+  if(val){
     // 重置
     goods.value.key = '';
     goods.value.refresh = false;
@@ -286,8 +286,8 @@ const orderBy = (val: string): void => {
 const goodsSearch = (): void => {
   const key: string = Util.LTrim(goods.value.key.trim().toUpperCase(), '0');
   goods.value.key = '';
-  if(props.data.status == 0) {
-    if(key.length == 0) return;
+  if(props.data.status==0){
+    if(key.length===0) return;
     goodsAdd([{ sku_id: key, num: 1 }]);
   } else {
     goodsList(key);
@@ -309,7 +309,7 @@ const goodsList = (key: string=''): void => {
   }, (res: any) => {
     load.clear();
     const {code, msg, data}: any = res.data;
-    if(code == 0) {
+    if(code==0){
       goods.value.list = data;
       clearSelect();
       // 统计价格
@@ -326,11 +326,11 @@ const goodsTotal = (refresh: boolean): void => {
   goods.value.market_price = 0;
   goods.value.num = 0;
   const index: number = list.length - 1;
-  const sku_tmp: string = index >= 0 ? list[index].sku_id : '';
+  const sku_tmp: string = index>=0?list[index].sku_id:'';
   let num: number = 0;
   let ratio: number = 0;
   exp.value.info = {};
-  for(let v of list) {
+  for(let v of list){
     if(!v.ratio) continue;
     num = parseInt(v.num);
     ratio = parseFloat(v.ratio);
@@ -350,14 +350,14 @@ const goodsTotal = (refresh: boolean): void => {
 
 /* 商品-添加 */
 const goodsAdd = (data: Array<any>, type: string=''): void => {
-  for(let d of data) {
+  for(let d of data){
     // 是否校对
     const is_sku: boolean = goodsIsSku(d.sku_id);
     if(goods.value.is_sku.checked && is_sku) return Ui.Toast('[ ' + d.sku_id + ' ]已存在', 5000, 'danger');
     // 已存在
-    if(is_sku) {
-      for(let v of goods.value.list) {
-        if(v.sku_id == d.sku_id) {
+    if(is_sku){
+      for(let v of goods.value.list){
+        if(v.sku_id===d.sku_id){
           v.num += parseInt(d.num);
           d.num = v.num;
           Ui.Toast('[ ' + d.sku_id + ' ]数量 ' + v.num + ' ');
@@ -368,7 +368,7 @@ const goodsAdd = (data: Array<any>, type: string=''): void => {
     }
   }
   // 导入
-  if(type==='import') {
+  if(type==='import'){
     goodsAddData(data);
   } else {
     // 延迟请求
@@ -383,8 +383,8 @@ const goodsAdd = (data: Array<any>, type: string=''): void => {
 /* 商品-是否存在 */
 const goodsIsSku = (sku_id: string): boolean => {
   let res: boolean = false;
-  for(let v of goods.value.list) {
-    if(v.sku_id == sku_id) res = true;
+  for(let v of goods.value.list){
+    if(v.sku_id===sku_id) res = true;
   }
   return res;
 }
@@ -399,17 +399,17 @@ const goodsAddData = (data: Array<any>): void => {
     data: data,
   }, (res: any) => {
     const {code, msg, data, err}: any = res.data;
-    if(code===0) {
+    if(code===0){
       // 全部更新
       goodsUpdate(data);
       goodsTotal(true);
-    } else if(code===5000) {
+    } else if(code===5000){
       Ui.Toast(msg, 5000, 'danger');
       // 部分更新
       if(data && data.length>0) goodsUpdate(data);
-      if(err && err.length>0) {
+      if(err && err.length>0){
         const list: any = goods.value.list;
-        for(let sku_id of err) {
+        for(let sku_id of err){
           for(let i in list) if(sku_id==list[i].sku_id) list[i].loading=1;
         }
       }
@@ -423,14 +423,14 @@ const goodsAddData = (data: Array<any>): void => {
 }
 /* 商品-更新数据 */
 const goodsUpdate = (data: Array<any>, isLoad: boolean=false): void => {
-  if(data.length == 0) return;
+  if(data.length==0) return;
   const list: any = goods.value.list;
-  for(let k in data) {
+  for(let k in data){
     // 品牌
     if(data[k].brand!=props.data.brand) Ui.Toast('[ '+data[k].sku_id+' ]品牌为“'+data[k].brand+'”不等于“'+props.data.brand+'”', 5000, 'danger');
     // 覆盖数据
-    for(let i in list) {
-      if(list[i].sku_id == data[k].sku_id) {
+    for(let i in list){
+      if(list[i].sku_id===data[k].sku_id){
         if(isLoad) list[i].loading = 1;
         else list[i] = data[k];
         continue;
@@ -442,10 +442,10 @@ const goodsUpdate = (data: Array<any>, isLoad: boolean=false): void => {
 /* 商品-数量 */
 const goodsNum = (e: any, id: string, sku_id: string): void => {
   const num: number = parseInt(e);
-  if(num.toString() == 'NaN') return Ui.Toast('请输入数字');
+  if(num.toString()==='NaN') return Ui.Toast('请输入数字');
   // 更新
-  for(let v of goods.value.list) {
-    if(v.sku_id == sku_id) v.num = num;
+  for(let v of goods.value.list){
+    if(v.sku_id===sku_id) v.num = num;
   }
   // 请求
   Request.Post('erp_purchase_out/goods_num?lang=' + state.lang, {
@@ -458,7 +458,7 @@ const goodsNum = (e: any, id: string, sku_id: string): void => {
     wms_co_id: props.data.wms_co_id,
   }, (res: any) => {
     const {code, msg}: any = res.data;
-    if(code == 0) {
+    if(code===0){
       Ui.Toast(msg);
       // 统计价格
       goodsTotal(true);
@@ -470,18 +470,18 @@ const goodsNum = (e: any, id: string, sku_id: string): void => {
 const goodsRemove = (type: string, row: any = {}): void => {
   goods.value.remove.type = type;
   goods.value.remove.data = [];
-  if(type == 'one') {
+  if(type==='one'){
     goods.value.remove.show = true;
     goods.value.remove.title = '移除" ' + row.sku_id + ' "';
     goods.value.remove.info = '是否移除单条数据?';
     goods.value.remove.data = [{ index: row.index, id: row.id, sku_id: row.sku_id, num: row.num }];
-  } else if(type=='part') {
+  } else if(type==='part'){
     const list: Array<any> = tableList.value.getData();
     if(list.length==0) return Ui.Toast('请选择数据');
     goods.value.remove.show = true;
     goods.value.remove.title = '移除选中';
     goods.value.remove.info = '是否移除选中数据?';
-    for(let v of list) {
+    for(let v of list){
       goods.value.remove.data.unshift({ index: v.index, id: v.id, sku_id: v.sku_id, num: v.num });
     }
   }
@@ -492,9 +492,9 @@ const goodsRemoveSub = (): void => {
   const data = goods.value.remove.data;
   const list = goods.value.list;
   let sku: Array<any> = [];
-  for(let v of data) {
+  for(let v of data){
     // 未加载
-    if(v.id.toString().substring(0, 1) == 's') {
+    if(v.id.toString().substring(0, 1)==='s'){
       list.splice(v.index, 1);
       // 统计价格
       goodsTotal(true);
@@ -503,7 +503,7 @@ const goodsRemoveSub = (): void => {
     sku.push({ index: v.index, id: v.id, sku_id: v.sku_id, num: v.num });
   }
   // 清理明细
-  if(sku.length == 0) return;
+  if(sku.length===0) return;
   const load: any = Ui.Loading();
   Request.Post('erp_purchase_out/goods_remove?lang=' + state.lang, {
     token: state.token,
@@ -514,9 +514,9 @@ const goodsRemoveSub = (): void => {
   }, (res: any) => {
     load.clear();
     const {code, msg}: any = res.data;
-    if(code == 0) {
+    if(code===0){
       // 移除
-      if(goods.value.remove.type == 'all') goods.value.list = [];
+      if(goods.value.remove.type=='all') goods.value.list = [];
       else for(let v of sku) list.splice(v.index, 1);
       // 统计价格
       goodsTotal(true);
@@ -552,7 +552,7 @@ const explodeSub = () => {
     load.clear();
     const {code, msg}: any = res.data;
     Ui.Toast(msg);
-    if(code == 0) {
+    if(code===0){
       // 刷新
       goods.value.refresh = true;
       close();
@@ -564,9 +564,9 @@ const explodeSub = () => {
 const goodsView = (img: string): void => {
   let data: any = [];
   let i: number = 0;
-  for(let v of goods.value.list) {
+  for(let v of goods.value.list){
     if(!v.img) continue;
-    if(v.img == img) imgIndex.value = i;
+    if(v.img===img) imgIndex.value = i;
     data.push({ label: v.sku_id, value: v.img, other: { '颜色及规格': v.properties_value, '标签价': v.sale_price + '元', '吊牌价': v.market_price + 'W' } });
     i++;
   }
@@ -585,13 +585,13 @@ const goodsCopy = (name: string, val: string) => {
 
 /* 商品-打印标签 */
 const goodsPrint = (): void => {
-  if(goods.value.print <= 0) return Ui.Toast('请选择!');
+  if(goods.value.print<=0) return Ui.Toast('请选择!');
   const list: Array<any> = tableList.value.getData();
   let sku: Array<any> = [];
-  for(let v of list) {
+  for(let v of list){
     sku.push({ sku_id: v.sku_id });
   }
-  if(sku.length == 0) return Ui.Toast('请选择!');
+  if(sku.length===0) return Ui.Toast('请选择!');
   state.print.sku = sku;
   state.print.show = true;
 }
@@ -606,14 +606,14 @@ const clearSelect = (): void => {
 /* 关闭 */
 const close = (): void => {
   // 验证
-  for(let v of goods.value.list) {
+  for(let v of goods.value.list){
     // 品牌控制
     if(v.brand!=props.data.brand) Ui.Toast('[ '+v.sku_id+' ]品牌为“'+v.brand+'”不等于“'+props.data.brand+'”', 5000, 'danger');
     // 加载状态
     if(v.loading==0 || v.loading==1) return Ui.Toast('['+v.sku_id+']未加载完成!');
   }
   // 更新价格
-  if(goods.value.refresh) {
+  if(goods.value.refresh){
     const load: any = Ui.Loading();
     Request.Post('erp_purchase_out/goods_price?lang=' + state.lang, {
       token: state.token,

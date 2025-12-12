@@ -51,7 +51,7 @@ const date = ref();
 
 /* 监听 */
 watch(()=>props.value, (val: any)=>{
-  if(val) {
+  if(val){
     date.value = val;
     emit('update:value', val);
   }

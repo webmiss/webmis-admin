@@ -74,7 +74,7 @@ const loadImg = (): void => {
 /* 点击选择 */
 const imgClick = (img: string): void => {
   emit('imgClick', img);
-  if(props.isView) {
+  if(props.isView){
     imgShow.value = true;
     imgData.value = [{label: props.imgTitle || img, value:img}];
   }

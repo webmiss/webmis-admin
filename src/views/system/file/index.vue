@@ -174,7 +174,7 @@ const loadData = (): void => {
   }, (res:any)=>{
     load.clear();
     const {code, msg, time, data}: any = res.data;
-    if(code==0) {
+    if(code==0){
       total.value.time = time;
       list.value.check = false;
       list.value.url = data.url;
@@ -222,7 +222,7 @@ const openFolder = (name: string): void => {
 const openFile = (filename: string): void => {
   const ext = getExt(filename);
   // 下载
-  if(!isImg(ext)) {
+  if(!isImg(ext)){
     down.value.show = true;
     down.value.data = {path: list.value.path, filename: filename};
     return ;
@@ -231,8 +231,8 @@ const openFile = (filename: string): void => {
   let index: number = 0;
   let imgs: Array<any> = [];
   let i: number = 0;
-  for(let v of list.value.data.files) {
-    if(isImg(v.ext)) {
+  for(let v of list.value.data.files){
+    if(isImg(v.ext)){
       if(filename==v.name) index=i;
       imgs.push({
         label: v.name,
@@ -243,7 +243,7 @@ const openFile = (filename: string): void => {
     }
   }
   // 预览
-  if(imgs.length>0) {
+  if(imgs.length>0){
     imgView.value.show = true;
     imgView.value.index = index;
     imgView.value.imgs = imgs;

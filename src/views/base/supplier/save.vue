@@ -132,7 +132,7 @@ const getSelect = (): void => {
     token: state.token,
   }, (res:any)=>{
     const {code, msg, data}: any = res.data;
-    if(code==0) {
+    if(code==0){
       // 分仓
       selectAll.value.city_name = data.city_name;
       nextTick(()=>{

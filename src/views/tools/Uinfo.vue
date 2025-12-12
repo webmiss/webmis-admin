@@ -80,7 +80,7 @@ let genderData: Array<any> = [];
 /* 监听 */
 watch(()=>props.show, (val: boolean)=>{
   uinfoShow = val;
-  if(val) {
+  if(val){
     // 默认值
     const uinfo: any = state.uinfo;
     form.value.nickname = uinfo.nickname || '';
@@ -106,7 +106,7 @@ const subUinfo = (): void => {
   Request.Post('user/change_uinfo?lang='+state.lang, {token: state.token, uinfo: form}, (res:any)=>{
     load.clear();
     const {code, msg}: any = res.data;
-    if(code==0) {
+    if(code==0){
       state.uinfo.nickname = form.value.nickname;
       state.uinfo.name = form.value.name;
       state.uinfo.gender = form.value.gender;

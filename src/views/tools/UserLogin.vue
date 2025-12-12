@@ -139,7 +139,7 @@ let tokenTime: any = null;
 
 /* 监听-登录状态 */
 watch(()=>state.isLogin, (val:Boolean)=>{
-  if(val) {
+  if(val){
     loginShow.value = false;
     // 验证Token
     clearInterval(tokenTime);
@@ -153,7 +153,7 @@ watch(()=>state.isLogin, (val:Boolean)=>{
   }
 }, { deep: true });
 watch(loginShow, (val:Boolean)=> {
-  if (val) {
+  if(val){
     // 用户信息
     showUser();
     // 背景动画
@@ -174,7 +174,7 @@ onMounted(()=>{
   if(langsTmp) langs.value = JSON.parse(langsTmp);
   else {
     for(let v of langsList){
-      if(Env.lang==v.value) {
+      if(Env.lang==v.value){
         langs.value = v;
         break;
       }
@@ -252,7 +252,7 @@ const clickLogin = (): void => {
   const uname: string = login.value.uname;
   const passwd: string = login.value.passwd;
   // 输入密码
-  if(uname.length>3 && !login.value.is_passwd) {
+  if(uname.length>3 && !login.value.is_passwd){
     login.value.is_passwd = true;
     // 激活输入框
     nextTick(()=>{
@@ -263,7 +263,7 @@ const clickLogin = (): void => {
   // 验证密码
   if(passwd.length<6) return Ui.Toast(state.langs.login_passwd);
   // 验证码
-  if(login.value.vcode.length!=4 && login.value.is_safety) {
+  if(login.value.vcode.length!=4 && login.value.is_safety){
     // 激活输入框
     nextTick(()=>{
       (proxy.$refs.loginVcode as any).focus();
@@ -334,12 +334,12 @@ const verifyToken = (uinfo: boolean=false): void => {
   Request.Post('user/token?lang='+state.lang, {token: state.token, uinfo: uinfo}, (res:any)=>{
     if(load) load.clear();
     const {code, msg, data}: any = res.data;
-    if(code==0 && data.token_time>0) {
+    if(code==0 && data.token_time>0){
       state.isLogin = true;
       // 修改密码
       if(!state.isPasswd && state.lang) state.isPasswd = data.isPasswd;
       // 用户信息
-      if(Object.keys(data.uinfo).length!=0) {
+      if(Object.keys(data.uinfo).length!=0){
         state.uinfo = data.uinfo;
         Storage.setItem('uname', data.uinfo.uname);
         Storage.setItem('uinfo', JSON.stringify(data.uinfo));

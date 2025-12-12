@@ -163,7 +163,7 @@ const loadData = (): void => {
   }, (res: any) => {
     load.clear();
     const {code, msg, data, time}: any = res.data;
-    if (code == 0) {
+    if(code===0){
       total.value.time = time;
       list.value.data = data;
       clearSelect();
@@ -177,7 +177,7 @@ const loadData = (): void => {
     data: getWhere(),
   }, (res: any) => {
     const {code, msg, data, time}: any = res.data;
-    if (code == 0) {
+    if(code===0){
       total.value.time = time;
       page.value.total = data.total;
       total.value.list.num = data.total;
@@ -188,10 +188,10 @@ const loadData = (): void => {
 const getWhere = (): object => {
   const data: any = {
     key: sea.value.key,
-    stime: typeof sea.value.time[0] == 'string' ? sea.value.time[0] : Time.Date('Y/m/d', sea.value.time[0]),
-    etime: typeof sea.value.time[1] == 'string' ? sea.value.time[1] : Time.Date('Y/m/d', sea.value.time[1]),
+    stime: typeof sea.value.time[0]==='string'?sea.value.time[0]:Time.Date('Y/m/d', sea.value.time[0]),
+    etime: typeof sea.value.time[1]==='string'?sea.value.time[1]:Time.Date('Y/m/d', sea.value.time[1]),
   };
-  for (let v of sea.value.columns) if (v.name) data[v.name] = v.value;
+  for(let v of sea.value.columns) if(v.name) data[v.name] = v.value;
   return data;
 }
 /* 选中状态 */
@@ -211,7 +211,7 @@ const resetData = (): void => {
   sea.value.customTime.active = '';
   // 条件
   sea.value.key = '';
-  for (let v of sea.value.columns) v.value = '';
+  for(let v of sea.value.columns) v.value = '';
   // 其它
   list.value.order = '';
   page.value.num = 1;
@@ -228,7 +228,7 @@ const clearSelect = (): void => {
 /* 自定义时间 */
 const setCustomTime = (type: string): void => {
   sea.value.customTime.active = type;
-  switch(type) {
+  switch(type){
     case 'today': sea.value.time = [Time.Date('Y/m/d'), Time.Date('Y/m/d')]; break;
     case 'yesterday': sea.value.time = [Time.Date('Y/m/d', Time.StrToTime('-1 day')), Time.Date('Y/m/d', Time.StrToTime('-1 day'))]; break;
     case 'month': sea.value.time = [Time.Date('Y/m/d', Time.StrToTime('-3 month')), Time.Date('Y/m/d')]; break;
@@ -267,10 +267,10 @@ const exportSubmit = (val: boolean): void => {
 const Copy = (name: string, val: string): void => {
   const data: any = tableList.value.getData();
   let sku_id: string = '';
-  for (let i in data) {
+  for(let i in data){
     sku_id += data[i][name] + ' ';
   }
-  if (sku_id) Util.CopyText(sku_id);
+  if(sku_id) Util.CopyText(sku_id);
   else Util.CopyText(val);
 }
 

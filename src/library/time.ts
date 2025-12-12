@@ -18,7 +18,7 @@ export default class Time {
   public static Date(format: string='Y-m-d H:i:s', timestamp: number | Date=0): string {
     // 获取时间
     let time: Date;
-    if(typeof timestamp == 'number') time = timestamp>0?new Date(timestamp*1000):new Date();
+    if(typeof timestamp==='number') time = timestamp>0?new Date(timestamp*1000):new Date();
     else time = timestamp;
     // 获取时间
     const y: string = ''+time.getFullYear();
@@ -44,7 +44,7 @@ export default class Time {
     const n: number = parseInt(arr[0]);
     let d: any = new Date(datetime);
     if(d=='Invalid Date') d = baseTimes?new Date(baseTimes):new Date();
-    switch (arr[1]) {
+    switch (arr[1]){
       case 'second': d.setSeconds(d.getSeconds()+n); break;
       case 'minute': d.setMinutes(d.getMinutes()+n); break;
       case 'hour': d.setHours(d.getHours()+n); break;
@@ -116,13 +116,13 @@ export default class Time {
     let t3: string = '00';
     let t: number = 0;
     // 小时
-    if(time >= 3600){
+    if(time>=3600){
       t = Math.floor(time/3600);
       t1 = t>=10?t.toString():'0'+t;
       time -= t*3600;
     }
     // 分钟
-    if(time >= 60){
+    if(time>=60){
       t = Math.floor(time/60);
       t2 = t>=10?t.toString():'0'+t;
       time -= t*60;
@@ -158,15 +158,15 @@ export default class Time {
     // 数据
     let n: number, s: string, obj: any;
     let c1: Array<any>=[], c2: Array<any>=[];
-    for(let y=y2; y>=y1; y--) {
+    for(let y=y2; y>=y1; y--){
       c1 = [];
-      for(let m=1; m<=12; m++) {
+      for(let m=1; m<=12; m++){
         // 限制
         if(y===y1 && m<m1) continue;
         if(y===y2 && m>m2) continue;
         c2 = [];
         n = this.daysInMonth(y, m);
-        for(let d=1; d<=n; d++) {
+        for(let d=1; d<=n; d++){
           // 限制
           if(m===m1 && d<d1) continue;
           if(m===m2 && d>d2) continue;

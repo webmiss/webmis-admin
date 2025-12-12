@@ -113,11 +113,11 @@ watch(()=>props.show, (val: boolean)=>{
 /* 搜索 */
 const goodsSearch = (): void => {
   const key: string = goods.value.key.trim().toUpperCase();
-  if(key.length == 0) return;
+  if(key.length===0) return;
   const sku: Array<string> = key.split(' ');
-  for(let sku_id of sku) {
+  for(let sku_id of sku){
     sku_id = Util.LTrim(sku_id, '0');
-    if(is_sku(sku_id)) {
+    if(is_sku(sku_id)){
       Ui.Toast('[ ' + sku_id + ' ]已存在!'); continue;
     }
     // 追加
@@ -135,15 +135,15 @@ const goodsImp = (): void => {
       const workbook: any = xlsxRead(base64, { type: 'binary' });
       const name: string = workbook.SheetNames[0];
       const arr: any = xlsxUtils.sheet_to_json(workbook.Sheets[name], { raw: false });
-      if (arr.length > 3000) return Ui.Toast('不能超过3000条');
+      if(arr.length > 3000) return Ui.Toast('不能超过3000条');
       // 商品资料
       let sku_id: string = '';
-      for (let v of arr) {
-        if (!v['商品编码'] || !v['数量']) {
+      for(let v of arr){
+        if(!v['商品编码'] || !v['数量']){
           Ui.Toast('必须存在“商品编码”、“数量”'); continue;
         }
         sku_id = Util.LTrim(Util.Trim(v['商品编码']).toUpperCase(), '0');
-        if(is_sku(sku_id)) {
+        if(is_sku(sku_id)){
           Ui.Toast('[ ' + sku_id + ' ]已存在!'); continue;
         }
         // 追加
@@ -159,8 +159,8 @@ const goodsImp = (): void => {
 }
 /* 商品资料-是否存在 */
 const is_sku = (sku_id: string): boolean => {
-  for (let v of goods.value.list) {
-    if (sku_id == v.sku_id) return true;
+  for(let v of goods.value.list){
+    if(sku_id===v.sku_id) return true;
   }
   return false;
 }
@@ -168,20 +168,20 @@ const is_sku = (sku_id: string): boolean => {
 const goodsTotal = (): void => {
   const list: Array<any> = goods.value.list;
   goods.value.num = 0;
-  for (let v of list) {
+  for(let v of list){
     goods.value.num += parseInt(v.num);
   }
 }
 
 /* 商品资料-移除 */
 const goodsRemove = (type: string, index: number = 0): void => {
-  if (goods.value.list.length == 0) return Ui.Toast('无商品资料!');
+  if(goods.value.list.length===0) return Ui.Toast('无商品资料!');
   remove.value.show = true;
   remove.value.type = type;
-  if (type == 'all') {
+  if(type==='all'){
     remove.value.title = '清空';
     remove.value.info = '移除全部资料';
-  } else if (type = 'one') {
+  } else if(type==='one'){
     remove.value.title = '移除';
     remove.value.info = goods.value.list[index].sku_id;
     remove.value.index = index;
@@ -190,8 +190,8 @@ const goodsRemove = (type: string, index: number = 0): void => {
 /* 商品资料-移除确认 */
 const goodsRemoveSub = (): void => {
   remove.value.show = false;
-  if (remove.value.type == 'all') goods.value.list = [];
-  else if (remove.value.type == 'one') goods.value.list.splice(remove.value.index, 1);
+  if(remove.value.type==='all') goods.value.list = [];
+  else if(remove.value.type==='one') goods.value.list.splice(remove.value.index, 1);
   // 统计价格
   goodsTotal();
 }
@@ -209,12 +209,12 @@ const submit = (): void => {
   }, (res: any) => {
     load.clear();
     const {code, msg, data}: any = res.data;
-    if(code===0) {
+    if(code===0){
       emit('submit', goods.value.list);
       goods.value.num = 0;
       goods.value.list = [];
       close();
-    } else if(code===5000) {
+    } else if(code===5000){
       Ui.Toast(msg);
       goods.value.list = data || [];
     } else Ui.Toast(msg);

@@ -12,8 +12,8 @@ export default class Env {
   public socketUrl: string = '';                // Socket地址
 
   /* 构造函数 */
-  constructor() {
-    if(Env.mode=='dev') {
+  constructor(){
+    if(Env.mode=='dev'){
       this.baseUrl = 'http://localhost:9000/';
       this.socketUrl = 'ws://127.0.0.1:9001';
     } else {

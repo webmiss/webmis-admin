@@ -303,7 +303,7 @@ onMounted(()=>{
 /* 搜索 */
 const serachVal = (): void => {
   const key: string = sea.value.key.trim();
-  if(key) {
+  if(key){
     sea.value.show = true;
     Request.Post('msg/sea?lang='+state.lang, {
       token: state.token,
@@ -321,8 +321,8 @@ const serachVal = (): void => {
 const searchClick = (row: any): void => {
   sea.value.show = false;
   // 已存在
-  for(let v of state.msg.group) {
-    if(v.gid==row.gid && v.fid==row.fid) {
+  for(let v of state.msg.group){
+    if(v.gid==row.gid && v.fid==row.fid){
       return msgClick(v);
     }
   }
@@ -349,7 +349,7 @@ const onRefresh = (): void => {
 }
 /* 上拉加载 */
 const onLoad = (): void => {
-  if(scroll.value.finished ) {
+  if(scroll.value.finished ){
     if(state.msg.list.length>0) return Ui.Toast('已无历史消息!');
     return;
   }
@@ -362,7 +362,7 @@ const loadData = (): void => {
   // 请求
   Request.Post('msg/list', {token: state.token}, (res:any)=>{
     const {code, msg, data} = res.data;
-    if(code===0) {
+    if(code===0){
       state.msg.group = data.list;
       state.msg.num = data.num;
     }
@@ -379,13 +379,13 @@ const loadMsg = (): void => {
     limit: page.value.limit,
   }, (res:any)=>{
     const {code, msg, data} = res.data;
-    if(code===0) {
+    if(code===0){
       // 数据
-      if(data.length>0) {
+      if(data.length>0){
         state.msg.list.unshift(...data);
         // 标记已读
         let ids: Array<any> = [];
-        for(let v of data) {
+        for(let v of data){
           if(v.is_new) ids.push(v.id);
         }
         msgRead(ids);
@@ -415,8 +415,8 @@ const msgToBottom = (): void => {
   let isImg: boolean = false;
   state.msg.isBottom = false;
   // 有图片
-  for(let v of state.msg.list) {
-    if(v.format===1 && isImgage(v.content.type)) {
+  for(let v of state.msg.list){
+    if(v.format===1 && isImgage(v.content.type)){
       isImg = true;
       const img = new Image();
       img.src = v.content.url+v.content.file;
@@ -428,7 +428,7 @@ const msgToBottom = (): void => {
     }
   }
   // 无图片
-  if(!isImg) {
+  if(!isImg){
     nextTick(()=>{
       document.querySelector('#msgBottom')?.scrollIntoView(true);
     });
@@ -438,10 +438,10 @@ const msgToBottom = (): void => {
 const msgRead = (ids: any=[], isNum: boolean=true): void => {
   if(ids.length==0) return;
   // 扣减数量
-  if(isNum) {
+  if(isNum){
     state.msg.num -= ids.length;
-    for(let v of state.msg.group) {
-      if(v.gid===state.msg.gid && v.fid===state.msg.fid) {
+    for(let v of state.msg.group){
+      if(v.gid===state.msg.gid && v.fid===state.msg.fid){
         v.num -= ids.length;
         if(v.num<0) v.num = 0;
       }
@@ -460,7 +460,7 @@ const msgRead = (ids: any=[], isNum: boolean=true): void => {
 /* 消息-输入 */
 const msgInput = (): void => {
   // 缓存消息
-  for(let v of state.msg.group) {
+  for(let v of state.msg.group){
     if(v.gid===state.msg.gid && v.fid===state.msg.fid) v.sendContent = msgData.value.content;
   }
 }
@@ -472,8 +472,8 @@ const msgCtrlEnter = (): void => {
 const msgCtrlV = async (e: any): Promise<void> => {
   const items = e.clipboardData?.items;
   if(!items) return;
-  for(const item of items) {
-    if (item.type.includes('image')) {
+  for(const item of items){
+    if(item.type.includes('image')){
       const blob = item.getAsFile();
       msgUploadFile(blob);
     }
@@ -486,7 +486,7 @@ const msgDragFile = (e: any): void => {
   // 获取文件
   const dt = e.dataTransfer;
   const files = dt.files;
-  for(let v of files) {
+  for(let v of files){
     msgUploadFile(v);
   }
 }
@@ -558,7 +558,7 @@ const msgUploadFile = async (fileObj: any): Promise<void> => {
         let complete = (event.loaded/event.total*100 | 0);
         state.msg.list[k].load = complete;
         // 发送
-        if(complete===100) {
+        if(complete===100){
           msgData['type'] = 'msg';
           msgData['base64'] = '';
           state.socket.send(JSON.stringify(msgData));
@@ -575,9 +575,9 @@ const msgDownload = (file: string, filename: string): void => {
 const msgImgView = (img: string): void => {
   let i: number = 0;
   let imgs: any = [];
-  for (let v of state.msg.list) {
-    if (v.format!==1 || !isImgage(v.content.type)) continue;
-    if (v.content.url+v.content.file == img) imgView.value.index = i;
+  for(let v of state.msg.list){
+    if(v.format!==1 || !isImgage(v.content.type)) continue;
+    if(v.content.url+v.content.file===img) imgView.value.index = i;
     imgs.push({label: v.content.name, value: v.content.url+v.content.file});
     i++;
   }
@@ -607,12 +607,12 @@ const msgSend = (event: any=null): void => {
   };
   state.msg.list.push(data);
   // 发送
-  if(state.socket) {
+  if(state.socket){
     data['type'] = 'msg';
     state.socket.send(JSON.stringify(data));
   }
   // AI助理
-  if(state.msg.gid===1) {
+  if(state.msg.gid===1){
     state.msg.list.push({
       fid: state.msg.fid,
       uid: 0,
@@ -633,7 +633,7 @@ const msgSend = (event: any=null): void => {
 /* 消息-清空 */
 const msgClear = (): void => {
   msgData.value.content = '';
-  for(let v of state.msg.group) {
+  for(let v of state.msg.group){
     if(v.gid===state.msg.gid && v.fid===state.msg.fid) v.sendContent = '';
   }
 }

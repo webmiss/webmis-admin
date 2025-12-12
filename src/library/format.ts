@@ -26,13 +26,13 @@ export default class Format {
     return parseFloat(price.replace(/,/g,'')).toFixed(fixed);
   }
   public static PriceQoq(n1: number = 0, n2: number = 0, index: number = 2): string {
-    if (n1 - n2 == 0) {
+    if(n1 - n2==0){
       return '0'
-    } else if (n1 == 0) {
+    }else if(n1==0){
       return '-100'
-    } else if (n2 == 0) {
+    }else if(n2==0){
       return '100'
-    } else {
+    }else{
       return (parseFloat(String((n1 - n2) / n2 * 100)).toFixed(index).toString()).replace(/\d{1,3}(?=(\d{3})+(\.\d*)?$)/g, '$&,');
     }
   }

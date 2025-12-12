@@ -96,13 +96,13 @@ const getSelect = (): void => {
     token: state.token,
   }, (res:any)=>{
     const {code, msg, data}: any = res.data;
-    if(code==0) {
+    if(code==0){
       // 类型、分仓、店铺、买断店铺
       selectAll.value.type_name = data.type_name;
       selectAll.value.go_co_name = data.go_co_name;
       selectAll.value.link_co_name = data.link_co_name;
       selectAll.value.quality_name = data.quality_name;
-      if(props.data.tp=='edit') {
+      if(props.data.tp=='edit'){
         nextTick(()=>{
           form.value.go_co_id = [parseInt(props.data.go_co_id)];
           form.value.link_co_id = [parseInt(props.data.link_co_id)];

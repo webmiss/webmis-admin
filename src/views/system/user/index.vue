@@ -238,7 +238,7 @@ const loadData = (): void => {
   }, (res: any) => {
     load.clear();
     const {code, msg, time, data}: any = res.data;
-    if (code === 0) {
+    if(code===0){
       total.value.time = time;
       list.value.data = data;
       clearSelect();
@@ -251,7 +251,7 @@ const loadData = (): void => {
     data: getWhere(),
   }, (res:any)=>{
     const {code, msg, time, data}: any = res.data;
-    if(code==0) {
+    if(code==0){
       total.value.time = time;
       page.value.total = data.total;
     } else Ui.Toast(msg);
@@ -300,13 +300,14 @@ const resetData = (): void => {
 /* 清除勾选 */
 const clearSelect = (): void => {
   nextTick(()=>{
+    list.value.num = 0;
     tableList.value.checkboxAll(false);
   });
 }
 /* 自定义时间 */
 const setCustomTime = (type: string): void => {
   sea.value.customTime.active = type;
-  switch(type) {
+  switch(type){
     case 'today': sea.value.time = [Time.Date('Y/m/d'), Time.Date('Y/m/d')]; break;
     case 'yesterday': sea.value.time = [Time.Date('Y/m/d', Time.StrToTime('-1 day')), Time.Date('Y/m/d', Time.StrToTime('-1 day'))]; break;
     case 'month': sea.value.time = [Time.Date('Y/m/d', Time.StrToTime('-3 month')), Time.Date('Y/m/d')]; break;
@@ -318,13 +319,13 @@ const setCustomTime = (type: string): void => {
 const saveData = (type: string, data?: any): void => {
   save.value.show = true;
   save.value.type = type;
-  if(type=='add') {
+  if(type=='add'){
     save.value.title = langs.add;
     save.value.data = {};
-  } else if(type=='edit') {
+  } else if(type=='edit'){
     save.value.title = langs.edit+'( '+(data.uname || data.tel || data.email || '')+' )';
     save.value.data = data;
-  } else if(type=='copy') {
+  } else if(type=='copy'){
     save.value.title = langs.copy;
     data.id = '';
     data.uname = '';
@@ -373,7 +374,7 @@ const getSelect = (): void => {
     token: state.token,
   }, (res:any)=>{
     const {code, msg, data}: any = res.data;
-    if(code==0) {
+    if(code==0){
       selectAll.value.type_name = data.type_name;
       selectAll.value.role_name = data.role_name;
       selectAll.value.status_name = data.status_name;

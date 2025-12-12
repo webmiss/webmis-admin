@@ -21,7 +21,7 @@ export default class Request {
   * Post请求
   * url: string 请求地址
   */
-  public static Post(url: string, data: any={}, success?: any, fail?: any, config?: any) {
+  public static Post(url: string, data: any={}, success?: any, fail?: any, config?: any){
     // 参数
     url = Request.getUrl(url);
     const cfg: AxiosRequestConfig = Request.getConfig(config);

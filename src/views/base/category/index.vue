@@ -173,7 +173,7 @@ const loadData = (): void => {
   }, (res: any) => {
     load.clear();
     const { code, msg, time, data }: any = res.data;
-    if (code === 0) {
+    if(code===0){
       total.value.time = time;
       list.value.data = data;
       clearSelect();
@@ -186,7 +186,7 @@ const loadData = (): void => {
     data: getWhere(),
   }, (res: any) => {
     const { code, msg, time, data }: any = res.data;
-    if (code == 0) {
+    if(code===0){
       total.value.time = time;
       page.value.total = data.total;
     } else Ui.Toast(msg);
@@ -198,7 +198,7 @@ const getWhere = (): object => {
     key: sea.value.key,
     status: sea.value.status,
   };
-  for (let v of sea.value.columns) if (v.name) data[v.name] = v.value;
+  for(let v of sea.value.columns) if(v.name) data[v.name] = v.value;
   return data;
 }
 /* 选中状态 */
@@ -216,7 +216,7 @@ const resetData = (): void => {
   // 条件
   sea.value.key = '';
   sea.value.status = '';
-  for (let v of sea.value.columns) v.value = '';
+  for(let v of sea.value.columns) v.value = '';
   // 其它
   list.value.order = '';
   page.value.num = 1;
@@ -235,15 +235,15 @@ const clearSelect = (): void => {
 const saveData = (type: string, data: any = {}): void => {
   save.value.show = true;
   save.value.data = data;
-  if (type == 'add') {
+  if(type==='add'){
     save.value.title = langs.add;
-  } else if (type == 'edit') {
+  } else if(type==='edit'){
     save.value.title = langs.edit + '( ' + data.name + ' )';
   }
 }
 /* 添加&编辑-回调 */
 const saveSubmit = (val: boolean): void => {
-  if (!val) return;
+  if(!val) return;
   save.value.show = false;
   loadData();
 }
@@ -281,7 +281,7 @@ const getSelect = (): void => {
     token: state.token,
   }, (res: any) => {
     const { code, msg, data }: any = res.data;
-    if (code == 0) {
+    if(code===0){
       selectAll.value.status_name = data.status_name;
       // 加载
       isLoad.value = true;

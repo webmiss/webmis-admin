@@ -223,7 +223,7 @@ onMounted(()=>{
   if(state.token) isLoad.value = true;
 });
 onActivated(()=>{
-  if(isLoad && state.isLogin) {
+  if(isLoad && state.isLogin){
     getSelect();
     loadData();
   }
@@ -235,7 +235,7 @@ const getSelect = (): void => {
     token: state.token,
   }, (res:any)=>{
     const {code, msg, data}: any = res.data;
-    if(code==0) {
+    if(code==0){
       selectAll.value.partner_name = data.partner_name;
     } else Ui.Toast(msg);
   });
@@ -252,7 +252,7 @@ const loadData = (): void => {
     token: state.token,
   }, (res: any) => {
     const {code, msg, time, data}: any = res.data;
-    if (code === 0) {
+    if(code===0){
       chartPie.value = data;
       total.value.time = time;
       for(let v of data) total.value.stock += parseInt(v.value);
@@ -262,7 +262,7 @@ const loadData = (): void => {
   const model: Array<string> = ['in', 'out', 'allocate_out', 'allocate_in', 'order', 'refund'];
   total.value.stime = '';
   total.value.etime = '';
-  for(let tp of model) {
+  for(let tp of model){
     total.value.now[tp+'_num'] = 0;
     total.value.old[tp+'_num'] = 0;
     total.value.list[tp] = [];
@@ -274,7 +274,7 @@ const loadData = (): void => {
       etime: typeof form.value.time[1]=='string'?form.value.time[1]:Time.Date('Y/m/d', form.value.time[1]),
     }, (res: any) => {
       const {code, msg, time, data}: any = res.data;
-      if (code === 0) {
+      if(code===0){
         total.value.time = time;
         total.value.stime = data.stime;
         total.value.etime = data.etime;
@@ -289,7 +289,7 @@ const loadData = (): void => {
 /* 自定义时间 */
 const setCustomTime = (type: string): void => {
   customTimeActive.value = type;
-  switch(type) {
+  switch(type){
     case 'today': form.value.time = [Time.Date('Y/m/d'), Time.Date('Y/m/d')]; break;
     case 'yesterday': form.value.time = [Time.Date('Y/m/d', Time.StrToTime('-1 day')), Time.Date('Y/m/d', Time.StrToTime('-1 day'))]; break;
     case 'week': form.value.time = [Time.Date('Y/m/d', Time.StrToTime('-6 day')), Time.Date('Y/m/d')]; break;
@@ -316,7 +316,7 @@ const getRatio = (now: number, old: number): string => {
 
 /* 仓库名称 */
 const getPartnerName = (wms_co_id: string): string => {
-  for(let v of selectAll.value.partner_name) {
+  for(let v of selectAll.value.partner_name){
     if(wms_co_id==v.value) return v.label;
   }
   return '全部';

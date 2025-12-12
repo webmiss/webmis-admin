@@ -25,7 +25,7 @@
           <wmButton effect="plain" icon="ui ui_export" padding="0 16px 0 8px" :disabled="exp.data.length==0" @click="exportData()">{{ langs.export }}({{ exp.num }})</wmButton>
         </template>
         <template #diff>
-          <wmButton effect="plain" icon="ui ui_safety" padding="0 16px 0 8px" :disabled="diff.data.length == 0" @click="diffData()" >对比({{ diff.num }})</wmButton>
+          <wmButton effect="plain" icon="ui ui_safety" padding="0 16px 0 8px" :disabled="diff.data.length==0" @click="diffData()" >对比({{ diff.num }})</wmButton>
         </template>
       </wmAction>
     </div>
@@ -244,7 +244,7 @@ const loadData = (): void => {
   }, (res: any) => {
     load.clear();
     const {code, msg, data, time}: any = res.data;
-    if (code == 0) {
+    if(code===0){
       total.value.time = time;
       list.value.data = data;
       clearSelect();
@@ -261,7 +261,7 @@ const loadData = (): void => {
     data: getWhere(),
   }, (res: any) => {
     const {code, msg, data, time}: any = res.data;
-    if (code == 0) {
+    if(code===0){
       total.value.time = time;
       page.value.total = data.total;
       total.value.list.sale_price = data.sale_price;
@@ -275,14 +275,14 @@ const loadData = (): void => {
 const getWhere = (): object => {
   const data: any = {
     key: sea.value.key,
-    stime: typeof sea.value.time[0] == 'string' ? sea.value.time[0] : Time.Date('Y/m/d', sea.value.time[0]),
-    etime: typeof sea.value.time[1] == 'string' ? sea.value.time[1] : Time.Date('Y/m/d', sea.value.time[1]),
+    stime: typeof sea.value.time[0]==='string'?sea.value.time[0]:Time.Date('Y/m/d', sea.value.time[0]),
+    etime: typeof sea.value.time[1]==='string'?sea.value.time[1]:Time.Date('Y/m/d', sea.value.time[1]),
     type: sea.value.type,
     go_co_id: sea.value.go_co_id,
     link_co_id: sea.value.link_co_id,
     status: sea.value.status,
   };
-  for (let v of sea.value.columns) if (v.name) data[v.name] = v.value;
+  for(let v of sea.value.columns) if(v.name) data[v.name] = v.value;
   return data;
 }
 /* 选中状态 */
@@ -297,8 +297,8 @@ const selectState = (n: number, t: number): void => {
   exp.value.num = 0;
   diff.value.data = [];
   diff.value.num = 0;
-  for (let v of data) {
-    if (v.status == 1) {
+  for(let v of data){
+    if(v.status==1){
       push.value.data.push(v.id);
       push.value.num += parseInt(v.num);
     }
@@ -324,7 +324,7 @@ const resetData = (): void => {
   sea.value.go_co_id = '';
   sea.value.link_co_id = '';
   sea.value.status = '';
-  for (let v of sea.value.columns) v.value = '';
+  for(let v of sea.value.columns) v.value = '';
   // 其它
   list.value.order = '';
   page.value.num = 1;
@@ -341,7 +341,7 @@ const clearSelect = (): void => {
 /* 自定义时间 */
 const setCustomTime = (type: string): void => {
   sea.value.customTime.active = type;
-  switch(type) {
+  switch(type){
     case 'today': sea.value.time = [Time.Date('Y/m/d'), Time.Date('Y/m/d')]; break;
     case 'yesterday': sea.value.time = [Time.Date('Y/m/d', Time.StrToTime('-1 day')), Time.Date('Y/m/d', Time.StrToTime('-1 day'))]; break;
     case 'month': sea.value.time = [Time.Date('Y/m/d', Time.StrToTime('-3 month')), Time.Date('Y/m/d')]; break;
@@ -351,12 +351,13 @@ const setCustomTime = (type: string): void => {
 
 /* 推送 */
 const pushData = (): void => {
+  if(push.value.num<=0) return Ui.Toast('请核对商品数量');
   push.value.show = true;
   push.value.info = '单号:[ <b>' + push.value.data.join(',') + '</b> ]&nbsp;&nbsp;&nbsp;&nbsp;数量: <b>' + push.value.num + '</b>';
 }
 /* 推送-回调 */
 const pushSubmit = (val: boolean): void => {
-  if (!val) return;
+  if(!val) return;
   push.value.show = false;
   loadData();
 }
@@ -369,7 +370,7 @@ const revokeData = (id: number, go_co_name: string, link_co_name: string, num: n
 }
 /* 撤回-回调 */
 const revokeSubmit = (val: boolean): void => {
-  if (!val) return;
+  if(!val) return;
   revoke.value.show = false;
   loadData();
 }
@@ -380,7 +381,7 @@ const exportData = (): void => {
 }
 /* 导出-回调 */
 const exportSubmit = (val: boolean): void => {
-  if (!val) return;
+  if(!val) return;
   exp.value.show = false;
   clearSelect();
 }
@@ -449,7 +450,7 @@ const printData = (row: any): void => {
   }, (res: any) => {
     load.clear();
     const {code, msg, data}: any = res.data;
-    if (code == 0) {
+    if(code===0){
       print.value.data = data;
     } else Ui.Toast(msg);
   });
@@ -461,7 +462,7 @@ const getSelect = (): void => {
     token: state.token,
   }, (res: any) => {
     const {code, msg, data}: any = res.data;
-    if (code == 0) {
+    if(code===0){
       // 分类、调出仓、调入仓、状态
       selectAll.value.type_name = data.type_name;
       selectAll.value.go_co_name = data.go_co_name;

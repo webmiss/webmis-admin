@@ -134,7 +134,7 @@ watch(()=>props.columns, (val: Array<any>)=>{
 const checkboxAll = (status: boolean | string = ''): void => {
   if(props.options.length==0) return ;
   checkbox.value.checked = typeof status=='boolean'?status:!checkbox.value.checked;
-  for(let i in props.options) {
+  for(let i in props.options){
     if(!props.options[i].disabled) props.options[i].checked = checkbox.value.checked;
   }
   partially();
@@ -142,7 +142,7 @@ const checkboxAll = (status: boolean | string = ''): void => {
 
 /* 勾选 */
 const Checkbox = (label: any, value: any): void => {
-  for(let i in props.options) {
+  for(let i in props.options){
     if(props.options[i].id==value){
       props.options[i].checked=!props.options[i].checked;
       break;
@@ -155,7 +155,7 @@ const Checkbox = (label: any, value: any): void => {
 const partially = (): void => {
   let n: number = 0;
   const t: number = props.options.length;
-  for(let i in props.options) {
+  for(let i in props.options){
     if(props.options[i].checked) n++;
   }
   // 状态
@@ -164,7 +164,7 @@ const partially = (): void => {
     checkbox.value.value = 'all';
     checkbox.value.partially = false;
     checkbox.value.data.checked = true;
-  }else if(t>0 && n>0) {
+  }else if(t>0 && n>0){
     checkbox.value.checked = true;
     checkbox.value.value = 'all';
     checkbox.value.partially = true;
@@ -182,7 +182,7 @@ const partially = (): void => {
 const getData = (): Array<any> => {
   let data: Array<any> = [];
   let tmp: Object = {};
-  for(let i in props.options) {
+  for(let i in props.options){
     if(props.options[i].checked){
       tmp = props.options[i];
       tmp['index'] = parseInt(i);

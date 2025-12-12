@@ -18,10 +18,10 @@
           <wmButton effect="dark" type="primary" icon="ui ui_add" padding="0 16px 0 8px" @click="saveData('add')">{{ langs.add }}</wmButton>
         </template>
         <template #edit>
-          <wmButton effect="plain" type="primary" icon="ui ui_edit" padding="0 16px 0 8px" :disabled="list.num == 0" @click="saveData('edits')">{{ langs.edit }}</wmButton>
+          <wmButton effect="plain" type="primary" icon="ui ui_edit" padding="0 16px 0 8px" :disabled="list.num==0" @click="saveData('edits')">{{ langs.edit }}</wmButton>
         </template>
         <template #del>
-          <wmButton effect="plain" type="danger" icon="ui ui_del" padding="0 16px 0 8px" :disabled="list.num == 0" @click="delData()">{{ langs.del }}({{ list.num }})</wmButton>
+          <wmButton effect="plain" type="danger" icon="ui ui_del" padding="0 16px 0 8px" :disabled="list.num==0" @click="delData()">{{ langs.del }}({{ list.num }})</wmButton>
         </template>
         <template #line>
           <span class="line" v-if="isAction('save')">|</span>
@@ -39,7 +39,7 @@
       <wmSearch v-model:show="sea.show" v-model:keys="sea.key" :columns="sea.columns" :placeholder="sea.placeholder" @keyup.enter="page.num=1;loadData()" @search="page.num=1;loadData()" @reset="resetData()">
         <template #customTime="d">
           <ul class="custom_time flex_center">
-            <li v-for="v in sea.customTime.list" :key="v.value" @click="setCustomTime(v.value)" :class="{ active: sea.customTime.active === v.value }">{{ v.label }}</li>
+            <li v-for="v in sea.customTime.list" :key="v.value" @click="setCustomTime(v.value)" :class="{ active: sea.customTime.active===v.value }">{{ v.label }}</li>
           </ul>
         </template>
         <template #time="d">
@@ -88,19 +88,19 @@
         <div class="tCenter">{{ d.num }}</div>
       </template>
       <template #in="d">
-        <div class="tCenter" :class="d.in == '进行中' ? 'c_danger' : 'c_success'">{{ d.in }}</div>
+        <div class="tCenter" :class="d.in==='进行中'?'c_danger':'c_success'">{{ d.in }}</div>
       </template>
       <template #allocate="d">
-        <div class="tCenter" :class="d.allocate == '调拨中' ? 'c_danger' : 'c_success'">{{ d.allocate }}</div>
+        <div class="tCenter" :class="d.allocate==='调拨中'?'c_danger':'c_success'">{{ d.allocate }}</div>
       </template>
       <template #order="d">
-        <div class="tCenter" :class="d.order == '进行中' ? 'c_danger' : 'c_success'">{{ d.order }}</div>
+        <div class="tCenter" :class="d.order==='进行中'?'c_danger':'c_success'">{{ d.order }}</div>
       </template>
       <template #refund="d">
-        <div class="tCenter" :class="d.refund == '进行中' ? 'c_danger' : 'c_success'">{{ d.refund }}</div>
+        <div class="tCenter" :class="d.refund==='进行中'?'c_danger':'c_success'">{{ d.refund }}</div>
       </template>
       <template #out="d">
-        <div class="tCenter" :class="d.out == '进行中' ? 'c_danger' : 'c_success'">{{ d.out }}</div>
+        <div class="tCenter" :class="d.out==='进行中'?'c_danger':'c_success'">{{ d.out }}</div>
       </template>
       <template #action="d">
         <div class="tCenter">
@@ -221,7 +221,7 @@ const selectAll = ref({ category: [], partner_name: [] });
 
 /* 创建完成 */
 onMounted(() => {
-  if (state.token) getSelect();
+  if(state.token) getSelect();
 });
 onActivated(() => {
   if(isLoad && state.isLogin) loadData();
@@ -242,7 +242,7 @@ const loadData = (): void => {
   }, (res: any) => {
     load.clear();
     const { code, msg, data, time }: any = res.data;
-    if (code == 0) {
+    if(code===0){
       total.value.time = time;
       list.value.data = data;
       clearSelect();
@@ -256,7 +256,7 @@ const loadData = (): void => {
     data: getWhere(),
   }, (res: any) => {
     const { code, msg, data, time }: any = res.data;
-    if (code == 0) {
+    if(code===0){
       total.value.time = time;
       page.value.total = data.total;
       total.value.list.stock = data.stock;
@@ -267,8 +267,8 @@ const loadData = (): void => {
 const getWhere = (): object => {
   const data: any = {
     key: sea.value.key,
-    stime: typeof sea.value.time[0] == 'string' ? sea.value.time[0] : Time.Date('Y/m/d', sea.value.time[0]),
-    etime: typeof sea.value.time[1] == 'string' ? sea.value.time[1] : Time.Date('Y/m/d', sea.value.time[1]),
+    stime: typeof sea.value.time[0]==='string'?sea.value.time[0]:Time.Date('Y/m/d', sea.value.time[0]),
+    etime: typeof sea.value.time[1]==='string'?sea.value.time[1]:Time.Date('Y/m/d', sea.value.time[1]),
     wms_co_id: sea.value.wms_co_id,
     num1: sea.value.num1,
     num2: sea.value.num2,
@@ -276,7 +276,7 @@ const getWhere = (): object => {
     owner: sea.value.owner,
     is_service: is_service.value.checked,
   };
-  for (let v of sea.value.columns) if (v.name) data[v.name] = v.value;
+  for(let v of sea.value.columns) if(v.name) data[v.name] = v.value;
   return data;
 }
 /* 选中状态 */
@@ -287,7 +287,7 @@ const selectState = (n: number, t: number): void => {
   exp_part.value.ids = [];
   exp_part.value.num = n;
   const data: Array<any> = tableList.value.getData();
-  for (let v of data) {
+  for(let v of data){
     exp_part.value.ids.push(v.id);
   }
 }
@@ -308,7 +308,7 @@ const resetData = (): void => {
   sea.value.num2 = '';
   sea.value.category = '';
   sea.value.owner = '';
-  for (let v of sea.value.columns) v.value = '';
+  for(let v of sea.value.columns) v.value = '';
   // 其它
   list.value.order = '';
   page.value.num = 1;
@@ -325,7 +325,7 @@ const clearSelect = (): void => {
 /* 自定义时间 */
 const setCustomTime = (type: string): void => {
   sea.value.customTime.active = type;
-  switch(type) {
+  switch(type){
     case 'week': sea.value.time = [Time.Date('Y/m/d', Time.StrToTime('-6 day')), Time.Date('Y/m/d')]; break;
     case 'month': sea.value.time = [Time.Date('Y/m/d', Time.StrToTime('-1 month')), Time.Date('Y/m/d')]; break;
     case 'year': sea.value.time = [Time.Date('Y/m/d', Time.StrToTime('-1 year')), Time.Date('Y/m/d')]; break;
@@ -337,24 +337,24 @@ const setCustomTime = (type: string): void => {
 const saveData = (type: string, data: any = {}): void => {
   save.value.show = true;
   save.value.data = { type: type };
-  if (type == 'add') {
+  if(type==='add'){
     save.value.title = langs.add;
     save.value.data.wms_co_id = '';
     save.value.data.sku_id = '';
     save.value.data.num = '';
-  } else if (type == 'edit') {
+  }else if(type==='edit'){
     save.value.title = langs.edit + '( ' + data.sku_id + ' )';
     save.value.data.ids = [data.id];
     save.value.data.wms_co_id = [parseInt(data.wms_co_id)];
     save.value.data.sku_id = data.sku_id;
     save.value.data.num = data.num;
-  } else if (type == 'edits') {
+  }else if(type==='edits'){
     // ID
     const data: Array<any> = tableList.value.getData();
     let ids: Array<number> = [];
     let sku: Array<string> = [];
     let wms: Array<any> = [];
-    for (let v of data) {
+    for(let v of data){
       ids.push(v.id);
       sku.push(v.sku_id);
       wms.push(parseInt(v.wms_co_id));
@@ -369,7 +369,7 @@ const saveData = (type: string, data: any = {}): void => {
 }
 /* 添加&编辑-回调 */
 const saveSubmit = (val: boolean): void => {
-  if (!val) return;
+  if(!val) return;
   save.value.show = false;
   loadData();
 }
@@ -379,12 +379,12 @@ const delData = (): void => {
   del.value.show = true;
   const data: Array<any> = tableList.value.getData();
   let ids: Array<number> = [];
-  for (let v of data) ids.push(v.id);
+  for(let v of data) ids.push(v.id);
   del.value.data = ids;
 }
 /* 删除-回调 */
 const delSubmit = (val: boolean): void => {
-  if (!val) return;
+  if(!val) return;
   del.value.show = false;
   loadData();
 }
@@ -396,7 +396,7 @@ const exportData = (num: number): void => {
 }
 /* 导出-回调 */
 const exportSubmit = (val: boolean): void => {
-  if (!val) return;
+  if(!val) return;
   exp.value.show = false;
   clearSelect();
 }
@@ -408,7 +408,7 @@ const exportPartData = (): void => {
 }
 /* 导出部分-回调 */
 const exportPartSubmit = (val: boolean): void => {
-  if (!val) return;
+  if(!val) return;
   exp_part.value.show = false;
   clearSelect();
 }
@@ -417,10 +417,10 @@ const exportPartSubmit = (val: boolean): void => {
 const Copy = (name: string, val: string): void => {
   const data: any = tableList.value.getData();
   let sku_id: string = '';
-  for (let i in data) {
+  for(let i in data){
     sku_id += data[i][name] + ' ';
   }
-  if (sku_id) Util.CopyText(sku_id);
+  if(sku_id) Util.CopyText(sku_id);
   else Util.CopyText(val);
 }
 
@@ -430,7 +430,7 @@ const getSelect = (): void => {
     token: state.token,
   }, (res: any) => {
     const { code, msg, data }: any = res.data;
-    if (code == 0) {
+    if(code===0){
       selectAll.value.category = data.category;
       selectAll.value.partner_name = data.partner_name;
       // 加载

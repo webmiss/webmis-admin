@@ -142,6 +142,12 @@
             <wmInput v-model:value="form.supplier_name" @iconClick="supplierInfo(form.supplier_name)" :placeholder="form.type=='edits'?'原始':''" icon="ui ui_search" iconAlign="right" padding="0 40px 0 10px" />
           </td>
         </tr>
+        <tr>
+          <td class="label">日志备注</td>
+          <td colspan="3">
+            <wmInput v-model:value="form.remark" :placeholder="form.type=='edits'?'原始':''" />
+          </td>
+        </tr>
       </wmTableForm>
     </wmMain>
     <template #bottom>
@@ -186,7 +192,7 @@ const form = ref({
   sku_id:'', name:'', properties_value:'', short_name:'', unit:'', weight:'', num:'', owner:'', i_id:'', supplier_name:'',
   cost_price:'', supply_price:'', sale_price:'', supplier_price:'', purchase_price:'', market_price:'', other_price:'', other_price1:'',
   ratio:'', ratio_cost:'', ratio_purchase:'', ratio_supply:'', ratio_supplier:'', ratio_sale:'', ratio_market:'',
-  labels:<any>'', category:<any>'', brand:<any>'',
+  labels:<any>'', category:<any>'', brand:<any>'', remark:'',
 });
 // 全部分类
 const selectAll = ref({labels:[], category:[], brand:[]});

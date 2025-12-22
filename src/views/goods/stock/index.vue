@@ -113,7 +113,9 @@
         </div>
       </template>
       <template #wms_co_id="d">
-        <div class="tCenter">{{ d.wms_co_id }}</div>
+        <div class="tCenter">
+          <wmLabel :options="dayDiff(d.utime)">{{ d.wms_co_id }}</wmLabel>
+        </div>
       </template>
     </wmTable>
     <!-- List End -->
@@ -149,6 +151,7 @@ import wmPage from '../../../components/page/index.vue';
 import wmDatePicker from '../../../components/datepicker/index.vue';
 import wmSelect from '../../../components/form/select/index.vue';
 import wmCheckbox from '../../../components/form/checkbox/index.vue';
+import wmLabel from '../../../components/container/label.vue';
 /* 统计、动作、搜索、更新、删除、导出 */
 import wmTotal from '../../tools/Total.vue';
 import wmAction from '../../tools/Action.vue';
@@ -204,7 +207,7 @@ const list = ref({
     { title: '采退', slot: 'out', width: '80px', textAlign: 'center' },
     { title: langs.action, slot: 'action', textAlign: 'center', width: '40px' },
     { title: langs.view, slot: 'view', textAlign: 'center', width: '40px' },
-    { title: '仓库ID', slot: 'wms_co_id', width: '100px', textAlign: 'center' },
+    { title: '仓库ID', slot: 'wms_co_id', width: '120px', minWidth: '120px', textAlign: 'center' },
     { title: '仓库名称', index: 'wms_co_name' },
     { title: '采购员', index: 'owner', order: '' },
   ], data: [], num: 0, total: 0, order: ''
@@ -422,6 +425,38 @@ const Copy = (name: string, val: string): void => {
   }
   if(sku_id) Util.CopyText(sku_id);
   else Util.CopyText(val);
+}
+
+/* 日期比较 */
+const dayDiff = (t: string): object => {
+  let old:number = Time.StrToTime(t);
+  let now:number = Time.StrToTime(Time.Date('Y-m-d')+' 23:59:59');
+  let d: number = Math.ceil((now-old)/(3600*24));
+  let content: string = '';
+  let color: string = '';
+  let bgColor: string = '';
+  if(d===1){
+    content = '今天';
+    color = '#FFF';
+    bgColor = '#67C23A';
+  } else if(d===2){
+    content = '昨天';
+    color = '#67C23A';
+    bgColor = '#E1F3D8';
+  } else if(d===3){
+    content = d+'天';
+    color = '#F56C6C';
+    bgColor = '#FDE2E2';
+  } else if(d>=4){
+    content = d+'天';
+    color = '#FFF';
+    bgColor = '#F56C6C';
+  } else {
+    content = '其它';
+    color = '#FFF';
+    bgColor = '#606266';
+  }
+  return {content:content, color: color, bgColor: bgColor};
 }
 
 /* 选项 */

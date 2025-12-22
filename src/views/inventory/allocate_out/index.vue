@@ -97,8 +97,12 @@
         <div class="tCenter">{{ d.total }}</div>
       </template>
       <template #status="d">
-        <div v-if="d.status=='0'" class="flex_center status0">{{ d.status_name }}</div>
-        <div v-else-if="d.status=='1'" class="flex_center status1">{{ d.status_name }}</div>
+        <div v-if="d.status=='0'" class="flex_center status0">
+          <wmLabel :options="dayDiff(d.ctime)">{{ d.state_name }}</wmLabel>
+        </div>
+        <div v-else-if="d.status=='1'" class="flex_center status1">
+          <wmLabel :options="dayDiff(d.ctime)">{{ d.state_name }}</wmLabel>
+        </div>
         <div v-else-if="d.status=='2'" class="flex_center status2">{{ d.status_name }}</div>
         <div v-else class="tCenter">{{ d.status_name }}</div>
       </template>
@@ -160,6 +164,7 @@ import wmTag from '../../../components/tag/index.vue';
 import wmPage from '../../../components/page/index.vue';
 import wmDatePicker from '../../../components/datepicker/index.vue';
 import wmSelect from '../../../components/form/select/index.vue';
+import wmLabel from '../../../components/container/label.vue';
 /* 动作 */
 import wmTotal from '../../tools/Total.vue';
 import wmAction from '../../tools/Action.vue';
@@ -518,6 +523,38 @@ const printData = (row: any): void => {
       print.value.data = data;
     } else Ui.Toast(msg);
   });
+}
+
+/* 日期比较 */
+const dayDiff = (t: string): object => {
+  let old:number = Time.StrToTime(t);
+  let now:number = Time.StrToTime(Time.Date('Y-m-d')+' 23:59:59');
+  let d: number = Math.ceil((now-old)/(3600*24));
+  let content: string = '';
+  let color: string = '';
+  let bgColor: string = '';
+  if(d===1){
+    content = '今天';
+    color = '#FFF';
+    bgColor = '#67C23A';
+  } else if(d===2){
+    content = '昨天';
+    color = '#67C23A';
+    bgColor = '#E1F3D8';
+  } else if(d===3){
+    content = d+'天';
+    color = '#F56C6C';
+    bgColor = '#FDE2E2';
+  } else if(d>=4){
+    content = d+'天';
+    color = '#FFF';
+    bgColor = '#F56C6C';
+  } else {
+    content = '其它';
+    color = '#FFF';
+    bgColor = '#606266';
+  }
+  return {content:content, color: color, bgColor: bgColor};
 }
 
 /* 选项 */

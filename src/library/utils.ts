@@ -30,7 +30,6 @@ export default class Util {
         let generalPasteboard = UIPasteboard.generalPasteboard();
         // 设置/获取文本内容
         generalPasteboard.setValueforPasteboardType(text+'', "public.utf8-plain-text");
-        let value = generalPasteboard.valueForPasteboardType("public.utf8-plain-text");
         Ui.Toast('复制成功');
         break;
       case 'Android':

@@ -22,6 +22,7 @@
       <div class="wm-login_bg bg9" :style="{visibility:loginBG=='bg9'?'inherit':'hidden', opacity:loginBG=='bg9'?'1':'0'}"></div>
       <div class="wm-login_mask"></div>
       <div class="wm-login_body">
+        <canvas id="effectCanvas" class="wm-login_effect"></canvas>
         <div class="wm-login_ct">
           <div class="wm-login_logo" :style="{backgroundImage: login.uname&&login.uname==login.local_uname&&login.img?'url('+(login.img)+')':'', backgroundSize:login.uname&&login.uname==login.local_uname&&login.img?'100%':'60%'}">
             <h2 class="uname" v-if="login.uname&&(login.is_passwd || login.is_safety)">{{ login.uname }}</h2>
@@ -68,18 +69,21 @@
 /* Login */
 .wm-login_popup{position: fixed; z-index: 9999; width: calc(100% + 1px); height: calc(100% + 1px); left: 0; top: 0; background-color: #323438;}
 .wm-login_bg{position: absolute; z-index: 1; width: 100%; height: 100%; background-position: center; background-size: cover; background-repeat: no-repeat; transition: All 5s ease-in-out;}
-.wm-login_bg.bg0{background-image: url('/bg/0.jpg?t=0728');}
-.wm-login_bg.bg1{background-image: url('/bg/1.jpg?t=0728');}
-.wm-login_bg.bg2{background-image: url('/bg/2.jpg?t=0728');}
-.wm-login_bg.bg3{background-image: url('/bg/3.jpg?t=0728');}
-.wm-login_bg.bg4{background-image: url('/bg/4.jpg?t=0728');}
-.wm-login_bg.bg5{background-image: url('/bg/5.jpg?t=0728');}
-.wm-login_bg.bg6{background-image: url('/bg/6.jpg?t=0728');}
-.wm-login_bg.bg7{background-image: url('/bg/7.jpg?t=0728');}
-.wm-login_bg.bg8{background-image: url('/bg/8.jpg?t=0728');}
-.wm-login_bg.bg9{background-image: url('/bg/9.jpg?t=0728');}
+.wm-login_bg.bg0{background-image: url('/bg/0.jpg?t=20250722');}
+.wm-login_bg.bg1{background-image: url('/bg/1.jpg?t=20250722');}
+.wm-login_bg.bg2{background-image: url('/bg/2.jpg?t=20250722');}
+.wm-login_bg.bg3{background-image: url('/bg/3.jpg?t=20250722');}
+.wm-login_bg.bg4{background-image: url('/bg/4.jpg?t=20251227');}
+.wm-login_bg.bg5{background-image: url('/bg/5.jpg?t=20250722');}
+.wm-login_bg.bg6{background-image: url('/bg/6.jpg?t=20250722');}
+.wm-login_bg.bg7{background-image: url('/bg/7.jpg?t=20250722');}
+.wm-login_bg.bg8{background-image: url('/bg/8.jpg?t=20251227');}
+.wm-login_bg.bg9{background-image: url('/bg/9.jpg?t=20250722');}
 .wm-login_mask{position: absolute; z-index: 2; width: 100%; height: 100%; background: -webkit-radial-gradient(50% 30% ,farthest-corner,rgba(0, 0, 0, 0),rgba(0, 0, 0, 0.3),rgba(0, 0, 0, 0.9));}
 .wm-login_body{position: absolute; z-index: 3; width: 100%; height: 100%; color: @Minor6;}
+/* 特效 */
+.wm-login_effect{position: fixed; left: 0; right: 0; background-color: transparent;}
+/* 登录 */
 .wm-login_ct{position: absolute; min-width: 300px; left: 50%; top: 50%; transform: translate(-50%, -60%);}
 .wm-login_logo{position: relative; margin: 56px auto; width: 160px; height: 160px; border: rgba(0,0,0,0.8) 1px solid; background-color: rgba(0,0,0,0.7); background-image: url('../../assets/logo.svg'); border-radius: 50%; background-repeat: no-repeat; background-position: center; transition: All 0.5s ease-in-out;}
 .wm-login_logo:hover{border-color: @Minor; background-color: rgba(0,0,0,0.7);}
@@ -108,6 +112,7 @@ import Storage from '../../library/storage';
 import Request from '../../library/request';
 /* JS组件 */
 import Time from '../../library/time';
+import Utils from '../../library/utils';
 /* 语言包 */
 import { en_US } from '../../config/langs/en_US';
 import { zh_CN } from '../../config/langs/zh_CN';
@@ -136,6 +141,13 @@ const bg_class: Array<string> = ['bg0', 'bg1', 'bg2', 'bg3', 'bg4', 'bg5', 'bg6'
 // 定时
 let time: any = null;
 let tokenTime: any = null;
+// 特效
+let effectCanvas: any = null;
+let effectCtx: any = null;
+let particles: any = [];
+let clickTimer: any = null;
+let checkTimer: any = null;
+let autoTimer: any = null;
 
 /* 监听-登录状态 */
 watch(()=>state.isLogin, (val:Boolean)=>{
@@ -162,8 +174,13 @@ watch(loginShow, (val:Boolean)=> {
     time = setInterval(()=>{
       bgAnimation();
     }, animationTime.value);
+    // 特效
+    setEffect();
   } else {
-    clearInterval(time);
+    // 关闭背景
+    if(time) clearInterval(time);
+    // 关闭特效
+    if(autoTimer) clearInterval(autoTimer);
   }
 });
 
@@ -210,6 +227,151 @@ const changeLangs = (v: any): void => {
 const bgAnimation = (): void => {
   const n: number = Math.floor(Math.random()*10);
   loginBG.value = bg_class[n];
+}
+
+/* 特效 */
+const setEffect = (): void => {
+  effectCanvas = document.getElementById('effectCanvas');
+  effectCtx = effectCanvas.getContext('2d');
+  effectCanvas.width = window.innerWidth;
+  effectCanvas.height = window.innerHeight;
+  window.addEventListener('resize', ()=>{
+    effectCanvas.width = window.innerWidth;
+    effectCanvas.height = window.innerHeight;
+  });
+  // 点击事件
+  if(clickTimer) clearTimeout(clickTimer);
+  document.addEventListener('click', (e: any) => {
+    clickTimer = setTimeout(() => {
+      createEffect(e.clientX, e.clientY);
+    }, 100);
+  });
+  // 随机动画( 假期 )
+  let day: string = Time.Date('Y-m-d');
+  Request.Post('index/holiday?lang='+state.lang, {date: day}, (res:any)=>{
+    const {code, msg, data}: any = res.data;
+    if(code===0) {
+      if(!data) return;
+      // 随机动画
+      if(autoTimer) clearInterval(autoTimer);
+      autoTimer = setInterval(()=>{
+        let n: number = Utils.getRandomInt(1, 3);
+        for(let i=1; i<=n; i++) {
+          let t: number = Utils.getRandomInt(1000, 3000);
+          setTimeout(()=>{
+            let x: number = Utils.getRandomInt(30, effectCanvas.width-30);
+            let y: number = Utils.getRandomInt(30, effectCanvas.height-30);
+            createEffect(x, y);
+          }, t);
+        }
+      }, 8000);
+    } else Ui.Toast(msg);
+  });
+  // 动画
+  animateEffect();
+}
+/* 特效-创建 */
+const createEffect = (x: number, y: number): void => {
+  // 粒子（200-300个）
+  const particleCount: number = Math.floor(Math.random() * 100) + 200;
+  const color: any = getSpringColor();
+  for(let i=0; i<particleCount; i++) {
+    particles.push(new TinyStarFireworkParticle(effectCtx, x, y, color));
+  }
+  // 清除
+  if(!checkTimer) {
+    checkTimer = setInterval(() => {
+      const hasActiveParticles = particles.some((p: { alpha: number; }) => p.alpha > 0);
+      if (!hasActiveParticles) {
+        clearInterval(checkTimer);
+        checkTimer = null;
+        setTimeout(() => {
+          effectCtx.clearRect(0, 0, effectCanvas.width, effectCanvas.height);
+          particles = [];
+        }, 300);
+      }
+    }, 100);
+  }
+}
+/* 特效-随机颜色 */
+const getSpringColor = (): any => {
+  const colors = ['#ff3333', '#ff6600', '#ffcc00', '#ffff00', '#33cc33', '#3399ff', '#9933ff', '#ff3399'];
+  return colors[Math.floor(Math.random() * colors.length)];
+}
+/* 特效-动画 */
+const animateEffect = (): any => {
+  effectCtx.clearRect(0, 0, effectCanvas.width, effectCanvas.height);
+  for(let i=particles.length-1; i>=0; i--) {
+    const p: any = particles[i];
+    p.update();
+    p.draw();
+    if(p.alpha<=0) particles.splice(i, 1);
+  }
+  requestAnimationFrame(animateEffect);
+}
+/* 特效-星点粒子 */
+class TinyStarFireworkParticle {
+  ctx: any;
+  x: number;
+  y: number;
+  speed: number;
+  angle: number;
+  gravity: number;
+  vx: number;
+  vy: number;
+  alpha: number;
+  decay: number;
+  color: any;
+  size: number;
+  twinkle: number;
+  constructor(ctx: any, x: number, y: number, color: any) {
+    this.ctx = ctx;
+    this.x = x;
+    this.y = y;
+    // 适中的速度，更轻盈
+    this.speed = Math.random() * 2 + 0.5;
+    this.angle = Math.random() * Math.PI * 2;
+    // 极轻的重力，飘落更缓慢
+    this.gravity = 0.01;
+    this.vx = Math.cos(this.angle) * this.speed;
+    this.vy = Math.sin(this.angle) * this.speed;
+    this.alpha = 1;
+    // 适中的衰减速度
+    this.decay = Math.random() * 0.008 + 0.003;
+    this.color = color;
+    // 极小的粒子尺寸（1-3px）
+    this.size = Math.random() * 3 + 1;
+    // 微光闪烁效果
+    this.twinkle = Math.random() * 0.5 + 0.5;
+  }
+  /* 更新 */
+  update() {
+    this.vy += this.gravity;
+    this.x += this.vx;
+    this.y += this.vy;
+    this.alpha -= this.decay;
+    // 微光效果：透明度轻微波动
+    this.twinkle = (this.twinkle + Math.random() * 0.1 - 0.05) % 1;
+    if (this.twinkle < 0.5) this.twinkle = 0.5;
+  }
+  /* 绘制 */
+  draw() {
+    this.ctx.save();
+    // 叠加微光效果的透明度
+    this.ctx.globalAlpha = this.alpha * this.twinkle;
+    // 简单的纯色小圆点，更精致
+    this.ctx.beginPath();
+    this.ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    this.ctx.fillStyle = this.color;
+    this.ctx.fill();
+    // 外围微光描边（更细腻）
+    this.ctx.beginPath();
+    this.ctx.arc(this.x, this.y, this.size + 0.5, 0, Math.PI * 2);
+    this.ctx.strokeStyle = 'rgba(255,255,255,0.3)';
+    this.ctx.lineWidth = 0.2;
+    this.ctx.stroke();
+    this.ctx.restore();
+  }
 }
 
 /* 用户-显示 */

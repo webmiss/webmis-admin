@@ -54,6 +54,7 @@
 
 <script setup lang="ts">
 
+// @ts-ignore
 const props = defineProps({
   show: {type: String, default: ''},                // 是否显示
   height: {type: String, default: '24px'},          // 高

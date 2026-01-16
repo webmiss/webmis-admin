@@ -93,6 +93,7 @@ import { useStore } from 'vuex';
 import wmInput from '../../../components/form/input/index.vue';
 
 /* 参数 */
+// @ts-ignore
 const props = defineProps({
     value: {type: [Array, String, Number], default: ''},    // 默认值
     options: {type: Array, default: []},                    // 数据: [{label:'男', value:'男', checked: true},{label:'女', value:'女'}]

@@ -263,6 +263,7 @@ import wmButton from '../../components/form/button/index.vue';
 import wmImgView from '../../components/image/view.vue';
 
 /* 参数 */
+// @ts-ignore
 const props = defineProps({
   show: {type: Boolean, default: false},   // 是否显示
 });

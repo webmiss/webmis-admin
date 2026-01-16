@@ -23,11 +23,12 @@
 </style>
 
 <script setup lang="ts">
-import { ref, onMounted, watch, getCurrentInstance } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
 
 /* 参数 */
+// @ts-ignore
 const props = defineProps({
   value: {type: [String, Array<any>, Date], default: ''},   // 日期: '2024-01-01'、['2024-01-01', '2024-01-31']
   range: {type: Boolean, default: false},                   // 范围选择
@@ -44,7 +45,6 @@ const props = defineProps({
   language: {type: String, default: 'zh-CN'},               // 语言
   dayName: {type: Array<string>, default: ['一', '二', '三', '四', '五', '六', '日']},
 });
-const { proxy } = getCurrentInstance() as any ;
 const emit = defineEmits(['update:value']);
 /* 变量 */
 const date = ref();
@@ -64,5 +64,4 @@ watch(date, (val: any)=>{
 onMounted(()=>{
   date.value = props.value;
 });
-
 </script>

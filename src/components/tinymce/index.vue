@@ -15,6 +15,7 @@ import Env from '../../config/Env';
 import Editor from '@tinymce/tinymce-vue';
 
 /* 参数 */
+// @ts-ignore
 const props = defineProps({
   value: {type: String, default: ''},                 // 内容
   width: {type: String, default: '100%'},             // 宽

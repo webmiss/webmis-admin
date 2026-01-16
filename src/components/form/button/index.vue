@@ -69,6 +69,7 @@
 <script setup lang="ts">
 
 /* 参数 */
+// @ts-ignore
 const props = defineProps({
   effect: {type: String, default: 'plain'},         // 样式: plain, dark, text
   type: {type: String, default: 'default'},         // 类型: primary, success, warning, danger, info

@@ -73,6 +73,7 @@ import { useStore } from 'vuex';
 import Ui from '../../library/ui';
 
 /* 参数 */
+// @ts-ignore
 const props = defineProps({
     show: {type: Boolean, default: false},              // 是否显示
     index: {type: Number, default: 0},                  // 默认展示

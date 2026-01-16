@@ -11,6 +11,7 @@ import { ref, onMounted, watch, getCurrentInstance, nextTick } from 'vue';
 import { Chart } from '@antv/g2';
 
 /* 参数 */
+// @ts-ignore
 const props = defineProps({
   value: Array<any>,                             // 数据: [{label: 'n1', value: 0.4}, {label: 'n2', value: 0.6}]
   theme: {type: String, default: 'classic'},     // 主题: classic、academy、classicDark
@@ -24,7 +25,7 @@ const { proxy } = getCurrentInstance() as any ;
 const auto_height = ref(0);
 
 /* 监听 */
-watch(()=>props, (val: any)=>{
+watch(()=>props, ()=>{
   // 初始化
   init();
 },{ deep: true });

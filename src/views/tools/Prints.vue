@@ -87,7 +87,7 @@
 
 <style lang="less" scoped>
 /* 内容 */
-.wm-print_body{position: fixed; z-index: 1000; width: 100%; height: 100%; background-color: #f2f4f8; opacity: 0; transition: @Transition;}
+.wm-print_body{position: fixed; z-index: 1000; width: 100%; min-width: 960px; height: 100%; background-color: #f2f4f8; opacity: 0; transition: @Transition;}
 .wm-print_body .img{cursor: pointer; background-position: center; background-repeat: no-repeat; background-size: cover;}
 .wm-print_left{overflow-y: auto; padding: 0 16px; width: 280px; height: 100%; background-color: #fff; border-right: #f2f4f8 1px solid; box-sizing: border-box;}
 .wm-print_left .search{padding: 8px 0; line-height: 40px;}
@@ -114,7 +114,7 @@
 .wm-print_right_list li{width: calc(100% / 6); padding: 10px 0;}
 /* 打印标签 */
 .print_body{overflow: hidden; width: 100%;}
-.print_item{width: calc(100% / 6); padding: 10px 0;}
+.print_item{padding: 8px;}
 .print_item .select{cursor: pointer; position: absolute; z-index: 1; top: -8px; right: -8px; width: 20px; height: 20px; background-color: #fff; border-radius: 50%; box-shadow: 0 0 8px rgba(0, 0, 0, 0.08);}
 .print_item .select.checked{background-color: @Minor;}
 .print_item .select.checked::before{content: ""; position: absolute; top: 5px; left: 5px; width: 8px; height: 4px; border-left: #fff 2px solid; border-bottom: #fff 2px solid; transform: rotate(-45deg);}
@@ -167,6 +167,7 @@ import wmButton from "../../components/form/button/index.vue";
 import Time from '../../library/time';
 
 /* 参数 */
+// @ts-ignore
 const props = defineProps({
   show: { type: Boolean, default: false }, // 是否显示
 });
@@ -199,11 +200,9 @@ watch(()=>props.show, (val:Boolean)=>{
     // 默认模板
     const tp: string | null = Storage.getItem("printTemplate");
     list.value.active = tp?tp:"pzscb_sz";
-    // 监听窗口、内容
-    Html.addEvent("resize", printWidht);
-    Html.observer(proxy.$refs.printBarcode, (res: any) => {
+    // 内容
+    Html.observer(proxy.$refs.printBarcode, () => {
       printNum();
-      printWidht();
     });
     // 默认数据
     if(state.print.sku.length > 0){
@@ -218,15 +217,12 @@ watch(()=>props.show, (val:Boolean)=>{
       state.print.sku = [];
       goodsInfo(sku);
     }
-  } else {
-    // 移除
-    Html.removeEvent("resize", printWidht);
   }
 });
 
 /* 模板-搜索 */
 const templateSearch = (): void => {
-  let data = list.value.template;
+  let data: any = list.value.template;
   const reg = new RegExp(seaKey.value.toLowerCase());
   for(let k in data){
     data[k].display = seaKey.value?reg.test(data[k].label):true;
@@ -237,7 +233,6 @@ const templateSearch = (): void => {
 const templateChange = (name: any): void => {
   list.value.active = name;
   Storage.setItem("printTemplate", name);
-  printWidht();
 }
 
 /* 搜索 */
@@ -332,22 +327,6 @@ const goodsImport = (): void => {
   });
 }
 
-/* 打印-内容宽度 */
-const printWidht = (): void => {
-  if(list.value.sku.length < 1) return Ui.Toast(state.langs.sku_id);
-  let content: any = proxy.$refs.printBarcode;
-  let item: any = document.getElementsByClassName("print_item");
-  let first: any = document.getElementsByClassName("print_box")[0];
-  let w: number = parseFloat(
-    Html.getPropertyValue(content, "width").replace("px", "")
-  );
-  let w1: number = parseFloat(
-    Html.getPropertyValue(first, "width").replace("px", "")
-  );
-  const n: number = Math.ceil(w/w1) - (w<768?1:2);
-  for(let v of item) v.style.width = "calc(100% / " + n + ")";
-}
-
 /* 打印-全选 */
 const printSelect = (): void => {
   const checked: boolean = !list.value.checked;
@@ -371,11 +350,10 @@ const printSubmit = (): void => {
     template: list.value.active,
     num: list.value.num,
   }, (res: any) => {
-    const d = res.data;
+    const {code, msg} = res.data;
+    if(code!==0) Ui.Toast(msg);
   });
-  // 重置
-  let item: any = document.getElementsByClassName("print_item");
-  for(let v of item) v.style.width = "100%";
+  // 预览
   nextTick(()=>{
     printJS({printable: proxy.$refs.printBarcode, type: "html", scanStyles: false, css: '/print/barcode.css?t='+Time.Time()});
   });

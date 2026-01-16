@@ -40,6 +40,7 @@
 import { ref, onMounted, watch } from 'vue';
 
 /* 参数 */
+// @ts-ignore
 const props = defineProps({
   value: {type: String, default: ''},           // 默认值
   options: {type: Object, default: {}},         // 数据: {label:'北京市', value:1, disabled: true}
@@ -68,7 +69,7 @@ const clickCheckbox = (): void => {
   data.checked = !data.checked;
   // 事件
   emit('update:value', data.checked?data.value:'');
-  emit('checkbox', data.label, data.value);
+  emit('checkbox', data.value, data.label);
 }
 
 </script>

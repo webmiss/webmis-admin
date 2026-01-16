@@ -109,6 +109,7 @@ import { ref, watch } from 'vue';
 import wmCheckBox from '../form/checkbox/index.vue';
 
 /* 参数 */
+// @ts-ignore
 const props = defineProps({
   columns: {type: Array<any>, default: []},       // 字段: [{title: '名称', index: 'title', slot: 'title', width: '40px', minWidth: '30px', maxWidth: '120px', textAlign: 'right'}]
   options: {type: Array<any>, default: []},       // 数据: [{id: 1, title: '系统', remark: '', checked:true, }]
@@ -126,13 +127,12 @@ const isShow = ref(false);
 const checkbox = ref({checked: false, partially: false, value:'', data:{label:'', value:'all', checked:false}});
 
 /* 监听 */
-watch(()=>props.columns, (val: Array<any>)=>{
+watch(()=>props.columns, ()=>{
   partially();
 },{ deep: true });
 
 /* 全选、全不选 */
 const checkboxAll = (status: boolean | string = ''): void => {
-  if(props.options.length==0) return ;
   checkbox.value.checked = typeof status=='boolean'?status:!checkbox.value.checked;
   for(let i in props.options){
     if(!props.options[i].disabled) props.options[i].checked = checkbox.value.checked;
@@ -141,7 +141,7 @@ const checkboxAll = (status: boolean | string = ''): void => {
 }
 
 /* 勾选 */
-const Checkbox = (label: any, value: any): void => {
+const Checkbox = (value: any): void => {
   for(let i in props.options){
     if(props.options[i].id==value){
       props.options[i].checked=!props.options[i].checked;
@@ -181,7 +181,7 @@ const partially = (): void => {
 /* 获取数据 */
 const getData = (): Array<any> => {
   let data: Array<any> = [];
-  let tmp: Object = {};
+  let tmp: any = {};
   for(let i in props.options){
     if(props.options[i].checked){
       tmp = props.options[i];

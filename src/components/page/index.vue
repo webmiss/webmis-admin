@@ -50,6 +50,7 @@ import wmSelect from '../form/select/index.vue';
 import Format from '.././../library/format';
 
 /* 参数 */
+// @ts-ignore
 const props = defineProps({
   total: {default: 0},                      // 总条数
   page: {type: Number, default: 1},         // 当前页码

@@ -21,6 +21,7 @@
 <script setup lang="ts">
 
 /* 参数 */
+// @ts-ignore
 const props = defineProps({
   options: {type: Object, default: {}},          // 配置
   content: {type: String, default: ''},          // 内容

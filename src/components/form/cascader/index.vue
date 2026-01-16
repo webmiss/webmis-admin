@@ -80,6 +80,7 @@ import { ref, watch, onMounted, getCurrentInstance } from 'vue';
 import { useStore } from 'vuex';
 
 /* 参数 */
+// @ts-ignore
 const props = defineProps({
     value: {type: Array<any>, default: []},                 // 默认值
     options: {type: Array<any>, default: []},               // 数据: [{label:'一级菜单', value:'m1', children: []}]

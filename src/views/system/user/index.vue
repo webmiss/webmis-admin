@@ -29,7 +29,7 @@
     <div class="app_action_search flex">
       <!-- Search -->
       <wmSearch v-model:show="sea.show" v-model:keys="sea.key" :columns="sea.columns" @keyup.enter="page.num=1;loadData()" @search="page.num=1;loadData()" @reset="resetData()">
-        <template #customTime="d">
+        <template #customTime>
           <ul class="custom_time flex_center">
             <li v-for="v in sea.customTime.list" :key="v.value" @click="setCustomTime(v.value)" :class="{active: sea.customTime.active===v.value}">{{ v.label }}</li>
           </ul>

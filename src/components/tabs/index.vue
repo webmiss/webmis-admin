@@ -21,6 +21,7 @@
 <script setup lang="ts">
 
 /* 参数 */
+// @ts-ignore
 const props = defineProps({
   value: {default: ''},                             // 默认值
   columns: {type: Array<any>, default: []},         // 字段: [{label: '基本信息', value: 'base', slot: 'base'}]

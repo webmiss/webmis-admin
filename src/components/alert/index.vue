@@ -41,6 +41,7 @@
 import { ref } from 'vue';
 
 /* 参数 */
+// @ts-ignore
 const props = defineProps({
   effect: {type: String, default: 'plain'},         // 样式: plain, dark
   type: {type: String, default: 'primary'},         // 类型: primary, success, warning, danger, info

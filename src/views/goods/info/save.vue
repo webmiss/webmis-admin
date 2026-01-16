@@ -175,6 +175,7 @@ import wmButton from '../../../components/form/button/index.vue';
 import SupplierInfo from '../../tools/SupplierInfo.vue';
 
 /* 参数 */
+// @ts-ignore
 const props = defineProps({
   show: {type: Boolean, default: false},        // 是否显示
   title: {type: String, default: ''},           // 标题

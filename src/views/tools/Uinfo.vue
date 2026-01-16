@@ -64,6 +64,7 @@ import wmRadio from '../../components/form/radio/index.vue';
 import wmDatePicker from '../../components/datepicker/index.vue';
 
 /* 参数 */
+// @ts-ignore
 const props = defineProps({
   show: {type: Boolean, default: false},   // 是否显示
 });

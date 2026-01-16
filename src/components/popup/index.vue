@@ -17,6 +17,7 @@
 import { onMounted, watch, getCurrentInstance, nextTick } from 'vue';
 
 /* 参数 */
+// @ts-ignore
 const props = defineProps({
   show: {type: Boolean, default: false},          // 是否显示
   position: {type: String, default: 'center'},    // 位置: center、left、right、top、bottom
@@ -32,7 +33,7 @@ const { proxy } = getCurrentInstance() as any ;
 const emit = defineEmits(['update:show', 'close']);
 
 /* 监听 */
-watch(()=>props.show, (val: boolean)=>{
+watch(()=>props.show, ()=>{
   // 动画
   _animation(props.show);
 },{ deep: true });

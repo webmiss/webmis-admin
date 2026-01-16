@@ -4,7 +4,7 @@
     <div class="wm-tree" v-for="(v1, k1) in listData" :key="k1">
       <div class="wm-tree_content flex_left" :style="{padding: padding, paddingLeft: '4px'}" @click="v1.display=!v1.display">
         <i :class="v1.children?'ui ui_arrow_right':''" :style="{transform: v1.display?'rotate(90deg)':'rotate(0deg)'}"></i>
-        <wm-checkBox :partially="v1.children&&v1.checked&&v1.partially" @update:value="selectClick($event, '1', [k1, -1, -1, -1])" :options="{label:'', value:v1.value, checked:v1.checked, disabled:v1.disabled}"></wm-checkBox>
+        <wm-checkBox :partially="v1.children&&v1.checked&&v1.partially" @update:value="selectClick($event, '1', [k1 as number, -1, -1, -1])" :options="{label:'', value:v1.value, checked:v1.checked, disabled:v1.disabled}"></wm-checkBox>
         <span class="label">{{ v1.label }}</span>
       </div>
       <!-- two -->
@@ -12,7 +12,7 @@
         <div class="wm-tree" v-for="(v2, k2) in v1.children" :key="k2">
           <div class="wm-tree_content flex_left" :style="{padding: padding, paddingLeft: '20px'}" @click="v2.display=!v2.display">
             <i :class="v2.children?'ui ui_arrow_right':''" :style="{transform: v2.display?'rotate(90deg)':'rotate(0deg)'}"></i>
-            <wm-checkBox :partially="v2.children&&v2.checked&&v2.partially" @update:value="selectClick($event, '2', [k1, k2, -1, -1])" :options="{label:'', value:v2.value, checked:v2.checked, disabled:v2.disabled}"></wm-checkBox>
+            <wm-checkBox :partially="v2.children&&v2.checked&&v2.partially" @update:value="selectClick($event, '2', [k1 as number, k2 as number, -1, -1])" :options="{label:'', value:v2.value, checked:v2.checked, disabled:v2.disabled}"></wm-checkBox>
             <span class="label">{{ v2.label }}</span>
           </div>
           <!-- three -->
@@ -20,7 +20,7 @@
             <div class="wm-tree" v-for="(v3, k3) in v2.children" :key="k3">
               <div class="wm-tree_content flex_left" :style="{padding: padding, paddingLeft: '36px'}" @click="v3.display=!v3.display">
                 <i :class="v3.children?'ui ui_arrow_right':''" :style="{transform: v3.display?'rotate(90deg)':'rotate(0deg)'}"></i>
-                <wm-checkBox :partially="v3.children&&v3.checked&&v3.partially" @update:value="selectClick($event, '3', [k1, k2, k3, -1])" :options="{label:'', value:v3.value, checked:v3.checked, disabled:v3.disabled}"></wm-checkBox>
+                <wm-checkBox :partially="v3.children&&v3.checked&&v3.partially" @update:value="selectClick($event, '3', [k1 as number, k2 as number, k3 as number, -1])" :options="{label:'', value:v3.value, checked:v3.checked, disabled:v3.disabled}"></wm-checkBox>
                 <span class="label">{{ v3.label }}</span>
               </div>
               <!-- four -->
@@ -28,7 +28,7 @@
                 <div class="wm-tree" v-for="(v4, k4) in v3.children" :key="k4">
                   <div class="wm-tree_content flex_left" :style="{padding: padding, paddingLeft: '52px'}">
                     <i></i>
-                    <wm-checkBox @update:value="selectClick($event, '4', [k1, k2, k3, k4])" :options="{label:'', value:v4.value, checked:v4.checked, disabled:v4.disabled}"></wm-checkBox>
+                    <wm-checkBox @update:value="selectClick($event, '4', [k1 as number, k2 as number, k3 as number, k4 as number])" :options="{label:'', value:v4.value, checked:v4.checked, disabled:v4.disabled}"></wm-checkBox>
                     <span class="label">{{ v4.label }}</span>
                   </div>
                 </div>
@@ -58,6 +58,7 @@ import { ref, watch } from 'vue';
 import wmCheckBox from '../form/checkbox/index.vue';
 
 /* 参数 */
+// @ts-ignore
 const props = defineProps({
     options: {type: Array, default: []},                    // 数据: [{label:'一级菜单', value:'m1', checked: true, children: []}]
     width: {type: String, default: '100%'},                 // 宽
@@ -146,7 +147,7 @@ const nextChecked = (data: any, checked: boolean): void => {
 
 /* 部分选择 */
 const setPartially = (): void => {
-  let n1:boolean=false, n2:boolean=false, n3:boolean=false, n4:boolean=false;
+  let n1:boolean=false, n2:boolean=false, n3:boolean=false;
   // 一级
   for(let v1 of listData.value){
     n1 = v1['children']?isPartially(v1['children']):false;
@@ -206,12 +207,6 @@ const getData = (): Array<string> => {
     }
   }
   return values;
-}
-
-/* 清空 */
-const clear = (): void => {
-  // $emit('update:value', '');
-  nextChecked(listData, false);
 }
 
 </script>

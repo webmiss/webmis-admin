@@ -46,6 +46,7 @@ import wmInput from '../../../components/form/input/index.vue';
 import wmButton from '../../../components/form/button/index.vue';
 
 /* 参数 */
+// @ts-ignore
 const props = defineProps({
   show: {type: Boolean, default: false},        // 是否显示
   title: {type: String, default: ''},           // 标题

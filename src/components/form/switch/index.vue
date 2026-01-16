@@ -17,6 +17,7 @@
 <script setup lang="ts">
 
 /* 参数 */
+// @ts-ignore
 const props = defineProps({
   value: {type: Boolean, default: false},       // 默认值
   disabled: {type: Boolean, default: false},    // 是否禁用

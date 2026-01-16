@@ -15,6 +15,7 @@
 import { useStore } from 'vuex';
 
 /* 参数 */
+// @ts-ignore
 const props = defineProps({
   columns: {type: Array<any>, default: []},    // 字段: [{action: 'add', slot: 'add', is_action: true}]
 });

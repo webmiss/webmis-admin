@@ -99,6 +99,7 @@ import { ref, watch, getCurrentInstance, nextTick } from 'vue';
 import { useStore } from 'vuex';
 
 /* 参数 */
+// @ts-ignore
 const props = defineProps({
   value: {type: [String, Number], default: ''},       // 值
   type: {type: String, default: 'text'},              // 类型: textarea, text

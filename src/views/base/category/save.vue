@@ -54,6 +54,7 @@ import wmSwitch from '../../../components/form/switch/index.vue';
 import wmTableForm from '../../../components/table/form.vue';
 
 /* 参数 */
+// @ts-ignore
 const props = defineProps({
   show: {type: Boolean, default: false},        // 是否显示
   title: {type: String, default: ''},           // 标题

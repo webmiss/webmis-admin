@@ -14,6 +14,7 @@ import { onMounted, watch, getCurrentInstance, nextTick } from 'vue';
 import { Chart } from '@antv/g2';
 
 /* 参数 */
+// @ts-ignore
 const props = defineProps({
   type: String,                                 // 位置: dodge、stack
   value: Array<any>,                            // 数据: [{label: 'n1', value: 0.4}, {label: 'n2', value: 0.6}]
@@ -25,7 +26,7 @@ const props = defineProps({
 const { proxy } = getCurrentInstance() as any ;
 
 /* 监听 */
-watch(()=>props, (val: any)=>{
+watch(()=>props, ()=>{
   // 初始化
   init();
 },{ deep: true });

@@ -23,7 +23,7 @@
       <div class="wm-login_mask"></div>
       <div class="wm-login_body">
         <canvas id="effectCanvas" class="wm-login_effect"></canvas>
-        <div class="wm-login_ct">
+        <div class="wm-login_ct" :style="{backgroundImage:effectBG?'url('+effectBG+')':''}">
           <div class="wm-login_logo" :style="{backgroundImage: login.uname&&login.uname==login.local_uname&&login.img?'url('+(login.img)+')':'', backgroundSize:login.uname&&login.uname==login.local_uname&&login.img?'100%':'60%'}">
             <h2 class="uname" v-if="login.uname&&(login.is_passwd || login.is_safety)">{{ login.uname }}</h2>
           </div>
@@ -84,10 +84,10 @@
 /* 特效 */
 .wm-login_effect{position: fixed; left: 0; right: 0; background-color: transparent;}
 /* 登录 */
-.wm-login_ct{position: absolute; min-width: 300px; left: 50%; top: 50%; transform: translate(-50%, -60%);}
+.wm-login_ct{position: absolute; padding: 0 10px; min-width: 300px; left: 50%; top: 50%; transform: translate(-50%, -60%); background-repeat: no-repeat; background-position: center; background-size: contain;}
 .wm-login_logo{position: relative; margin: 56px auto; width: 160px; height: 160px; border: rgba(0,0,0,0.8) 1px solid; background-color: rgba(0,0,0,0.7); background-image: url('../../assets/logo.svg'); border-radius: 50%; background-repeat: no-repeat; background-position: center; transition: All 0.5s ease-in-out;}
 .wm-login_logo:hover{border-color: @Minor; background-color: rgba(0,0,0,0.7);}
-.wm-login_logo .uname{position: absolute; bottom: -45px; left: 50%; transform: translateX(-50%); font-size: 24px; text-shadow: 0 0 8px #000;}
+.wm-login_logo .uname{position: absolute; bottom: -45px; left: 50%; transform: translateX(-50%); font-size: 24px; font-weight: bold; color: #FFF; text-shadow: 0 0 4px #000;}
 .wm-login_form{position: relative;}
 .wm-login_form input{width: 100%; padding: 0 16px 0 48px; height: 48px; line-height: 48px; color: @Minor8; font-size: 16px; border: transparent 1px solid; background-color: rgba(0,0,0,0.7); border-radius: 8px; box-sizing: border-box;}
 .wm-login_form input:hover{border-color: @Minor; background-color: rgba(0,0,0,0.8);}
@@ -118,6 +118,7 @@ import { en_US } from '../../config/langs/en_US';
 import { zh_CN } from '../../config/langs/zh_CN';
 
 /* 参数 */
+// @ts-ignore
 const props = defineProps({
   show: {type: Boolean, default: true},          // 是否显示
 });
@@ -148,6 +149,7 @@ let particles: any = [];
 let clickTimer: any = null;
 let checkTimer: any = null;
 let autoTimer: any = null;
+let effectBG = ref('');
 
 /* 监听-登录状态 */
 watch(()=>state.isLogin, (val:Boolean)=>{
@@ -158,10 +160,12 @@ watch(()=>state.isLogin, (val:Boolean)=>{
     tokenTime = setInterval(()=>{
       verifyToken();
     }, verifyTokenTime.value);
+    document.addEventListener("removeEventListener", handleWindowVisibilityChange);
   } else {
     loginShow.value = true;
     clearInterval(tokenTime);
     logout();
+    document.addEventListener("visibilitychange", handleWindowVisibilityChange);
   }
 }, { deep: true });
 watch(loginShow, (val:Boolean)=> {
@@ -176,6 +180,7 @@ watch(loginShow, (val:Boolean)=> {
     }, animationTime.value);
     // 特效
     setEffect();
+    animateEffect();
   } else {
     // 关闭背景
     if(time) clearInterval(time);
@@ -205,6 +210,15 @@ onMounted(()=>{
   if(token) verifyToken(true);
   else state.isLogin = false;
 });
+
+/* 窗口状态切换 */
+const handleWindowVisibilityChange = () => {
+  if(document.visibilityState === "visible") {
+    if(!state.isLogin) location.reload();
+  } else {
+    if(autoTimer) clearInterval(autoTimer);
+  }
+}
 
 /* 语言包 */
 const getLangs = (langs: any): void => {
@@ -252,6 +266,8 @@ const setEffect = (): void => {
     const {code, msg, data}: any = res.data;
     if(code===0) {
       if(!data) return;
+      // 背景
+      effectBG.value = data.img;
       // 随机动画
       if(autoTimer) clearInterval(autoTimer);
       autoTimer = setInterval(()=>{
@@ -264,11 +280,11 @@ const setEffect = (): void => {
             createEffect(x, y);
           }, t);
         }
-      }, 8000);
+      }, 5000);
     } else Ui.Toast(msg);
   });
   // 动画
-  animateEffect();
+  // animateEffect();
 }
 /* 特效-创建 */
 const createEffect = (x: number, y: number): void => {

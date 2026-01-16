@@ -29,6 +29,7 @@
 <script setup lang="ts">
 
 /* 参数 */
+// @ts-ignore
 const props = defineProps({
   width: {type: String, default: '100%'},           // 宽
   height: {type: String, default: '100%'},          // 高

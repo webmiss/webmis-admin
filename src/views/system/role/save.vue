@@ -61,6 +61,7 @@ import wmTabs from '../../../components/tabs/index.vue';
 import wmTree from '../../../components/tree/index.vue';
 
 /* 参数 */
+// @ts-ignore
 const props = defineProps({
   show: {type: Boolean, default: false},        // 是否显示
   title: {type: String, default: ''},           // 标题

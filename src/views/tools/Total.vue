@@ -26,6 +26,7 @@
 <script setup lang="ts">
 
 /* 参数 */
+// @ts-ignore
 const props = defineProps({
   time: {type: String, default: ''},    // 时间
 });

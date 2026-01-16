@@ -146,6 +146,7 @@ import wmImg from '../../../components/image/index.vue';
 import wmImgView from '../../../components/image/view.vue';
 
 /* 参数 */
+// @ts-ignore
 const props = defineProps({
   show: { type: Boolean, default: false },        // 是否显示
   title: { type: String, default: '' },           // 标题

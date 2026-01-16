@@ -35,6 +35,7 @@
 import { ref, onMounted, watch } from 'vue';
 
 /* 参数 */
+// @ts-ignore
 const props = defineProps({
   value: {default: ''},                       // 默认值
   options: {type: Array<any>, default: []},   // 数据: [{label:'男', value:'男', disabled: true},{label:'女', value:'女'}]

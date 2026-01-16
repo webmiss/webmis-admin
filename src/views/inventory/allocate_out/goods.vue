@@ -12,7 +12,7 @@
               <wmCheckbox :options="goods.is_sku"></wmCheckbox>
             </li>
             <li v-if="isAction('save')">
-              <wmButton type="danger" effect="text" padding="0 4px" @click="goodsRemove('part')">移除</wmButton>
+              <wmButton type="danger" effect="text" padding="0 4px" @click="goodsRemove('part')">移除({{ goods.remove.num }})</wmButton>
             </li>
             <li>|</li>
             <li v-if="isAction('import')">
@@ -173,6 +173,7 @@ import wmImgView from '../../../components/image/view.vue';
 import actionImport from './import.vue';
 
 /* 参数 */
+// @ts-ignore
 const props = defineProps({
   show: { type: Boolean, default: false },        // 是否显示
   title: { type: String, default: '' },           // 标题
@@ -217,7 +218,7 @@ const goods = ref({
   sale_price: 0, market_price: 0, num: 0,
   print: 0, total: 0,
   is_sku: {label: '校对商品', value: 'is_sku', checked: true},
-  remove: {show: false, type: '', title: '', info: '', data: <any>[]},
+  remove: {show: false, type: '', title: '', info: '', num: 0, data: <any>[]},
   refresh: false,
 });
 // 动作
@@ -227,8 +228,8 @@ const imgShow = ref(false);
 const imgIndex = ref(0);
 const imgData = ref([]);
 // 层级
-const level = ref({});
-const levelData = ref({
+const level = ref(<any>{});
+const levelData = ref(<any>{
   // 瑞丽库房
   11846851: {
     '翡翠-手镯': { '9万以下': [0, 90000], '9-35万': [90000, 350000], '35-70万': [350000, 700000], '70-120万': [700000, 1200000], '120万以上': 1200000 },
@@ -266,6 +267,7 @@ watch(()=>props.show, (val: boolean)=>{
 const selectState = (n: number, t: number): void => {
   goods.value.print = n;
   goods.value.total = t;
+  goods.value.remove.num = n;
 }
 /* 排序 */
 const orderBy = (val: string): void => {

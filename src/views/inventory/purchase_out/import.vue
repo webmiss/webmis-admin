@@ -73,6 +73,7 @@ import wmInput from '../../../components/form/input/index.vue';
 import wmButton from '../../../components/form/button/index.vue';
 
 /* 参数 */
+// @ts-ignore
 const props = defineProps({
     show: { type: Boolean, default: false },        // 是否显示
     title: { type: String, default: '' },           // 标题
@@ -95,12 +96,6 @@ const goods = ref({
     {title: '查看', slot: 'view', textAlign: 'center', width: '60px', minWidth: '60px'},
     {title: '状态', slot: 'status', textAlign: 'center', width: '80px'},
   ], list: <any>[], num: 0,
-});
-// 添加
-const add = ref({
-  show: false, title: '新增商品',
-  cost_price: '0.00', supply_price: '0.00', sale_price: '0.00', purchase_price: '0.00', supplier_price: '0.00', market_price: '0.00', weight: '0.00', unit: '个',
-  sku_id: '', labels: '', name: '', category: '', properties_value: '', brand: '', short_name: '', i_id: '', owner: '', supplier_name: '',
 });
 // 移除
 const remove = ref({show: false, type: '', title: '移除', info: '', index: 0});
@@ -132,28 +127,33 @@ const goodsSearch = (): void => {
 const goodsImp = (): void => {
   Files.Select({ mimeType: [] }, (fileObj: any) => {
     Files.FileToBase64(fileObj, (base64: any) => {
-      const workbook: any = xlsxRead(base64, { type: 'binary' });
-      const name: string = workbook.SheetNames[0];
-      const arr: any = xlsxUtils.sheet_to_json(workbook.Sheets[name], { raw: false });
-      if(arr.length > 3000) return Ui.Toast('不能超过3000条');
-      // 商品资料
-      let sku_id: string = '';
-      for(let v of arr){
-        if(!v['商品编码'] || !v['数量']){
-          Ui.Toast('必须存在“商品编码”、“数量”'); continue;
+      Ui.Toast('正在解析文件');
+      const load: any = Ui.Loading();
+      setTimeout(()=>{
+        load.clear();
+        const workbook: any = xlsxRead(base64, { type: 'binary' });
+        const name: string = workbook.SheetNames[0];
+        const arr: any = xlsxUtils.sheet_to_json(workbook.Sheets[name], { raw: false });
+        if(arr.length > 3000) return Ui.Toast('不能超过3000条');
+        // 商品资料
+        let sku_id: string = '';
+        for(let v of arr){
+          if(!v['商品编码'] || !v['数量']){
+            Ui.Toast('必须存在“商品编码”、“数量”'); continue;
+          }
+          sku_id = Util.LTrim(Util.Trim(v['商品编码']).toUpperCase(), '0');
+          if(is_sku(sku_id)){
+            Ui.Toast('[ ' + sku_id + ' ]已存在!'); continue;
+          }
+          // 追加
+          goods.value.list.push({
+            sku_id: sku_id,
+            num: v['数量'],
+          });
         }
-        sku_id = Util.LTrim(Util.Trim(v['商品编码']).toUpperCase(), '0');
-        if(is_sku(sku_id)){
-          Ui.Toast('[ ' + sku_id + ' ]已存在!'); continue;
-        }
-        // 追加
-        goods.value.list.push({
-          sku_id: sku_id,
-          num: v['数量'],
-        });
-      }
-      // 统计价格
-      goodsTotal();
+        // 统计价格
+        goodsTotal();
+      }, 300);
     }, 'blob');
   });
 }

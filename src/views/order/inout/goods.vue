@@ -12,7 +12,7 @@
               <wmCheckbox :options="goods.is_sku"></wmCheckbox>
             </li>
             <li v-if="isAction('save')">
-              <wmButton type="danger" effect="text" padding="0 4px" @click="goodsRemove('part')">移除</wmButton>
+              <wmButton type="danger" effect="text" padding="0 4px" @click="goodsRemove('part')">移除({{ goods.remove.num }})</wmButton>
             </li>
             <li>|</li>
             <li v-if="isAction('goods_imp')">
@@ -170,6 +170,7 @@ import wmImgView from '../../../components/image/view.vue';
 import actionImport from './import.vue';
 
 /* 参数 */
+// @ts-ignore
 const props = defineProps({
   show: { type: Boolean, default: false },        // 是否显示
   title: { type: String, default: '' },           // 标题
@@ -213,7 +214,7 @@ const goods = ref({
   sale_price: 0, market_price: 0, num: 0,
   print: 0, total: 0,
   is_sku: {label: '校对商品', value: 'is_sku', checked: true},
-  remove: {show: false, type: '', title: '', info: '', data: <any>[]},
+  remove: {show: false, type: '', title: '', info: '', num: 0, data: <any>[]},
   refresh: false,
 });
 // 动作
@@ -239,6 +240,7 @@ watch(()=>props.show, (val: boolean)=>{
 const selectState = (n: number, t: number): void => {
   goods.value.print = n;
   goods.value.total = t;
+  goods.value.remove.num = n;
 }
 /* 排序 */
 const orderBy = (val: string): void => {

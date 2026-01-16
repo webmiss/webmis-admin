@@ -10,7 +10,7 @@
           <li><wmButton type="primary" effect="text" padding="0 4px" @click="add.show = true">添加</wmButton></li>
           <li><wmButton type="primary" effect="text" padding="0 4px" @click="goodsImp()">导入</wmButton></li>
           <li>|</li>
-          <li><wmButton type="danger" effect="text" padding="0 4px" @click="goodsRemove('part')">移除</wmButton></li>
+          <li><wmButton type="danger" effect="text" padding="0 4px" @click="goodsRemove('part')">移除({{ remove.num }})</wmButton></li>
           <li>|</li>
           <li><wmButton type="primary" effect="text" padding="0 4px" @click="goodsPrint()">打印标签</wmButton></li>
         </ul>
@@ -26,7 +26,7 @@
     </template>
     <wmMain paddingY="4px">
       <!-- 商品资料 -->
-      <wmTable ref="tableList" :columns="goods.columns" :options="goods.list" :maxLen="100">
+      <wmTable ref="tableList" :columns="goods.columns" :options="goods.list" :maxLen="100" @partially="selectState">
         <template #index="d">
           <div class="tCenter">{{ d.index + 1 }}</div>
         </template>
@@ -215,6 +215,7 @@ import wmButton from '../../../components/form/button/index.vue';
 import wmCheckbox from '../../../components/form/checkbox/index.vue';
 
 /* 参数 */
+// @ts-ignore
 const props = defineProps({
     show: { type: Boolean, default: false },        // 是否显示
     title: { type: String, default: '' },           // 标题
@@ -264,7 +265,7 @@ const add = ref({
   cost_price: '0.00', supply_price: '0.00', sale_price: '0.00', purchase_price: '0.00', supplier_price: '0.00', market_price: '0.00', weight: '0.00', unit: '个',
   sku_id: '', labels: '', name: '', category: '', properties_value: '', brand: '', short_name: '', i_id: '', owner: '', supplier_name: '',
 });
-const remove = ref({show: false, type: '', title: '移除', info: '', data: <any>[]});
+const remove = ref({show: false, type: '', title: '移除', info: '', num: 0, data: <any>[]});
 const imp = ref({show: false, refresh: false, title: '上传资料', s0: 0, s1: 0, s2: 0, s3: 0, s4: 0});
 // 全部分类
 const selectAll = ref({labels: [], category: [], brand: []});
@@ -302,6 +303,10 @@ const goodsSearch =(): void => {
   goods.value.key = '';
   const list: any = goods.value.list;
   for(let v of list) v.display = reg.test(v.sku_id);
+}
+/* 选中状态 */
+const selectState = (n: number): void => {
+  remove.value.num = n;
 }
 
 /* 商品资料-添加 */
@@ -364,53 +369,58 @@ const goodsAdd =(): void => {
 const goodsImp =(): void => {
   Files.Select({ mimeType: [] },(fileObj: any) => {
     Files.FileToBase64(fileObj,(base64: any) => {
-      const workbook: any = xlsxRead(base64, { type: 'binary' });
-      const name: string = workbook.SheetNames[0];
-      const arr: any = xlsxUtils.sheet_to_json(workbook.Sheets[name], { raw: false });
-      if(arr.length > 3000) return Ui.Toast('不能超过3000条');
-      // 商品资料
-      goods.value.list = [];
-      let id: number = 0;
-      let sku_id: string = '';
-      let sku: Array<string> = [];
-      for(let v of arr){
-        if(!v['商品编码'] || !v['款式编码'] || !v['品牌']) continue;
-        // 调整价格
-        let sale_price: string = v['基本售价'] || v['标签价'] || 0;
-        let price: number = sale_price?goodsPrice(parseFloat(sale_price)):0;
-        // 数据
-        id++;
-        sku_id = Util.Trim(v['商品编码']).toUpperCase();
-        sku.push(sku_id);
-        goods.value.list.push({
-          id: 'id_'+id,
-          sku_id: sku_id,
-          i_id: v['款式编码'],
-          name: v['商品名称'] || '',
-          properties_value: v['颜色及规格'] || '',
-          short_name: v['暗码'] || '',
-          cost_price: v['成本价'] || 0,
-          supply_price: v['供应链价'] || 0,
-          sale_price: sale_price,
-          price: price,
-          purchase_price: v['采购价'] || 0,
-          supplier_price: v['人民币采购价'] || 0,
-          market_price: v['吊牌价'] || 0,
-          unit: v['单位'] || '',
-          weight: v['重量'] || 0,
-          labels: v['商品标签'] || v['标签'] || '',
-          category: v['分类'] || '',
-          brand: v['品牌'] || '',
-          supplier_name: v['供应商名称'] || v['供应商'] || '',
-          owner: v['采购员'] || '',
-          status: '0',
-          display: true,
-        });
-      }
-      // 统计价格
-      goodsTotal();
-      // 商品状态
-      goodsStatus(sku);
+      Ui.Toast('正在解析文件');
+      const load: any = Ui.Loading();
+      setTimeout(()=>{
+        load.clear();
+        const workbook: any = xlsxRead(base64, { type: 'binary' });
+        const name: string = workbook.SheetNames[0];
+        const arr: any = xlsxUtils.sheet_to_json(workbook.Sheets[name], { raw: false });
+        if(arr.length > 3000) return Ui.Toast('不能超过3000条');
+        // 商品资料
+        goods.value.list = [];
+        let id: number = 0;
+        let sku_id: string = '';
+        let sku: Array<string> = [];
+        for(let v of arr){
+          if(!v['商品编码'] || !v['款式编码'] || !v['品牌']) continue;
+          // 调整价格
+          let sale_price: string = v['基本售价'] || v['标签价'] || 0;
+          let price: number = sale_price?goodsPrice(parseFloat(sale_price)):0;
+          // 数据
+          id++;
+          sku_id = Util.Trim(v['商品编码']).toUpperCase();
+          sku.push(sku_id);
+          goods.value.list.push({
+            id: 'id_'+id,
+            sku_id: sku_id,
+            i_id: v['款式编码'],
+            name: v['商品名称'] || '',
+            properties_value: v['颜色及规格'] || '',
+            short_name: v['暗码'] || '',
+            cost_price: v['成本价'] || 0,
+            supply_price: v['供应链价'] || 0,
+            sale_price: sale_price,
+            price: price,
+            purchase_price: v['采购价'] || 0,
+            supplier_price: v['人民币采购价'] || 0,
+            market_price: v['吊牌价'] || 0,
+            unit: v['单位'] || '',
+            weight: v['重量'] || 0,
+            labels: v['商品标签'] || v['标签'] || '',
+            category: v['分类'] || '',
+            brand: v['品牌'] || '',
+            supplier_name: v['供应商名称'] || v['供应商'] || '',
+            owner: v['采购员'] || '',
+            status: '0',
+            display: true,
+          });
+        }
+        // 统计价格
+        goodsTotal();
+        // 商品状态
+        goodsStatus(sku);
+      }, 300);
     }, 'blob');
   });
 }

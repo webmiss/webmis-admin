@@ -23,7 +23,7 @@
       <div class="wm-login_mask"></div>
       <div class="wm-login_body">
         <canvas id="effectCanvas" class="wm-login_effect"></canvas>
-        <div class="wm-login_ct" :style="{backgroundImage:effectBG?'url('+effectBG+')':''}">
+        <div id="LoginCT" class="wm-login_ct" :style="{backgroundImage:effectBG?'url('+effectBG+')':''}">
           <div class="wm-login_logo" :style="{backgroundImage: login.uname&&login.uname==login.local_uname&&login.img?'url('+(login.img)+')':'', backgroundSize:login.uname&&login.uname==login.local_uname&&login.img?'100%':'60%'}">
             <h2 class="uname" v-if="login.uname&&(login.is_passwd || login.is_safety)">{{ login.uname }}</h2>
           </div>
@@ -84,7 +84,7 @@
 /* 特效 */
 .wm-login_effect{position: fixed; left: 0; right: 0; background-color: transparent;}
 /* 登录 */
-.wm-login_ct{position: absolute; padding: 0 10px; min-width: 300px; left: 50%; top: 50%; transform: translate(-50%, -60%); background-repeat: no-repeat; background-position: center; background-size: contain;}
+.wm-login_ct{opacity: 0; position: absolute; padding: 0 30px; min-width: 300px; height: 400px; left: 50%; top: 50%; transform: translate(-50%, -60%); background-repeat: no-repeat; background-position: top center; background-size: 93%; transition: All 2s ease-in-out;}
 .wm-login_logo{position: relative; margin: 56px auto; width: 160px; height: 160px; border: rgba(0,0,0,0.8) 1px solid; background-color: rgba(0,0,0,0.7); background-image: url('../../assets/logo.svg'); border-radius: 50%; background-repeat: no-repeat; background-position: center; transition: All 0.5s ease-in-out;}
 .wm-login_logo:hover{border-color: @Minor; background-color: rgba(0,0,0,0.7);}
 .wm-login_logo .uname{position: absolute; bottom: -45px; left: 50%; transform: translateX(-50%); font-size: 24px; font-weight: bold; color: #FFF; text-shadow: 0 0 4px #000;}
@@ -209,6 +209,11 @@ onMounted(()=>{
   state.token = token?token:'';
   if(token) verifyToken(true);
   else state.isLogin = false;
+  // 显示登录
+  var LoginCT: any = document.getElementById('LoginCT');
+  setTimeout(()=>{
+    LoginCT.style.opacity = '1';
+  }, 100);
 });
 
 /* 窗口状态切换 */
@@ -553,7 +558,7 @@ const logout = (): void => {
 }
 
 /* 外部函数 */
-defineExpose({  
+defineExpose({
   logout,
   verifyToken,
 });

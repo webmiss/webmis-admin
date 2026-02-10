@@ -4,15 +4,13 @@
   <!-- Socket -->
   <Socket v-if="state.isLogin"></Socket>
   <!-- Uinfo -->
-  <uinfo v-model:show="state.isUinfo" v-if="state.isLogin"></uinfo>
+  <Uinfo v-model:show="state.isUinfo" v-if="state.isLogin"></Uinfo>
   <!-- Passwd -->
-  <passwd v-model:show="state.isPasswd" v-if="state.isLogin"></passwd>
-  <!-- Msg -->
-  <msg v-model:show="msgShow" v-if="state.isLogin"></msg>
+  <Passwd v-model:show="state.isPasswd" v-if="state.isLogin"></Passwd>
   <!-- Tools -->
+  <Msg v-model:show="msgShow" v-if="state.isLogin"></Msg>
   <Goods v-model:show="state.goods.show" v-if="state.isLogin"></Goods>
   <Print v-model:show="state.print.show" v-if="state.isLogin"></Print>
-
   <!-- Main -->
   <div class="app_main flex">
     <!-- MenusAll -->
@@ -152,7 +150,7 @@
         </wmPopup>
       </div>
       <!-- Tabs -->
-      <div class="app_tabs_body flex">
+      <div class="app_tabs_body flex" :style="{backgroundImage:holidayBG?'url('+holidayBG+')':''}">
         <ul class="app_tabs flex_left">
           <li class="home" :class="tabs.active=='/'?'active':''" @click="MenusClick(state.langs.home, '/')">{{ state.langs.home }}</li>
           <li v-for="(v,k) in tabs.list" :key="k" @click="MenusClick(v.name, v.url)" :class="tabs.active==v.url?'active':''">
@@ -211,6 +209,7 @@ import Request from './library/request';
 import Storage from './library/storage';
 import Ui from './library/ui';
 import Files from './library/files';
+import Time from './library/time';
 /* 组件 */
 import wmPopup from './components/popup/index.vue';
 /* Tools */
@@ -221,7 +220,6 @@ import Passwd from './views/tools/Passwd.vue';
 import Msg from './views/tools/Msg.vue';
 import Goods from './views/tools/Goods.vue';
 import Print from './views/tools/Prints.vue';
-
 const emit = defineEmits(['update:show', 'close']);
 const userLogin = ref();
 // 变量
@@ -229,6 +227,7 @@ const store = useStore();
 const state = store.state;
 const route = useRoute();
 const router = useRouter();
+const holidayBG = ref('');
 // 配置
 const title: string = Env.title+' '+Env.version;
 const copy: string = Env.copy;
@@ -260,6 +259,17 @@ onMounted(()=>{
   tabs.value.active = route.path;
   // 左侧菜单
   is_menus.value = Storage.getItem('IsMenus')?true:false;
+  // 节日主题
+  let day: string = Time.Date('Y-m-d');
+  Request.Post('index/holiday?lang='+state.lang, {date: day}, (res:any)=>{
+    const {code, data}: any = res.data;
+    if(code===0) {
+      if(!data) return;
+      // 背景
+      holidayBG.value = data.bg;
+      console.log(data.bg);
+    }
+  });
 });
 
 /* 获取菜单 */

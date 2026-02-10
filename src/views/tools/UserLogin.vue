@@ -266,6 +266,7 @@ const setEffect = (): void => {
     }, 100);
   });
   // 随机动画( 假期 )
+  // let day: string = '2026-02-16';
   let day: string = Time.Date('Y-m-d');
   Request.Post('index/holiday?lang='+state.lang, {date: day}, (res:any)=>{
     const {code, msg, data}: any = res.data;

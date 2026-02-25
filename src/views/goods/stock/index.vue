@@ -53,6 +53,8 @@
         </template>
         <template #service>
           <wmCheckbox :options="is_service"></wmCheckbox>
+          <wmCheckbox :options="is_live"></wmCheckbox>
+          <wmCheckbox :options="is_delivery"></wmCheckbox>
         </template>
         <template #num="d">
           <div class="flex">
@@ -219,6 +221,8 @@ const del = ref({ show: false, title: '删除', data: <any>[] });
 const exp = ref({ show: false, title: '导出', num: 0 });
 const exp_part = ref({ show: false, title: '导出选择', num: 0, data: <any>[], ids: <any>[] });
 const is_service = ref({ label: '全部客服仓', value: 'is_sku', checked: false });
+const is_live = ref({ label: '全部直播间', value: 'is_live', checked: false });
+const is_delivery = ref({ label: '全部送货仓', value: 'is_live', checked: false });
 // 全部分类
 const selectAll = ref({ category: [], partner_name: [] });
 
@@ -278,6 +282,8 @@ const getWhere = (): object => {
     category: sea.value.category,
     owner: sea.value.owner,
     is_service: is_service.value.checked,
+    is_live: is_live.value.checked,
+    is_delivery: is_delivery.value.checked,
   };
   for(let v of sea.value.columns) if(v.name) data[v.name] = v.value;
   return data;
@@ -315,6 +321,9 @@ const resetData = (): void => {
   // 其它
   list.value.order = '';
   page.value.num = 1;
+  is_service.value.checked = false;
+  is_live.value.checked = false;
+  is_delivery.value.checked = false;
   // 加载
   loadData();
 }

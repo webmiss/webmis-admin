@@ -220,7 +220,7 @@ const move = (e: any): void => {
 }
 
 /* 手指松开 */
-const end = (e: any): void => {
+const end = (): void => {
   if(!props.isMove || swiper.children.length <= 1) return;
   // 滑动方向
   const ratio = Math.abs(movePage.x/movePage.y) || 0;

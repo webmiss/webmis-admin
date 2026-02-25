@@ -11,6 +11,7 @@
   <Msg v-model:show="msgShow" v-if="state.isLogin"></Msg>
   <Goods v-model:show="state.goods.show" v-if="state.isLogin"></Goods>
   <Print v-model:show="state.print.show" v-if="state.isLogin"></Print>
+  <Photo v-model:show="state.photo.show" v-if="state.isLogin"></Photo>
   <!-- Main -->
   <div class="app_main flex">
     <!-- MenusAll -->
@@ -158,6 +159,10 @@
           </li>
         </ul>
         <ul class="app_tools flex">
+          <li class="photo" title="货品图片" @click="state.photo.show=true">
+            <span class="redNum" style="zoom: 0.8;">精准</span>
+            <i class="icons icon_image"></i>
+          </li>
           <li class="goods" title="货品查询" @click="state.goods.show=true">
             <i class="icons icon_stock1"></i>
           </li>
@@ -220,6 +225,7 @@ import Passwd from './views/tools/Passwd.vue';
 import Msg from './views/tools/Msg.vue';
 import Goods from './views/tools/Goods.vue';
 import Print from './views/tools/Prints.vue';
+import Photo from './views/tools/Photo.vue';
 const emit = defineEmits(['update:show', 'close']);
 const userLogin = ref();
 // 变量
@@ -245,7 +251,21 @@ const is_menus = ref(true);
 
 /* 监听 */
 watch(()=>state.isLogin, (isLogin: boolean)=>{
-  if(isLogin) MenusList();
+  if(isLogin) {
+    // 菜单
+    MenusList();
+    // 节日主题
+    // let day: string = '2026-02-16';
+    let day: string = Time.Date('Y-m-d');
+    Request.Post('index/holiday?lang='+state.lang, {date: day}, (res:any)=>{
+      const {code, data}: any = res.data;
+      if(code===0) {
+        if(!data) return;
+        // 背景
+        holidayBG.value = data.bg;
+      }
+    });
+  }
 },{ deep: true });
 watch(()=>route.path, (path: string)=>{
   if(state.isLogin){
@@ -259,17 +279,6 @@ onMounted(()=>{
   tabs.value.active = route.path;
   // 左侧菜单
   is_menus.value = Storage.getItem('IsMenus')?true:false;
-  // 节日主题
-  let day: string = Time.Date('Y-m-d');
-  Request.Post('index/holiday?lang='+state.lang, {date: day}, (res:any)=>{
-    const {code, data}: any = res.data;
-    if(code===0) {
-      if(!data) return;
-      // 背景
-      holidayBG.value = data.bg;
-      console.log(data.bg);
-    }
-  });
 });
 
 /* 获取菜单 */

@@ -55,7 +55,7 @@ const submit = (): void => {
     data: props.data,
   }, (res:any)=>{
     load.clear();
-    const {code, msg, data, time}: any = res.data;
+    const {code, msg}: any = res.data;
     Ui.Toast(msg);
     emit('submit', code==0);
   });

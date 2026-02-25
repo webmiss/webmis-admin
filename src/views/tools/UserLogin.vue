@@ -47,7 +47,7 @@
               <i class="ui ui_arrow_left" @click="clearUser()"></i>
               <i class="ui ui_arrow_right" @click="clickLogin()"></i>
             </span>
-            <span v-else>{{ copy }}</span>
+            <span v-else>{{ Env.copy }} v{{ Env.version }}</span>
           </div>
         </div>
       </div>
@@ -127,7 +127,6 @@ const { proxy } = getCurrentInstance() as any ;
 const store = useStore();
 const state = store.state;
 const router = useRouter();
-const copy = Env.copy;
 /* 变量 */
 const animationTime = ref(20000);       // 动画切换间隔时间
 const verifyTokenTime = ref(30000);     // Token验证间隔时间
@@ -191,6 +190,8 @@ watch(loginShow, (val:Boolean)=> {
 
 /* 创建完成 */
 onMounted(()=>{
+  // 检测更新
+  IsUpdate();
   // 默认语言
   let langsTmp: string | null = Storage.getItem('langs');
   if(langsTmp) langs.value = JSON.parse(langsTmp);
@@ -215,6 +216,21 @@ onMounted(()=>{
     LoginCT.style.opacity = '1';
   }, 100);
 });
+
+/* 检测更新 */
+const IsUpdate= () => {
+  Request.Post('index/version?lang='+Env.lang, {
+    os: 'web',
+    version: Env.version,
+  }, (res:any)=>{
+    const {code, msg, data} = res.data;
+    if(code===0) {
+      if(data.version===Env.version) return;
+      setTimeout(()=>{ window.location.reload(); }, 3000);
+    } else Ui.Toast(msg);
+  });
+  
+}
 
 /* 窗口状态切换 */
 const handleWindowVisibilityChange = () => {

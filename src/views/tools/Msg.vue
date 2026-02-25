@@ -72,7 +72,7 @@
               <div class="history" v-if="!scroll.finished" @click="onLoad()">历史消息</div>
               <template v-for="(v,k) in state.msg.list" :key="k">
                 <!-- Time -->
-                <div class="time">{{ getMsgTime(state.msg.list[k-1]?state.msg.list[k-1].time:v.time, v.time) }}</div>
+                <div class="time">{{ getMsgTime(state.msg.list[k as number - 1]?state.msg.list[k as number - 1].time:v.time, v.time) }}</div>
                 <!-- Msg Left -->
                 <div class="msg_left flex_left" v-if="v.fid!=state.uinfo.uid">
                   <div class="img" :style="{backgroundImage: v.img?'url('+v.img+')':''}">
@@ -366,7 +366,7 @@ const loadData = (): void => {
     if(code===0){
       state.msg.group = data.list;
       state.msg.num = data.num;
-    }
+    } else Ui.Toast(msg);
   });
 }
 /* 加载消息 */
@@ -549,7 +549,7 @@ const msgUploadFile = async (fileObj: any): Promise<void> => {
     formData.append('file', blob);
     Request.Post(data.host, formData, (res: any)=>{
       if(res.data) Ui.Toast(res.data);
-    }, (e:any)=>{
+    }, ()=>{
       Ui.Toast('文件上传失败');
     }, {
       headers: {

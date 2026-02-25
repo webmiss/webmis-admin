@@ -375,7 +375,7 @@ const formData = (key: string): void => {
     order: '',
   }, (res: any) => {
     load.clear();
-    const {code, msg, data, time}: any = res.data;
+    const {code, msg, data}: any = res.data;
     if(code===0){
       form.value.list = data;
       nextTick(()=>{
@@ -385,7 +385,7 @@ const formData = (key: string): void => {
   });
 }
 /* 选择入库单-选中状态 */
-const selectState = (n: number, t: number): void => {
+const selectState = (n: number): void => {
   form.value.total = n;
   form.value.num = 0;
   const data: Array<any> = formList.value.getData();

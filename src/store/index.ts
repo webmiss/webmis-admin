@@ -17,6 +17,8 @@ export default createStore({
     print: {show: false, sku: []},
     // 货品
     goods: {show: false, sku_id: '', photo: {refresh: false, id:'', ctime:'', wms_co_id:'', list:<any>[]}},
+    // 图片
+    photo: {show: false},
   },
   getters: {
   },

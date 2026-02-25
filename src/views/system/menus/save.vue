@@ -80,7 +80,7 @@
                 <wmInput v-model:value="v.perm" maxlength="32"></wmInput>
               </td>
               <td class="action">
-                <wmButton effect="text" type="danger" @click="actionRemove(k)">{{ langs.remove }}</wmButton>
+                <wmButton effect="text" type="danger" @click="actionRemove(k as number)">{{ langs.remove }}</wmButton>
               </td>
             </tr>
           </wmTableForm>
@@ -160,7 +160,6 @@ const form = ref({
   en_US: '', zh_CN: '',
 });
 // 全部分类
-const fid = ref(<any>[]);
 const menusAll = ref(<any>[]);
 
 /* 监听 */

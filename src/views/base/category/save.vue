@@ -39,7 +39,7 @@
 </style>
 
 <script setup lang="ts">
-import { ref, watch, nextTick } from 'vue';
+import { ref, watch } from 'vue';
 import { useStore } from 'vuex';
 /* UI组件 */
 import Ui from '../../../library/ui';
@@ -69,8 +69,6 @@ const langs: any = state.langs;
 const infoShow = ref(false);
 // 数据
 const form = ref({id: 0, status: true, name: '', sort:'0', remark: ''});
-// 全部分类
-const selectAll = ref({city_name: <any>[], class_name: <any>[]});
 
 /* 监听 */
 watch(()=>props.show, (val: boolean)=>{

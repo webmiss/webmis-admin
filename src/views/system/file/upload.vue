@@ -15,7 +15,7 @@
               <i v-else class="ui ui_image"></i>
             </div>
             <div class="text nowrap">{{ v.name }}</div>
-            <i class="ui close" :class="v.state==1?'ui_close':'ui_more'" title="移除" @click="remove(k)"></i>
+            <i class="ui close" :class="v.state==1?'ui_close':'ui_more'" title="移除" @click="remove(k as number)"></i>
           </li>
         </ul>
         <div class="null" v-else></div>
@@ -105,7 +105,7 @@ const upFile = (k: number, fileObj: any): void => {
       listData.value[k].state = 2;
       emit('submit', false);
     }
-  }, (e:any)=>{
+  }, ()=>{
     Ui.Toast(langs.network_err);
   }, {
     headers: {

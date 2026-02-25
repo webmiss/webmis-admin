@@ -186,8 +186,8 @@ const imgShow = ref(false);
 const imgIndex = ref(0);
 const imgData = ref([]);
 // 层级
-const level = ref({});
-const levelData = ref({
+const level = ref(<any>{});
+const levelData = ref(<any>{
   // 瑞丽库房
   11846851: {
     '翡翠-手镯': { '9万以下': [0, 90000], '9-35万': [90000, 350000], '35-70万': [350000, 700000], '70-120万': [700000, 1200000], '120万以上': 1200000 },
@@ -208,8 +208,6 @@ const levelData = ref({
     '翡翠-挂件': { '1.3万以下': [0, 13000], '1.3-3万': [13000, 30000], '3-7.5万': [30000, 75000], '7.5-25万': [75000, 250000], '25万上': 250000 },
   },
 });
-// 操作
-const diff = ref({ show: false, title: '对比调拨单' });
 
 /* 监听 */
 watch(()=>props.show, (val: boolean)=>{

@@ -270,7 +270,7 @@
           <div class="photo_goods_ct scrollbar">
             <ul class="photo_goods_list">
               <template v-for="(v, k) in photo.list">
-                <li :style="{display: k<photo.maxLen?'':(photo.isShow?'':'none')}">
+                <li :style="{display: (k as number) <photo.maxLen?'':(photo.isShow?'':'none')}">
                   <div class="img"
                     :style="{backgroundImage: v.img?'url('+v.img+')':''}"
                     @click="v.img?imgViewsPhoto(v.sku_id):''"
@@ -283,7 +283,7 @@
                   </div>
                   <div class="action">
                     <i class="ui ui_more" v-if="v.loading===0"></i>
-                    <span v-else @click="removeGoods(k, v)">移除</span>
+                    <span v-else @click="removeGoods(k as number, v)">移除</span>
                   </div>
                 </li>
               </template>
@@ -521,7 +521,7 @@ watch(()=>props.show, (val:Boolean)=>{
     Html.addEvent('resize', imgWidht);
     if(tabs.value.active=='img'){
       imgWidht();
-      Html.observer(proxy.$refs.imgContent, (res: any)=>{
+      Html.observer(proxy.$refs.imgContent, ()=>{
         imgWidht();
       });
     };
@@ -792,7 +792,7 @@ const photoOpen = (): void => {
         // photo.value.video.play();
       }
       photo.value.isTrue = true;
-    }).catch((err:any)=>{
+    }).catch(()=>{
       photo.value.isTrue = false;
       return Ui.Toast('无法访问摄像头!');
     });
@@ -840,7 +840,7 @@ const addGoods = (sku_id: string): void => {
     wms_co_id: state.goods.photo.wms_co_id,
     data: [{sku_id: sku_id, num: 1}],
   }, (res: any) => {
-    const {code, msg, data, err}: any = res.data;
+    const {code, msg, data}: any = res.data;
     if(code===0) setPhotoList(sku_id, {id: data[sku_id].id});
     else Ui.Toast(msg);
   });
@@ -874,7 +874,7 @@ const startScan = async (mode: boolean=true): Promise<void> => {
     photo.value.codeReader = new BrowserMultiFormatReader();
     const devices: any = await photo.value.codeReader.listVideoInputDevices();
     const constraints: any = {video:{width:{ideal:300}, height:{ideal:300}, focusMode:'continuous'}};
-    photo.value.codeReader.decodeFromVideoDevice(devices[0].deviceId, 'GoodsScanVideo', (res: any, err: any)=>{
+    photo.value.codeReader.decodeFromVideoDevice(devices[0].deviceId, 'GoodsScanVideo', (res: any)=>{
       if(res){
         // 添加商品
         if(!inPhotoList(res.text)) photo.value.list.unshift({id:'', sku_id:res.text, properties_value:'', loading: 0, img:''});

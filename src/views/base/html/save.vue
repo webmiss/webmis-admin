@@ -57,7 +57,7 @@
 </style>
 
 <script setup lang="ts">
-import { ref, watch, onMounted } from 'vue';
+import { ref, watch } from 'vue';
 import { useStore } from 'vuex';
 /* UI组件 */
 import Ui from '../../../library/ui';
@@ -112,15 +112,6 @@ watch(()=>props.show, (val: boolean)=>{
     form.value.content = props.data.content || '';
   }
 });
-
-/* 上传文件 */
-const upload = (blobInfo:any, progress:any): any => {
-  return new Promise((resolve, reject) => {
-    const fileObj = blobInfo.blob();
-    console.log(fileObj);
-    resolve('img_url');
-  })
-}
 
 /* 验证 */
 const verify = (form: any): any => {

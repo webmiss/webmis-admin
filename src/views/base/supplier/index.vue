@@ -108,7 +108,6 @@ import Ui from '../../../library/ui';
 import Request from '../../../library/request';
 import Permission from '../../../library/permission';
 import Time from '../../../library/time';
-import Util from "../../../library/utils";
 import Format from '../../../library/format';
 /* 组件 */
 import wmButton from '../../../components/form/button/index.vue';
@@ -334,15 +333,6 @@ const exportSubmit = (val: boolean): void => {
   if(!val) return;
   exp.value.show = false;
   clearSelect();
-}
-
-/* 复制 */
-const Copy = (name: string, val: string) => {
-  const data: any = tableList.value.getData();
-  let sku_id: string = '';
-  for(let i in data) sku_id += data[i][name] + ' ';
-  if(sku_id) Util.CopyText(sku_id);
-  else Util.CopyText(val);
 }
 
 /* 选项 */

@@ -22,7 +22,7 @@ export default class Html {
 
   /* 获取值 */
   public static getPropertyValue(elt: Element, property:string): string {
-    return getComputedStyle(elt).getPropertyValue('width');
+    return getComputedStyle(elt).getPropertyValue(property);
   }
 
   /* 加载Css和JS */

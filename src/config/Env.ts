@@ -6,7 +6,7 @@ export default class Env {
   public static title: string = 'WebMIS';       // 项目名称
   public static version: string = '3.0.0';      // 版本
   public static lang: string = 'zh_CN'          // 语言
-  public static copy: string = '©'+(new Date()).getFullYear()+' webmis.vip';
+  public static copy: string = '© '+(new Date()).getFullYear()+' webmis.vip';
   public baseUrl: string = '';                  // 网址
   public apiUrl: string = 'admin/';             // 接口地址
   public socketUrl: string = '';                // Socket地址

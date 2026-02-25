@@ -57,7 +57,7 @@
               <thead class="columns">
                 <tr>
                   <td>序号</td>
-                  <td v-for="v in columns" v-show="v.checked">{{ v.label }}</td>
+                  <td v-for="v in columns" v-show="v.checked">{{ v.title || v.label }}</td>
                 </tr>
               </thead>
               <tbody v-if="data.length>0">
@@ -71,7 +71,7 @@
                         </span>
                         <b v-else>{{ priceEncode(d[v.value]*d['num']) }}</b>
                       </template>
-                      <span v-else>{{ d[v.value] }}</span>
+                      <span v-else>{{ d[v.value]&&d[v.value]!='0.00'?d[v.value]:'-' }}</span>
                     </td>
                   </template>
                 </tr>

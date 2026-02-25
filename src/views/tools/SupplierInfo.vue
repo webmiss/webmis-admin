@@ -73,7 +73,6 @@ const emit = defineEmits(['update:show']);
 // 状态
 const store = useStore();
 const state = store.state;
-const langs = state.langs;
 // 变量
 const infoShow = ref(false);
 const infoData = ref(<any>{});

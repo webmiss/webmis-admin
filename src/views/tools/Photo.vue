@@ -51,7 +51,7 @@
       </div>
     </div>
     <!-- 列表 -->
-    <ul class="wm-photo_list">
+    <ul class="wm-photo_list" v-if="page.list.length>0">
       <li v-for="v in page.list">
         <div class="info" @click="v.img?goodsView(v.img):''">
           <div class="sku_id flex">
@@ -69,6 +69,7 @@
         </div>
       </li>
     </ul>
+    <div class="null" v-else></div>
     <!-- 列表 End -->
   </div>
   <!-- 图片预览 -->
@@ -79,6 +80,7 @@
 /* 内容 */
 .wm-photo_body{overflow-y: auto; position: fixed; z-index: 999; width: 100%; min-width: 1280px; height: 100%; color: #FFF; background-color: rgba(0,0,0,0.9); opacity: 0; transition: @Transition;}
 .wm-photo_body .img{position: relative; background-position: center; background-repeat: no-repeat; background-size: cover;}
+.wm-photo_body .null{height: calc(100% - 60px); display: flex; justify-content: center; align-items: center;}
 /* 搜索 */
 .wm-photo_search{position: sticky; z-index: 99; top: 0; padding: 10px 16px; width: calc(100% - 32px); height: 36px; line-height: 36px; background-color: #222; border-top: #000 1px solid; border-bottom: #000 1px solid;}
 .wm-photo_search input{height: 36px; background-color: #55555575; border: #000 1px solid; color: #FFF; border-radius: 4px; box-sizing: border-box;}

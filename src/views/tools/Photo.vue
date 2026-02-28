@@ -168,7 +168,7 @@ const is_finished = ref(false);
 /* 数据 */
 const page = ref({total:0, num:1, limit:50, list:<any>[]});
 const form = ref({key:'', price1:'', price2:'', category:'', time:'1'});
-const order = ref({utime:'DESC', sale_price:'', stock:''});
+const order = ref({utime:'DESC', sale_price:'', stock:'DESC'});
 // 图片预览
 const imgView = ref({show: false, index:0, imgs:[]});
 

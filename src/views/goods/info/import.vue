@@ -408,7 +408,7 @@ const goodsImp =(): void => {
             unit: v['单位'] || '',
             weight: v['重量'] || 0,
             labels: v['商品标签'] || v['标签'] || '',
-            category: v['分类'] || '',
+            category: v['商品分类'] || v['分类'] || '',
             brand: v['品牌'] || '',
             supplier_name: v['供应商名称'] || v['供应商'] || '',
             owner: v['采购员'] || '',

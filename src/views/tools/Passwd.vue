@@ -96,7 +96,10 @@ const getVcode = (): void => {
   else return Ui.Toast(state.langs.passwd_verify_null);
   // 获取验证码
   const load: any = Ui.Loading();
-  Request.Post('user/get_vcode?lang='+state.lang, {type: type, uname:form.value.uname}, (res:any)=>{
+  Request.Post('user/get_vcode?lang='+state.lang, {
+    type: type,
+    uname: form.value.uname
+  }, (res:any)=>{
     load.clear();
     const {code, msg, data}: any = res.data;
     if(code==0){
@@ -107,7 +110,7 @@ const getVcode = (): void => {
       vcodeTime();
     }
     return Ui.Toast(msg);
-  });
+  }, ()=>load.clear());
 }
 /* 验证码倒计时 */
 const vcodeTime = (): void => {
@@ -133,7 +136,11 @@ const submitPwd = (): void => {
   if(form.value.passwd1!==form.value.passwd2) return Ui.Toast(state.langs.passwd_verify_passwd1);
   // 请求
   const load: any = Ui.Loading();
-  Request.Post('user/change_passwd?lang='+state.lang, {uname: form.value.uname, passwd: form.value.passwd1, vcode: form.value.vcode}, (res:any)=>{
+  Request.Post('user/change_passwd?lang='+state.lang, {
+    uname: form.value.uname,
+    passwd: form.value.passwd1,
+    vcode: form.value.vcode
+  }, (res:any)=>{
     load.clear();
     const {code, msg}: any = res.data;
     if(code==0){
@@ -142,7 +149,7 @@ const submitPwd = (): void => {
     }else{
       return Ui.Toast(msg);
     }
-  });
+  }, ()=>load.clear());
 }
 
 /* 关闭 */

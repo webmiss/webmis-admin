@@ -206,7 +206,7 @@ const submit = (): void => {
     type: props.data.type,
     wms_co_id: props.data.wms_co_id,
     data: goods.value.list,
-  }, (res: any) => {
+  }, (res: any)=>{
     load.clear();
     const {code, msg, data}: any = res.data;
     if(code===0){
@@ -218,7 +218,7 @@ const submit = (): void => {
       Ui.Toast(msg);
       goods.value.list = data || [];
     } else Ui.Toast(msg);
-  });
+  }, ()=>load.clear());
 }
 
 /* 关闭 */

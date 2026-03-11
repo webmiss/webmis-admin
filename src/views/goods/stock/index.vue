@@ -246,7 +246,7 @@ const loadData = (): void => {
     page: page.value.num,
     limit: page.value.limit,
     order: list.value.order,
-  }, (res: any) => {
+  }, (res: any)=>{
     load.clear();
     const { code, msg, data, time }: any = res.data;
     if(code===0){
@@ -254,14 +254,14 @@ const loadData = (): void => {
       list.value.data = data;
       clearSelect();
     } else Ui.Toast(msg);
-  });
+  }, ()=>load.clear());
   // 统计
   page.value.total = 0;
   total.value.list.stock = 0;
   Request.Post('erp_goods_stock/total?lang=' + state.lang, {
     token: state.token,
     data: getWhere(),
-  }, (res: any) => {
+  }, (res: any)=>{
     const { code, msg, data, time }: any = res.data;
     if(code===0){
       total.value.time = time;
@@ -472,7 +472,7 @@ const dayDiff = (t: string): object => {
 const getSelect = (): void => {
   Request.Post('erp_goods_stock/get_select?lang=' + state.lang, {
     token: state.token,
-  }, (res: any) => {
+  }, (res: any)=>{
     const { code, msg, data }: any = res.data;
     if(code===0){
       selectAll.value.category = data.category;

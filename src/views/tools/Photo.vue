@@ -256,8 +256,7 @@ const LoadData = (): void => {
         if(data.length===0) is_finished.value = true;
       }
     }
-  });
-  
+  }, ()=>load.clear());
 }
 
 /* 价格 */

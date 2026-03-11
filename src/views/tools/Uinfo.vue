@@ -104,7 +104,10 @@ const subUinfo = (): void => {
   Close();
   // 请求
   const load: any = Ui.Loading();
-  Request.Post('user/change_uinfo?lang='+state.lang, {token: state.token, uinfo: form}, (res:any)=>{
+  Request.Post('user/change_uinfo?lang='+state.lang, {
+    token: state.token,
+    uinfo: form
+  }, (res:any)=>{
     load.clear();
     const {code, msg}: any = res.data;
     if(code==0){
@@ -116,7 +119,7 @@ const subUinfo = (): void => {
       state.uinfo.position = form.value.position;
     }
     Ui.Toast(msg);
-  });
+  }, ()=>load.clear());
 }
 
 /* 关闭 */

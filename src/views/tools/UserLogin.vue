@@ -519,7 +519,7 @@ const clickLogin = (): void => {
       }
       return Ui.Toast(msg);
     }
-  },()=>{
+  }, ()=>{
     if(load) load.clear();
     Ui.Toast(state.langs.network_err);
   });
@@ -531,7 +531,10 @@ const verifyToken = (uinfo: boolean=false): void => {
   let load: any;
   if(uinfo) load= Ui.Loading();
   // 请求
-  Request.Post('user/token?lang='+state.lang, {token: state.token, uinfo: uinfo}, (res:any)=>{
+  Request.Post('user/token?lang='+state.lang, {
+    token: state.token,
+    uinfo: uinfo
+  }, (res:any)=>{
     if(load) load.clear();
     const {code, msg, data}: any = res.data;
     if(code==0 && data.token_time>0){

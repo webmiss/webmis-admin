@@ -250,7 +250,7 @@ const loadData = (): void => {
   total.value.stock = 0;
   Request.Post('index/stock?lang=' + state.lang, {
     token: state.token,
-  }, (res: any) => {
+  }, (res: any)=>{
     const {code, msg, time, data}: any = res.data;
     if(code===0){
       chartPie.value = data;
@@ -272,7 +272,7 @@ const loadData = (): void => {
       wms_co_id: form.value.wms_co_id,
       stime: typeof form.value.time[0]=='string'?form.value.time[0]:Time.Date('Y/m/d',form.value.time[0]),
       etime: typeof form.value.time[1]=='string'?form.value.time[1]:Time.Date('Y/m/d', form.value.time[1]),
-    }, (res: any) => {
+    }, (res: any)=>{
       const {code, msg, time, data}: any = res.data;
       if(code===0){
         total.value.time = time;

@@ -190,7 +190,7 @@ const loadData = (): void => {
     page: page.value.num,
     limit: page.value.limit,
     order: list.value.order,
-  }, (res: any) => {
+  }, (res: any)=>{
     load.clear();
     const { code, msg, time, data }: any = res.data;
     if(code===0){
@@ -198,13 +198,13 @@ const loadData = (): void => {
       list.value.data = data;
       clearSelect();
     } else Ui.Toast(msg);
-  });
+  }, ()=>load.clear());
   // 统计
   page.value.total = 0;
   Request.Post('erp_base_partner/total?lang=' + state.lang, {
     token: state.token,
     data: getWhere(),
-  }, (res: any) => {
+  }, (res: any)=>{
     const { code, msg, time, data }: any = res.data;
     if(code===0){
       total.value.time = time;
@@ -303,7 +303,7 @@ const exportSubmit = (val: boolean): void => {
 const getSelect = (): void => {
   Request.Post('erp_base_partner/get_select?lang=' + state.lang, {
     token: state.token,
-  }, (res: any) => {
+  }, (res: any)=>{
     const { code, msg, data }: any = res.data;
     if(code===0){
       selectAll.value.type_name = data.type_name;

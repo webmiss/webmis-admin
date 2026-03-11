@@ -155,7 +155,7 @@ const submit = (): void => {
     const {code, msg}: any = res.data;
     Ui.Toast(msg);
     emit('submit', code==0);
-  });
+  }, ()=>load.clear());
 }
 
 /* 关闭 */

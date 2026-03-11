@@ -248,7 +248,7 @@ const submit = (): void => {
     Ui.Toast(msg);
     if(code==0) getMenus();
     emit('submit', code==0);
-  });
+  }, ()=>load.clear());
 }
 
 /* 全部菜单 */

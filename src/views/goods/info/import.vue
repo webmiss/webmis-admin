@@ -285,7 +285,7 @@ watch(()=>props.show,(val: boolean)=>{
 const getSelect =(): void => {
   Request.Post('erp_goods_info/get_select?lang=' + state.lang, {
     token: state.token,
-  },(res: any) => {
+  }, (res: any)=>{
     const {code, msg, data}: any = res.data;
     if(code===0){
       // 标签、分类、品牌
@@ -450,7 +450,7 @@ const goodsStatus =(sku: Array<string>): void => {
   Request.Post('erp_goods_info/status?lang=' + state.lang, {
     token: state.token,
     sku: sku,
-  },(res: any) => {
+  }, (res: any)=>{
     load.clear();
     const {code, msg, data}: any = res.data;
     if(code===0){
@@ -461,7 +461,7 @@ const goodsStatus =(sku: Array<string>): void => {
         }
       }
     } else Ui.Toast(msg);
-  });
+  }, ()=>load.clear());
 }
 
 /* 商品资料-移除 */
@@ -546,7 +546,7 @@ const submit =(): void => {
     token: state.token,
     data: data,
     price: goods.value.price.checked,
-  },(res: any) => {
+  }, (res: any)=>{
     load.clear();
     const {code, msg}: any = res.data;
     Ui.Toast(msg);
@@ -555,7 +555,7 @@ const submit =(): void => {
       for(let v of data) sku.push(v.sku_id);
       goodsStatus(sku);
     }
-  });
+  }, ()=>load.clear());
 }
 
 /* 商品-复制 */

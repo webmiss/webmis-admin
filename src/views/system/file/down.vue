@@ -57,8 +57,9 @@ const submit = (): void => {
     Files.DownBlob(res.data, props.data.filename);
     // 事件
     emit('submit', true);
-  },()=>{
+  }, ()=>{
     Ui.Toast(langs.network_err);
+    load.clear();
   },{
     responseType:'blob',
   });

@@ -612,7 +612,7 @@ const goodsInfo = (sku_id: any, type: string=''): void => {
         setPhotoList(sku_id, {loading: 1});
       }
     }
-  });
+  }, ()=>load.clear());
 }
 /* 货品流向 */
 const goodsDirect = (): void => {
@@ -632,7 +632,7 @@ const goodsDirect = (): void => {
     } else {
       Ui.Toast(msg);
     }
-  });
+  }, ()=>load.clear());
   // 分仓
   Request.Post('erp_goods/stock?lang='+state.lang, {
     token: state.token,
@@ -675,7 +675,7 @@ const goodsDirectExport = (): void => {
     } else {
       Ui.Toast(msg);
     }
-  });
+  }, ()=>load.clear());
 }
 
 /* 封面图-内容宽度 */
@@ -839,7 +839,7 @@ const addGoods = (sku_id: string): void => {
     ctime: state.goods.photo.ctime,
     wms_co_id: state.goods.photo.wms_co_id,
     data: [{sku_id: sku_id, num: 1}],
-  }, (res: any) => {
+  }, (res: any)=>{
     const {code, msg, data}: any = res.data;
     if(code===0) setPhotoList(sku_id, {id: data[sku_id].id});
     else Ui.Toast(msg);
@@ -859,7 +859,7 @@ const removeGoods = (k: number, d: any={}): void => {
       ctime: state.goods.photo.ctime,
       wms_co_id: state.goods.photo.wms_co_id,
       data: [{id: d.id, sku_id: d.sku_id, num: 1}],
-    }, (res: any) => {
+    }, (res: any)=>{
       const {code, msg}: any = res.data;
       if(code !== 0) Ui.Toast(msg);
     });

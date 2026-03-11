@@ -160,7 +160,7 @@ const loadData = (): void => {
     page: page.value.num,
     limit: page.value.limit,
     order: list.value.order,
-  }, (res: any) => {
+  }, (res: any)=>{
     load.clear();
     const {code, msg, data, time}: any = res.data;
     if(code===0){
@@ -168,14 +168,14 @@ const loadData = (): void => {
       list.value.data = data;
       clearSelect();
     } else Ui.Toast(msg);
-  });
+  }, ()=>load.clear());
   // 统计
   page.value.total = 0;
   total.value.list.num = 0;
   Request.Post('erp_goods_log/total?lang=' + state.lang, {
     token: state.token,
     data: getWhere(),
-  }, (res: any) => {
+  }, (res: any)=>{
     const {code, msg, data, time}: any = res.data;
     if(code===0){
       total.value.time = time;

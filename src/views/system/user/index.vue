@@ -235,7 +235,7 @@ const loadData = (): void => {
     page: page.value.num,
     limit: page.value.limit,
     order: list.value.order,
-  }, (res: any) => {
+  }, (res: any)=>{
     load.clear();
     const {code, msg, time, data}: any = res.data;
     if(code===0){
@@ -243,7 +243,7 @@ const loadData = (): void => {
       list.value.data = data;
       clearSelect();
     } else Ui.Toast(msg);
-  });
+  }, ()=>load.clear());
   // 统计
   page.value.total = 0;
   Request.Post('sys_user/total?lang='+state.lang, {

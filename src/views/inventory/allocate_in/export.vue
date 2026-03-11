@@ -63,7 +63,7 @@ const submit = (): void => {
     }
     // 事件
     emit('submit', code==0);
-  });
+  }, ()=>load.clear());
 }
 
 /* 关闭 */

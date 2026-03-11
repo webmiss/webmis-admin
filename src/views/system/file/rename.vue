@@ -77,7 +77,7 @@ const submit = (): void =>{
     const {code}: any = res.data;
     // 事件
     emit('submit', code==0);
-  });
+  }, ()=>load.clear());
 }
 
 /* 关闭 */

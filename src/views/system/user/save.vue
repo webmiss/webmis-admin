@@ -1,5 +1,5 @@
 <template>
-  <wmDialog v-model:show="infoShow" :title="title" width="720px" bottom="40px" :overflow="tabIndex=='perm'?'hidden auto':'hidden'" @close="close()">
+  <wmDialog v-model:show="infoShow" :title="title" width="720px" bottom="40px" :overflow="['base', 'perm', 'brand', 'shop', 'partner', 'partner_in'].includes(tabIndex)?'hidden auto':'hidden'" @close="close()">
     <wmMain paddingY="0">
       <wmTabs v-model:value="tabIndex" :columns="tabs">
         <!-- 帐号信息 -->
@@ -225,7 +225,7 @@ const submit = (): void => {
     const {code, msg}: any = res.data;
     Ui.Toast(msg);
     emit('submit', code==0);
-  });
+  }, ()=>load.clear());
 }
 
 /* 关闭 */

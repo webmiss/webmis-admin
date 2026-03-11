@@ -272,7 +272,7 @@ const goodsList = (key: string=''): void => {
     id: props.data.id,
     order: goods.value.order,
     sku_id: key,
-  }, (res: any) => {
+  }, (res: any)=>{
     load.clear();
     const {code, msg, data}: any = res.data;
     if(code===0){
@@ -281,7 +281,7 @@ const goodsList = (key: string=''): void => {
       // 统计价格
       goodsTotal(false);
     } else Ui.Toast(msg);
-  });
+  }, ()=>load.clear());
 }
 /* 商品资料-统计 */
 const goodsTotal = (refresh: boolean): void => {
@@ -355,7 +355,7 @@ const goodsAddData = (data: Array<any>): void => {
     shop_id: props.data.shop_id,
     shop_to: props.data.shop_to,
     data: data,
-  }, (res: any) => {
+  }, (res: any)=>{
     const {code, msg, data, err}: any = res.data;
     if(code===0){
       // 全部更新
@@ -411,7 +411,7 @@ const goodsNum = (e: any, id: string, sku_id: string): void => {
     pid: props.data.id,
     ctime: props.data.ctime,
     wms_co_id: props.data.wms_co_id,
-  }, (res: any) => {
+  }, (res: any)=>{
     const {code, msg}: any = res.data;
     if(code===0){
       Ui.Toast(msg);
@@ -466,7 +466,7 @@ const goodsRemoveSub = (): void => {
     ctime: props.data.ctime,
     wms_co_id: props.data.wms_co_id,
     data: sku,
-  }, (res: any) => {
+  }, (res: any)=>{
     load.clear();
     const {code, msg}: any = res.data;
     if(code===0){
@@ -478,7 +478,7 @@ const goodsRemoveSub = (): void => {
     } else {
       Ui.Toast(msg, 5000, 'danger');
     }
-  });
+  }, ()=>load.clear());
 }
 
 /* 导入 */
@@ -549,14 +549,14 @@ const close = (): void => {
       token: state.token,
       id: props.data.id,
       ctime: props.data.ctime,
-    }, (res: any) => {
+    }, (res: any)=>{
       load.clear();
       const {code, msg}: any = res.data;
       if(code!==0) Ui.Toast(msg, 5000, 'danger');
       // 事件
       emit('update:show', false);
       emit('submit', goods.value.refresh);
-    });
+    }, ()=>load.clear());
   } else {
     // 事件
     emit('update:show', false);

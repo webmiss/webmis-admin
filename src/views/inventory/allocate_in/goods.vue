@@ -248,7 +248,7 @@ const goodsList = (key: string=''): void => {
     id: props.data.id,
     order: goods.value.order,
     sku_id: key,
-  }, (res: any) => {
+  }, (res: any)=>{
     load.clear();
     const {code, msg, data}: any = res.data;
     if(code===0){
@@ -257,7 +257,7 @@ const goodsList = (key: string=''): void => {
       // 统计价格
       goodsTotal();
     } else Ui.Toast(msg);
-  });
+  }, ()=>load.clear());
 }
 // 统计价格
 const goodsTotal = (): void => {

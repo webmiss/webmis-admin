@@ -257,7 +257,7 @@ const goodsInfo = (sku: Array<string>): void => {
   Request.Post("erp_goods/barcode?lang="+state.lang, {
     token: state.token,
     sku: sku,
-  },(res: any) => {
+  }, (res: any)=>{
     const {code, msg, data} = res.data;
     if(code===0){
       for(let sku_id in data) goodsContent(sku_id, data[sku_id]);
@@ -349,7 +349,7 @@ const printSubmit = (): void => {
     token: state.token,
     template: list.value.active,
     num: list.value.num,
-  }, (res: any) => {
+  }, (res: any)=>{
     const {code, msg} = res.data;
     if(code!==0) Ui.Toast(msg);
   });

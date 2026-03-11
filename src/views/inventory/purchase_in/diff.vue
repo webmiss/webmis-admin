@@ -258,7 +258,7 @@ watch(()=>props.show, (val: boolean)=>{
       Request.Post('erp_purchase_in/goods_list?lang=' + state.lang, {
       token: state.token,
       id: id,
-    }, (res: any) => {
+    }, (res: any)=>{
       const {code, msg, data}: any = res.data;
       if(code===0){
         // 是否存在
@@ -294,7 +294,7 @@ const goodsList = (key: string): void => {
     Request.Post('erp_purchase_out/goods_list?lang=' + state.lang, {
       token: state.token,
       id: id,
-    }, (res: any) => {
+    }, (res: any)=>{
       load.clear();
       const {code, msg, data}: any = res.data;
       if(code===0){
@@ -309,7 +309,7 @@ const goodsList = (key: string): void => {
           }
         }
       } else Ui.Toast(msg);
-    });
+    }, ()=>load.clear());
   }
 }
 /* 是否存在 */
@@ -372,7 +372,7 @@ const formData = (key: string): void => {
     page: 1,
     limit: 30,
     order: '',
-  }, (res: any) => {
+  }, (res: any)=>{
     load.clear();
     const {code, msg, data}: any = res.data;
     if(code===0){
@@ -381,7 +381,7 @@ const formData = (key: string): void => {
         formList.value.checkboxAll(false);
       });
     } else Ui.Toast(msg);
-  });
+  }, ()=>load.clear());
 }
 /* 选择入库单-选中状态 */
 const selectState = (n: number): void => {

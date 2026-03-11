@@ -97,7 +97,7 @@ const supplierInfo = (name:string): void => {
     const {code, msg, data}: any = res.data;
     if(code==0) infoData.value=data;
     else Ui.Toast(msg);
-  });
+  }, ()=>load.clear());
 }
 
 /* 关闭 */

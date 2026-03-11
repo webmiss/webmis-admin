@@ -182,7 +182,7 @@ const loadData = (): void => {
     } else {
       Ui.Toast(msg);
     }
-  });
+  }, ()=>load.clear());
 }
 
 /* 全选/不选 */

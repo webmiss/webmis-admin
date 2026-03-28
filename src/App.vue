@@ -270,7 +270,6 @@ watch(()=>state.isLogin, (isLogin: boolean)=>{
 watch(()=>route.path, (path: string)=>{
   if(state.isLogin){
     tabs.value.active = path;
-    MenusList();
   }
 },{ deep: true });
 

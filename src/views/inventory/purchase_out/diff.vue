@@ -74,7 +74,7 @@
           <div class="tCenter"><b>{{ d.num || '-' }}</b></div>
         </template>
         <template #view="d">
-          <div class="tCenter">
+          <div class="flex_center">
             <wmButton type="primary" effect="text" padding="0 4px" @click="state.goods.show=true;state.goods.sku_id=d.sku_id">{{ langs.flow }}</wmButton>
           </div>
         </template>

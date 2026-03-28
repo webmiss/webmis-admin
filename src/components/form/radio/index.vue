@@ -3,12 +3,12 @@
     <template v-for="(v,k) in list" :key="k">
       <li class="flex disabled" v-if="v.disabled" :style="{margin:margin, padding:padding}">
         <span class="wm-radio_checked"></span>
-        <span v-if="v.label" class="wm-radio_label">{{ v.label }}</span>
+        <span v-if="v.label" class="wm-radio_label" v-html="v.label"></span>
         <slot v-else></slot>
       </li>
-      <li class="enabled" v-else @click.stop="clickRadio(k)" :style="{margin:margin, padding:padding}">
+      <li class="enabled" v-else @click.stop="clickRadio(k as any)" :style="{margin:margin, padding:padding}">
         <span class="wm-radio_checked" :class="v.value==value?'active':''"></span>
-        <span v-if="v.label" class="wm-radio_label">{{ v.label }}</span>
+        <span v-if="v.label" class="wm-radio_label" v-html="v.label"></span>
         <slot v-else></slot>
       </li>
     </template>
@@ -37,8 +37,8 @@ import { ref, onMounted, watch } from 'vue';
 /* 参数 */
 // @ts-ignore
 const props = defineProps({
-  value: {default: ''},                       // 默认值
-  options: {type: Array<any>, default: []},   // 数据: [{label:'男', value:'男', disabled: true},{label:'女', value:'女'}]
+  value: {default: ''},                         // 默认值
+  options: {type: Array<any>, default: []},     // 数据: [{label:'男', value:'男', disabled: true},{label:'女', value:'女'}]
   margin: {type: String, default: '4px 4px'},   // 外部间距
   padding: {type: String, default: '4px'},      // 内部间距
 });
@@ -55,7 +55,6 @@ watch(()=>props.options, (val: any)=>{
 onMounted(()=>{
   list.value = props.options;
 });
-
 
 /* 点击选择 */
 const clickRadio = (k: number): void => {

@@ -36,7 +36,7 @@
 .wm-dialog_close::after,.wm-dialog_close::before{content: ''; position: absolute; width: 12px; height: 1.6px; background-color: #666; left: 50%; top: 50%; transform-origin: center;}
 .wm-dialog_close::after{transform: rotate(45deg); margin-left: -16%;}
 .wm-dialog_close::before{transform: rotate(-45deg); margin-left: -16%;}
-.wm-dialog_top{position: relative; overflow: hidden;}
+.wm-dialog_top{position: relative;}
 .wm-dialog_content{width: 100%; height: 100%;}
 .wm-dialog_bottom{position: relative; padding: 16px 0; text-align: center;}
 </style>

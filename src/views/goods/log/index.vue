@@ -54,7 +54,7 @@
         <div class="copy">{{ d.sku_id }}<span @click="Copy('sku_id', d.sku_id)">复</span></div>
       </template>
       <template #view="d">
-        <div class="tCenter">
+        <div class="flex_center">
           <wmButton type="primary" effect="text" padding="0 4px" @click="state.goods.show=true;state.goods.sku_id=d.sku_id">{{ langs.flow }}</wmButton>
         </div>
       </template>
@@ -267,9 +267,7 @@ const exportSubmit = (val: boolean): void => {
 const Copy = (name: string, val: string): void => {
   const data: any = tableList.value.getData();
   let sku_id: string = '';
-  for(let i in data){
-    sku_id += data[i][name] + ' ';
-  }
+  for(let v of data) sku_id += v[name] + ' ';
   if(sku_id) Util.CopyText(sku_id);
   else Util.CopyText(val);
 }

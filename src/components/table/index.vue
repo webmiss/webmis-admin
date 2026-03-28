@@ -12,7 +12,7 @@
             maxWidth: v.maxWidth?v.maxWidth+' !important':'',
             textAlign: v.textAlign
           }">
-            {{ v.title }}
+            <div v-html="v.title"></div>
             <div class="order_body" v-if="['', 'ASC', 'DESC'].includes(v.order)" @click="OrderBy(k, v.index, v.order)">
               <div class="order">
                 <i class="ui ui_arrow_up" :class="v.order=='DESC'?'active':''"></i>

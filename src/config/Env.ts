@@ -1,7 +1,7 @@
 /* 配置文件 */
 export default class Env {
 
-  public static mode: string = '';              // 模式: 开发(dev)
+  public static mode: string = 'dev';              // 模式: 开发(dev)
   public static isSocket: boolean = false;      // Socket开启
   public static title: string = 'WebMIS';       // 项目名称
   public static version: string = '3.0.0';      // 版本
@@ -14,10 +14,10 @@ export default class Env {
   /* 构造函数 */
   constructor(){
     if(Env.mode=='dev'){
-      this.baseUrl = 'http://localhost:9000/';
+      this.baseUrl = 'http://localhost:9030/';
       this.socketUrl = 'ws://127.0.0.1:9001';
     } else {
-      this.baseUrl = 'https://php.webmis.vip/';
+      this.baseUrl = 'https://python.webmis.vip/';
       this.socketUrl = 'wss://php.webmis.vip/wss';
     }
     this.apiUrl = this.baseUrl+this.apiUrl;

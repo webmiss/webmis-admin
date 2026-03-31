@@ -103,18 +103,18 @@
         <div v-else class="tCenter">{{ d.status_name }}</div>
       </template>
       <template #action="d">
-        <div class="tCenter">
+        <div class="flex_center">
           <wmButton @click="saveData('edit', d)" v-if="isAction('save')&&d.status=='0'">{{ langs.edit }}</wmButton>
           <span class="c_info" v-else><i class="ui ui_safety"></i></span>
         </div>
       </template>
       <template #goods="d">
-        <div class="tCenter">
+        <div class="flex_center">
           <wmButton type="primary" effect="text" padding="0 4px" @click="goodsData(d)">商品</wmButton>
         </div>
       </template>
       <template #print="d">
-        <div class="tCenter">
+        <div class="flex_center">
           <wmButton type="primary" effect="text" padding="0 4px" @click="printData(d)" :disabled="d.num==0">{{ langs.print }}</wmButton>
         </div>
       </template>

@@ -204,7 +204,7 @@
         <div class="tCenter" :class="d.ratio<1?'c_danger':'c_info'">{{ d.ratio }}</div>
       </template>
       <template #action="d">
-        <div class="tCenter">
+        <div class="flex_center">
           <wmButton @click="saveData('edit', d)" v-if="isAction('save')">{{ langs.edit }}</wmButton>
           <span v-else>-</span>
         </div>

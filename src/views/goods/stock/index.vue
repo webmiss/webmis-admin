@@ -105,7 +105,7 @@
         <div class="tCenter" :class="d.out==='进行中'?'c_danger':'c_success'">{{ d.out }}</div>
       </template>
       <template #action="d">
-        <div class="tCenter">
+        <div class="flex_center">
           <wmButton v-if="isAction('save')" @click="saveData('edit', d)">{{ langs.edit }}</wmButton>
         </div>
       </template>

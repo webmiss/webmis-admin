@@ -80,7 +80,7 @@
         </div>
       </template>
       <template #action="d">
-        <div class="tCenter">
+        <div class="flex_center">
           <wmButton v-if="isAction('save')" @click="saveData('copy', d)">{{ langs.copy }}</wmButton>
           <span v-else>-</span>
         </div>

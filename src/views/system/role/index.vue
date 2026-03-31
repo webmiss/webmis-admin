@@ -42,7 +42,7 @@
         <div class="tCenter">{{ d.id }}</div>
       </template>
       <template #perm="d">
-        <div class="tCenter">
+        <div class="flex_center">
           <wmButton @click="saveData('edit', d)" v-if="isAction('save')">{{ langs.edit }}</wmButton>
           <span v-else>-</span>
         </div>

@@ -96,18 +96,6 @@
       <template #gender="d">
         <div class="tCenter">{{ d.gender || '-' }}</div>
       </template>
-      <template #brand="d">
-        <div class="nowrap" style="max-width: 160px;">{{ d.brand || '-' }}</div>
-      </template>
-      <template #shop="d">
-        <div class="nowrap" style="max-width: 160px;">{{ d.shop || '-' }}</div>
-      </template>
-      <template #partner="d">
-        <div class="nowrap" style="max-width: 160px;">{{ d.partner || '-' }}</div>
-      </template>
-      <template #partner_in="d">
-        <div class="nowrap" style="max-width: 160px;">{{ d.partner_in || '-' }}</div>
-      </template>
     </wmTable>
     <!-- List End -->
   </div>
@@ -201,10 +189,6 @@ const list = ref({columns: [
   {title: langs.sys_user_name, index: 'name'},
   {title: langs.sys_user_gender, index: 'gender', slot: 'gender', textAlign: 'center'},
   {title: langs.sys_user_birthday, index: 'birthday'},
-  {title: '品牌', index: 'brand', slot: 'brand'},
-  {title: '店铺', index: 'shop', slot: 'shop'},
-  {title: '仓库', index: 'partner', slot: 'partner'},
-  {title: '调入仓', index: 'partner_in', slot: 'partner_in'},
   {title: langs.remark, index: 'remark'},
 ], data: [], num: 0, total: 0, order: ''});
 const page = ref({total: 0, num:1, limit: 100});

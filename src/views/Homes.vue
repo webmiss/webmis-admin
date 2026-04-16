@@ -182,7 +182,6 @@ import { ref, onMounted, onActivated, nextTick } from 'vue';
 import { useStore } from 'vuex';
 /* JS组件 */
 import Ui from '../library/ui';
-import Request from '../library/request';
 import Time from '../library/time';
 /* UI组件 */
 import wmMain from '../components/container/main.vue';
@@ -231,14 +230,10 @@ onActivated(()=>{
 
 /* 选项 */
 const getSelect = (): void => {
-  Request.Post('index/get_select?lang='+state.lang, {
-    token: state.token,
-  }, (res:any)=>{
-    const {code, msg, data}: any = res.data;
-    if(code==0){
-      selectAll.value.partner_name = data.partner_name;
-    } else Ui.Toast(msg);
-  });
+  selectAll.value.partner_name = [
+    {label: '瑞丽库房', value: 1},
+    {label: '平洲库房', value: 2},
+  ];
 }
 
 /* 加载数据 */
@@ -246,44 +241,96 @@ const loadData = (): void => {
   // 仓库名称
   if(form.value.wms_co_id.length>0) form.value.wms_co_name = getPartnerName(form.value.wms_co_id[0]);
   // 库存
-  total.value.time = '';
+  total.value.time = Time.Date('Y-m-d H:i:s');
   total.value.stock = 0;
-  Request.Post('index/stock?lang=' + state.lang, {
-    token: state.token,
-  }, (res: any)=>{
-    const {code, msg, time, data}: any = res.data;
-    if(code===0){
-      chartPie.value = data;
-      total.value.time = time;
-      for(let v of data) total.value.stock += parseInt(v.value);
-    } else Ui.Toast(msg);
-  });
+  let data: any = [
+    {label:'瑞丽库房', value:59884, wms_co_id:1},
+    {label:'瑞丽库房', value:26144, wms_co_id:2},
+  ];
+  chartPie.value = data;
+  for(let v of data) total.value.stock += parseInt(v.value);
   // 入库、采退、调拨出、调拨入、订单、售后
   const model: Array<string> = ['in', 'out', 'allocate_out', 'allocate_in', 'order', 'refund'];
-  total.value.stime = '';
-  total.value.etime = '';
+  total.value.stime = Time.Date('Y-m-d');
+  total.value.etime = Time.Date('Y-m-d');
   for(let tp of model){
     total.value.now[tp+'_num'] = 0;
     total.value.old[tp+'_num'] = 0;
     total.value.list[tp] = [];
     chartInterval.value = [];
-    Request.Post('index/list?lang=' + state.lang+'&type='+tp, {
-      token: state.token,
-      wms_co_id: form.value.wms_co_id,
-      stime: typeof form.value.time[0]=='string'?form.value.time[0]:Time.Date('Y/m/d',form.value.time[0]),
-      etime: typeof form.value.time[1]=='string'?form.value.time[1]:Time.Date('Y/m/d', form.value.time[1]),
-    }, (res: any)=>{
-      const {code, msg, time, data}: any = res.data;
-      if(code===0){
-        total.value.time = time;
-        total.value.stime = data.stime;
-        total.value.etime = data.etime;
-        total.value.now[tp+'_num'] = data.total_now[tp+'_num'];
-        total.value.old[tp+'_num'] = data.total_old[tp+'_num'];
-        total.value.list[tp] = data.list;
-        if(chartActive.value===tp) chickChart(chartActive.value);
-      } else Ui.Toast(msg);
-    });
+    if(tp=='in') {
+      total.value.list[tp] = [
+        {label:'09时', value:6, sale_amount:'9622.00'},
+        {label:'10时', value:900, sale_amount:'30959530.00'},
+        {label:'11时', value:997, sale_amount:'63330582.00'},
+        {label:'12时', value:199, sale_amount:'8526217.00'},
+        {label:'13时', value:20, sale_amount:'577000.00'},
+      ];
+      total.value.now[tp+'_num'] = 2123;
+      total.value.old[tp+'_num'] = 8081;
+    }else if(tp=='out') {
+      total.value.list[tp] = [
+        {label:'00时', value:1399, sale_amount:'81303490.00'},
+        {label:'01时', value:10, sale_amount:'12960000.00'},
+        {label:'09时', value:1, sale_amount:'288000.00'},
+        {label:'10时', value:6, sale_amount:'57000.00'},
+      ];
+      total.value.now[tp+'_num'] = 1416;
+      total.value.old[tp+'_num'] = 2631;
+    }else if(tp=='allocate_out') {
+      total.value.list[tp] = [
+        {label:'01时', value:157, sale_amount:'27430150.00'},
+        {label:'05时', value:82, sale_amount:'41516.08'},
+        {label:'06时', value:267, sale_amount:'680219.29'},
+        {label:'07时', value:554, sale_amount:'2197329.50'},
+        {label:'08时', value:587, sale_amount:'66689773.18'},
+        {label:'09时', value:899, sale_amount:'30790569.32'},
+        {label:'10时', value:67, sale_amount:'460713.70'},
+        {label:'11时', value:3, sale_amount:'4935.66'},
+        {label:'12时', value:437, sale_amount:'63624803.00'},
+        {label:'13时', value:1, sale_amount:'36000.00'},
+      ];
+      total.value.now[tp+'_num'] = 3054;
+      total.value.old[tp+'_num'] = 11753;
+    }else if(tp=='allocate_in') {
+      total.value.list[tp] = [
+        {label:'00时', value:1683, sale_amount:'121882423.04'},
+        {label:'01时', value:160, sale_amount:'3979944.00'},
+        {label:'05时', value:155, sale_amount:'22038335.00'},
+        {label:'07时', value:313, sale_amount:'773626.00'},
+        {label:'08时', value:1, sale_amount:'37188.00'},
+        {label:'10时', value:81, sale_amount:'2180896.00'},
+        {label:'11时', value:40, sale_amount:'1676877.00'},
+        {label:'12时', value:12, sale_amount:'73500.00'},
+        {label:'13时', value:20, sale_amount:'310100.00'},
+      ];
+      total.value.now[tp+'_num'] = 2454;
+      total.value.old[tp+'_num'] = 9911;
+    }else if(tp=='order') {
+      total.value.list[tp] = [
+        {label:'08时', value:2, sale_amount:'6643.00'},
+        {label:'09时', value:90, sale_amount:'191798.28'},
+        {label:'10时', value:53, sale_amount:'7107.74'},
+        {label:'11时', value:121, sale_amount:'562381.58'},
+        {label:'12时', value:62, sale_amount:'157122.51'},
+        {label:'13时', value:23, sale_amount:'70148.63'},
+      ];
+      total.value.now[tp+'_num'] = 351;
+      total.value.old[tp+'_num'] = 1343;
+    }else if(tp=='refund') {
+      total.value.list[tp] = [
+        {label:'07时', value:1, sale_amount:'9600.00'},
+        {label:'09时', value:17, sale_amount:'528695.00'},
+        {label:'10时', value:106, sale_amount:'1099863.70'},
+        {label:'11时', value:22, sale_amount:'205135.58'},
+        {label:'12时', value:25, sale_amount:'141063.00'},
+        {label:'13时', value:70, sale_amount:'387072.28'},
+      ];
+      total.value.now[tp+'_num'] = 241;
+      total.value.old[tp+'_num'] = 445;
+    }
+    // 图表
+    if(chartActive.value===tp) chickChart(chartActive.value);
   }
 }
 /* 自定义时间 */

@@ -9,9 +9,6 @@
   <Passwd v-model:show="state.isPasswd" v-if="state.isLogin"></Passwd>
   <!-- Tools -->
   <Msg v-model:show="msgShow" v-if="state.isLogin"></Msg>
-  <Goods v-model:show="state.goods.show" v-if="state.isLogin"></Goods>
-  <Print v-model:show="state.print.show" v-if="state.isLogin"></Print>
-  <Photo v-model:show="state.photo.show" v-if="state.isLogin"></Photo>
   <!-- Main -->
   <div class="app_main flex">
     <!-- MenusAll -->
@@ -159,16 +156,6 @@
           </li>
         </ul>
         <ul class="app_tools flex">
-          <li class="photo" title="货品图片" @click="state.photo.show=true">
-            <span class="redNum" style="zoom: 0.8;">精准</span>
-            <i class="icons icon_image"></i>
-          </li>
-          <li class="goods" title="货品查询" @click="state.goods.show=true">
-            <i class="icons icon_stock1"></i>
-          </li>
-          <li class="print" title="打印标签" @click="state.print.show=true">
-            <i class="icons icon_print"></i>
-          </li>
           <li class="msg" title="消息" @click="msgShow=true;menusShow=false;uinfoShow=false">
             <span class="redNum" v-if="state.msg.num>0">{{ state.msg.num }}</span>
             <i class="ui ui_message"></i>
@@ -223,9 +210,6 @@ import Socket from './views/tools/Socket.vue';
 import Uinfo from './views/tools/Uinfo.vue';
 import Passwd from './views/tools/Passwd.vue';
 import Msg from './views/tools/Msg.vue';
-import Goods from './views/tools/Goods.vue';
-import Print from './views/tools/Prints.vue';
-import Photo from './views/tools/Photo.vue';
 const emit = defineEmits(['update:show', 'close']);
 const userLogin = ref();
 // 变量
@@ -253,7 +237,7 @@ const is_menus = ref(true);
 watch(()=>state.isLogin, (isLogin: boolean)=>{
   if(isLogin) {
     // 菜单
-    MenusList();
+    setTimeout(()=>{ MenusList(); }, 300);
     // 节日主题
     // let day: string = '2026-02-16';
     let day: string = Time.Date('Y-m-d');
@@ -295,7 +279,7 @@ const MenusList = (): void => {
       menus.value.tmpList.value = menusTmp?JSON.parse(menusTmp):[];
       // 点击当前页
       let title: string = '';
-      for(let v1 of data){
+      for(let v1 of data) {
         if(!v1.children) continue;
         for(let v2 of v1.children){
           if(!v2.children) continue;

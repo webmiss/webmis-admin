@@ -3,6 +3,11 @@ import Ui from '../library/ui';
 /* Util */
 export default class Util {
 
+  /* Seelp */
+  public static sleep(ms: any) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
   /* Trim */
   public static Trim(str: any, glue: string='\\s'): string {
     const reg = new RegExp('(^'+glue+'*)|('+glue+'*$)', 'gi');

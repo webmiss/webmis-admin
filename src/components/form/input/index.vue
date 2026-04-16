@@ -40,7 +40,7 @@
       :maxlength="maxlength"
       :disabled="disabled"
       :readonly="readonly"
-      :enterkeyhint="enterkeyhint"
+      :enterkeyhint="enterkeyhint as any"
       :style="{
         height: height,
         padding: padding,
@@ -60,7 +60,7 @@
       :maxlength="maxlength"
       :disabled="disabled"
       :readonly="readonly"
-      :enterkeyhint="enterkeyhint"
+      :enterkeyhint="enterkeyhint as any"
       :style="{
         height: height,
         padding: padding,

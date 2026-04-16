@@ -4,7 +4,6 @@ import Home from '../views/Homes.vue';
 /* 路由 */
 const routes: Array<RouteRecordRaw> = [
   { path: '/', name: 'Home', component: Home },
-  // { path: '/refresh', name: 'Refresh', component: ()=>import('../views/tools/Refresh.vue') },
   // 系统管理
   { path: '/SysFileManage', name: 'SysFileManage', component: ()=>import('../views/system/file/index.vue') },
   { path: '/SysMenus', name: 'SysMenus', component: ()=>import('../views/system/menus/index.vue') },
@@ -12,25 +11,6 @@ const routes: Array<RouteRecordRaw> = [
   { path: '/SysRole', name: 'SysRole', component: ()=>import('../views/system/role/index.vue') },
   // 基础数据
   { path: '/WebHtml', name: 'WebHtml', component: ()=>import('../views/base/html/index.vue') },
-  { path: '/BaseOrganization', name: 'BaseOrganization', component: () => import('../views/base/organization/index.vue') },
-  { path: '/BaseShop', name: 'BaseShop', meta: { keepAlive: true }, component: () => import('../views/base/shop/index.vue') },
-  { path: '/BasePartner', name: 'BasePartner', component: () => import('../views/base/partner/index.vue') },
-  { path: '/BaseBrand', name: 'BaseBrand', component: () => import('../views/base/brand/index.vue') },
-  { path: '/BaseCategory', name: 'BaseCategory', component: () => import('../views/base/category/index.vue') },
-  { path: '/BaseSupplier', name: 'BaseSupplier', component: () => import('../views/base/supplier/index.vue') },
-  // 商品
-  { path: '/GoodsInfo', name: 'GoodsInfo', component: () => import('../views/goods/info/index.vue') },
-  { path: '/GoodsLog', name: 'GoodsLog', component: () => import('../views/goods/log/index.vue') },
-  { path: '/GoodsStock', name: 'GoodsStock', component: () => import('../views/goods/stock/index.vue') },
-  // 库存
-  { path: '/PurchaseIn', name: 'PurchaseIn', component: () => import('../views/inventory/purchase_in/index.vue') },
-  { path: '/PurchaseInPush', name: 'PurchaseInPush', component: () => import('../views/inventory/purchase_in_push/index.vue') },
-  { path: '/PurchaseOut', name: 'PurchaseOut', component: () => import('../views/inventory/purchase_out/index.vue') },
-  { path: '/PurchaseOutPush', name: 'PurchaseOutPush', component: () => import('../views/inventory/purchase_out_push/index.vue') },
-  { path: '/AllocateOut', name: 'AllocateOut', component: () => import('../views/inventory/allocate_out/index.vue') },
-  { path: '/AllocateIn', name: 'AllocateIn', component: () => import('../views/inventory/allocate_in/index.vue') },
-  // 订单
-  { path: '/OrderInout', name: 'OrderInout', component: () => import('../views/order/inout/index.vue') },
 ]
 /* 创建 */
 export default createRouter({

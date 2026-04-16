@@ -18,7 +18,7 @@
 </template>
 
 <style lang="less" scoped>
-.wm-show_modal_body{position: absolute; top: 0; left: 0; z-index: 999; width: 100%; height: 100%;}
+.wm-show_modal_body{position: fixed; top: 0; left: 0; z-index: 9999; width: 100%; height: 100%;}
 .wm-show_modal_mask{position: absolute; z-index: 1; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); opacity: 0; transition: opacity 0.3s;}
 .wm-show_modal_content{overflow: hidden; position: absolute; z-index: 2; top: 50%; left: 50%; width: calc(100% - 40px); max-width: 420px; transform: translate3D(-50%, -70%, 0); text-align: center; background-color: #FFF; border-radius: 8px; transition: transform 0.3s ease-in-out, opacity 0.3s;}
 .wm-show_modal_content .title{padding: 16px 10px 0; line-height: 40px; font-size: 16px; font-weight: 540;}

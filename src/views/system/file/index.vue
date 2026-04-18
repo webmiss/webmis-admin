@@ -15,10 +15,10 @@
       <span class="text">{{ list.path }}</span>
     </div>
     <div class="flex">
-      <wmButton icon="ui ui_add" padding="0 16px 0 8px" @click="mkdirData()">{{ langs.mkdir }}</wmButton>
-      <wmButton icon="ui ui_edit" padding="0 16px 0 8px" @click="renameData()">{{ langs.rename }}</wmButton>
-      <wmButton effect="plain" type="danger" icon="ui ui_del" padding="0 16px 0 8px" @click="removeData()">{{ langs.del }}</wmButton>
+      <wmButton icon="ui ui_edit" padding="0 16px 0 8px" @click="renameData()" :disabled="rename.num!=1">{{ langs.rename }}</wmButton>
+      <wmButton effect="plain" type="danger" icon="ui ui_del" padding="0 16px 0 8px" @click="removeData()" :disabled="remove.num==0">{{ langs.del }}</wmButton>
       <span class="line">|</span>
+      <wmButton icon="ui ui_add" padding="0 16px 0 8px" @click="mkdirData()">{{ langs.mkdir }}</wmButton>
       <wmButton effect="dark" type="primary" icon="ui ui_upload" padding="0 16px 0 8px" @click="uploadData()">{{ langs.upload }}</wmButton>
     </div>
   </div>
@@ -29,7 +29,7 @@
       <!-- 文件夹 -->
       <li v-for="(v,k) in list.data.folder" :key="'dir'+k" :class="v.check?'file_active':'file_state'">
         <div class="file_center">
-          <div class="file_click" @click="v.check=!v.check"><i class="check"></i></div>
+          <div class="file_click" @click="v.check=!v.check;selectState()"><i class="check"></i></div>
           <div class="file">
             <div class="file_ct" @click="openFolder(v.name)">
               <i class="ui ui_folder"></i>
@@ -41,7 +41,7 @@
       <!-- 文件 -->
       <li v-for="(v,k) in list.data.files" :key="'file'+k" :class="v.check?'file_active':'file_state'">
         <div class="file_center">
-          <div class="file_click" @click="v.check=!v.check"><i class="check"></i></div>
+          <div class="file_click" @click="v.check=!v.check;selectState()"><i class="check"></i></div>
           <div class="file">
             <div class="file_ct" @click="openFile(v.name)">
               <div class="file_img bgImg" v-if="isImg(v.ext)" :style="{backgroundImage:'url('+list.url+list.data.path+v.name+')'}"></div>
@@ -55,14 +55,14 @@
     <div v-else class="null"></div>
   </div>
 
-  <!-- 新建文件夹 -->
-  <actionMkdir v-model:show="mkdir.show" :data="mkdir.data" @submit="mkdirSubmit($event)"></actionMkdir>
   <!-- 重命名 -->
   <actionRename v-model:show="rename.show" :data="rename.data" @submit="renameSubmit($event)"></actionRename>
   <!-- 删除 -->
   <actionRemove v-model:show="remove.show" :data="remove.data" @submit="removeSubmit($event)"></actionRemove>
   <!-- 下载 -->
   <actionDown v-model:show="down.show" :data="down.data" @submit="downSubmit($event)"></actionDown>
+  <!-- 新建文件夹 -->
+  <actionMkdir v-model:show="mkdir.show" :data="mkdir.data" @submit="mkdirSubmit($event)"></actionMkdir>
   <!-- 上传 -->
   <actionUpload v-model:show="upload.show" :data="upload.data" @submit="uploadSubmit($event)"></actionUpload>
   <!-- 图片预览 -->
@@ -147,14 +147,14 @@ const langs: any = state.langs;
 // 列表
 const total = ref({time: '', list: {}});
 const list = ref({url: '', path: '/', check: false, data: {path:'', dirNum: 0, fileNum: 0, size: 0, folder: <any>[], files: <any>[]}});
-// 新建文件夹、重命名、删除、下载、上传
-const mkdir = ref({show: false, data:{path: '', name: ''}});
-const rename = ref({show: false, data:{path: '', name: '', rename: ''}});
-const remove = ref({show: false, data:{path: '', names: []}});
-const down = ref({show: false, data:{path: '', filename: ''}});
-const upload = ref({show: false, data:{url: '', path: '', files: []}});
+// 动作
+const rename = ref({show:false, num:0, data:{path: '', name: '', rename: ''}});
+const remove = ref({show:false, num:0, data:{path: '', names: []}});
+const down = ref({show:false, data:{path: '', filename: ''}});
+const mkdir = ref({show:false, data:{path: '', name: ''}});
+const upload = ref({show:false, data:{url: '', path: '', files: []}});
   // 图片预览
-const imgView = ref({show: false, imgs: <any>[], index: 0});
+const imgView = ref({show:false, imgs: <any>[], index: 0});
 
 /* 创建完成 */
 onMounted(()=>{
@@ -166,6 +166,13 @@ onActivated(()=>{
 
 /* 加载数据 */
 const loadData = (): void => {
+  // 初始化
+  list.value.data.path = '';
+  list.value.data.dirNum = 0;
+  list.value.data.fileNum = 0;
+  list.value.data.size = 0;
+  list.value.data.folder = [];
+  list.value.data.files = [];
   // 请求
   const load: any = Ui.Loading();
   Request.Post('sys_file/list?lang='+state.lang, {
@@ -174,11 +181,13 @@ const loadData = (): void => {
   }, (res:any)=>{
     load.clear();
     const {code, msg, time, data}: any = res.data;
-    if(code==0){
+    if(code==0 && data){
       total.value.time = time;
       list.value.check = false;
       list.value.url = data.url;
       list.value.data = data.list;
+      // 状态
+      selectState();
     } else {
       Ui.Toast(msg);
     }
@@ -190,10 +199,34 @@ const selectAll = (check: boolean): void => {
   list.value.check = check;
   // 文件夹
   const folder = list.value.data.folder;
-  for(let i in folder) folder[i].check=check;
+  for(let v of folder) v.check=check;
   // 文件
   const files = list.value.data.files;
-  for(let i in files) files[i].check=check;
+  for(let v of files) v.check=check;
+  // 状态
+  selectState();
+}
+
+/* 选中状态 */
+const selectState = (): void => {
+  rename.value.num = 0;
+  remove.value.num = 0;
+  // 文件夹
+  const folder = list.value.data.folder;
+  for(let v of folder) {
+    if(v.check) {
+      rename.value.num++;
+      remove.value.num++;
+    }
+  }
+  // 文件
+  const files = list.value.data.files;
+  for(let v of files) {
+    if(v.check) {
+      rename.value.num++;
+      remove.value.num++;
+    }
+  }
 }
 
 /* 返回上级 */

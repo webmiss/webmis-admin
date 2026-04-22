@@ -5,15 +5,19 @@ export default class Files {
   public static Select(cfg: Object, success: Function=()=>{}, error: Function=()=>{}): void {
     // 参数
     let param: any = {
-      multiple: false,    // 多选
-      mimeType: ['image/jpeg', 'image/png', 'image/gif'],
+      multiple: false,                                    // 多选
+      accept: 'image/*',                                  // 类型限制
+      capture: '',                                        // 拍照模式: camera:相机, user:前置, environment:后置 , audio:音频 , video:视频
+      mimeType: ['image/jpeg', 'image/png', 'image/gif'], // 类型限制
       ...cfg
     }
     // 文件对象
     const fileObj: any = document.createElement('input');
     fileObj.setAttribute('type','file');
     fileObj.setAttribute("style",'display: none');
-    if(param.multiple) fileObj.setAttribute('multiple','multiple');
+    if(param.multiple) fileObj.setAttribute('multiple', param.multiple);
+    if(param.accept) fileObj.setAttribute('accept', param.accept);
+    if(param.capture) fileObj.setAttribute('capture', param.capture);
     document.body.appendChild(fileObj);
     fileObj.click();
     fileObj.onchange = ()=>{
@@ -195,7 +199,7 @@ export default class Files {
     }
   }
 
-  /* 导入Excel */
+  /* 导出Excel */
   public static ExportExcel(content: string, cfg: Object): void {
     // 参数
     const param: any = {

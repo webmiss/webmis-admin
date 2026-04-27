@@ -6,7 +6,7 @@ export default class Files {
     // 参数
     let param: any = {
       multiple: false,                                    // 多选
-      accept: 'image/*',                                  // 类型限制
+      accept: '',                                         // 类型限制: image/*, video/*, audio/*
       capture: '',                                        // 拍照模式: camera:相机, user:前置, environment:后置 , audio:音频 , video:视频
       mimeType: ['image/jpeg', 'image/png', 'image/gif'], // 类型限制
       ...cfg

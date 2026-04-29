@@ -96,7 +96,7 @@ const getVcode = (): void => {
   else return Ui.Toast(state.langs.passwd_verify_null);
   // 获取验证码
   const load: any = Ui.Loading();
-  Request.Post('user/get_vcode?lang='+state.lang, {
+  Request.Post('user/vcode_num?lang='+state.lang, {
     type: type,
     uname: form.value.uname
   }, (res:any)=>{
